@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What If Universe</title>
+
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    margin: 0;
+    background: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    user-select: none;
+    touch-action: none;
+}
+
+#game {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 30%, #452080 0%, transparent 35%),
+        radial-gradient(circle at 20% 80%, #151f5e 0%, transparent 35%),
+        linear-gradient(#080816, #020208);
+}
+
+.stars {
+    position: absolute;
+    inset: 0;
+    opacity: .35;
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 35px 35px;
+}
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    transition: opacity .6s;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 500px;
+}
+
+.small {
+    font-size: 11px;
+    letter-spacing: 5px;
+    opacity: .6;
+    margin-bottom: 18px;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(42px, 12vw, 70px);
+    line-height: .9;
+}
+
+.purple { color: #a67cff; }
+
+.subtitle {
+    margin-top: 22px;
+    opacity: .7;
+    line-height: 1.5;
+}
+
+button {
+    width: min(330px, 90%);
+    padding: 17px;
+    margin-top: 15px;
+    border: 1px solid #a67cff;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #6335d5, #9c61ff);
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+button:active { transform: scale(.96); }
+
+#intro { background: #000; }
+
+#introText {
+    font-size: 20px;
+    letter-spacing: 3px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.chapter {
+    color: #a67cff;
+    letter-spacing: 4px;
+    font-size: 11px;
+    margin-bottom: 12px;
+}
+
+.dialogue {
+    margin-top: 40px;
+    padding: 22px;
+    width: 100%;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 18px;
+    background: rgba(10,10,25,.82);
+    text-align: left;
+}
+
+.name {
+    color: #b692ff;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.text {
+    line-height: 1.55;
+    font-size: 17px;
+}
+
+.choices {
+    margin-top: 15px;
+    display: none;
+}
+
+.choice {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(166,124,255,.45);
+    text-align: left;
+}
+
+/* QTE */
+
+#qte {
+    background:
+        radial-gradient(circle, #37146c 0%, #08010f 55%, #000 100%);
+}
+
+.warning {
+    font-size: 13px;
+    letter-spacing: 6px;
+    opacity: .65;
+}
+
+#dodgeText {
+    font-size: clamp(55px, 16vw, 90px);
+    font-weight: 900;
+    margin: 15px 0 5px;
+    text-shadow: 0 0 30px #8b5cf6;
+    animation: pulse .35s infinite alternate;
+}
+
+.swipe {
+    font-size: 17px;
+    opacity: .8;
+}
+
+.arrow {
+    font-size: 70px;
+    margin: 15px;
+    animation: moveLeft .55s infinite;
+}
+
+.timer {
+    width: min(350px, 85vw);
+    height: 8px;
+    background: rgba(255,255,255,.15);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 25px;
+}
+
+#timerBar {
+    height: 100%;
+    width: 100%;
+    background: #a67cff;
+}
+
+.flash {
+    animation: flash .15s 3;
+}
+
+.shake {
+    animation: shake .08s 6;
+}
+
+#resultText {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+#resultSub {
+    margin-top: 12px;
+    opacity: .7;
+    line-height: 1.5;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.07); }
+}
+
+@keyframes moveLeft {
+    from { transform: translateX(20px); opacity: .3; }
+    to { transform: translateX(-20px); opacity: 1; }
+}
+
+@keyframes flash {
+    0%,100% { filter: brightness(1); }
+    50% { filter: brightness(4); }
+}
+
+@keyframes shake {
+    0% { transform: translate(0); }
+    25% { transform: translate(-10px, 5px); }
+    50% { transform: translate(10px, -5px); }
+    75% { transform: translate(-6px, -3px); }
+    100% { transform: translate(0); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<div class="stars"></div>
+
+<!-- HOME -->
+<div id="home" class="screen">
+    <div class="content">
+        <div class="small">AN INTERACTIVE STORY</div>
+
+        <h1>
+            WHAT IF<br>
+            <span class="purple">UNIVERSE</span>
+        </h1>
+
+        <div class="subtitle">
+            Ogni scelta crea una nuova realtà.<br>
+            Questa volta, sarai tu a viverla.
+        </div>
+
+        <button onclick="startGame()">INIZIA</button>
+    </div>
+</div>
+
+<!-- INTRO -->
+<div id="intro" class="screen hidden">
+    <div id="introText"></div>
+</div>
+
+<!-- SCENA -->
+<div id="scene1" class="screen hidden">
+    <div class="content">
+
+        <div class="chapter">CAPITOLO 01</div>
+        <h2>QUALCOSA È CAMBIATO</h2>
+
+        <div class="dialogue">
+            <div class="name">???</div>
+            <div class="text" id="dialogueText">
+                Tu non appartieni a questa linea temporale.
+            </div>
+        </div>
+
+        <div class="choices" id="choices">
+
+            <button class="choice" onclick="choose('lie')">
+                Mentigli.
+            </button>
+
+            <button class="choice" onclick="choose('truth')">
+                Digli la verità.
+            </button>
+
+            <button class="choice" onclick="choose('attack')">
+                Attaccalo.
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!-- QTE -->
+<div id="qte" class="screen hidden">
+
+    <div class="warning">ATTACCO IN ARRIVO</div>
+
+    <div id="dodgeText">SCHIVA!</div>
+
+    <div class="arrow">←</div>
+
+    <div class="swipe">
+        SWIPE A SINISTRA
+    </div>
+
+    <div class="timer">
+        <div id="timerBar"></div>
+    </div>
+
+</div>
+
+<!-- RISULTATO -->
+<div id="result" class="screen hidden">
+
+    <div id="resultText"></div>
+    <div id="resultSub"></div>
+
+    <button onclick="restartGame()">
+        CONTINUA
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+let qteActive = false;
+let touchStartX = 0;
+let qteTimeout;
+
+function hide(id) {
+    document.getElementById(id).classList.add("hidden");
+}
+
+function show(id) {
+    document.getElementById(id).classList.remove("hidden");
+}
+
+function startGame() {
+
+    hide("home");
+    show("intro");
+
+    const text = document.getElementById("introText");
+
+    setTimeout(() => {
+        text.innerHTML = "UNIVERSO 7";
+        text.style.opacity = 1;
+    }, 600);
+
+    setTimeout(() => {
+        text.style.opacity = 0;
+    }, 2200);
+
+    setTimeout(() => {
+        text.innerHTML = "QUALCOSA NON DOVREBBE ESSERE QUI...";
+        text.style.opacity = 1;
+    }, 3000);
+
+    setTimeout(() => {
+        text.style.opacity = 0;
+    }, 5000);
+
+    setTimeout(() => {
+
+        hide("intro");
+        show("scene1");
+
+        setTimeout(() => {
+            document.getElementById("choices").style.display = "block";
+        }, 1000);
+
+    }, 5800);
+}
+
+
+function choose(choice) {
+
+    const dialogue = document.getElementById("dialogueText");
+    document.getElementById("choices").style.display = "none";
+
+    if (choice === "lie") {
+        dialogue.innerHTML =
+        "Interessante... perfino adesso scegli di mentire.";
+    }
+
+    if (choice === "truth") {
+        dialogue.innerHTML =
+        "Allora sai già che la tua presenza qui avrà delle conseguenze.";
+    }
+
+    if (choice === "attack") {
+
+        dialogue.innerHTML =
+        "Vuoi davvero attaccarmi?<br><br>Allora prova a sopravvivere.";
+
+        setTimeout(startQTE, 1700);
+    }
+}
+
+
+function startQTE() {
+
+    hide("scene1");
+    show("qte");
+
+    qteActive = true;
+
+    if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100]);
+    }
+
+    const bar = document.getElementById("timerBar");
+
+    bar.style.transition = "none";
+    bar.style.width = "100%";
+
+    setTimeout(() => {
+        bar.style.transition = "width 2s linear";
+        bar.style.width = "0%";
+    }, 50);
+
+    qteTimeout = setTimeout(() => {
+        if (qteActive) failQTE();
+    }, 2050);
+}
+
+
+function successQTE() {
+
+    if (!qteActive) return;
+
+    qteActive = false;
+    clearTimeout(qteTimeout);
+
+    hide("qte");
+    show("result");
+
+    document.getElementById("game")
+        .classList.add("flash");
+
+    document.getElementById("resultText")
+        .innerHTML = "PERFECT DODGE";
+
+    document.getElementById("resultSub")
+        .innerHTML =
+        "L'attacco attraversa il punto in cui ti trovavi un istante prima.<br><br>Ma il tuo avversario sorride.";
+
+    if (navigator.vibrate) {
+        navigator.vibrate(70);
+    }
+}
+
+
+function failQTE() {
+
+    qteActive = false;
+
+    hide("qte");
+    show("result");
+
+    document.getElementById("game")
+        .classList.add("shake");
+
+    document.getElementById("resultText")
+        .innerHTML = "COLPITO";
+
+    document.getElementById("resultSub")
+        .innerHTML =
+        "Non sei stato abbastanza veloce.<br><br>La tua energia diminuisce.";
+}
+
+
+function restartGame() {
+    location.reload();
+}
+
+
+/* PC: trascina col mouse */
+
+document.addEventListener("mousedown", e => {
+    touchStartX = e.clientX;
+});
+
+document.addEventListener("mouseup", e => {
+
+    if (!qteActive) return;
+
+    const distance = e.clientX - touchStartX;
+
+    if (distance < -60) {
+        successQTE();
+    }
+});
+
+
+/* MOBILE: swipe */
+
+document.addEventListener("touchstart", e => {
+
+    touchStartX =
+        e.changedTouches[0].screenX;
+
+}, {passive:true});
+
+
+document.addEventListener("touchend", e => {
+
+    if (!qteActive) return;
+
+    const endX =
+        e.changedTouches[0].screenX;
+
+    const distance =
+        endX - touchStartX;
+
+    if (distance < -50) {
+        successQTE();
+    }
+
+}, {passive:true});
+
+</script>
+
+</body>
+</html>
