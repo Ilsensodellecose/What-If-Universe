@@ -6,236 +6,1405 @@
 <title>What If Universe</title>
 
 <style>
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-body {
-    margin: 0;
-    background: #000;
-    color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    user-select: none;
-    touch-action: none;
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-#game {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
+body{
+    margin:0;
+    background:#000;
+    color:white;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
+    user-select:none;
+    touch-action:none;
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
     background:
-        radial-gradient(circle at 50% 30%, #452080 0%, transparent 35%),
-        radial-gradient(circle at 20% 80%, #151f5e 0%, transparent 35%),
-        linear-gradient(#080816, #020208);
+        radial-gradient(circle at 50% 25%,#452080 0%,transparent 35%),
+        radial-gradient(circle at 20% 80%,#151f5e 0%,transparent 35%),
+        linear-gradient(#080816,#020208);
 }
 
-.stars {
-    position: absolute;
-    inset: 0;
-    opacity: .35;
-    background-image: radial-gradient(white 1px, transparent 1px);
-    background-size: 35px 35px;
+.stars{
+    position:absolute;
+    inset:0;
+    opacity:.3;
+    background-image:radial-gradient(white 1px,transparent 1px);
+    background-size:35px 35px;
 }
 
-.screen {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
-    text-align: center;
-    transition: opacity .6s;
+.screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    text-align:center;
+    transition:opacity .4s;
 }
 
-.hidden {
-    opacity: 0;
-    pointer-events: none;
+.hidden{
+    opacity:0;
+    pointer-events:none;
 }
 
-.content {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 500px;
+.content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:480px;
 }
 
-.small {
-    font-size: 11px;
-    letter-spacing: 5px;
-    opacity: .6;
-    margin-bottom: 18px;
+.small{
+    font-size:11px;
+    letter-spacing:5px;
+    opacity:.6;
+    margin-bottom:18px;
 }
 
-h1 {
-    margin: 0;
-    font-size: clamp(42px, 12vw, 70px);
-    line-height: .9;
+h1{
+    margin:0;
+    font-size:clamp(42px,12vw,70px);
+    line-height:.9;
 }
 
-.purple { color: #a67cff; }
-
-.subtitle {
-    margin-top: 22px;
-    opacity: .7;
-    line-height: 1.5;
+.purple{
+    color:#a67cff;
 }
 
-button {
-    width: min(330px, 90%);
-    padding: 17px;
-    margin-top: 15px;
-    border: 1px solid #a67cff;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #6335d5, #9c61ff);
-    color: white;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
+.subtitle{
+    margin-top:22px;
+    opacity:.7;
+    line-height:1.5;
 }
 
-button:active { transform: scale(.96); }
-
-#intro { background: #000; }
-
-#introText {
-    font-size: 20px;
-    letter-spacing: 3px;
-    opacity: 0;
-    transition: opacity 1s;
+button{
+    width:min(330px,90%);
+    padding:17px;
+    margin-top:13px;
+    border:1px solid #a67cff;
+    border-radius:14px;
+    background:linear-gradient(135deg,#6335d5,#9c61ff);
+    color:white;
+    font-weight:bold;
+    letter-spacing:1px;
+    cursor:pointer;
 }
 
-.chapter {
-    color: #a67cff;
-    letter-spacing: 4px;
-    font-size: 11px;
-    margin-bottom: 12px;
+button:active{
+    transform:scale(.96);
 }
 
-.dialogue {
-    margin-top: 40px;
-    padding: 22px;
-    width: 100%;
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 18px;
-    background: rgba(10,10,25,.82);
-    text-align: left;
+/* INTRO */
+
+#intro{
+    background:#000;
 }
 
-.name {
-    color: #b692ff;
-    font-weight: bold;
-    font-size: 12px;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+#introText{
+    font-size:20px;
+    letter-spacing:3px;
+    opacity:0;
+    transition:opacity 1s;
 }
 
-.text {
-    line-height: 1.55;
-    font-size: 17px;
+/* HUD */
+
+#hud{
+    position:absolute;
+    top:max(16px,env(safe-area-inset-top));
+    left:18px;
+    right:18px;
+    z-index:100;
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
 }
 
-.choices {
-    margin-top: 15px;
-    display: none;
+.hud-left{
+    text-align:left;
 }
 
-.choice {
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(166,124,255,.45);
-    text-align: left;
+.level{
+    font-size:11px;
+    letter-spacing:2px;
+    opacity:.65;
+}
+
+.hpText{
+    font-size:11px;
+    margin-top:5px;
+}
+
+.hpContainer{
+    width:130px;
+    height:6px;
+    margin-top:5px;
+    border-radius:20px;
+    background:rgba(255,255,255,.15);
+    overflow:hidden;
+}
+
+#hpBar{
+    width:100%;
+    height:100%;
+    background:linear-gradient(90deg,#8dffb0,#55e583);
+    transition:width .5s;
+}
+
+.gems{
+    padding:8px 11px;
+    border-radius:15px;
+    background:rgba(10,10,25,.55);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(8px);
+    font-size:13px;
+}
+
+/* PERSONAGGIO */
+
+.character-area{
+    position:relative;
+    height:38vh;
+    min-height:245px;
+    max-height:390px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    margin-top:25px;
+    margin-bottom:-12px;
+}
+
+#kaelios,
+#kaeliosAfter{
+    position:relative;
+    z-index:3;
+    height:100%;
+    max-width:95%;
+    object-fit:contain;
+
+    filter:
+        drop-shadow(0 0 15px rgba(151,91,255,.55))
+        drop-shadow(0 0 45px rgba(96,42,190,.35));
+
+    animation:floatKaelios 3.5s ease-in-out infinite;
+    transition:transform .35s,filter .35s;
+}
+
+.aura{
+    position:absolute;
+    z-index:1;
+    width:230px;
+    height:310px;
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(143,80,255,.45),
+            rgba(91,33,182,.18) 45%,
+            transparent 72%
+        );
+
+    filter:blur(18px);
+    animation:auraPulse 2s ease-in-out infinite alternate;
+    transition:all .4s;
+}
+
+.attackMode #kaelios{
+    animation:none;
+    transform:translateY(10px) scale(1.12);
+
+    filter:
+        drop-shadow(0 0 25px #d8b4fe)
+        drop-shadow(0 0 75px #7c3aed)
+        brightness(1.25);
+}
+
+.attackMode .aura{
+    width:330px;
+    height:400px;
+    opacity:1;
+}
+
+/* TESTI */
+
+.chapter{
+    color:#a67cff;
+    letter-spacing:4px;
+    font-size:10px;
+    margin-bottom:7px;
+}
+
+.sceneTitle{
+    margin:0;
+    font-size:18px;
+}
+
+.dialogue{
+    margin-top:12px;
+    padding:18px;
+    width:100%;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:18px;
+    background:rgba(10,10,25,.82);
+    backdrop-filter:blur(10px);
+    text-align:left;
+}
+
+.name{
+    color:#b692ff;
+    font-weight:bold;
+    font-size:11px;
+    letter-spacing:2px;
+    margin-bottom:8px;
+}
+
+.text{
+    line-height:1.5;
+    font-size:15px;
+}
+
+.choices{
+    margin-top:8px;
+    display:none;
+}
+
+.choice{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(166,124,255,.45);
+    text-align:left;
+}
+
+/* SFERA NEMICA */
+
+#energyBall{
+    position:absolute;
+    left:47%;
+    top:27%;
+    width:32px;
+    height:32px;
+    z-index:80;
+    border-radius:50%;
+    opacity:0;
+    pointer-events:none;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.1);
+
+    background:
+        radial-gradient(
+            circle,
+            #fff 0%,
+            #fff 8%,
+            #f3e8ff 15%,
+            #d8b4fe 28%,
+            #a855f7 48%,
+            #6d28d9 68%,
+            transparent 74%
+        );
+
+    box-shadow:
+        0 0 10px #fff,
+        0 0 25px #e9d5ff,
+        0 0 50px #c084fc,
+        0 0 90px #7c3aed,
+        0 0 140px #6d28d9;
+}
+
+#energyBall.charge{
+    opacity:1;
+    animation:chargeEnergy .9s ease-in-out forwards;
+}
+
+#energyBall.fly{
+    opacity:1;
+    animation:flyEnergy 1.25s cubic-bezier(.12,.55,.18,1) forwards;
 }
 
 /* QTE */
 
-#qte {
+#qteOverlay{
+    position:absolute;
+    inset:0;
+    z-index:190;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+
+    padding-top:max(110px,14vh);
+
+    opacity:0;
+    pointer-events:none;
+
     background:
-        radial-gradient(circle, #37146c 0%, #08010f 55%, #000 100%);
+        radial-gradient(
+            circle,
+            transparent 15%,
+            rgba(17,2,29,.25) 60%,
+            rgba(0,0,0,.5) 100%
+        );
+
+    transition:opacity .12s;
 }
 
-.warning {
-    font-size: 13px;
-    letter-spacing: 6px;
-    opacity: .65;
+#qteOverlay.active{
+    opacity:1;
+    pointer-events:auto;
 }
 
-#dodgeText {
-    font-size: clamp(55px, 16vw, 90px);
-    font-weight: 900;
-    margin: 15px 0 5px;
-    text-shadow: 0 0 30px #8b5cf6;
-    animation: pulse .35s infinite alternate;
+.qteWarning{
+    font-size:11px;
+    letter-spacing:6px;
+    opacity:.7;
+    margin-bottom:5px;
 }
 
-.swipe {
-    font-size: 17px;
-    opacity: .8;
+#dodgeText{
+    font-size:clamp(50px,15vw,82px);
+    font-weight:900;
+    line-height:1;
+
+    text-shadow:
+        0 0 15px #fff,
+        0 0 40px #8b5cf6;
+
+    animation:qtePulse .25s infinite alternate;
 }
 
-.arrow {
-    font-size: 70px;
-    margin: 15px;
-    animation: moveLeft .55s infinite;
+.swipeTutorial{
+    position:relative;
+    width:min(270px,72vw);
+    height:82px;
+    margin-top:10px;
 }
 
-.timer {
-    width: min(350px, 85vw);
-    height: 8px;
-    background: rgba(255,255,255,.15);
-    border-radius: 20px;
-    overflow: hidden;
-    margin-top: 25px;
+.swipeTrack{
+    position:absolute;
+    left:12px;
+    right:12px;
+    top:38px;
+    height:4px;
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(192,132,252,.95),
+            rgba(255,255,255,.18)
+        );
+
+    box-shadow:
+        0 0 16px rgba(168,85,247,.55);
 }
 
-#timerBar {
-    height: 100%;
-    width: 100%;
-    background: #a67cff;
+.swipeTrack::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:50%;
+
+    width:15px;
+    height:15px;
+
+    border-left:4px solid #fff;
+    border-bottom:4px solid #fff;
+
+    transform:
+        translateY(-50%)
+        rotate(45deg);
+
+    filter:
+        drop-shadow(0 0 7px #a855f7);
 }
 
-.flash {
-    animation: flash .15s 3;
+.swipeFinger{
+    position:absolute;
+    right:5px;
+    top:4px;
+
+    font-size:42px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(255,255,255,.45)
+        );
+
+    animation:
+        fingerSwipeLeft
+        .9s
+        cubic-bezier(.2,.7,.2,1)
+        infinite;
 }
 
-.shake {
-    animation: shake .08s 6;
+.swipeTrail{
+    position:absolute;
+    right:25px;
+    top:30px;
+
+    width:105px;
+    height:18px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(168,85,247,0),
+            rgba(216,180,254,.55)
+        );
+
+    filter:blur(4px);
+
+    transform-origin:right center;
+
+    animation:
+        trailSwipe
+        .9s
+        ease-in-out
+        infinite;
 }
 
-#resultText {
-    font-size: 38px;
-    font-weight: 900;
-    letter-spacing: 2px;
+.swipe{
+    font-size:13px;
+    font-weight:900;
+    letter-spacing:3px;
+
+    text-shadow:
+        0 0 14px #7c3aed;
+
+    animation:
+        swipeTextPulse
+        .45s
+        infinite alternate;
 }
 
-#resultSub {
-    margin-top: 12px;
-    opacity: .7;
-    line-height: 1.5;
+.timer{
+    width:min(300px,75vw);
+    height:7px;
+
+    margin-top:20px;
+
+    background:
+        rgba(255,255,255,.18);
+
+    border-radius:20px;
+
+    overflow:hidden;
 }
 
-@keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.07); }
+#timerBar{
+    width:100%;
+    height:100%;
+    background:#c084fc;
 }
 
-@keyframes moveLeft {
-    from { transform: translateX(20px); opacity: .3; }
-    to { transform: translateX(-20px); opacity: 1; }
+/* FLASH */
+
+#impactFlash{
+    position:absolute;
+    inset:0;
+    z-index:200;
+    pointer-events:none;
+    opacity:0;
+
+    background:
+        radial-gradient(
+            circle,
+            white 0%,
+            #e9d5ff 25%,
+            #7c3aed 65%,
+            #000 100%
+        );
 }
 
-@keyframes flash {
-    0%,100% { filter: brightness(1); }
-    50% { filter: brightness(4); }
+#impactFlash.hit{
+    animation:
+        impactFlash
+        .55s
+        ease-out;
 }
 
-@keyframes shake {
-    0% { transform: translate(0); }
-    25% { transform: translate(-10px, 5px); }
-    50% { transform: translate(10px, -5px); }
-    75% { transform: translate(-6px, -3px); }
-    100% { transform: translate(0); }
+/* RISULTATO */
+
+#result{
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            #241041,
+            #050508 65%
+        );
 }
+
+#resultText{
+    font-size:38px;
+    font-weight:900;
+}
+
+#resultSub{
+    margin-top:12px;
+    opacity:.75;
+    line-height:1.5;
+    max-width:400px;
+}
+
+.reward{
+    margin-top:25px;
+    color:#c59cff;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+/* ANIMAZIONI */
+
+@keyframes floatKaelios{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-9px);
+    }
+}
+
+@keyframes auraPulse{
+    from{
+        opacity:.45;
+        transform:scale(.92);
+    }
+
+    to{
+        opacity:.9;
+        transform:scale(1.08);
+    }
+}
+
+@keyframes chargeEnergy{
+    0%{
+        transform:
+            translate(-50%,-50%)
+            scale(.05);
+
+        filter:brightness(1);
+    }
+
+    35%{
+        transform:
+            translate(-50%,-50%)
+            scale(.7);
+    }
+
+    55%{
+        transform:
+            translate(-50%,-50%)
+            scale(1.25);
+
+        filter:brightness(2);
+    }
+
+    72%{
+        transform:
+            translate(-50%,-50%)
+            scale(.85);
+    }
+
+    100%{
+        transform:
+            translate(-50%,-50%)
+            scale(1.2);
+
+        filter:brightness(2.8);
+    }
+}
+
+@keyframes flyEnergy{
+    0%{
+        left:47%;
+        top:27%;
+
+        transform:
+            translate(-50%,-50%)
+            scale(1.2);
+    }
+
+    25%{
+        left:47%;
+        top:31%;
+
+        transform:
+            translate(-50%,-50%)
+            scale(1.8);
+    }
+
+    50%{
+        left:47%;
+        top:37%;
+
+        transform:
+            translate(-50%,-50%)
+            scale(3);
+    }
+
+    72%{
+        left:49%;
+        top:43%;
+
+        transform:
+            translate(-50%,-50%)
+            scale(5.5);
+    }
+
+    88%{
+        left:50%;
+        top:48%;
+
+        transform:
+            translate(-50%,-50%)
+            scale(9);
+    }
+
+    100%{
+        left:50%;
+        top:50%;
+
+        transform:
+            translate(-50%,-50%)
+            scale(17);
+
+        filter:brightness(3);
+    }
+}
+
+@keyframes qtePulse{
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(1.08);
+    }
+}
+
+@keyframes fingerSwipeLeft{
+    0%{
+        transform:translateX(0) scale(1);
+        opacity:.35;
+    }
+
+    15%{
+        opacity:1;
+    }
+
+    75%{
+        transform:
+            translateX(-190px)
+            scale(.92);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateX(-190px)
+            scale(.92);
+
+        opacity:0;
+    }
+}
+
+@keyframes trailSwipe{
+    0%{
+        opacity:0;
+        transform:scaleX(.15);
+    }
+
+    30%{
+        opacity:.8;
+        transform:scaleX(.7);
+    }
+
+    80%{
+        opacity:.35;
+        transform:scaleX(1.5);
+    }
+
+    100%{
+        opacity:0;
+        transform:scaleX(1.5);
+    }
+}
+
+@keyframes swipeTextPulse{
+    from{
+        transform:scale(1);
+        opacity:.78;
+    }
+
+    to{
+        transform:scale(1.06);
+        opacity:1;
+    }
+}
+
+@keyframes shake{
+    0%{transform:translate(0);}
+    20%{transform:translate(-10px,5px);}
+    40%{transform:translate(10px,-5px);}
+    60%{transform:translate(-8px,-3px);}
+    80%{transform:translate(8px,3px);}
+    100%{transform:translate(0);}
+}
+
+@keyframes impactFlash{
+    0%{opacity:0;}
+    15%{opacity:1;}
+    40%{opacity:.85;}
+    100%{opacity:0;}
+}
+
+.shake{
+    animation:shake .07s 8;
+}
+
+/* ============================= */
+/* ATTACCO DEL GIOCATORE */
+/* ============================= */
+
+#playerAttack{
+    background:
+        radial-gradient(
+            circle at 50% 75%,
+            rgba(92,39,170,.34),
+            transparent 32%
+        ),
+        linear-gradient(
+            rgba(2,2,8,.12),
+            rgba(2,2,8,.72)
+        );
+
+    z-index:40;
+}
+
+.playerEnemy{
+    position:absolute;
+    top:7%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    height:42vh;
+    max-width:82vw;
+
+    object-fit:contain;
+
+    opacity:.72;
+
+    filter:
+        drop-shadow(
+            0 0 30px
+            rgba(166,124,255,.45)
+        );
+}
+
+.attackUI{
+    position:relative;
+    z-index:5;
+
+    width:min(390px,92vw);
+
+    margin-top:auto;
+    margin-bottom:5vh;
+}
+
+.attackLabel{
+    font-size:11px;
+    letter-spacing:5px;
+    opacity:.65;
+}
+
+#chargeTitle{
+    margin:8px 0 5px;
+
+    font-size:
+        clamp(32px,10vw,52px);
+
+    font-weight:900;
+
+    text-shadow:
+        0 0 25px
+        rgba(166,124,255,.65);
+}
+
+.chargeHint{
+    font-size:12px;
+    letter-spacing:2px;
+    opacity:.7;
+    margin-bottom:18px;
+}
+
+.chargeTrack{
+    position:relative;
+
+    width:100%;
+    height:22px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+}
+
+.perfectZone{
+    position:absolute;
+
+    left:70%;
+    width:20%;
+
+    top:0;
+    bottom:0;
+
+    background:
+        rgba(255,255,255,.24);
+
+    box-shadow:
+        0 0 18px
+        rgba(255,255,255,.25)
+        inset;
+
+    z-index:2;
+
+    pointer-events:none;
+}
+
+#chargeFill{
+    position:absolute;
+
+    inset:0 auto 0 0;
+
+    width:0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6335d5,
+            #c084fc,
+            #fff
+        );
+
+    box-shadow:
+        0 0 22px #a855f7;
+
+    transition:
+        width .03s linear;
+}
+
+#chargePercent{
+    margin-top:8px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    letter-spacing:2px;
+}
+
+#holdButton{
+    margin-top:20px;
+
+    width:min(330px,90%);
+
+    padding:20px;
+
+    border-radius:18px;
+
+    touch-action:none;
+
+    box-shadow:
+        0 0 25px
+        rgba(124,58,237,.25);
+}
+
+#playerBall{
+    position:absolute;
+
+    z-index:4;
+
+    left:50%;
+    bottom:25%;
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    opacity:0;
+
+    transform:
+        translateX(-50%)
+        scale(.3);
+
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            circle,
+            #fff 0%,
+            #fff 9%,
+            #e9d5ff 20%,
+            #a855f7 48%,
+            #6d28d9 70%,
+            transparent 75%
+        );
+
+    box-shadow:
+        0 0 15px #fff,
+        0 0 35px #c084fc,
+        0 0 80px #7c3aed;
+}
+
+#playerBall.active{
+    opacity:1;
+}
+
+#playerBall.fireWeak{
+    animation:
+        playerShotWeak
+        .65s
+        ease-in
+        forwards;
+}
+
+#playerBall.firePerfect{
+    animation:
+        playerShotPerfect
+        .5s
+        cubic-bezier(.2,.75,.2,1)
+        forwards;
+}
+
+#playerBall.overload{
+    animation:
+        playerOverload
+        .45s
+        ease-out
+        forwards;
+}
+
+@keyframes playerShotWeak{
+    from{
+        bottom:25%;
+
+        transform:
+            translateX(-50%)
+            scale(.7);
+
+        opacity:1;
+    }
+
+    to{
+        bottom:63%;
+
+        transform:
+            translateX(-50%)
+            scale(1.5);
+
+        opacity:0;
+    }
+}
+
+@keyframes playerShotPerfect{
+    0%{
+        bottom:25%;
+
+        transform:
+            translateX(-50%)
+            scale(1);
+
+        opacity:1;
+    }
+
+    65%{
+        bottom:58%;
+
+        transform:
+            translateX(-50%)
+            scale(3);
+
+        opacity:1;
+    }
+
+    100%{
+        bottom:66%;
+
+        transform:
+            translateX(-50%)
+            scale(6);
+
+        opacity:0;
+
+        filter:brightness(3);
+    }
+}
+
+@keyframes playerOverload{
+    0%{
+        transform:
+            translateX(-50%)
+            scale(2);
+
+        opacity:1;
+    }
+
+    55%{
+        transform:
+            translateX(-50%)
+            scale(5);
+
+        opacity:1;
+
+        filter:brightness(3);
+    }
+
+    100%{
+        transform:
+            translateX(-50%)
+            scale(9);
+
+        opacity:0;
+    }
+}
+
+#attackResult{
+    position:absolute;
+    inset:0;
+
+    z-index:120;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    padding:28px;
+
+    text-align:center;
+
+    background:
+        rgba(3,2,10,.91);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:opacity .25s;
+}
+
+#attackResult.active{
+    opacity:1;
+    pointer-events:auto;
+}
+
+#attackResultTitle{
+    font-size:
+        clamp(34px,11vw,55px);
+
+    font-weight:900;
+}
+
+#attackResultText{
+    max-width:390px;
+
+    margin-top:14px;
+
+    line-height:1.55;
+
+    opacity:.78;
+}
+
+/* ============================= */
+/* ATTO 2 - LA FRATTURA */
+/* ============================= */
+
+#riftScene{
+    z-index:45;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 18%,
+            rgba(126,34,206,.28),
+            transparent 32%
+        ),
+        linear-gradient(
+            #080816,
+            #020208
+        );
+}
+
+.riftKaelios{
+    position:absolute;
+
+    left:50%;
+    bottom:21%;
+
+    transform:
+        translateX(-50%);
+
+    height:47vh;
+
+    max-width:88vw;
+
+    object-fit:contain;
+
+    opacity:.72;
+
+    filter:
+        drop-shadow(
+            0 0 25px
+            rgba(168,85,247,.55)
+        )
+        drop-shadow(
+            0 0 60px
+            rgba(109,40,217,.3)
+        );
+}
+
+/* FRATTURA */
+
+#riftCrack{
+    position:absolute;
+
+    left:50%;
+    top:8%;
+
+    width:7px;
+    height:0;
+
+    opacity:0;
+
+    transform:
+        translateX(-50%)
+        rotate(7deg);
+
+    background:#fff;
+
+    box-shadow:
+        0 0 10px #fff,
+        0 0 25px #d8b4fe,
+        0 0 55px #a855f7,
+        0 0 100px #6d28d9;
+
+    z-index:3;
+}
+
+#riftCrack::before,
+#riftCrack::after{
+    content:"";
+
+    position:absolute;
+
+    width:4px;
+    height:80px;
+
+    background:#ead5ff;
+
+    box-shadow:
+        0 0 12px #fff,
+        0 0 30px #9333ea;
+
+    transform-origin:top;
+}
+
+#riftCrack::before{
+    left:0;
+    top:55px;
+
+    transform:
+        rotate(42deg);
+}
+
+#riftCrack::after{
+    left:2px;
+    top:120px;
+
+    transform:
+        rotate(-38deg);
+}
+
+#riftCrack.open{
+    animation:
+        openRift
+        1s
+        ease-out
+        forwards,
+        riftPulse
+        .55s
+        1s
+        infinite
+        alternate;
+}
+
+@keyframes openRift{
+    0%{
+        height:0;
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        height:220px;
+        opacity:1;
+    }
+}
+
+@keyframes riftPulse{
+    from{
+        filter:brightness(1);
+    }
+
+    to{
+        filter:brightness(2);
+    }
+}
+
+/* DIALOGO FRATTURA */
+
+.riftDialogue{
+    position:absolute;
+
+    left:50%;
+    bottom:5%;
+
+    transform:
+        translateX(-50%);
+
+    width:min(430px,91vw);
+
+    padding:18px;
+
+    z-index:10;
+
+    border-radius:20px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.14);
+
+    background:
+        rgba(5,3,15,.86);
+
+    backdrop-filter:
+        blur(8px);
+
+    text-align:left;
+}
+
+.riftName{
+    color:#c4a1ff;
+
+    font-size:10px;
+
+    letter-spacing:4px;
+
+    font-weight:bold;
+
+    margin-bottom:9px;
+}
+
+#riftText{
+    font-size:15px;
+
+    line-height:1.55;
+
+    min-height:48px;
+}
+
+#riftContinue{
+    width:100%;
+
+    margin-top:14px;
+
+    padding:13px;
+}
+
+/* SCELTA FRATTURA */
+
+#riftChoice{
+    z-index:50;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(126,34,206,.28),
+            transparent 35%
+        ),
+        rgba(2,2,8,.96);
+}
+
+.riftChoiceContent{
+    width:min(430px,92vw);
+}
+
+.choiceWarning{
+    font-size:10px;
+
+    letter-spacing:5px;
+
+    color:#c4a1ff;
+
+    margin-bottom:12px;
+}
+
+.riftChoiceTitle{
+    font-size:
+        clamp(35px,11vw,55px);
+
+    font-weight:900;
+
+    margin-bottom:10px;
+}
+
+.riftChoiceDescription{
+    opacity:.7;
+
+    font-size:14px;
+
+    line-height:1.55;
+
+    margin-bottom:20px;
+}
+
+.riftChoiceButton{
+    width:100%;
+
+    padding:18px;
+
+    margin-top:9px;
+}
+
 </style>
 </head>
 
@@ -245,73 +1414,176 @@ button:active { transform: scale(.96); }
 
 <div class="stars"></div>
 
+<div id="energyBall"></div>
+
+<div id="impactFlash"></div>
+
+<!-- HUD -->
+
+<div id="hud" class="hidden">
+
+    <div class="hud-left">
+
+        <div class="level">
+            LV. 1
+        </div>
+
+        <div class="hpText">
+            HP <span id="hpNumber">100</span>/100
+        </div>
+
+        <div class="hpContainer">
+            <div id="hpBar"></div>
+        </div>
+
+    </div>
+
+    <div class="gems">
+        💎 <span id="gemNumber">100</span>
+    </div>
+
+</div>
+
 <!-- HOME -->
+
 <div id="home" class="screen">
+
     <div class="content">
-        <div class="small">AN INTERACTIVE STORY</div>
+
+        <div class="small">
+            AN INTERACTIVE STORY
+        </div>
 
         <h1>
             WHAT IF<br>
-            <span class="purple">UNIVERSE</span>
+            <span class="purple">
+                UNIVERSE
+            </span>
         </h1>
 
         <div class="subtitle">
-            Ogni scelta crea una nuova realtà.<br>
+            Ogni scelta crea una nuova realtà.
+            <br>
             Questa volta, sarai tu a viverla.
         </div>
 
-        <button onclick="startGame()">INIZIA</button>
+        <button onclick="startGame()">
+            INIZIA
+        </button>
+
     </div>
+
 </div>
 
 <!-- INTRO -->
+
 <div id="intro" class="screen hidden">
     <div id="introText"></div>
 </div>
 
-<!-- SCENA -->
+<!-- SCENA PRINCIPALE -->
+
 <div id="scene1" class="screen hidden">
+
     <div class="content">
 
-        <div class="chapter">CAPITOLO 01</div>
-        <h2>QUALCOSA È CAMBIATO</h2>
+        <div
+            class="character-area"
+            id="characterArea">
+
+            <div class="aura"></div>
+
+            <img
+                src="kaelios.png"
+                id="kaelios"
+                alt="Kaelios">
+
+        </div>
+
+        <div class="chapter">
+            CAPITOLO 01
+        </div>
+
+        <h2 class="sceneTitle">
+            QUALCOSA È CAMBIATO
+        </h2>
 
         <div class="dialogue">
-            <div class="name">???</div>
-            <div class="text" id="dialogueText">
-                Tu non appartieni a questa linea temporale.
+
+            <div class="name">
+                KAELIOS
             </div>
+
+            <div
+                class="text"
+                id="dialogueText">
+
+                Tu non appartieni a questa linea temporale.
+
+            </div>
+
         </div>
 
-        <div class="choices" id="choices">
+        <div
+            class="choices"
+            id="choices">
 
-            <button class="choice" onclick="choose('lie')">
+            <button
+                class="choice"
+                onclick="choose('lie')">
+
                 Mentigli.
+
             </button>
 
-            <button class="choice" onclick="choose('truth')">
+            <button
+                class="choice"
+                onclick="choose('truth')">
+
                 Digli la verità.
+
             </button>
 
-            <button class="choice" onclick="choose('attack')">
+            <button
+                class="choice"
+                onclick="choose('attack')">
+
                 Attaccalo.
+
             </button>
 
         </div>
+
     </div>
+
 </div>
 
 <!-- QTE -->
-<div id="qte" class="screen hidden">
 
-    <div class="warning">ATTACCO IN ARRIVO</div>
+<div id="qteOverlay">
 
-    <div id="dodgeText">SCHIVA!</div>
+    <div class="qteWarning">
+        ATTACCO IN ARRIVO
+    </div>
 
-    <div class="arrow">←</div>
+    <div id="dodgeText">
+        SCHIVA!
+    </div>
+
+    <div class="swipeTutorial">
+
+        <div class="swipeTrack"></div>
+
+        <div class="swipeTrail"></div>
+
+        <div class="swipeFinger">
+            ☝️
+        </div>
+
+    </div>
 
     <div class="swipe">
-        SWIPE A SINISTRA
+        SCORRI VERSO SINISTRA
     </div>
 
     <div class="timer">
@@ -321,217 +1593,1740 @@ button:active { transform: scale(.96); }
 </div>
 
 <!-- RISULTATO -->
+
 <div id="result" class="screen hidden">
 
     <div id="resultText"></div>
+
     <div id="resultSub"></div>
 
-    <button onclick="restartGame()">
+    <div
+        id="reward"
+        class="reward">
+    </div>
+
+    <button onclick="continueStory()">
         CONTINUA
     </button>
 
 </div>
 
+<!-- DOPO IL COMBATTIMENTO -->
+
+<div id="afterFight" class="screen hidden">
+
+    <div class="content">
+
+        <div class="character-area">
+
+            <div class="aura"></div>
+
+            <img
+                src="kaelios.png"
+                id="kaeliosAfter"
+                alt="Kaelios">
+
+        </div>
+
+        <div class="chapter">
+            CAPITOLO 01
+        </div>
+
+        <div class="dialogue">
+
+            <div class="name">
+                KAELIOS
+            </div>
+
+            <div
+                class="text"
+                id="afterText">
+
+                Interessante.
+
+            </div>
+
+        </div>
+
+        <div
+            class="choices"
+            id="afterChoices">
+
+            <button
+                class="choice"
+                onclick="finalChoice('why')">
+
+                Perché mi stai mettendo alla prova?
+
+            </button>
+
+            <button
+                class="choice"
+                onclick="finalChoice('again')">
+
+                Attaccami di nuovo.
+
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
+<!-- ATTACCO DEL GIOCATORE -->
+
+<div id="playerAttack" class="screen hidden">
+
+    <img
+        src="kaelios.png"
+        class="playerEnemy"
+        alt="Kaelios">
+
+    <div id="playerBall"></div>
+
+    <div class="attackUI">
+
+        <div class="attackLabel">
+            IL TUO TURNO
+        </div>
+
+        <div id="chargeTitle">
+            CARICA
+        </div>
+
+        <div class="chargeHint">
+            Tieni premuto e rilascia nella zona luminosa
+        </div>
+
+        <div class="chargeTrack">
+
+            <div id="chargeFill"></div>
+
+            <div class="perfectZone"></div>
+
+        </div>
+
+        <div id="chargePercent">
+            0%
+        </div>
+
+        <button id="holdButton">
+            TIENI PREMUTO
+        </button>
+
+    </div>
+
+</div>
+
+<!-- RISULTATO ATTACCO -->
+
+<div id="attackResult">
+
+    <div id="attackResultTitle"></div>
+
+    <div id="attackResultText"></div>
+
+    <button onclick="finishPlayerAttack()">
+        CONTINUA
+    </button>
+
+</div>
+
+<!-- ============================= -->
+<!-- ATTO 2 - LA FRATTURA -->
+<!-- ============================= -->
+
+<div id="riftScene" class="screen hidden">
+
+    <div id="riftCrack"></div>
+
+    <img
+        src="kaelios.png"
+        class="riftKaelios"
+        alt="Kaelios">
+
+    <div class="riftDialogue">
+
+        <div class="riftName">
+            KAELIOS
+        </div>
+
+        <div id="riftText">
+            ...
+        </div>
+
+        <button
+            id="riftContinue"
+            onclick="advanceRift()">
+
+            CONTINUA
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- SCELTA FRATTURA -->
+
+<div id="riftChoice" class="screen hidden">
+
+    <div class="riftChoiceContent">
+
+        <div class="choiceWarning">
+            LA FRATTURA SI STA APRENDO
+        </div>
+
+        <div class="riftChoiceTitle">
+            DECIDI ORA
+        </div>
+
+        <div class="riftChoiceDescription">
+
+            Qualcosa sta attraversando il cielo.
+
+            <br><br>
+
+            Kaelios non sembra più interessato
+            a combatterti.
+
+        </div>
+
+        <button
+            class="riftChoiceButton"
+            onclick="chooseRift('run')">
+
+            SCAPPA
+
+        </button>
+
+        <button
+            class="riftChoiceButton"
+            onclick="chooseRift('stay')">
+
+            RESTA CON KAELIOS
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
 
 <script>
 
-let qteActive = false;
-let touchStartX = 0;
+/* ============================= */
+/* VARIABILI */
+/* ============================= */
+
+let hp=100;
+let xp=0;
+
+let qteActive=false;
+let touchStartX=0;
 let qteTimeout;
 
-function hide(id) {
-    document.getElementById(id).classList.add("hidden");
+let lastResult="";
+
+let playerCharging=false;
+let chargeValue=0;
+let chargeFrame=null;
+let chargeStart=0;
+let playerAttackOutcome="";
+
+let riftStep=0;
+let riftPath="";
+let kaeliosTrust=0;
+
+/* UTILITÀ */
+
+function hide(id){
+
+    document
+        .getElementById(id)
+        .classList
+        .add("hidden");
 }
 
-function show(id) {
-    document.getElementById(id).classList.remove("hidden");
+function show(id){
+
+    document
+        .getElementById(id)
+        .classList
+        .remove("hidden");
 }
 
-function startGame() {
+/* ============================= */
+/* INIZIO */
+/* ============================= */
+
+function startGame(){
 
     hide("home");
+
     show("intro");
 
-    const text = document.getElementById("introText");
+    show("hud");
 
-    setTimeout(() => {
-        text.innerHTML = "UNIVERSO 7";
-        text.style.opacity = 1;
-    }, 600);
+    const text=
+        document.getElementById(
+            "introText"
+        );
 
-    setTimeout(() => {
-        text.style.opacity = 0;
-    }, 2200);
+    setTimeout(()=>{
 
-    setTimeout(() => {
-        text.innerHTML = "QUALCOSA NON DOVREBBE ESSERE QUI...";
-        text.style.opacity = 1;
-    }, 3000);
+        text.innerHTML=
+            "UNIVERSO 7";
 
-    setTimeout(() => {
-        text.style.opacity = 0;
-    }, 5000);
+        text.style.opacity=1;
 
-    setTimeout(() => {
+    },600);
+
+    setTimeout(()=>{
+
+        text.style.opacity=0;
+
+    },2100);
+
+    setTimeout(()=>{
+
+        text.innerHTML=
+            "QUALCOSA NON DOVREBBE ESSERE QUI...";
+
+        text.style.opacity=1;
+
+    },2900);
+
+    setTimeout(()=>{
+
+        text.style.opacity=0;
+
+    },4800);
+
+    setTimeout(()=>{
 
         hide("intro");
+
         show("scene1");
 
-        setTimeout(() => {
-            document.getElementById("choices").style.display = "block";
-        }, 1000);
+        setTimeout(()=>{
 
-    }, 5800);
+            document
+                .getElementById("choices")
+                .style.display="block";
+
+        },900);
+
+    },5500);
 }
 
+/* ============================= */
+/* PRIME SCELTE */
+/* ============================= */
 
-function choose(choice) {
+function choose(choice){
 
-    const dialogue = document.getElementById("dialogueText");
-    document.getElementById("choices").style.display = "none";
+    const dialogue=
+        document.getElementById(
+            "dialogueText"
+        );
 
-    if (choice === "lie") {
-        dialogue.innerHTML =
-        "Interessante... perfino adesso scegli di mentire.";
+    document
+        .getElementById("choices")
+        .style.display="none";
+
+    if(choice==="lie"){
+
+        dialogue.innerHTML=
+            "Il tuo battito è cambiato. Non sei molto bravo a mentire.";
+
+        setTimeout(()=>{
+
+            document
+                .getElementById("choices")
+                .style.display="block";
+
+        },1800);
     }
 
-    if (choice === "truth") {
-        dialogue.innerHTML =
-        "Allora sai già che la tua presenza qui avrà delle conseguenze.";
+    if(choice==="truth"){
+
+        dialogue.innerHTML=
+            "La verità non ti renderà più al sicuro.";
+
+        setTimeout(()=>{
+
+            document
+                .getElementById("choices")
+                .style.display="block";
+
+        },1800);
     }
 
-    if (choice === "attack") {
+    if(choice==="attack"){
 
-        dialogue.innerHTML =
-        "Vuoi davvero attaccarmi?<br><br>Allora prova a sopravvivere.";
+        dialogue.innerHTML=
+            "Vuoi davvero attaccarmi?<br><br>Allora prova a sopravvivere.";
 
-        setTimeout(startQTE, 1700);
+        setTimeout(
+            chargeAttack,
+            900
+        );
     }
 }
 
+/* ============================= */
+/* ATTACCO KAELIOS */
+/* ============================= */
 
-function startQTE() {
+function chargeAttack(){
+
+    const area=
+        document.getElementById(
+            "characterArea"
+        );
+
+    const ball=
+        document.getElementById(
+            "energyBall"
+        );
+
+    area.classList.add(
+        "attackMode"
+    );
+
+    ball.className="";
+
+    void ball.offsetWidth;
+
+    ball.classList.add(
+        "charge"
+    );
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(
+            [60,40,80]
+        );
+    }
+
+    setTimeout(()=>{
+
+        document
+            .getElementById("game")
+            .classList
+            .add("shake");
+
+    },550);
+
+    setTimeout(()=>{
+
+        document
+            .getElementById("game")
+            .classList
+            .remove("shake");
+
+    },900);
+
+    setTimeout(()=>{
+
+        ball.classList.remove(
+            "charge"
+        );
+
+        void ball.offsetWidth;
+
+        ball.classList.add(
+            "fly"
+        );
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(90);
+
+        }
+
+    },1000);
+
+    setTimeout(()=>{
+
+        activateQTE();
+
+    },1480);
+}
+
+/* ============================= */
+/* QTE SCHIVATA */
+/* ============================= */
+
+function activateQTE(){
+
+    qteActive=true;
+
+    const overlay=
+        document.getElementById(
+            "qteOverlay"
+        );
+
+    const bar=
+        document.getElementById(
+            "timerBar"
+        );
+
+    overlay.classList.add(
+        "active"
+    );
+
+    bar.style.transition="none";
+
+    bar.style.width="100%";
+
+    void bar.offsetWidth;
+
+    setTimeout(()=>{
+
+        bar.style.transition=
+            "width 1.65s linear";
+
+        bar.style.width="0%";
+
+    },20);
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(
+            [100,35,100]
+        );
+    }
+
+    qteTimeout=
+        setTimeout(()=>{
+
+            if(qteActive){
+
+                failQTE();
+
+            }
+
+        },1670);
+}
+
+/* SCHIVATA RIUSCITA */
+
+function successQTE(){
+
+    if(!qteActive){
+        return;
+    }
+
+    qteActive=false;
+
+    clearTimeout(
+        qteTimeout
+    );
+
+    lastResult="success";
+
+    xp+=25;
+
+    const overlay=
+        document.getElementById(
+            "qteOverlay"
+        );
+
+    const ball=
+        document.getElementById(
+            "energyBall"
+        );
+
+    overlay.classList.remove(
+        "active"
+    );
+
+    const rect=
+        ball.getBoundingClientRect();
+
+    ball.style.animation="none";
+
+    ball.style.left=
+        (
+            rect.left+
+            rect.width/2
+        )+"px";
+
+    ball.style.top=
+        (
+            rect.top+
+            rect.height/2
+        )+"px";
+
+    ball.style.width=
+        rect.width+"px";
+
+    ball.style.height=
+        rect.height+"px";
+
+    ball.style.transform=
+        "translate(-50%,-50%)";
+
+    void ball.offsetWidth;
+
+    ball.style.transition=
+        "left .3s ease-out, opacity .3s, transform .3s";
+
+    ball.style.left="-30%";
+
+    ball.style.opacity="0";
+
+    ball.style.transform=
+        "translate(-50%,-50%) scale(.7)";
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(55);
+
+    }
+
+    setTimeout(()=>{
+
+        resetEnergyBall();
+
+        showResultSuccess();
+
+    },400);
+}
+
+/* COLPITO */
+
+function failQTE(){
+
+    if(!qteActive){
+        return;
+    }
+
+    qteActive=false;
+
+    clearTimeout(
+        qteTimeout
+    );
+
+    lastResult="fail";
+
+    hp-=36;
+
+    if(hp<0){
+        hp=0;
+    }
+
+    document
+        .getElementById(
+            "qteOverlay"
+        )
+        .classList
+        .remove("active");
+
+    document
+        .getElementById(
+            "hpNumber"
+        )
+        .innerHTML=hp;
+
+    document
+        .getElementById(
+            "hpBar"
+        )
+        .style.width=
+            hp+"%";
+
+    const flash=
+        document.getElementById(
+            "impactFlash"
+        );
+
+    flash.classList.remove(
+        "hit"
+    );
+
+    void flash.offsetWidth;
+
+    flash.classList.add(
+        "hit"
+    );
+
+    document
+        .getElementById("game")
+        .classList
+        .add("shake");
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(
+            [180,60,250]
+        );
+    }
+
+    setTimeout(()=>{
+
+        document
+            .getElementById("game")
+            .classList
+            .remove("shake");
+
+        resetEnergyBall();
+
+        showResultFail();
+
+    },550);
+}
+
+/* RESET SFERA */
+
+function resetEnergyBall(){
+
+    const ball=
+        document.getElementById(
+            "energyBall"
+        );
+
+    ball.className="";
+
+    ball.removeAttribute(
+        "style"
+    );
+}
+
+/* RISULTATI */
+
+function showResultSuccess(){
 
     hide("scene1");
-    show("qte");
 
-    qteActive = true;
-
-    if (navigator.vibrate) {
-        navigator.vibrate([100, 50, 100]);
-    }
-
-    const bar = document.getElementById("timerBar");
-
-    bar.style.transition = "none";
-    bar.style.width = "100%";
-
-    setTimeout(() => {
-        bar.style.transition = "width 2s linear";
-        bar.style.width = "0%";
-    }, 50);
-
-    qteTimeout = setTimeout(() => {
-        if (qteActive) failQTE();
-    }, 2050);
-}
-
-
-function successQTE() {
-
-    if (!qteActive) return;
-
-    qteActive = false;
-    clearTimeout(qteTimeout);
-
-    hide("qte");
     show("result");
 
-    document.getElementById("game")
-        .classList.add("flash");
+    document
+        .getElementById(
+            "resultText"
+        )
+        .innerHTML=
+            "PERFECT DODGE";
 
-    document.getElementById("resultText")
-        .innerHTML = "PERFECT DODGE";
+    document
+        .getElementById(
+            "resultSub"
+        )
+        .innerHTML=
+            "La sfera ti sfiora e scompare alle tue spalle.<br><br>Kaelios rimane immobile.";
 
-    document.getElementById("resultSub")
-        .innerHTML =
-        "L'attacco attraversa il punto in cui ti trovavi un istante prima.<br><br>Ma il tuo avversario sorride.";
-
-    if (navigator.vibrate) {
-        navigator.vibrate(70);
-    }
+    document
+        .getElementById(
+            "reward"
+        )
+        .innerHTML=
+            "+25 XP";
 }
 
+function showResultFail(){
 
-function failQTE() {
+    hide("scene1");
 
-    qteActive = false;
-
-    hide("qte");
     show("result");
 
-    document.getElementById("game")
-        .classList.add("shake");
+    document
+        .getElementById(
+            "resultText"
+        )
+        .innerHTML=
+            "COLPITO";
 
-    document.getElementById("resultText")
-        .innerHTML = "COLPITO";
+    document
+        .getElementById(
+            "resultSub"
+        )
+        .innerHTML=
+            "L'energia esplode contro di te.<br><br>HP "+
+            hp+
+            "/100";
 
-    document.getElementById("resultSub")
-        .innerHTML =
-        "Non sei stato abbastanza veloce.<br><br>La tua energia diminuisce.";
+    document
+        .getElementById(
+            "reward"
+        )
+        .innerHTML=
+            "-36 HP";
 }
 
+/* ============================= */
+/* DOPO COMBATTIMENTO */
+/* ============================= */
 
-function restartGame() {
-    location.reload();
+function continueStory(){
+
+    hide("result");
+
+    show("afterFight");
+
+    const text=
+        document.getElementById(
+            "afterText"
+        );
+
+    if(lastResult==="success"){
+
+        text.innerHTML=
+            "Hai schivato.<br><br>Nessun mortale avrebbe dovuto riuscirci.";
+
+    }
+
+    else{
+
+        text.innerHTML=
+            "Sei ancora cosciente.<br><br>Forse non ho sbagliato persona.";
+
+    }
+
+    setTimeout(()=>{
+
+        document
+            .getElementById(
+                "afterChoices"
+            )
+            .style.display="block";
+
+    },900);
 }
 
+function finalChoice(choice){
 
-/* PC: trascina col mouse */
+    const text=
+        document.getElementById(
+            "afterText"
+        );
 
-document.addEventListener("mousedown", e => {
-    touchStartX = e.clientX;
-});
+    document
+        .getElementById(
+            "afterChoices"
+        )
+        .style.display="none";
 
-document.addEventListener("mouseup", e => {
+    if(choice==="why"){
 
-    if (!qteActive) return;
+        text.innerHTML=
+            "Perché tra milioni di realtà...<br><br>sei l'unico che non dovrebbe esistere.";
 
-    const distance = e.clientX - touchStartX;
+        /*
+        Dopo aver ricevuto la risposta,
+        facciamo comparire di nuovo
+        la possibilità di proseguire.
+        */
 
-    if (distance < -60) {
-        successQTE();
-    }
-});
+        setTimeout(()=>{
 
+            document
+                .getElementById(
+                    "afterChoices"
+                )
+                .style.display="block";
 
-/* MOBILE: swipe */
-
-document.addEventListener("touchstart", e => {
-
-    touchStartX =
-        e.changedTouches[0].screenX;
-
-}, {passive:true});
-
-
-document.addEventListener("touchend", e => {
-
-    if (!qteActive) return;
-
-    const endX =
-        e.changedTouches[0].screenX;
-
-    const distance =
-        endX - touchStartX;
-
-    if (distance < -50) {
-        successQTE();
+        },1700);
     }
 
-}, {passive:true});
+    if(choice==="again"){
+
+        text.innerHTML=
+            "No.<br><br>La prossima volta sarai tu ad attaccare.";
+
+        setTimeout(()=>{
+
+            startPlayerAttack();
+
+        },1300);
+    }
+}
+
+/* ============================= */
+/* ATTACCO GIOCATORE */
+/* ============================= */
+
+function startPlayerAttack(){
+
+    hide("afterFight");
+
+    show("playerAttack");
+
+    playerCharging=false;
+
+    chargeValue=0;
+
+    document
+        .getElementById(
+            "chargeFill"
+        )
+        .style.width="0%";
+
+    document
+        .getElementById(
+            "chargePercent"
+        )
+        .innerHTML="0%";
+
+    document
+        .getElementById(
+            "chargeTitle"
+        )
+        .innerHTML="CARICA";
+
+    document
+        .getElementById(
+            "holdButton"
+        )
+        .innerHTML=
+            "TIENI PREMUTO";
+
+    document
+        .getElementById(
+            "playerBall"
+        )
+        .className="";
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(40);
+
+    }
+}
+
+function beginPlayerCharge(e){
+
+    if(e){
+        e.preventDefault();
+    }
+
+    if(playerCharging){
+        return;
+    }
+
+    playerCharging=true;
+
+    chargeStart=
+        performance.now();
+
+    document
+        .getElementById(
+            "playerBall"
+        )
+        .className=
+            "active";
+
+    document
+        .getElementById(
+            "holdButton"
+        )
+        .innerHTML=
+            "RILASCIA!";
+
+    document
+        .getElementById(
+            "chargeTitle"
+        )
+        .innerHTML=
+            "ENERGIA";
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(35);
+
+    }
+
+    updatePlayerCharge();
+}
+
+function updatePlayerCharge(){
+
+    if(!playerCharging){
+        return;
+    }
+
+    /*
+    0 -> 100 in 1 secondo
+    */
+
+    chargeValue=
+        Math.min(
+            100,
+            (
+                (
+                    performance.now()
+                    -
+                    chargeStart
+                )
+                /
+                1000
+            )
+            *
+            100
+        );
+
+    document
+        .getElementById(
+            "chargeFill"
+        )
+        .style.width=
+            chargeValue+"%";
+
+    document
+        .getElementById(
+            "chargePercent"
+        )
+        .innerHTML=
+            Math.floor(
+                chargeValue
+            )+"%";
+
+    const ball=
+        document.getElementById(
+            "playerBall"
+        );
+
+    ball.style.transform=
+        "translateX(-50%) scale("+
+        (
+            .35+
+            (
+                chargeValue/100
+            )
+            *
+            1.8
+        )
+        +")";
+
+    ball.style.filter=
+        "brightness("+
+        (
+            1+
+            chargeValue/80
+        )
+        +")";
+
+    if(chargeValue>=100){
+
+        releasePlayerCharge(
+            true
+        );
+
+        return;
+    }
+
+    chargeFrame=
+        requestAnimationFrame(
+            updatePlayerCharge
+        );
+}
+
+function releasePlayerCharge(
+    forced=false
+){
+
+    if(!playerCharging){
+        return;
+    }
+
+    playerCharging=false;
+
+    if(chargeFrame){
+
+        cancelAnimationFrame(
+            chargeFrame
+        );
+    }
+
+    if(
+        chargeValue>=96
+        ||
+        forced
+    ){
+
+        resolvePlayerAttack(
+            "overload"
+        );
+    }
+
+    else if(
+        chargeValue>=70
+        &&
+        chargeValue<=90
+    ){
+
+        resolvePlayerAttack(
+            "perfect"
+        );
+    }
+
+    else if(
+        chargeValue>90
+    ){
+
+        resolvePlayerAttack(
+            "late"
+        );
+    }
+
+    else{
+
+        resolvePlayerAttack(
+            "weak"
+        );
+    }
+}
+
+function resolvePlayerAttack(type){
+
+    playerAttackOutcome=type;
+
+    const ball=
+        document.getElementById(
+            "playerBall"
+        );
+
+    ball.removeAttribute(
+        "style"
+    );
+
+    ball.className=
+        "active";
+
+    void ball.offsetWidth;
+
+    if(type==="perfect"){
+
+        ball.classList.add(
+            "firePerfect"
+        );
+
+        document
+            .getElementById(
+                "chargeTitle"
+            )
+            .innerHTML=
+                "PERFECT!";
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(
+                [70,35,140]
+            );
+        }
+
+        setTimeout(()=>{
+
+            const f=
+                document
+                    .getElementById(
+                        "impactFlash"
+                    );
+
+            f.classList.remove(
+                "hit"
+            );
+
+            void f.offsetWidth;
+
+            f.classList.add(
+                "hit"
+            );
+
+            document
+                .getElementById(
+                    "game"
+                )
+                .classList
+                .add("shake");
+
+        },320);
+
+        setTimeout(()=>{
+
+            document
+                .getElementById(
+                    "game"
+                )
+                .classList
+                .remove("shake");
+
+            showPlayerAttackResult();
+
+        },720);
+    }
+
+    else if(type==="weak"){
+
+        ball.classList.add(
+            "fireWeak"
+        );
+
+        document
+            .getElementById(
+                "chargeTitle"
+            )
+            .innerHTML=
+                "TROPPO PRESTO";
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(45);
+
+        }
+
+        setTimeout(
+            showPlayerAttackResult,
+            700
+        );
+    }
+
+    else if(type==="late"){
+
+        ball.classList.add(
+            "fireWeak"
+        );
+
+        document
+            .getElementById(
+                "chargeTitle"
+            )
+            .innerHTML=
+                "TROPPO TARDI";
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(
+                [55,35,55]
+            );
+        }
+
+        setTimeout(
+            showPlayerAttackResult,
+            700
+        );
+    }
+
+    else{
+
+        ball.classList.add(
+            "overload"
+        );
+
+        document
+            .getElementById(
+                "chargeTitle"
+            )
+            .innerHTML=
+                "SOVRACCARICO";
+
+        document
+            .getElementById(
+                "game"
+            )
+            .classList
+            .add("shake");
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(
+                [120,50,180]
+            );
+        }
+
+        setTimeout(()=>{
+
+            document
+                .getElementById(
+                    "game"
+                )
+                .classList
+                .remove("shake");
+
+            showPlayerAttackResult();
+
+        },600);
+    }
+}
+
+function showPlayerAttackResult(){
+
+    const p=
+        document.getElementById(
+            "attackResult"
+        );
+
+    const t=
+        document.getElementById(
+            "attackResultTitle"
+        );
+
+    const x=
+        document.getElementById(
+            "attackResultText"
+        );
+
+    p.classList.add(
+        "active"
+    );
+
+    if(
+        playerAttackOutcome
+        ===
+        "perfect"
+    ){
+
+        xp+=50;
+
+        t.innerHTML=
+            "PERFECT CHARGE";
+
+        x.innerHTML=
+            "L'energia esplode dalla tua mano e investe Kaelios.<br><br>Per la prima volta, il suo sorriso scompare.<br><br><b>+50 XP</b>";
+    }
+
+    else if(
+        playerAttackOutcome
+        ===
+        "weak"
+    ){
+
+        t.innerHTML=
+            "ATTACCO DEBOLE";
+
+        x.innerHTML=
+            "Hai rilasciato l'energia troppo presto.<br><br>Kaelios devia il colpo con una sola mano.";
+    }
+
+    else if(
+        playerAttackOutcome
+        ===
+        "late"
+    ){
+
+        t.innerHTML=
+            "TROPPO TARDI";
+
+        x.innerHTML=
+            "Hai superato il punto ideale. L'energia perde stabilità e Kaelios riesce a deviare il colpo.";
+    }
+
+    else{
+
+        hp=
+            Math.max(
+                0,
+                hp-15
+            );
+
+        document
+            .getElementById(
+                "hpNumber"
+            )
+            .innerHTML=hp;
+
+        document
+            .getElementById(
+                "hpBar"
+            )
+            .style.width=
+                hp+"%";
+
+        t.innerHTML=
+            "SOVRACCARICO";
+
+        x.innerHTML=
+            "Hai trattenuto l'energia troppo a lungo. La sfera collassa prima di partire.<br><br>L'esplosione ti ferisce.<br><br><b>-15 HP</b>";
+    }
+}
+
+/* ============================= */
+/* FINE CONTRATTACCO */
+/* ============================= */
+
+function finishPlayerAttack(){
+
+    document
+        .getElementById(
+            "attackResult"
+        )
+        .classList
+        .remove("active");
+
+    hide("playerAttack");
+
+    show("afterFight");
+
+    const t=
+        document.getElementById(
+            "afterText"
+        );
+
+    document
+        .getElementById(
+            "afterChoices"
+        )
+        .style.display="none";
+
+    if(
+        playerAttackOutcome
+        ===
+        "perfect"
+    ){
+
+        t.innerHTML=
+            "Kaelios osserva il punto in cui l'hai colpito.<br><br>«Quell'energia... non appartiene a questo universo.»";
+    }
+
+    else if(
+        playerAttackOutcome
+        ===
+        "weak"
+    ){
+
+        t.innerHTML=
+            "Kaelios abbassa lentamente la mano.<br><br>«La forza c'è. Il controllo, ancora no.»";
+    }
+
+    else if(
+        playerAttackOutcome
+        ===
+        "late"
+    ){
+
+        t.innerHTML=
+            "Kaelios devia l'energia all'ultimo istante.<br><br>«Hai esitato. In battaglia, un istante è abbastanza.»";
+    }
+
+    else{
+
+        t.innerHTML=
+            "Kaelios ti osserva mentre l'energia si disperde.<br><br>«Se non impari a controllarla, sarà lei a distruggere te.»";
+    }
+
+    /*
+    Inizio Atto 2
+    */
+
+    setTimeout(()=>{
+
+        startRift();
+
+    },2200);
+}
+
+/* ============================= */
+/* ATTO 2 - LA FRATTURA */
+/* ============================= */
+
+function startRift(){
+
+    hide("afterFight");
+
+    show("riftScene");
+
+    riftStep=0;
+
+    const crack=
+        document.getElementById(
+            "riftCrack"
+        );
+
+    const text=
+        document.getElementById(
+            "riftText"
+        );
+
+    /*
+    Reset necessario
+    */
+
+    crack.classList.remove(
+        "open"
+    );
+
+    document
+        .getElementById(
+            "riftContinue"
+        )
+        .style.display="block";
+
+    text.innerHTML="...";
+
+    setTimeout(()=>{
+
+        crack.classList.add(
+            "open"
+        );
+
+        document
+            .getElementById(
+                "game"
+            )
+            .classList
+            .add("shake");
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(
+                [80,40,120]
+            );
+        }
+
+        setTimeout(()=>{
+
+            document
+                .getElementById(
+                    "game"
+                )
+                .classList
+                .remove("shake");
+
+        },500);
+
+    },500);
+
+    setTimeout(()=>{
+
+        text.innerHTML=
+            "No.";
+
+    },1200);
+}
+
+function advanceRift(){
+
+    const text=
+        document.getElementById(
+            "riftText"
+        );
+
+    riftStep++;
+
+    if(riftStep===1){
+
+        text.innerHTML=
+            "Questa frattura...<br><br>non l'hai aperta tu.";
+    }
+
+    else if(riftStep===2){
+
+        text.innerHTML=
+            "E se riescono ad attraversarla...";
+    }
+
+    else if(riftStep===3){
+
+        text.innerHTML=
+            "«Ti hanno già trovato.»";
+
+        if(navigator.vibrate){
+
+            navigator.vibrate(50);
+
+        }
+    }
+
+    else{
+
+        hide("riftScene");
+
+        show("riftChoice");
+    }
+}
+
+/* ============================= */
+/* PRIMA SCELTA IMPORTANTE */
+/* ============================= */
+
+function chooseRift(choice){
+
+    riftPath=choice;
+
+    hide("riftChoice");
+
+    show("riftScene");
+
+    const text=
+        document.getElementById(
+            "riftText"
+        );
+
+    document
+        .getElementById(
+            "riftContinue"
+        )
+        .style.display="none";
+
+    /*
+    RESTA CON KAELIOS
+    */
+
+    if(choice==="stay"){
+
+        kaeliosTrust++;
+
+        text.innerHTML=
+            "Kaelios ti guarda per un istante.<br><br>Non sei scappato.";
+
+        setTimeout(()=>{
+
+            text.innerHTML=
+                "Si mette davanti a te mentre la frattura continua ad aprirsi.<br><br>«Qualunque cosa accada... non lasciare che ti tocchi.»";
+
+        },1800);
+    }
+
+    /*
+    SCAPPA
+    */
+
+    else{
+
+        kaeliosTrust--;
+
+        document
+            .querySelector(
+                ".riftKaelios"
+            )
+            .style.opacity=".25";
+
+        text.innerHTML=
+            "Ti volti e corri.";
+
+        setTimeout(()=>{
+
+            text.innerHTML=
+                "Il terreno vibra sotto i tuoi piedi.<br><br>Poi senti una voce provenire dalla frattura.";
+
+        },1600);
+
+        setTimeout(()=>{
+
+            text.innerHTML=
+                "«Finalmente.»";
+
+        },3300);
+    }
+}
+
+/* ============================= */
+/* INPUT SWIPE */
+/* ============================= */
+
+document.addEventListener(
+    "mousedown",
+    e=>{
+
+        touchStartX=
+            e.clientX;
+    }
+);
+
+document.addEventListener(
+    "mouseup",
+    e=>{
+
+        if(!qteActive){
+            return;
+        }
+
+        const distance=
+            e.clientX
+            -
+            touchStartX;
+
+        if(distance < -60){
+
+            successQTE();
+
+        }
+    }
+);
+
+document.addEventListener(
+    "touchstart",
+    e=>{
+
+        touchStartX=
+            e.changedTouches[0]
+            .screenX;
+    },
+    {
+        passive:true
+    }
+);
+
+document.addEventListener(
+    "touchend",
+    e=>{
+
+        if(!qteActive){
+            return;
+        }
+
+        const endX=
+            e.changedTouches[0]
+            .screenX;
+
+        const distance=
+            endX
+            -
+            touchStartX;
+
+        if(distance < -50){
+
+            successQTE();
+
+        }
+    },
+    {
+        passive:true
+    }
+);
+
+/* ============================= */
+/* INPUT ATTACCO */
+/* ============================= */
+
+const holdButton=
+    document.getElementById(
+        "holdButton"
+    );
+
+holdButton.addEventListener(
+    "pointerdown",
+    beginPlayerCharge
+);
+
+window.addEventListener(
+    "pointerup",
+    ()=>{
+
+        if(playerCharging){
+
+            releasePlayerCharge(
+                false
+            );
+        }
+    }
+);
+
+window.addEventListener(
+    "pointercancel",
+    ()=>{
+
+        if(playerCharging){
+
+            releasePlayerCharge(
+                false
+            );
+        }
+    }
+);
 
 </script>
 
