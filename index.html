@@ -3934,6 +3934,19 @@ button:active{
     -webkit-touch-callout:none;
 }
 
+
+/* =========================================================
+   V2.2 — UNIFIED MOBILE SWIPE CONTROLLER
+   ========================================================= */
+#qteOverlay,
+#branchQte{
+    touch-action:none !important;
+    overscroll-behavior:none !important;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+    -webkit-touch-callout:none !important;
+}
+
 </style>
 
 </head>
@@ -8715,6 +8728,81 @@ const branchQteOverlay=document.getElementById("branchQte");
         mobileQteStartY=null;
     },{passive:true});
 });
+
+
+/* =========================================================
+   V2.2 — UNICO CONTROLLER SWIPE MOBILE
+   Capture-phase: intercetta la gesture prima del browser.
+   ========================================================= */
+let unifiedSwipeStartX = null;
+let unifiedSwipeStartY = null;
+let unifiedSwipeTracking = false;
+
+function unifiedQteIsActive(){
+    return qteActive === true || cineSwipeActive === true;
+}
+
+function unifiedTouchStart(e){
+    if(!unifiedQteIsActive()) return;
+    if(!e.touches || e.touches.length !== 1) return;
+
+    unifiedSwipeStartX = e.touches[0].clientX;
+    unifiedSwipeStartY = e.touches[0].clientY;
+    unifiedSwipeTracking = true;
+
+    if(e.cancelable) e.preventDefault();
+}
+
+function unifiedTouchMove(e){
+    if(!unifiedSwipeTracking || !unifiedQteIsActive()) return;
+    if(e.cancelable) e.preventDefault();
+}
+
+function unifiedTouchEnd(e){
+    if(!unifiedSwipeTracking || !unifiedQteIsActive()) return;
+    if(!e.changedTouches || !e.changedTouches.length) return;
+
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const dx = endX - unifiedSwipeStartX;
+    const dy = endY - unifiedSwipeStartY;
+
+    unifiedSwipeTracking = false;
+    unifiedSwipeStartX = null;
+    unifiedSwipeStartY = null;
+
+    if(e.cancelable) e.preventDefault();
+
+    // Deve essere una vera gesture orizzontale.
+    if(Math.abs(dx) < 38 || Math.abs(dx) <= Math.abs(dy)) return;
+
+    // Primo QTE contro Kaelios: sinistra.
+    if(qteActive === true){
+        if(dx < -38) successQTE();
+        return;
+    }
+
+    // Ramo SCAPPA: direzione richiesta a schermo.
+    if(cineSwipeActive === true){
+        const correct =
+            (cineSwipeDirection === "left"  && dx < -38) ||
+            (cineSwipeDirection === "right" && dx > 38);
+
+        if(correct) finishCineDodge(true);
+    }
+}
+
+function unifiedTouchCancel(){
+    unifiedSwipeTracking = false;
+    unifiedSwipeStartX = null;
+    unifiedSwipeStartY = null;
+}
+
+// Capture=true: il QTE riceve il touch prima di eventuali altri listener.
+document.addEventListener("touchstart", unifiedTouchStart, {passive:false, capture:true});
+document.addEventListener("touchmove",  unifiedTouchMove,  {passive:false, capture:true});
+document.addEventListener("touchend",   unifiedTouchEnd,   {passive:false, capture:true});
+document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  capture:true});
 
 </script>
 
