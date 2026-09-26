@@ -10018,36 +10018,56 @@ function startPrologueFinalV238(){
             visual:"kaelios"
         },
         {
-            action:prologueStrikeV238
+            action:prologueStrikeV239
         }
     ]);
 }
 
-function prologueStrikeV238(){
+/* Solo il COLPO è automatico. Il testo successivo aspetta il giocatore. */
+function prologueStrikeV239(){
     const e=cineEls();
     e.cont.style.display="none";
-    cineVisual("kaelios");
+    cineVisual("entity");
     cineSpeaker("");
-    e.text.innerHTML="La figura alza una mano.";
+    e.text.innerHTML="";
 
     flashImpact();
     addShake(380);
     vibrate([90,35,120]);
 
     setTimeout(()=>{
-        cineVisual("entity");
-        e.text.innerHTML="Kaelios viene scaraventato via.";
+        cineVisual("kaelios");
+        flashImpact();
+        addShake(430);
+        vibrate([100,30,120]);
+
         setTimeout(()=>{
-            scriptedDeathV237=true;
-            prologueDrainHpV238();
-        },650);
+            startCineSequence([
+                {
+                    text:"Kaelios viene scaraventato via. Non si rialza.",
+                    visual:"kaelios"
+                },
+                {
+                    speaker:"???",
+                    text:"«Questa versione di te finisce qui.»",
+                    visual:"entity"
+                },
+                {
+                    action:prologueDrainHpV239
+                }
+            ]);
+        },360);
     },420);
 }
 
-function prologueDrainHpV238(){
+/* Gli HP scendono automaticamente SOLO dopo che il giocatore ha letto e premuto CONTINUA. */
+function prologueDrainHpV239(){
     const e=cineEls();
-    cineSpeaker("???");
-    e.text.innerHTML="«Questa versione di te finisce qui.»";
+    e.cont.style.display="none";
+    cineSpeaker("");
+    e.text.innerHTML="";
+
+    scriptedDeathV237=true;
 
     const startHp=hp;
     const beats=[
@@ -10068,10 +10088,10 @@ function prologueDrainHpV238(){
         if(i<beats.length){
             setTimeout(hit,420);
         }else{
-            setTimeout(showFakeGameOverV238,520);
+            setTimeout(showFakeGameOverV238,650);
         }
     }
-    setTimeout(hit,360);
+    setTimeout(hit,320);
 }
 
 function showFakeGameOverV238(){
@@ -10092,6 +10112,7 @@ function showFakeGameOverV238(){
     go.classList.add("active");
     go.setAttribute("aria-hidden","false");
 
+    /* Qui la pausa è intenzionale: deve sembrare un vero Game Over. */
     setTimeout(()=>{
         go.classList.add("fake-rewrite-v238");
         vibrate([35,25,60]);
@@ -10101,9 +10122,8 @@ function showFakeGameOverV238(){
             textEl.textContent="Ricordi ciò che è appena accaduto.";
             btn.textContent="RISCRIVI";
             btn.style.display="";
-            
         },520);
-    },1250);
+    },1450);
 }
 
 function startVoluntaryRewriteV238(){
@@ -10111,12 +10131,10 @@ function startVoluntaryRewriteV238(){
     const btn=document.getElementById("gameOverRetryV237");
     go.classList.remove("active","fake-rewrite-v238");
     go.setAttribute("aria-hidden","true");
-    
 
     scriptedDeathV237=false;
     gameOverActiveV237=false;
 
-    // Il giocatore torna in piedi: il costo narrativo resta visibile negli HP.
     hp=Math.max(18,Math.round((checkpointV237.hp || 64)*.45));
     updateHP();
 
@@ -10126,13 +10144,14 @@ function startVoluntaryRewriteV238(){
     requestAnimationFrame(()=>{
         openRewriteGameV233(()=>{
             playRewriteFxV232(()=>{
-                finishVoluntaryRewriteV238();
+                finishVoluntaryRewriteV239();
             });
         });
     });
 }
 
-function finishVoluntaryRewriteV238(){
+/* Da qui: una schermata = una informazione = CONTINUA. */
+function finishVoluntaryRewriteV239(){
     startCineSequence([
         {
             speaker:"TU",
@@ -10144,49 +10163,57 @@ function finishVoluntaryRewriteV238(){
             visual:"rewind"
         },
         {
-            action:prologueChangedOutcomeV238
+            action:prologueChangedOutcomeV239
         }
     ]);
 }
 
-function prologueChangedOutcomeV238(){
+/* Solo l'attacco che manca il bersaglio è automatico. */
+function prologueChangedOutcomeV239(){
     const e=cineEls();
     e.cont.style.display="none";
     cineVisual("entity");
     cineSpeaker("");
-    e.text.innerHTML="L'impulso attraversa il vuoto.";
+    e.text.innerHTML="";
 
     flashImpact();
+    addShake(260);
     vibrate([40,25,55]);
 
     setTimeout(()=>{
-        cineVisual("kaelios");
-        cineSpeaker("KAELIOS");
-        e.text.innerHTML="«Quindi ricordi.»";
-        e.cont.style.display="block";
-        e.cont.textContent="CONTINUA";
-        e.cont.onclick=()=>{
-            startCineSequence([
-                {
-                    text:"La realtà intorno a voi comincia a spezzarsi.",
-                    visual:"rewind",
-                    effect:"shake"
-                },
-                {
-                    speaker:"KAELIOS",
-                    text:"«Hai cambiato ciò che doveva accadere. Dobbiamo andare.»",
-                    visual:"kaelios"
-                },
-                {
-                    text:"Kaelios apre un varco. Per la prima volta, scegli di attraversarlo.",
-                    visual:"rewind"
-                },
-                {
-                    action:completeChapterOneV238
-                }
-            ]);
-        };
-    },650);
+        startCineSequence([
+            {
+                text:"L'impulso attraversa il punto in cui eri un istante fa.",
+                visual:"entity"
+            },
+            {
+                speaker:"KAELIOS",
+                text:"«Quindi ricordi.»",
+                visual:"kaelios"
+            },
+            {
+                text:"La realtà intorno a voi comincia a spezzarsi.",
+                visual:"rewind",
+                effect:"shake"
+            },
+            {
+                speaker:"KAELIOS",
+                text:"«Hai cambiato ciò che doveva accadere. Dobbiamo andare.»",
+                visual:"kaelios"
+            },
+            {
+                text:"Kaelios apre un varco.",
+                visual:"rewind"
+            },
+            {
+                text:"Per la prima volta, scegli di attraversarlo.",
+                visual:"rewind"
+            },
+            {
+                action:completeChapterOneV238
+            }
+        ]);
+    },620);
 }
 
 function completeChapterOneV238(){
