@@ -4388,6 +4388,42 @@ button:active{
 .goEyebrowV237{font-size:11px;letter-spacing:4px;opacity:.55;margin-bottom:12px}
 .goTitleV237{font-size:clamp(25px,8vw,42px);line-height:.98;font-weight:900;letter-spacing:2px;text-shadow:0 0 18px rgba(157,91,220,.28)}
 .goTextV237{margin:16px 0 24px;font-size:13px;opacity:.72}
+
+/* =========================================================
+   V2.3.8 — FINALE PROLOGO
+   ========================================================= */
+#gameOverV237.fake-rewrite-v238 .goEyebrowV237{opacity:.85}
+#gameOverV237.fake-rewrite-v238 .goTitleV237{
+    animation:fakeGlitchV238 .22s steps(2,end) 3;
+}
+#gameOverV237.fake-rewrite-v238 .goTextV237{opacity:.9}
+#gameOverV237.fake-rewrite-v238 #gameOverRetryV237{
+    letter-spacing:3px;
+    font-weight:900;
+}
+@keyframes fakeGlitchV238{
+    0%,100%{transform:translate3d(0,0,0)}
+    33%{transform:translate3d(-4px,1px,0)}
+    66%{transform:translate3d(4px,-1px,0)}
+}
+#chapterCompleteV238{
+    position:absolute;inset:0;z-index:950;
+    display:flex;align-items:center;justify-content:center;
+    padding:calc(24px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+            calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+    background:radial-gradient(circle at 50% 45%,rgba(83,31,133,.22),rgba(2,1,7,.98) 58%);
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .55s ease;
+}
+#chapterCompleteV238.active{opacity:1;visibility:visible;pointer-events:auto}
+.chapterCardV238{width:min(92vw,480px);text-align:center}
+.chapterEyebrowV238{font-size:10px;letter-spacing:5px;opacity:.5;margin-bottom:15px}
+.chapterTitleV238{font-size:clamp(28px,8.5vw,46px);line-height:1;font-weight:900;letter-spacing:2px}
+.chapterLineV238{width:58px;height:1px;background:rgba(255,255,255,.45);margin:22px auto}
+.chapterRewardV238{font-size:20px;font-weight:800;margin-bottom:10px}
+.chapterMemoryV238{font-size:11px;letter-spacing:2px;opacity:.72}
+.chapterHintV238{font-size:12px;line-height:1.5;opacity:.48;margin-top:22px}
+
 </style>
 
 </head>
@@ -5130,6 +5166,18 @@ button:active{
 
         
         
+        
+        <div id="chapterCompleteV238" aria-hidden="true">
+            <div class="chapterCardV238">
+                <div class="chapterEyebrowV238">WHAT IF UNIVERSE</div>
+                <div class="chapterTitleV238">CAPITOLO 01<br>COMPLETATO</div>
+                <div class="chapterLineV238"></div>
+                <div class="chapterRewardV238">+50 💎</div>
+                <div class="chapterMemoryV238">MEMORIA TEMPORALE ACQUISITA</div>
+                <div class="chapterHintV238">Qualcosa, oltre questa realtà, ti sta aspettando.</div>
+            </div>
+        </div>
+
         <div id="gameOverV237" aria-hidden="true">
             <div class="goCardV237">
                 <div class="goEyebrowV237">HP 0</div>
@@ -9779,9 +9827,7 @@ function handleEntityDodgeV23(success){
 
     if(entityCombatPhase==="rewritten"){
         if(!success){
-            hp=Math.max(1,hp-6);
-            updateHP();
-            flashImpact();
+            if(damagePlayerV237(6)) return;
             addShake(260);
             vibrate([70,30,80]);
 
@@ -9822,8 +9868,10 @@ function handleEntityDodgeV23(success){
                 speaker:"???",
                 text:"«Le riscrive.»",
                 visual:"entity",
-                effect:"shake",
-                continue:false
+                effect:"shake"
+            },
+            {
+                action:startPrologueFinalV238
             }
         ]);
     }
@@ -9950,8 +9998,216 @@ function startRewrittenDodgeV23(){
 }
 
 
+
+/* =========================================================
+   V2.3.8 — FINALE BREVE DEL PROLOGO
+   ========================================================= */
+let prologueFinalV238=false;
+
+function startPrologueFinalV238(){
+    prologueFinalV238=true;
+    startCineSequence([
+        {
+            speaker:"???",
+            text:"«Allora la correzione non può più aspettare.»",
+            visual:"entity"
+        },
+        {
+            speaker:"KAELIOS",
+            text:"«Dietro di me.»",
+            visual:"kaelios"
+        },
+        {
+            action:prologueStrikeV238
+        }
+    ]);
+}
+
+function prologueStrikeV238(){
+    const e=cineEls();
+    e.cont.style.display="none";
+    cineVisual("kaelios");
+    cineSpeaker("");
+    e.text.innerHTML="La figura alza una mano.";
+
+    flashImpact();
+    addShake(380);
+    vibrate([90,35,120]);
+
+    setTimeout(()=>{
+        cineVisual("entity");
+        e.text.innerHTML="Kaelios viene scaraventato via.";
+        setTimeout(()=>{
+            scriptedDeathV237=true;
+            prologueDrainHpV238();
+        },650);
+    },420);
+}
+
+function prologueDrainHpV238(){
+    const e=cineEls();
+    cineSpeaker("???");
+    e.text.innerHTML="«Questa versione di te finisce qui.»";
+
+    const startHp=hp;
+    const beats=[
+        Math.max(0,Math.round(startHp*.62)),
+        Math.max(0,Math.round(startHp*.28)),
+        0
+    ];
+    let i=0;
+
+    function hit(){
+        hp=beats[i];
+        updateHP();
+        flashImpact();
+        addShake(i===2?500:260);
+        vibrate(i===2?[120,45,160]:[65,25,80]);
+        i++;
+
+        if(i<beats.length){
+            setTimeout(hit,420);
+        }else{
+            setTimeout(showFakeGameOverV238,520);
+        }
+    }
+    setTimeout(hit,360);
+}
+
+function showFakeGameOverV238(){
+    hide("riftScene");
+
+    const go=document.getElementById("gameOverV237");
+    const eyebrow=go.querySelector(".goEyebrowV237");
+    const title=go.querySelector(".goTitleV237");
+    const textEl=go.querySelector(".goTextV237");
+    const btn=document.getElementById("gameOverRetryV237");
+
+    eyebrow.textContent="HP 0";
+    title.innerHTML="LINEA TEMPORALE<br>COLLASSATA";
+    textEl.textContent="La tua storia termina qui.";
+    btn.style.display="none";
+
+    go.classList.remove("fake-rewrite-v238");
+    go.classList.add("active");
+    go.setAttribute("aria-hidden","false");
+
+    setTimeout(()=>{
+        go.classList.add("fake-rewrite-v238");
+        vibrate([35,25,60]);
+
+        setTimeout(()=>{
+            title.innerHTML="QUESTA REALTÀ<br>NON DEVE FINIRE COSÌ";
+            textEl.textContent="Ricordi ciò che è appena accaduto.";
+            btn.textContent="RISCRIVI";
+            btn.style.display="";
+            
+        },520);
+    },1250);
+}
+
+function startVoluntaryRewriteV238(){
+    const go=document.getElementById("gameOverV237");
+    const btn=document.getElementById("gameOverRetryV237");
+    go.classList.remove("active","fake-rewrite-v238");
+    go.setAttribute("aria-hidden","true");
+    
+
+    scriptedDeathV237=false;
+    gameOverActiveV237=false;
+
+    // Il giocatore torna in piedi: il costo narrativo resta visibile negli HP.
+    hp=Math.max(18,Math.round((checkpointV237.hp || 64)*.45));
+    updateHP();
+
+    show("riftScene");
+    cineVisual("rewind");
+
+    requestAnimationFrame(()=>{
+        openRewriteGameV233(()=>{
+            playRewriteFxV232(()=>{
+                finishVoluntaryRewriteV238();
+            });
+        });
+    });
+}
+
+function finishVoluntaryRewriteV238(){
+    startCineSequence([
+        {
+            speaker:"TU",
+            text:"«Kaelios. Spostati.»",
+            visual:"kaelios"
+        },
+        {
+            text:"Questa volta conosci già l'attacco.",
+            visual:"rewind"
+        },
+        {
+            action:prologueChangedOutcomeV238
+        }
+    ]);
+}
+
+function prologueChangedOutcomeV238(){
+    const e=cineEls();
+    e.cont.style.display="none";
+    cineVisual("entity");
+    cineSpeaker("");
+    e.text.innerHTML="L'impulso attraversa il vuoto.";
+
+    flashImpact();
+    vibrate([40,25,55]);
+
+    setTimeout(()=>{
+        cineVisual("kaelios");
+        cineSpeaker("KAELIOS");
+        e.text.innerHTML="«Quindi ricordi.»";
+        e.cont.style.display="block";
+        e.cont.textContent="CONTINUA";
+        e.cont.onclick=()=>{
+            startCineSequence([
+                {
+                    text:"La realtà intorno a voi comincia a spezzarsi.",
+                    visual:"rewind",
+                    effect:"shake"
+                },
+                {
+                    speaker:"KAELIOS",
+                    text:"«Hai cambiato ciò che doveva accadere. Dobbiamo andare.»",
+                    visual:"kaelios"
+                },
+                {
+                    text:"Kaelios apre un varco. Per la prima volta, scegli di attraversarlo.",
+                    visual:"rewind"
+                },
+                {
+                    action:completeChapterOneV238
+                }
+            ]);
+        };
+    },650);
+}
+
+function completeChapterOneV238(){
+    hide("riftScene");
+    gems+=50;
+    updateGems();
+
+    const chapter=document.getElementById("chapterCompleteV238");
+    chapter.classList.add("active");
+    chapter.setAttribute("aria-hidden","false");
+}
+
 /* V2.3.3 — input sicuro mobile */
-document.getElementById("gameOverRetryV237").addEventListener("click",retryCheckpointV237);
+document.getElementById("gameOverRetryV237").addEventListener("click",function(e){
+    if(prologueFinalV238 && scriptedDeathV237){
+        e.preventDefault();
+        startVoluntaryRewriteV238();
+        return;
+    }
+    retryCheckpointV237();
+});
 const rewriteRetryBtnV233=document.getElementById("rewriteRetryV233");
 rewriteRetryBtnV233.addEventListener("click",retryRewriteV233);
 
