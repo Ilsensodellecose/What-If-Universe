@@ -4445,6 +4445,15 @@ button:active{
     opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s ease;
 }
 #hubTeaserV241.active{opacity:1;visibility:visible;pointer-events:auto}
+
+/* V2.4.4 — overlay figli di riftScene: il parent deve restare visibile */
+#riftScene.prologue-overlay-v244 .riftKaelios,
+#riftScene.prologue-overlay-v244 .riftCrack,
+#riftScene.prologue-overlay-v244 .riftDialogue{
+    opacity:0 !important;
+    pointer-events:none !important;
+}
+
 </style>
 
 </head>
@@ -9624,6 +9633,9 @@ function checkGameOverV237(){
     rewriteGameActiveV233=false;
     try{cancelAnimationFrame(rewriteGameRafV234)}catch(e){}
     gameOverActiveV237=true;
+    const rift=document.getElementById("riftScene");
+    if(rift) rift.classList.add("prologue-overlay-v244");
+
     const go=document.getElementById("gameOverV237");
     go.classList.add("active");
     go.setAttribute("aria-hidden","false");
@@ -9639,6 +9651,8 @@ function damagePlayerV237(amount){
 }
 function retryCheckpointV237(){
     gameOverActiveV237=false;
+    const rift=document.getElementById("riftScene");
+    if(rift) rift.classList.remove("prologue-overlay-v244");
     const go=document.getElementById("gameOverV237");
     go.classList.remove("active");
     go.setAttribute("aria-hidden","true");
@@ -10139,7 +10153,7 @@ function prologueDrainHpV239(){
 
 function showFakeGameOverV243(){
     scriptedDeathStageV243="collapsed";
-    hide("riftScene");
+    show("riftScene");
 
     const go=document.getElementById("gameOverV237");
     const eyebrow=go.querySelector(".goEyebrowV237");
@@ -10194,6 +10208,8 @@ function startVoluntaryRewriteV243(){
     if(scriptedDeathStageV243!=="rewrite-ready") return;
 
     scriptedDeathStageV243="rewrite-playing";
+    const rift=document.getElementById("riftScene");
+    if(rift) rift.classList.remove("prologue-overlay-v244");
 
     const go=document.getElementById("gameOverV237");
     const btn=document.getElementById("gameOverRetryV237");
@@ -10286,8 +10302,12 @@ function prologueChangedOutcomeV239(){
 }
 
 function completeChapterOneV238(){
+    /* Gli overlay finali vivono DENTRO riftScene: il parent resta visibile. */
+    const rift=document.getElementById("riftScene");
+    if(rift) rift.classList.add("prologue-overlay-v244");
+
     /* Chiude esplicitamente tutto ciò che potrebbe coprire il finale. */
-    try{ hide("riftScene"); }catch(e){}
+    try{ show("riftScene"); }catch(e){}
     try{ hide("qteOverlay"); }catch(e){}
     try{ hide("branchQte"); }catch(e){}
 
