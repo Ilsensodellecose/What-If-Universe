@@ -10036,6 +10036,7 @@ function startRewrittenDodgeV23(){
    V2.3.8 — FINALE BREVE DEL PROLOGO
    ========================================================= */
 let prologueFinalV238=false;
+let scriptedDeathStageV243="";
 
 function startPrologueFinalV238(){
     prologueFinalV238=true;
@@ -10096,11 +10097,15 @@ function prologueStrikeV239(){
 /* Gli HP scendono automaticamente SOLO dopo che il giocatore ha letto e premuto CONTINUA. */
 function prologueDrainHpV239(){
     const e=cineEls();
+
+    /* Da questo momento nessun vecchio CONTINUA può restare attivo. */
     e.cont.style.display="none";
+    e.cont.onclick=null;
     cineSpeaker("");
     e.text.innerHTML="";
 
     scriptedDeathV237=true;
+    scriptedDeathStageV243="dying";
 
     const startHp=hp;
     const beats=[
@@ -10111,6 +10116,8 @@ function prologueDrainHpV239(){
     let i=0;
 
     function hit(){
+        if(scriptedDeathStageV243!=="dying") return;
+
         hp=beats[i];
         updateHP();
         flashImpact();
@@ -10119,15 +10126,19 @@ function prologueDrainHpV239(){
         i++;
 
         if(i<beats.length){
-            setTimeout(hit,420);
+            setTimeout(hit,360);
         }else{
-            setTimeout(showFakeGameOverV238,650);
+            /* Appena finisce l'ultimo colpo mostriamo il Game Over.
+               Nessuna pausa narrativa nascosta. */
+            setTimeout(showFakeGameOverV243,260);
         }
     }
-    setTimeout(hit,320);
+
+    setTimeout(hit,220);
 }
 
-function showFakeGameOverV238(){
+function showFakeGameOverV243(){
+    scriptedDeathStageV243="collapsed";
     hide("riftScene");
 
     const go=document.getElementById("gameOverV237");
@@ -10136,43 +10147,58 @@ function showFakeGameOverV238(){
     const textEl=go.querySelector(".goTextV237");
     const btn=document.getElementById("gameOverRetryV237");
 
+    go.classList.remove("fake-rewrite-v238");
     eyebrow.textContent="HP 0";
     title.innerHTML="LINEA TEMPORALE<br>COLLASSATA";
     textEl.textContent="La tua storia termina qui.";
     btn.textContent="CONTINUA";
+    btn.disabled=false;
     btn.style.display="";
 
-    go.classList.remove("fake-rewrite-v238");
     go.classList.add("active");
     go.setAttribute("aria-hidden","false");
-
-    /* Nessun timer narrativo: resta qui finché il giocatore preme CONTINUA. */
 }
 
-function revealRewriteChoiceV240(){
+/* Chiamata ESCLUSIVAMENTE dal click su CONTINUA. */
+function revealRewriteChoiceV243(){
+    if(scriptedDeathStageV243!=="collapsed") return;
+
+    scriptedDeathStageV243="revealing";
+
     const go=document.getElementById("gameOverV237");
     const eyebrow=go.querySelector(".goEyebrowV237");
     const title=go.querySelector(".goTitleV237");
     const textEl=go.querySelector(".goTextV237");
     const btn=document.getElementById("gameOverRetryV237");
 
+    btn.disabled=true;
     btn.style.display="none";
     go.classList.add("fake-rewrite-v238");
     vibrate([35,25,60]);
 
-    /* Solo il glitch è automatico e molto breve. */
     setTimeout(()=>{
+        if(scriptedDeathStageV243!=="revealing") return;
+
         eyebrow.textContent="MEMORIA TEMPORALE";
         title.innerHTML="QUESTA REALTÀ<br>NON DEVE FINIRE COSÌ";
         textEl.textContent="Ricordi ciò che è appena accaduto.";
         btn.textContent="RISCRIVI";
+        btn.disabled=false;
         btn.style.display="";
-    },420);
+        scriptedDeathStageV243="rewrite-ready";
+    },380);
 }
 
-function startVoluntaryRewriteV238(){
+/* Chiamata ESCLUSIVAMENTE dal click su RISCRIVI. */
+function startVoluntaryRewriteV243(){
+    if(scriptedDeathStageV243!=="rewrite-ready") return;
+
+    scriptedDeathStageV243="rewrite-playing";
+
     const go=document.getElementById("gameOverV237");
     const btn=document.getElementById("gameOverRetryV237");
+
+    btn.disabled=true;
     go.classList.remove("active","fake-rewrite-v238");
     go.setAttribute("aria-hidden","true");
 
@@ -10185,16 +10211,15 @@ function startVoluntaryRewriteV238(){
     show("riftScene");
     cineVisual("rewind");
 
-    requestAnimationFrame(()=>{
-        openRewriteGameV233(()=>{
-            playRewriteFxV232(()=>{
-                finishVoluntaryRewriteV239();
-            });
+    /* Nessun ritardo: apriamo il minigame nello stesso click/tick. */
+    openRewriteGameV233(()=>{
+        scriptedDeathStageV243="rewrite-done";
+        playRewriteFxV232(()=>{
+            finishVoluntaryRewriteV239();
         });
     });
 }
 
-/* Da qui: una schermata = una informazione = CONTINUA. */
 function finishVoluntaryRewriteV239(){
     startCineSequence([
         {
@@ -10284,18 +10309,17 @@ function completeChapterOneV238(){
         go.setAttribute("aria-hidden","true");
     }
 
+    const chapter=document.getElementById("chapterCompleteV238");
+    chapter.style.display="flex";
+    chapter.classList.add("active");
+    chapter.setAttribute("aria-hidden","false");
+
     if(!window.chapterRewardGrantedV241){
         window.chapterRewardGrantedV241=true;
         gems+=50;
         xp+=100;
         updateGems();
-        updateXP();
     }
-
-    const chapter=document.getElementById("chapterCompleteV238");
-    chapter.style.display="flex";
-    chapter.classList.add("active");
-    chapter.setAttribute("aria-hidden","false");
 }
 
 /* V2.3.3 — input sicuro mobile */
@@ -10312,16 +10336,20 @@ document.getElementById("chapterContinueV241").addEventListener("click",function
 });
 
 document.getElementById("gameOverRetryV237").addEventListener("click",function(e){
+    e.preventDefault();
+
     if(prologueFinalV238 && scriptedDeathV237){
-        e.preventDefault();
-        const btn=document.getElementById("gameOverRetryV237");
-        if(btn.textContent.trim()==="CONTINUA"){
-            revealRewriteChoiceV240();
-        }else if(btn.textContent.trim()==="RISCRIVI"){
-            startVoluntaryRewriteV238();
+        if(scriptedDeathStageV243==="collapsed"){
+            revealRewriteChoiceV243();
+            return;
+        }
+        if(scriptedDeathStageV243==="rewrite-ready"){
+            startVoluntaryRewriteV243();
+            return;
         }
         return;
     }
+
     retryCheckpointV237();
 });
 const rewriteRetryBtnV233=document.getElementById("rewriteRetryV233");
