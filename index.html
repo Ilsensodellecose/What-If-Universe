@@ -10075,40 +10075,39 @@ function startPrologueFinalV238(){
 function prologueStrikeV239(){
     const e=cineEls();
     e.cont.style.display="none";
-    cineVisual("entity");
-    cineSpeaker("");
-    e.text.innerHTML="";
+    e.cont.onclick=null;
 
+    cineVisual("kaelios");
     flashImpact();
-    addShake(380);
-    vibrate([90,35,120]);
+    addShake(520);
+    vibrate([70,35,110]);
 
+    /* L'animazione del colpo può essere automatica. Il testo no. */
     setTimeout(()=>{
-        cineVisual("kaelios");
-        flashImpact();
-        addShake(430);
-        vibrate([100,30,120]);
+        cineSpeaker("");
+        cineVisual("rift");
+        e.text.textContent="Kaelios viene scaraventato via. Non si rialza.";
+        e.cont.textContent="CONTINUA";
+        e.cont.style.display="";
 
-        setTimeout(()=>{
-            startCineSequence([
-                {
-                    text:"Kaelios viene scaraventato via. Non si rialza.",
-                    visual:"kaelios"
-                },
-                {
-                    speaker:"???",
-                    text:"«Questa versione di te finisce qui.»",
-                    visual:"entity"
-                },
-                {
-                    action:prologueDrainHpV239
-                }
-            ]);
-        },360);
+        /* Primo click: passa alla frase dell'Entità. */
+        e.cont.onclick=function(){
+            cineSpeaker("???");
+            cineVisual("entity");
+            e.text.textContent="Questa versione di te finisce qui.";
+            e.cont.textContent="CONTINUA";
+            e.cont.style.display="";
+
+            /* Secondo click: SOLO ORA partono i flash e la morte. */
+            e.cont.onclick=function(){
+                e.cont.onclick=null;
+                e.cont.style.display="none";
+                prologueDrainHpV239();
+            };
+        };
     },420);
 }
 
-/* Gli HP scendono automaticamente SOLO dopo che il giocatore ha letto e premuto CONTINUA. */
 function prologueDrainHpV239(){
     const e=cineEls();
 
@@ -10120,6 +10119,8 @@ function prologueDrainHpV239(){
 
     scriptedDeathV237=true;
     scriptedDeathStageV243="dying";
+    cineQueue=[];
+    cineRunning=false;
 
     const startHp=hp;
     const beats=[
