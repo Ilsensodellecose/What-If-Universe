@@ -2,132 +2,282 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+
+<meta name="theme-color" content="#020208">
+
 <title>What If Universe</title>
 
 <style>
+
+/* =========================================================
+   WHAT IF UNIVERSE — PERFORMANCE BASE V1
+   ========================================================= */
+
+:root{
+    --purple:#a67cff;
+    --purple2:#7c3aed;
+    --panel:rgba(8,6,20,.91);
+    --border:rgba(255,255,255,.13);
+}
+
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
 }
 
+html,
 body{
     margin:0;
-    background:#000;
-    color:white;
-    font-family:Arial,sans-serif;
+    width:100%;
+    height:100%;
     overflow:hidden;
+    background:#020208;
+}
+
+body{
+    color:#fff;
+    font-family:Arial,sans-serif;
+
     user-select:none;
-    touch-action:none;
+    -webkit-user-select:none;
+
+    overscroll-behavior:none;
+    -webkit-touch-callout:none;
+}
+
+button{
+    font:inherit;
+    color:#fff;
+    cursor:pointer;
+
+    -webkit-appearance:none;
+    appearance:none;
+
+    touch-action:manipulation;
 }
 
 #game{
+    position:fixed;
+    inset:0;
+
     width:100vw;
     height:100vh;
-    position:relative;
+    height:100dvh;
+
     overflow:hidden;
+
     background:
-        radial-gradient(circle at 50% 25%,#452080 0%,transparent 35%),
-        radial-gradient(circle at 20% 80%,#151f5e 0%,transparent 35%),
-        linear-gradient(#080816,#020208);
+        radial-gradient(
+            circle at 50% 25%,
+            #342064 0%,
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 18% 82%,
+            #101849 0%,
+            transparent 34%
+        ),
+        #020208;
+
+    contain:layout paint;
 }
+
+
+/* =========================================================
+   STELLE
+   ========================================================= */
 
 .stars{
     position:absolute;
     inset:0;
-    opacity:.3;
-    background-image:radial-gradient(white 1px,transparent 1px);
-    background-size:35px 35px;
+
+    opacity:.24;
+
+    pointer-events:none;
+
+    background-image:
+        radial-gradient(
+            rgba(255,255,255,.85) 1px,
+            transparent 1px
+        );
+
+    background-size:38px 38px;
 }
+
+
+/* =========================================================
+   SCHERMATE
+   ========================================================= */
 
 .screen{
     position:absolute;
     inset:0;
+
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:24px;
+
+    padding:
+        max(68px,calc(env(safe-area-inset-top) + 54px))
+        max(16px,calc(env(safe-area-inset-right) + 14px))
+        max(14px,calc(env(safe-area-inset-bottom) + 10px))
+        max(16px,calc(env(safe-area-inset-left) + 14px));
+
     text-align:center;
-    transition:opacity .4s;
+
+    overflow:hidden;
+
+    opacity:1;
+    visibility:visible;
+
+    transition:
+        opacity .22s ease;
+
+    contain:layout paint;
 }
 
-.hidden{
+.screen.hidden{
     opacity:0;
+    visibility:hidden;
     pointer-events:none;
 }
 
 .content{
     position:relative;
     z-index:2;
+
     width:100%;
-    max-width:480px;
+    max-width:460px;
+
+    max-height:100%;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
 }
 
+
+/* =========================================================
+   TESTI BASE
+   ========================================================= */
+
 .small{
-    font-size:11px;
+    margin-bottom:17px;
+
+    font-size:10px;
     letter-spacing:5px;
+
     opacity:.6;
-    margin-bottom:18px;
 }
 
 h1{
     margin:0;
-    font-size:clamp(42px,12vw,70px);
+
+    font-size:clamp(40px,12vw,68px);
+
     line-height:.9;
 }
 
 .purple{
-    color:#a67cff;
+    color:var(--purple);
 }
 
 .subtitle{
-    margin-top:22px;
-    opacity:.7;
+    margin-top:20px;
+
     line-height:1.5;
+
+    font-size:clamp(13px,3.8vw,15px);
+
+    opacity:.7;
 }
 
 button{
     width:min(330px,90%);
-    padding:17px;
-    margin-top:13px;
-    border:1px solid #a67cff;
+
+    min-height:48px;
+
+    margin-top:11px;
+
+    padding:14px 16px;
+
+    border:1px solid rgba(166,124,255,.8);
+
     border-radius:14px;
-    background:linear-gradient(135deg,#6335d5,#9c61ff);
-    color:white;
-    font-weight:bold;
-    letter-spacing:1px;
-    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5730bd,
+            #8651e7
+        );
+
+    font-weight:700;
+
+    letter-spacing:.8px;
+
+    transition:
+        transform .08s ease,
+        filter .08s ease;
 }
 
 button:active{
-    transform:scale(.96);
+    transform:scale(.975);
+    filter:brightness(1.1);
 }
 
-/* INTRO */
+
+/* =========================================================
+   INTRO
+   ========================================================= */
 
 #intro{
     background:#000;
 }
 
 #introText{
-    font-size:20px;
+    font-size:clamp(15px,5vw,20px);
+
     letter-spacing:3px;
+
     opacity:0;
-    transition:opacity 1s;
+
+    transition:opacity .8s ease;
 }
 
-/* HUD */
+
+/* =========================================================
+   HUD
+   ========================================================= */
 
 #hud{
     position:absolute;
-    top:max(16px,env(safe-area-inset-top));
-    left:18px;
-    right:18px;
+
+    top:max(11px,env(safe-area-inset-top));
+
+    left:max(14px,env(safe-area-inset-left));
+    right:max(14px,env(safe-area-inset-right));
+
     z-index:100;
+
     display:flex;
     justify-content:space-between;
+    align-items:flex-start;
+
     pointer-events:none;
+
+    transition:opacity .2s ease;
+}
+
+#hud.hidden{
+    opacity:0;
+    visibility:hidden;
 }
 
 .hud-left{
@@ -135,208 +285,346 @@ button:active{
 }
 
 .level{
-    font-size:11px;
+    font-size:10px;
     letter-spacing:2px;
+
     opacity:.65;
 }
 
 .hpText{
-    font-size:11px;
-    margin-top:5px;
+    margin-top:4px;
+
+    font-size:10px;
 }
 
 .hpContainer{
-    width:130px;
+    width:min(128px,34vw);
     height:6px;
+
     margin-top:5px;
-    border-radius:20px;
-    background:rgba(255,255,255,.15);
+
     overflow:hidden;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.14);
 }
 
 #hpBar{
     width:100%;
     height:100%;
-    background:linear-gradient(90deg,#8dffb0,#55e583);
-    transition:width .5s;
+
+    transform-origin:left center;
+
+    background:
+        linear-gradient(
+            90deg,
+            #8dffb0,
+            #55e583
+        );
+
+    transition:width .35s ease;
 }
 
 .gems{
-    padding:8px 11px;
-    border-radius:15px;
-    background:rgba(10,10,25,.55);
-    border:1px solid rgba(255,255,255,.12);
-    backdrop-filter:blur(8px);
-    font-size:13px;
+    padding:7px 10px;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    background:rgba(10,8,24,.84);
+
+    font-size:12px;
 }
 
-/* PERSONAGGIO */
+
+/* =========================================================
+   KAELIOS
+   ========================================================= */
 
 .character-area{
     position:relative;
-    height:38vh;
-    min-height:245px;
-    max-height:390px;
+
+    width:100%;
+
+    height:min(35dvh,320px);
+    min-height:170px;
+
     display:flex;
     justify-content:center;
     align-items:flex-end;
-    margin-top:25px;
-    margin-bottom:-12px;
+
+    margin-top:2px;
+    margin-bottom:-4px;
+
+    flex-shrink:1;
+
+    contain:layout paint;
 }
 
 #kaelios,
 #kaeliosAfter{
     position:relative;
+
     z-index:3;
+
     height:100%;
-    max-width:95%;
+    max-width:92%;
+
     object-fit:contain;
 
+    /*
+       Una sola ombra leggera.
+       Molto meno costosa delle precedenti.
+    */
     filter:
-        drop-shadow(0 0 15px rgba(151,91,255,.55))
-        drop-shadow(0 0 45px rgba(96,42,190,.35));
+        drop-shadow(
+            0 0 14px
+            rgba(145,85,255,.42)
+        );
 
-    animation:floatKaelios 3.5s ease-in-out infinite;
-    transition:transform .35s,filter .35s;
+    animation:
+        floatKaelios
+        4s
+        ease-in-out
+        infinite;
+
+    will-change:transform;
+
+    transform:translateZ(0);
 }
 
 .aura{
     position:absolute;
+
     z-index:1;
-    width:230px;
-    height:310px;
+
+    width:min(210px,55vw);
+    height:min(280px,32dvh);
+
     border-radius:50%;
+
+    /*
+       Nessun filter:blur animato.
+       Il gradiente crea già l'effetto morbido.
+    */
 
     background:
         radial-gradient(
             ellipse,
-            rgba(143,80,255,.45),
-            rgba(91,33,182,.18) 45%,
+            rgba(143,80,255,.35) 0%,
+            rgba(91,33,182,.16) 40%,
+            rgba(91,33,182,.06) 58%,
             transparent 72%
         );
 
-    filter:blur(18px);
-    animation:auraPulse 2s ease-in-out infinite alternate;
-    transition:all .4s;
+    animation:
+        auraPulse
+        2.5s
+        ease-in-out
+        infinite alternate;
+
+    will-change:
+        transform,
+        opacity;
+
+    transform:translateZ(0);
 }
 
 .attackMode #kaelios{
     animation:none;
-    transform:translateY(10px) scale(1.12);
+
+    transform:
+        translate3d(0,8px,0)
+        scale(1.08);
 
     filter:
-        drop-shadow(0 0 25px #d8b4fe)
-        drop-shadow(0 0 75px #7c3aed)
-        brightness(1.25);
+        drop-shadow(
+            0 0 20px
+            rgba(210,180,255,.8)
+        );
 }
 
 .attackMode .aura{
-    width:330px;
-    height:400px;
+    transform:scale(1.25);
     opacity:1;
 }
 
-/* TESTI */
+
+/* =========================================================
+   DIALOGHI
+   ========================================================= */
 
 .chapter{
-    color:#a67cff;
+    flex-shrink:0;
+
+    margin-bottom:6px;
+
+    color:var(--purple);
+
+    font-size:9px;
     letter-spacing:4px;
-    font-size:10px;
-    margin-bottom:7px;
 }
 
 .sceneTitle{
+    flex-shrink:0;
+
     margin:0;
-    font-size:18px;
+
+    font-size:clamp(16px,4.8vw,19px);
 }
 
 .dialogue{
-    margin-top:12px;
-    padding:18px;
     width:100%;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:18px;
-    background:rgba(10,10,25,.82);
-    backdrop-filter:blur(10px);
+
+    flex-shrink:0;
+
+    margin-top:9px;
+
+    padding:13px 15px;
+
+    border:1px solid var(--border);
+
+    border-radius:16px;
+
+    background:var(--panel);
+
     text-align:left;
 }
 
 .name{
+    margin-bottom:7px;
+
     color:#b692ff;
-    font-weight:bold;
-    font-size:11px;
+
+    font-size:10px;
+    font-weight:700;
+
     letter-spacing:2px;
-    margin-bottom:8px;
 }
 
 .text{
-    line-height:1.5;
-    font-size:15px;
+    font-size:clamp(13px,3.8vw,15px);
+
+    line-height:1.4;
 }
 
 .choices{
-    margin-top:8px;
+    width:100%;
+
+    flex-shrink:0;
+
     display:none;
+
+    margin-top:4px;
 }
 
 .choice{
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(166,124,255,.45);
+    width:100%;
+
+    min-height:42px;
+
+    margin-top:5px;
+
+    padding:10px 13px;
+
+    border:
+        1px solid
+        rgba(166,124,255,.4);
+
+    background:
+        rgba(25,18,46,.92);
+
     text-align:left;
 }
 
-/* SFERA NEMICA */
+
+/* =========================================================
+   SFERA KAELIOS
+   ========================================================= */
 
 #energyBall{
     position:absolute;
-    left:47%;
-    top:27%;
+
+    /*
+       Questo rimane SEMPRE 47%.
+    */
+    left:48%;
+    top:34%;
+
     width:32px;
     height:32px;
+
     z-index:80;
+
     border-radius:50%;
+
     opacity:0;
+
     pointer-events:none;
 
     transform:
-        translate(-50%,-50%)
+        translate3d(-50%,-50%,0)
         scale(.1);
 
     background:
         radial-gradient(
             circle,
             #fff 0%,
-            #fff 8%,
-            #f3e8ff 15%,
-            #d8b4fe 28%,
-            #a855f7 48%,
-            #6d28d9 68%,
-            transparent 74%
+            #fff 9%,
+            #e8d5ff 20%,
+            #b56cff 42%,
+            #7133cf 66%,
+            transparent 72%
         );
 
+    /*
+       Glow ridotto.
+    */
     box-shadow:
-        0 0 10px #fff,
-        0 0 25px #e9d5ff,
-        0 0 50px #c084fc,
-        0 0 90px #7c3aed,
-        0 0 140px #6d28d9;
+        0 0 12px rgba(255,255,255,.9),
+        0 0 30px rgba(192,132,252,.75),
+        0 0 58px rgba(124,58,237,.55);
+
+    will-change:
+        transform,
+        opacity;
 }
 
 #energyBall.charge{
     opacity:1;
-    animation:chargeEnergy .9s ease-in-out forwards;
+
+    animation:
+        chargeEnergy
+        .9s
+        ease-out
+        forwards;
 }
 
 #energyBall.fly{
     opacity:1;
-    animation:flyEnergy 1.25s cubic-bezier(.12,.55,.18,1) forwards;
+
+    /*
+       Ora il movimento è fatto con transform,
+       non con left/top.
+    */
+    animation:
+        flyEnergy
+        1.25s
+        cubic-bezier(.15,.55,.2,1)
+        forwards;
 }
 
-/* QTE */
+
+/* =========================================================
+   QTE
+   ========================================================= */
 
 #qteOverlay{
     position:absolute;
     inset:0;
+
     z-index:190;
 
     display:flex;
@@ -344,80 +632,96 @@ button:active{
     align-items:center;
     justify-content:flex-start;
 
-    padding-top:max(110px,14vh);
+    padding:
+        max(88px,calc(env(safe-area-inset-top) + 68px))
+        18px
+        max(18px,env(safe-area-inset-bottom));
 
     opacity:0;
+    visibility:hidden;
+
     pointer-events:none;
 
     background:
-        radial-gradient(
-            circle,
-            transparent 15%,
-            rgba(17,2,29,.25) 60%,
-            rgba(0,0,0,.5) 100%
-        );
+        rgba(5,2,15,.44);
 
-    transition:opacity .12s;
+    transition:opacity .1s linear;
 }
 
 #qteOverlay.active{
     opacity:1;
+    visibility:visible;
+
     pointer-events:auto;
 }
 
 .qteWarning{
-    font-size:11px;
-    letter-spacing:6px;
-    opacity:.7;
     margin-bottom:5px;
+
+    font-size:10px;
+
+    letter-spacing:5px;
+
+    opacity:.72;
 }
 
 #dodgeText{
-    font-size:clamp(50px,15vw,82px);
+    font-size:clamp(44px,14vw,76px);
+
     font-weight:900;
+
     line-height:1;
 
     text-shadow:
-        0 0 15px #fff,
-        0 0 40px #8b5cf6;
+        0 0 18px
+        rgba(180,130,255,.8);
 
-    animation:qtePulse .25s infinite alternate;
+    animation:
+        qtePulse
+        .3s
+        infinite alternate;
+
+    will-change:transform;
 }
 
 .swipeTutorial{
     position:relative;
+
     width:min(270px,72vw);
-    height:82px;
-    margin-top:10px;
+    height:72px;
+
+    margin-top:6px;
 }
 
 .swipeTrack{
     position:absolute;
+
     left:12px;
     right:12px;
-    top:38px;
+    top:35px;
+
     height:4px;
+
     border-radius:20px;
 
     background:
         linear-gradient(
             90deg,
-            rgba(192,132,252,.95),
-            rgba(255,255,255,.18)
+            #c084fc,
+            rgba(255,255,255,.15)
         );
-
-    box-shadow:
-        0 0 16px rgba(168,85,247,.55);
 }
 
 .swipeTrack::before{
     content:"";
+
     position:absolute;
+
     left:0;
     top:50%;
 
-    width:15px;
-    height:15px;
+    width:13px;
+    height:13px;
 
     border-left:4px solid #fff;
     border-bottom:4px solid #fff;
@@ -425,482 +729,300 @@ button:active{
     transform:
         translateY(-50%)
         rotate(45deg);
-
-    filter:
-        drop-shadow(0 0 7px #a855f7);
 }
 
 .swipeFinger{
     position:absolute;
+
     right:5px;
-    top:4px;
+    top:2px;
 
-    font-size:42px;
-
-    filter:
-        drop-shadow(
-            0 0 10px
-            rgba(255,255,255,.45)
-        );
+    font-size:39px;
 
     animation:
         fingerSwipeLeft
         .9s
         cubic-bezier(.2,.7,.2,1)
         infinite;
+
+    will-change:
+        transform,
+        opacity;
 }
 
 .swipeTrail{
     position:absolute;
+
     right:25px;
-    top:30px;
+    top:29px;
 
-    width:105px;
-    height:18px;
+    width:100px;
+    height:12px;
 
-    border-radius:30px;
+    border-radius:20px;
 
     background:
         linear-gradient(
             90deg,
-            rgba(168,85,247,0),
-            rgba(216,180,254,.55)
+            transparent,
+            rgba(216,180,254,.5)
         );
-
-    filter:blur(4px);
-
-    transform-origin:right center;
 
     animation:
         trailSwipe
         .9s
         ease-in-out
         infinite;
+
+    will-change:
+        transform,
+        opacity;
 }
 
 .swipe{
-    font-size:13px;
+    font-size:12px;
+
     font-weight:900;
+
     letter-spacing:3px;
-
-    text-shadow:
-        0 0 14px #7c3aed;
-
-    animation:
-        swipeTextPulse
-        .45s
-        infinite alternate;
 }
 
 .timer{
     width:min(300px,75vw);
     height:7px;
 
-    margin-top:20px;
+    margin-top:15px;
 
-    background:
-        rgba(255,255,255,.18);
+    overflow:hidden;
 
     border-radius:20px;
 
-    overflow:hidden;
+    background:
+        rgba(255,255,255,.16);
 }
 
 #timerBar{
     width:100%;
     height:100%;
+
     background:#c084fc;
+
+    transform-origin:left center;
 }
 
-/* FLASH */
+
+/* =========================================================
+   IMPATTO
+   ========================================================= */
 
 #impactFlash{
     position:absolute;
     inset:0;
+
     z-index:200;
-    pointer-events:none;
+
     opacity:0;
+
+    pointer-events:none;
 
     background:
         radial-gradient(
             circle,
-            white 0%,
-            #e9d5ff 25%,
-            #7c3aed 65%,
-            #000 100%
+            #fff 0%,
+            #d8b4fe 22%,
+            #6d28d9 60%,
+            #050508 100%
         );
 }
 
 #impactFlash.hit{
     animation:
         impactFlash
-        .55s
+        .45s
         ease-out;
 }
 
-/* RISULTATO */
+
+/* =========================================================
+   RISULTATO
+   ========================================================= */
 
 #result{
     background:
         radial-gradient(
             circle at 50% 40%,
-            #241041,
+            #211039,
             #050508 65%
         );
 }
 
 #resultText{
-    font-size:38px;
+    font-size:clamp(30px,10vw,42px);
+
     font-weight:900;
 }
 
 #resultSub{
-    margin-top:12px;
-    opacity:.75;
-    line-height:1.5;
     max-width:400px;
+
+    margin-top:12px;
+
+    font-size:clamp(13px,4vw,15px);
+
+    line-height:1.5;
+
+    opacity:.75;
 }
 
 .reward{
-    margin-top:25px;
+    margin-top:19px;
+
     color:#c59cff;
-    font-weight:bold;
+
+    font-weight:700;
+
     letter-spacing:2px;
 }
 
-/* ANIMAZIONI */
 
-@keyframes floatKaelios{
-    0%,100%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-9px);
-    }
-}
-
-@keyframes auraPulse{
-    from{
-        opacity:.45;
-        transform:scale(.92);
-    }
-
-    to{
-        opacity:.9;
-        transform:scale(1.08);
-    }
-}
-
-@keyframes chargeEnergy{
-    0%{
-        transform:
-            translate(-50%,-50%)
-            scale(.05);
-
-        filter:brightness(1);
-    }
-
-    35%{
-        transform:
-            translate(-50%,-50%)
-            scale(.7);
-    }
-
-    55%{
-        transform:
-            translate(-50%,-50%)
-            scale(1.25);
-
-        filter:brightness(2);
-    }
-
-    72%{
-        transform:
-            translate(-50%,-50%)
-            scale(.85);
-    }
-
-    100%{
-        transform:
-            translate(-50%,-50%)
-            scale(1.2);
-
-        filter:brightness(2.8);
-    }
-}
-
-@keyframes flyEnergy{
-    0%{
-        left:47%;
-        top:27%;
-
-        transform:
-            translate(-50%,-50%)
-            scale(1.2);
-    }
-
-    25%{
-        left:47%;
-        top:31%;
-
-        transform:
-            translate(-50%,-50%)
-            scale(1.8);
-    }
-
-    50%{
-        left:47%;
-        top:37%;
-
-        transform:
-            translate(-50%,-50%)
-            scale(3);
-    }
-
-    72%{
-        left:49%;
-        top:43%;
-
-        transform:
-            translate(-50%,-50%)
-            scale(5.5);
-    }
-
-    88%{
-        left:50%;
-        top:48%;
-
-        transform:
-            translate(-50%,-50%)
-            scale(9);
-    }
-
-    100%{
-        left:50%;
-        top:50%;
-
-        transform:
-            translate(-50%,-50%)
-            scale(17);
-
-        filter:brightness(3);
-    }
-}
-
-@keyframes qtePulse{
-    from{
-        transform:scale(1);
-    }
-
-    to{
-        transform:scale(1.08);
-    }
-}
-
-@keyframes fingerSwipeLeft{
-    0%{
-        transform:translateX(0) scale(1);
-        opacity:.35;
-    }
-
-    15%{
-        opacity:1;
-    }
-
-    75%{
-        transform:
-            translateX(-190px)
-            scale(.92);
-
-        opacity:1;
-    }
-
-    100%{
-        transform:
-            translateX(-190px)
-            scale(.92);
-
-        opacity:0;
-    }
-}
-
-@keyframes trailSwipe{
-    0%{
-        opacity:0;
-        transform:scaleX(.15);
-    }
-
-    30%{
-        opacity:.8;
-        transform:scaleX(.7);
-    }
-
-    80%{
-        opacity:.35;
-        transform:scaleX(1.5);
-    }
-
-    100%{
-        opacity:0;
-        transform:scaleX(1.5);
-    }
-}
-
-@keyframes swipeTextPulse{
-    from{
-        transform:scale(1);
-        opacity:.78;
-    }
-
-    to{
-        transform:scale(1.06);
-        opacity:1;
-    }
-}
-
-@keyframes shake{
-    0%{transform:translate(0);}
-    20%{transform:translate(-10px,5px);}
-    40%{transform:translate(10px,-5px);}
-    60%{transform:translate(-8px,-3px);}
-    80%{transform:translate(8px,3px);}
-    100%{transform:translate(0);}
-}
-
-@keyframes impactFlash{
-    0%{opacity:0;}
-    15%{opacity:1;}
-    40%{opacity:.85;}
-    100%{opacity:0;}
-}
-
-.shake{
-    animation:shake .07s 8;
-}
-
-/* ============================= */
-/* ATTACCO DEL GIOCATORE */
-/* ============================= */
+/* =========================================================
+   ATTACCO GIOCATORE
+   ========================================================= */
 
 #playerAttack{
+    z-index:40;
+
+    justify-content:flex-end;
+
     background:
         radial-gradient(
-            circle at 50% 75%,
-            rgba(92,39,170,.34),
-            transparent 32%
+            circle at 50% 70%,
+            rgba(92,39,170,.25),
+            transparent 34%
         ),
-        linear-gradient(
-            rgba(2,2,8,.12),
-            rgba(2,2,8,.72)
-        );
-
-    z-index:40;
+        #05050d;
 }
 
 .playerEnemy{
     position:absolute;
-    top:7%;
+
+    top:
+        max(
+            52px,
+            calc(env(safe-area-inset-top) + 38px)
+        );
+
     left:50%;
 
-    transform:translateX(-50%);
-
-    height:42vh;
+    height:min(39dvh,330px);
     max-width:82vw;
 
     object-fit:contain;
 
     opacity:.72;
 
+    transform:
+        translate3d(-50%,0,0);
+
     filter:
         drop-shadow(
-            0 0 30px
-            rgba(166,124,255,.45)
+            0 0 15px
+            rgba(166,124,255,.38)
         );
 }
 
 .attackUI{
     position:relative;
+
     z-index:5;
 
     width:min(390px,92vw);
 
-    margin-top:auto;
-    margin-bottom:5vh;
+    margin-bottom:
+        max(
+            5px,
+            env(safe-area-inset-bottom)
+        );
 }
 
 .attackLabel{
-    font-size:11px;
+    font-size:10px;
+
     letter-spacing:5px;
+
     opacity:.65;
 }
 
 #chargeTitle{
-    margin:8px 0 5px;
+    margin:6px 0 4px;
 
-    font-size:
-        clamp(32px,10vw,52px);
+    font-size:clamp(30px,9vw,48px);
 
     font-weight:900;
 
     text-shadow:
-        0 0 25px
-        rgba(166,124,255,.65);
+        0 0 16px
+        rgba(166,124,255,.55);
 }
 
 .chargeHint{
-    font-size:12px;
-    letter-spacing:2px;
+    margin-bottom:13px;
+
+    font-size:11px;
+
+    letter-spacing:1.4px;
+
     opacity:.7;
-    margin-bottom:18px;
 }
 
 .chargeTrack{
     position:relative;
 
     width:100%;
-    height:22px;
-
-    border-radius:20px;
+    height:20px;
 
     overflow:hidden;
-
-    background:
-        rgba(255,255,255,.12);
 
     border:
         1px solid
         rgba(255,255,255,.15);
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.11);
 }
 
 .perfectZone{
     position:absolute;
 
     left:70%;
-    width:20%;
-
     top:0;
     bottom:0;
 
-    background:
-        rgba(255,255,255,.24);
-
-    box-shadow:
-        0 0 18px
-        rgba(255,255,255,.25)
-        inset;
+    width:20%;
 
     z-index:2;
 
     pointer-events:none;
+
+    background:
+        rgba(255,255,255,.25);
 }
 
 #chargeFill{
     position:absolute;
 
-    inset:0 auto 0 0;
+    left:0;
+    top:0;
 
-    width:0%;
+    width:100%;
+    height:100%;
+
+    transform:
+        scaleX(0);
+
+    transform-origin:left center;
 
     background:
         linear-gradient(
@@ -910,38 +1032,35 @@ button:active{
             #fff
         );
 
-    box-shadow:
-        0 0 22px #a855f7;
-
-    transition:
-        width .03s linear;
+    will-change:transform;
 }
 
 #chargePercent{
-    margin-top:8px;
+    margin-top:7px;
 
-    font-size:13px;
+    font-size:12px;
 
-    font-weight:bold;
+    font-weight:700;
 
     letter-spacing:2px;
 }
 
 #holdButton{
-    margin-top:20px;
-
     width:min(330px,90%);
 
-    padding:20px;
+    min-height:50px;
 
-    border-radius:18px;
+    margin-top:13px;
+
+    padding:15px;
 
     touch-action:none;
-
-    box-shadow:
-        0 0 25px
-        rgba(124,58,237,.25);
 }
+
+
+/* =========================================================
+   SFERA GIOCATORE
+   ========================================================= */
 
 #playerBall{
     position:absolute;
@@ -949,7 +1068,7 @@ button:active{
     z-index:4;
 
     left:50%;
-    bottom:25%;
+    bottom:24%;
 
     width:42px;
     height:42px;
@@ -958,11 +1077,11 @@ button:active{
 
     opacity:0;
 
-    transform:
-        translateX(-50%)
-        scale(.3);
-
     pointer-events:none;
+
+    transform:
+        translate3d(-50%,0,0)
+        scale(.3);
 
     background:
         radial-gradient(
@@ -976,9 +1095,13 @@ button:active{
         );
 
     box-shadow:
-        0 0 15px #fff,
-        0 0 35px #c084fc,
-        0 0 80px #7c3aed;
+        0 0 12px #fff,
+        0 0 28px rgba(192,132,252,.8),
+        0 0 55px rgba(124,58,237,.6);
+
+    will-change:
+        transform,
+        opacity;
 }
 
 #playerBall.active{
@@ -988,7 +1111,7 @@ button:active{
 #playerBall.fireWeak{
     animation:
         playerShotWeak
-        .65s
+        .6s
         ease-in
         forwards;
 }
@@ -1004,129 +1127,54 @@ button:active{
 #playerBall.overload{
     animation:
         playerOverload
-        .45s
+        .42s
         ease-out
         forwards;
 }
 
-@keyframes playerShotWeak{
-    from{
-        bottom:25%;
 
-        transform:
-            translateX(-50%)
-            scale(.7);
-
-        opacity:1;
-    }
-
-    to{
-        bottom:63%;
-
-        transform:
-            translateX(-50%)
-            scale(1.5);
-
-        opacity:0;
-    }
-}
-
-@keyframes playerShotPerfect{
-    0%{
-        bottom:25%;
-
-        transform:
-            translateX(-50%)
-            scale(1);
-
-        opacity:1;
-    }
-
-    65%{
-        bottom:58%;
-
-        transform:
-            translateX(-50%)
-            scale(3);
-
-        opacity:1;
-    }
-
-    100%{
-        bottom:66%;
-
-        transform:
-            translateX(-50%)
-            scale(6);
-
-        opacity:0;
-
-        filter:brightness(3);
-    }
-}
-
-@keyframes playerOverload{
-    0%{
-        transform:
-            translateX(-50%)
-            scale(2);
-
-        opacity:1;
-    }
-
-    55%{
-        transform:
-            translateX(-50%)
-            scale(5);
-
-        opacity:1;
-
-        filter:brightness(3);
-    }
-
-    100%{
-        transform:
-            translateX(-50%)
-            scale(9);
-
-        opacity:0;
-    }
-}
+/* =========================================================
+   RISULTATO ATTACCO
+   ========================================================= */
 
 #attackResult{
     position:absolute;
     inset:0;
 
-    z-index:120;
+    z-index:220;
 
     display:flex;
     flex-direction:column;
-
     justify-content:center;
     align-items:center;
 
-    padding:28px;
+    padding:
+        max(68px,calc(env(safe-area-inset-top) + 52px))
+        22px
+        max(20px,calc(env(safe-area-inset-bottom) + 12px));
 
     text-align:center;
 
     background:
-        rgba(3,2,10,.91);
+        rgba(3,2,10,.96);
 
     opacity:0;
+    visibility:hidden;
 
     pointer-events:none;
 
-    transition:opacity .25s;
+    transition:opacity .18s ease;
 }
 
 #attackResult.active{
     opacity:1;
+    visibility:visible;
+
     pointer-events:auto;
 }
 
 #attackResultTitle{
-    font-size:
-        clamp(34px,11vw,55px);
+    font-size:clamp(30px,10vw,50px);
 
     font-weight:900;
 }
@@ -1134,87 +1182,95 @@ button:active{
 #attackResultText{
     max-width:390px;
 
-    margin-top:14px;
+    margin-top:13px;
 
-    line-height:1.55;
+    font-size:clamp(13px,4vw,15px);
+
+    line-height:1.5;
 
     opacity:.78;
 }
 
-/* ============================= */
-/* ATTO 2 - LA FRATTURA */
-/* ============================= */
+
+/* =========================================================
+   FRATTURA
+   ========================================================= */
 
 #riftScene{
     z-index:45;
-    overflow:hidden;
 
     background:
         radial-gradient(
             circle at 50% 18%,
-            rgba(126,34,206,.28),
-            transparent 32%
+            rgba(126,34,206,.22),
+            transparent 34%
         ),
-        linear-gradient(
-            #080816,
-            #020208
-        );
+        #04040c;
 }
 
 .riftKaelios{
     position:absolute;
 
     left:50%;
-    bottom:21%;
 
-    transform:
-        translateX(-50%);
+    bottom:
+        max(
+            135px,
+            calc(env(safe-area-inset-bottom) + 122px)
+        );
 
-    height:47vh;
-
-    max-width:88vw;
+    height:min(44dvh,360px);
+    max-width:86vw;
 
     object-fit:contain;
 
     opacity:.72;
 
+    transform:
+        translate3d(-50%,0,0);
+
     filter:
         drop-shadow(
-            0 0 25px
-            rgba(168,85,247,.55)
-        )
-        drop-shadow(
-            0 0 60px
-            rgba(109,40,217,.3)
+            0 0 15px
+            rgba(168,85,247,.4)
         );
 }
-
-/* FRATTURA */
 
 #riftCrack{
     position:absolute;
 
     left:50%;
-    top:8%;
+
+    top:
+        max(
+            62px,
+            calc(env(safe-area-inset-top) + 45px)
+        );
 
     width:7px;
-    height:0;
+    height:210px;
+
+    z-index:3;
 
     opacity:0;
 
     transform:
-        translateX(-50%)
-        rotate(7deg);
+        translate3d(-50%,0,0)
+        rotate(7deg)
+        scaleY(0);
+
+    transform-origin:top center;
 
     background:#fff;
 
     box-shadow:
         0 0 10px #fff,
-        0 0 25px #d8b4fe,
-        0 0 55px #a855f7,
-        0 0 100px #6d28d9;
+        0 0 25px rgba(216,180,254,.8),
+        0 0 48px rgba(168,85,247,.6);
 
-    z-index:3;
+    will-change:
+        transform,
+        opacity;
 }
 
 #riftCrack::before,
@@ -1224,49 +1280,462 @@ button:active{
     position:absolute;
 
     width:4px;
-    height:80px;
+    height:70px;
 
     background:#ead5ff;
 
     box-shadow:
-        0 0 12px #fff,
-        0 0 30px #9333ea;
+        0 0 15px
+        rgba(147,51,234,.7);
 
     transform-origin:top;
 }
 
 #riftCrack::before{
     left:0;
-    top:55px;
+    top:50px;
 
-    transform:
-        rotate(42deg);
+    transform:rotate(42deg);
 }
 
 #riftCrack::after{
     left:2px;
-    top:120px;
+    top:108px;
 
-    transform:
-        rotate(-38deg);
+    transform:rotate(-38deg);
 }
 
 #riftCrack.open{
     animation:
         openRift
-        1s
+        .9s
         ease-out
-        forwards,
-        riftPulse
-        .55s
-        1s
-        infinite
-        alternate;
+        forwards;
+}
+
+.riftDialogue{
+    position:absolute;
+
+    left:max(14px,env(safe-area-inset-left));
+    right:max(14px,env(safe-area-inset-right));
+
+    bottom:max(10px,env(safe-area-inset-bottom));
+
+    z-index:10;
+
+    width:auto;
+    max-width:430px;
+
+    margin:auto;
+
+    padding:13px 15px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:17px;
+
+    background:
+        rgba(7,5,18,.95);
+
+    text-align:left;
+}
+
+.riftName{
+    margin-bottom:7px;
+
+    color:#c4a1ff;
+
+    font-size:9px;
+
+    font-weight:700;
+
+    letter-spacing:4px;
+}
+
+#riftText{
+    min-height:40px;
+
+    font-size:clamp(13px,3.8vw,15px);
+
+    line-height:1.45;
+}
+
+#riftContinue{
+    width:100%;
+
+    min-height:42px;
+
+    margin-top:8px;
+
+    padding:9px;
+}
+
+
+/* =========================================================
+   SCELTA FRATTURA
+   ========================================================= */
+
+#riftChoice{
+    z-index:50;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(126,34,206,.22),
+            transparent 36%
+        ),
+        #030309;
+}
+
+.riftChoiceContent{
+    width:min(430px,92vw);
+}
+
+.choiceWarning{
+    margin-bottom:10px;
+
+    color:#c4a1ff;
+
+    font-size:9px;
+
+    letter-spacing:4px;
+}
+
+.riftChoiceTitle{
+    margin-bottom:9px;
+
+    font-size:clamp(32px,10vw,50px);
+
+    font-weight:900;
+}
+
+.riftChoiceDescription{
+    margin-bottom:16px;
+
+    font-size:clamp(13px,4vw,15px);
+
+    line-height:1.5;
+
+    opacity:.7;
+}
+
+.riftChoiceButton{
+    width:100%;
+
+    margin-top:8px;
+
+    padding:14px;
+}
+
+
+/* =========================================================
+   ANIMAZIONI OTTIMIZZATE
+   ========================================================= */
+
+@keyframes floatKaelios{
+
+    0%,
+    100%{
+        transform:
+            translate3d(0,0,0);
+    }
+
+    50%{
+        transform:
+            translate3d(0,-6px,0);
+    }
+}
+
+@keyframes auraPulse{
+
+    from{
+        opacity:.48;
+
+        transform:
+            translateZ(0)
+            scale(.96);
+    }
+
+    to{
+        opacity:.78;
+
+        transform:
+            translateZ(0)
+            scale(1.04);
+    }
+}
+
+@keyframes chargeEnergy{
+
+    0%{
+        transform:
+            translate3d(-50%,-50%,0)
+            scale(.08);
+
+        opacity:.6;
+    }
+
+    60%{
+        transform:
+            translate3d(-50%,-50%,0)
+            scale(1.28);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translate3d(-50%,-50%,0)
+            scale(1.15);
+
+        opacity:1;
+    }
+}
+
+
+/*
+   IMPORTANTE:
+   La sfera resta posizionata al 47%.
+   Il viaggio usa transform e non left/top.
+*/
+
+@keyframes flyEnergy{
+
+    0%{
+        transform:
+            translate3d(-50%,-50%,0)
+            scale(1.15);
+    }
+
+    30%{
+        transform:
+            translate3d(-50%,20px,0)
+            scale(1.8);
+    }
+
+    60%{
+        transform:
+            translate3d(-45%,85px,0)
+            scale(3.8);
+    }
+
+    82%{
+        transform:
+            translate3d(-25%,145px,0)
+            scale(7);
+    }
+
+    100%{
+        transform:
+            translate3d(0,190px,0)
+            scale(13);
+
+        opacity:.95;
+    }
+}
+
+@keyframes qtePulse{
+
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(1.055);
+    }
+}
+
+@keyframes fingerSwipeLeft{
+
+    0%{
+        transform:
+            translate3d(0,0,0);
+
+        opacity:.3;
+    }
+
+    15%{
+        opacity:1;
+    }
+
+    75%{
+        transform:
+            translate3d(-185px,0,0);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translate3d(-185px,0,0);
+
+        opacity:0;
+    }
+}
+
+@keyframes trailSwipe{
+
+    0%{
+        opacity:0;
+
+        transform:scaleX(.15);
+    }
+
+    30%{
+        opacity:.7;
+
+        transform:scaleX(.7);
+    }
+
+    80%{
+        opacity:.3;
+
+        transform:scaleX(1.45);
+    }
+
+    100%{
+        opacity:0;
+
+        transform:scaleX(1.45);
+    }
+}
+
+@keyframes impactFlash{
+
+    0%{
+        opacity:0;
+    }
+
+    15%{
+        opacity:1;
+    }
+
+    42%{
+        opacity:.75;
+    }
+
+    100%{
+        opacity:0;
+    }
+}
+
+@keyframes shake{
+
+    0%{
+        transform:translate3d(0,0,0);
+    }
+
+    20%{
+        transform:translate3d(-6px,3px,0);
+    }
+
+    40%{
+        transform:translate3d(6px,-3px,0);
+    }
+
+    60%{
+        transform:translate3d(-4px,-2px,0);
+    }
+
+    80%{
+        transform:translate3d(4px,2px,0);
+    }
+
+    100%{
+        transform:translate3d(0,0,0);
+    }
+}
+
+.shake{
+    animation:
+        shake
+        .075s
+        6;
+}
+
+@keyframes playerShotWeak{
+
+    from{
+        transform:
+            translate3d(-50%,0,0)
+            scale(.8);
+
+        opacity:1;
+    }
+
+    to{
+        transform:
+            translate3d(-50%,-38dvh,0)
+            scale(1.5);
+
+        opacity:0;
+    }
+}
+
+@keyframes playerShotPerfect{
+
+    0%{
+        transform:
+            translate3d(-50%,0,0)
+            scale(1);
+
+        opacity:1;
+    }
+
+    65%{
+        transform:
+            translate3d(-50%,-30dvh,0)
+            scale(3);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translate3d(-50%,-40dvh,0)
+            scale(5.5);
+
+        opacity:0;
+    }
+}
+
+@keyframes playerOverload{
+
+    0%{
+        transform:
+            translate3d(-50%,0,0)
+            scale(2);
+
+        opacity:1;
+    }
+
+    55%{
+        transform:
+            translate3d(-50%,0,0)
+            scale(4.5);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translate3d(-50%,0,0)
+            scale(8);
+
+        opacity:0;
+    }
 }
 
 @keyframes openRift{
+
     0%{
-        height:0;
+        transform:
+            translate3d(-50%,0,0)
+            rotate(7deg)
+            scaleY(0);
+
         opacity:0;
     }
 
@@ -1275,134 +1744,152 @@ button:active{
     }
 
     100%{
-        height:220px;
+        transform:
+            translate3d(-50%,0,0)
+            rotate(7deg)
+            scaleY(1);
+
         opacity:1;
     }
 }
 
-@keyframes riftPulse{
-    from{
-        filter:brightness(1);
+
+/* =========================================================
+   SCHERMI BASSI
+   ========================================================= */
+
+@media (max-height:720px){
+
+    .screen{
+        padding-top:
+            max(
+                57px,
+                calc(
+                    env(safe-area-inset-top)
+                    + 44px
+                )
+            );
+
+        padding-bottom:
+            max(
+                7px,
+                env(safe-area-inset-bottom)
+            );
     }
 
-    to{
-        filter:brightness(2);
+    .character-area{
+        height:29dvh;
+        min-height:135px;
+    }
+
+    .dialogue{
+        margin-top:5px;
+
+        padding:10px 12px;
+    }
+
+    .text{
+        line-height:1.3;
+    }
+
+    .choice{
+        min-height:36px;
+
+        margin-top:4px;
+
+        padding:7px 11px;
+    }
+
+    button{
+        min-height:40px;
+
+        padding:10px 13px;
+    }
+
+    .playerEnemy{
+        height:32dvh;
+    }
+
+    #chargeTitle{
+        font-size:29px;
+    }
+
+    .chargeHint{
+        margin-bottom:8px;
+    }
+
+    #holdButton{
+        min-height:43px;
+
+        margin-top:9px;
+    }
+
+    .riftKaelios{
+        height:34dvh;
+    }
+
+    .riftDialogue{
+        padding:10px 12px;
+    }
+
+    #riftContinue{
+        min-height:37px;
     }
 }
 
-/* DIALOGO FRATTURA */
 
-.riftDialogue{
-    position:absolute;
+/* =========================================================
+   SCHERMI MOLTO BASSI
+   ========================================================= */
 
-    left:50%;
-    bottom:5%;
+@media (max-height:620px){
 
-    transform:
-        translateX(-50%);
+    .character-area{
+        height:25dvh;
+        min-height:115px;
+    }
 
-    width:min(430px,91vw);
+    .chapter{
+        margin-bottom:3px;
+    }
 
-    padding:18px;
+    .sceneTitle{
+        font-size:15px;
+    }
 
-    z-index:10;
+    .dialogue{
+        padding:8px 10px;
+    }
 
-    border-radius:20px;
+    .choice{
+        font-size:12px;
+    }
 
-    border:
-        1px solid
-        rgba(255,255,255,.14);
+    .playerEnemy{
+        height:27dvh;
+    }
 
-    background:
-        rgba(5,3,15,.86);
+    .attackLabel{
+        display:none;
+    }
 
-    backdrop-filter:
-        blur(8px);
-
-    text-align:left;
+    .chargeHint{
+        font-size:10px;
+    }
 }
 
-.riftName{
-    color:#c4a1ff;
 
-    font-size:10px;
+/* =========================================================
+   ACCESSIBILITÀ / RISPARMIO MOVIMENTO
+   ========================================================= */
 
-    letter-spacing:4px;
+@media (prefers-reduced-motion:reduce){
 
-    font-weight:bold;
-
-    margin-bottom:9px;
-}
-
-#riftText{
-    font-size:15px;
-
-    line-height:1.55;
-
-    min-height:48px;
-}
-
-#riftContinue{
-    width:100%;
-
-    margin-top:14px;
-
-    padding:13px;
-}
-
-/* SCELTA FRATTURA */
-
-#riftChoice{
-    z-index:50;
-
-    background:
-        radial-gradient(
-            circle at 50% 15%,
-            rgba(126,34,206,.28),
-            transparent 35%
-        ),
-        rgba(2,2,8,.96);
-}
-
-.riftChoiceContent{
-    width:min(430px,92vw);
-}
-
-.choiceWarning{
-    font-size:10px;
-
-    letter-spacing:5px;
-
-    color:#c4a1ff;
-
-    margin-bottom:12px;
-}
-
-.riftChoiceTitle{
-    font-size:
-        clamp(35px,11vw,55px);
-
-    font-weight:900;
-
-    margin-bottom:10px;
-}
-
-.riftChoiceDescription{
-    opacity:.7;
-
-    font-size:14px;
-
-    line-height:1.55;
-
-    margin-bottom:20px;
-}
-
-.riftChoiceButton{
-    width:100%;
-
-    padding:18px;
-
-    margin-top:9px;
+    #kaelios,
+    #kaeliosAfter,
+    .aura{
+        animation:none;
+    }
 }
 
 </style>
@@ -1412,421 +1899,454 @@ button:active{
 
 <div id="game">
 
-<div class="stars"></div>
+    <div class="stars"></div>
 
-<div id="energyBall"></div>
+    <div id="energyBall"></div>
 
-<div id="impactFlash"></div>
+    <div id="impactFlash"></div>
 
-<!-- HUD -->
 
-<div id="hud" class="hidden">
+    <!-- ===================================================
+         HUD
+         =================================================== -->
 
-    <div class="hud-left">
+    <div id="hud" class="hidden">
 
-        <div class="level">
-            LV. 1
+        <div class="hud-left">
+
+            <div class="level">
+                LV. 1
+            </div>
+
+            <div class="hpText">
+                HP <span id="hpNumber">100</span>/100
+            </div>
+
+            <div class="hpContainer">
+                <div id="hpBar"></div>
+            </div>
+
         </div>
 
-        <div class="hpText">
-            HP <span id="hpNumber">100</span>/100
-        </div>
-
-        <div class="hpContainer">
-            <div id="hpBar"></div>
+        <div class="gems">
+            💎 <span id="gemNumber">100</span>
         </div>
 
     </div>
 
-    <div class="gems">
-        💎 <span id="gemNumber">100</span>
+
+    <!-- ===================================================
+         HOME
+         =================================================== -->
+
+    <div id="home" class="screen">
+
+        <div class="content">
+
+            <div class="small">
+                AN INTERACTIVE STORY
+            </div>
+
+            <h1>
+                WHAT IF<br>
+                <span class="purple">
+                    UNIVERSE
+                </span>
+            </h1>
+
+            <div class="subtitle">
+                Ogni scelta crea una nuova realtà.<br>
+                Questa volta, sarai tu a viverla.
+            </div>
+
+            <button onclick="startGame()">
+                INIZIA
+            </button>
+
+        </div>
+
     </div>
 
-</div>
 
-<!-- HOME -->
+    <!-- ===================================================
+         INTRO
+         =================================================== -->
 
-<div id="home" class="screen">
+    <div id="intro" class="screen hidden">
 
-    <div class="content">
-
-        <div class="small">
-            AN INTERACTIVE STORY
-        </div>
-
-        <h1>
-            WHAT IF<br>
-            <span class="purple">
-                UNIVERSE
-            </span>
-        </h1>
-
-        <div class="subtitle">
-            Ogni scelta crea una nuova realtà.
-            <br>
-            Questa volta, sarai tu a viverla.
-        </div>
-
-        <button onclick="startGame()">
-            INIZIA
-        </button>
+        <div id="introText"></div>
 
     </div>
 
-</div>
 
-<!-- INTRO -->
+    <!-- ===================================================
+         SCENA 1
+         =================================================== -->
 
-<div id="intro" class="screen hidden">
-    <div id="introText"></div>
-</div>
+    <div id="scene1" class="screen hidden">
 
-<!-- SCENA PRINCIPALE -->
+        <div class="content">
 
-<div id="scene1" class="screen hidden">
+            <div
+                class="character-area"
+                id="characterArea">
 
-    <div class="content">
+                <div class="aura"></div>
 
-        <div
-            class="character-area"
-            id="characterArea">
+                <img
+                    src="./Kaelios.png"
+                    id="kaelios"
+                    alt="Kaelios">
 
-            <div class="aura"></div>
+            </div>
 
-            <img
-                src="./Kaelios.png"
-                id="kaelios"
-                alt="Kaelios">
+            <div class="chapter">
+                CAPITOLO 01
+            </div>
 
-        </div>
+            <h2 class="sceneTitle">
+                QUALCOSA È CAMBIATO
+            </h2>
 
-        <div class="chapter">
-            CAPITOLO 01
-        </div>
+            <div class="dialogue">
 
-        <h2 class="sceneTitle">
-            QUALCOSA È CAMBIATO
-        </h2>
+                <div class="name">
+                    KAELIOS
+                </div>
 
-        <div class="dialogue">
+                <div
+                    class="text"
+                    id="dialogueText">
 
-            <div class="name">
-                KAELIOS
+                    Tu non appartieni a questa linea temporale.
+
+                </div>
+
             </div>
 
             <div
-                class="text"
-                id="dialogueText">
+                class="choices"
+                id="choices">
 
-                Tu non appartieni a questa linea temporale.
+                <button
+                    class="choice"
+                    onclick="choose('lie')">
+
+                    Mentigli.
+
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="choose('truth')">
+
+                    Digli la verità.
+
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="choose('attack')">
+
+                    Attaccalo.
+
+                </button>
 
             </div>
 
         </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         QTE
+         =================================================== -->
+
+    <div id="qteOverlay">
+
+        <div class="qteWarning">
+            ATTACCO IN ARRIVO
+        </div>
+
+        <div id="dodgeText">
+            SCHIVA!
+        </div>
+
+        <div class="swipeTutorial">
+
+            <div class="swipeTrack"></div>
+
+            <div class="swipeTrail"></div>
+
+            <div class="swipeFinger">
+                ☝️
+            </div>
+
+        </div>
+
+        <div class="swipe">
+            SCORRI VERSO SINISTRA
+        </div>
+
+        <div class="timer">
+            <div id="timerBar"></div>
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         RISULTATO SCHIVATA
+         =================================================== -->
+
+    <div id="result" class="screen hidden">
+
+        <div id="resultText"></div>
+
+        <div id="resultSub"></div>
 
         <div
-            class="choices"
-            id="choices">
-
-            <button
-                class="choice"
-                onclick="choose('lie')">
-
-                Mentigli.
-
-            </button>
-
-            <button
-                class="choice"
-                onclick="choose('truth')">
-
-                Digli la verità.
-
-            </button>
-
-            <button
-                class="choice"
-                onclick="choose('attack')">
-
-                Attaccalo.
-
-            </button>
-
+            id="reward"
+            class="reward">
         </div>
 
-    </div>
-
-</div>
-
-<!-- QTE -->
-
-<div id="qteOverlay">
-
-    <div class="qteWarning">
-        ATTACCO IN ARRIVO
-    </div>
-
-    <div id="dodgeText">
-        SCHIVA!
-    </div>
-
-    <div class="swipeTutorial">
-
-        <div class="swipeTrack"></div>
-
-        <div class="swipeTrail"></div>
-
-        <div class="swipeFinger">
-            ☝️
-        </div>
-
-    </div>
-
-    <div class="swipe">
-        SCORRI VERSO SINISTRA
-    </div>
-
-    <div class="timer">
-        <div id="timerBar"></div>
-    </div>
-
-</div>
-
-<!-- RISULTATO -->
-
-<div id="result" class="screen hidden">
-
-    <div id="resultText"></div>
-
-    <div id="resultSub"></div>
-
-    <div
-        id="reward"
-        class="reward">
-    </div>
-
-    <button onclick="continueStory()">
-        CONTINUA
-    </button>
-
-</div>
-
-<!-- DOPO IL COMBATTIMENTO -->
-
-<div id="afterFight" class="screen hidden">
-
-    <div class="content">
-
-        <div class="character-area">
-
-            <div class="aura"></div>
-
-            <img
-                src="kaelios.png"
-                id="kaeliosAfter"
-                alt="Kaelios">
-
-        </div>
-
-        <div class="chapter">
-            CAPITOLO 01
-        </div>
-
-        <div class="dialogue">
-
-            <div class="name">
-                KAELIOS
-            </div>
-
-            <div
-                class="text"
-                id="afterText">
-
-                Interessante.
-
-            </div>
-
-        </div>
-
-        <div
-            class="choices"
-            id="afterChoices">
-
-            <button
-                class="choice"
-                onclick="finalChoice('why')">
-
-                Perché mi stai mettendo alla prova?
-
-            </button>
-
-            <button
-                class="choice"
-                onclick="finalChoice('again')">
-
-                Attaccami di nuovo.
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ATTACCO DEL GIOCATORE -->
-
-<div id="playerAttack" class="screen hidden">
-
-    <img
-        src="kaelios.png"
-        class="playerEnemy"
-        alt="Kaelios">
-
-    <div id="playerBall"></div>
-
-    <div class="attackUI">
-
-        <div class="attackLabel">
-            IL TUO TURNO
-        </div>
-
-        <div id="chargeTitle">
-            CARICA
-        </div>
-
-        <div class="chargeHint">
-            Tieni premuto e rilascia nella zona luminosa
-        </div>
-
-        <div class="chargeTrack">
-
-            <div id="chargeFill"></div>
-
-            <div class="perfectZone"></div>
-
-        </div>
-
-        <div id="chargePercent">
-            0%
-        </div>
-
-        <button id="holdButton">
-            TIENI PREMUTO
-        </button>
-
-    </div>
-
-</div>
-
-<!-- RISULTATO ATTACCO -->
-
-<div id="attackResult">
-
-    <div id="attackResultTitle"></div>
-
-    <div id="attackResultText"></div>
-
-    <button onclick="finishPlayerAttack()">
-        CONTINUA
-    </button>
-
-</div>
-
-<!-- ============================= -->
-<!-- ATTO 2 - LA FRATTURA -->
-<!-- ============================= -->
-
-<div id="riftScene" class="screen hidden">
-
-    <div id="riftCrack"></div>
-
-    <img
-        src="kaelios.png"
-        class="riftKaelios"
-        alt="Kaelios">
-
-    <div class="riftDialogue">
-
-        <div class="riftName">
-            KAELIOS
-        </div>
-
-        <div id="riftText">
-            ...
-        </div>
-
-        <button
-            id="riftContinue"
-            onclick="advanceRift()">
-
+        <button onclick="continueStory()">
             CONTINUA
-
         </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         DOPO COMBATTIMENTO
+         =================================================== -->
+
+    <div id="afterFight" class="screen hidden">
+
+        <div class="content">
+
+            <div class="character-area">
+
+                <div class="aura"></div>
+
+                <img
+                    src="./Kaelios.png"
+                    id="kaeliosAfter"
+                    alt="Kaelios">
+
+            </div>
+
+            <div class="chapter">
+                CAPITOLO 01
+            </div>
+
+            <div class="dialogue">
+
+                <div class="name">
+                    KAELIOS
+                </div>
+
+                <div
+                    class="text"
+                    id="afterText">
+
+                    Interessante.
+
+                </div>
+
+            </div>
+
+            <div
+                class="choices"
+                id="afterChoices">
+
+                <button
+                    class="choice"
+                    onclick="finalChoice('why')">
+
+                    Perché mi stai mettendo alla prova?
+
+                </button>
+
+                <button
+                    class="choice"
+                    onclick="finalChoice('again')">
+
+                    Attaccami di nuovo.
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         ATTACCO GIOCATORE
+         =================================================== -->
+
+    <div id="playerAttack" class="screen hidden">
+
+        <img
+            src="./Kaelios.png"
+            class="playerEnemy"
+            alt="Kaelios">
+
+        <div id="playerBall"></div>
+
+        <div class="attackUI">
+
+            <div class="attackLabel">
+                IL TUO TURNO
+            </div>
+
+            <div id="chargeTitle">
+                CARICA
+            </div>
+
+            <div class="chargeHint">
+                Tieni premuto e rilascia nella zona luminosa
+            </div>
+
+            <div class="chargeTrack">
+
+                <div id="chargeFill"></div>
+
+                <div class="perfectZone"></div>
+
+            </div>
+
+            <div id="chargePercent">
+                0%
+            </div>
+
+            <button id="holdButton">
+                TIENI PREMUTO
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         RISULTATO ATTACCO
+         =================================================== -->
+
+    <div id="attackResult">
+
+        <div id="attackResultTitle"></div>
+
+        <div id="attackResultText"></div>
+
+        <button onclick="finishPlayerAttack()">
+            CONTINUA
+        </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         ATTO 2 — FRATTURA
+         =================================================== -->
+
+    <div id="riftScene" class="screen hidden">
+
+        <div id="riftCrack"></div>
+
+        <img
+            src="./Kaelios.png"
+            class="riftKaelios"
+            alt="Kaelios">
+
+        <div class="riftDialogue">
+
+            <div class="riftName">
+                KAELIOS
+            </div>
+
+            <div id="riftText">
+                ...
+            </div>
+
+            <button
+                id="riftContinue"
+                onclick="advanceRift()">
+
+                CONTINUA
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         SCELTA FRATTURA
+         =================================================== -->
+
+    <div id="riftChoice" class="screen hidden">
+
+        <div class="riftChoiceContent">
+
+            <div class="choiceWarning">
+                LA FRATTURA SI STA APRENDO
+            </div>
+
+            <div class="riftChoiceTitle">
+                DECIDI ORA
+            </div>
+
+            <div class="riftChoiceDescription">
+
+                Qualcosa sta attraversando il cielo.
+
+                <br><br>
+
+                Kaelios non sembra più interessato
+                a combatterti.
+
+            </div>
+
+            <button
+                class="riftChoiceButton"
+                onclick="chooseRift('run')">
+
+                SCAPPA
+
+            </button>
+
+            <button
+                class="riftChoiceButton"
+                onclick="chooseRift('stay')">
+
+                RESTA CON KAELIOS
+
+            </button>
+
+        </div>
 
     </div>
 
 </div>
 
-<!-- SCELTA FRATTURA -->
-
-<div id="riftChoice" class="screen hidden">
-
-    <div class="riftChoiceContent">
-
-        <div class="choiceWarning">
-            LA FRATTURA SI STA APRENDO
-        </div>
-
-        <div class="riftChoiceTitle">
-            DECIDI ORA
-        </div>
-
-        <div class="riftChoiceDescription">
-
-            Qualcosa sta attraversando il cielo.
-
-            <br><br>
-
-            Kaelios non sembra più interessato
-            a combatterti.
-
-        </div>
-
-        <button
-            class="riftChoiceButton"
-            onclick="chooseRift('run')">
-
-            SCAPPA
-
-        </button>
-
-        <button
-            class="riftChoiceButton"
-            onclick="chooseRift('stay')">
-
-            RESTA CON KAELIOS
-
-        </button>
-
-    </div>
-
-</div>
-
-</div>
 
 <script>
 
-/* ============================= */
-/* VARIABILI */
-/* ============================= */
+/* =========================================================
+   STATO
+   ========================================================= */
 
 let hp=100;
 let xp=0;
 
 let qteActive=false;
 let touchStartX=0;
-let qteTimeout;
+let qteTimeout=null;
 
 let lastResult="";
 
@@ -1840,7 +2360,51 @@ let riftStep=0;
 let riftPath="";
 let kaeliosTrust=0;
 
-/* UTILITÀ */
+
+/* =========================================================
+   CACHE ELEMENTI USATI SPESSO
+   ========================================================= */
+
+const game=
+    document.getElementById("game");
+
+const hpNumber=
+    document.getElementById("hpNumber");
+
+const hpBar=
+    document.getElementById("hpBar");
+
+const energyBall=
+    document.getElementById("energyBall");
+
+const impactFlash=
+    document.getElementById("impactFlash");
+
+const qteOverlay=
+    document.getElementById("qteOverlay");
+
+const timerBar=
+    document.getElementById("timerBar");
+
+const playerBall=
+    document.getElementById("playerBall");
+
+const chargeFill=
+    document.getElementById("chargeFill");
+
+const chargePercent=
+    document.getElementById("chargePercent");
+
+const chargeTitle=
+    document.getElementById("chargeTitle");
+
+const holdButton=
+    document.getElementById("holdButton");
+
+
+/* =========================================================
+   UTILITÀ
+   ========================================================= */
 
 function hide(id){
 
@@ -1850,6 +2414,7 @@ function hide(id){
         .add("hidden");
 }
 
+
 function show(id){
 
     document
@@ -1858,16 +2423,64 @@ function show(id){
         .remove("hidden");
 }
 
-/* ============================= */
-/* INIZIO */
-/* ============================= */
+
+function vibrate(pattern){
+
+    if(navigator.vibrate){
+
+        navigator.vibrate(pattern);
+    }
+}
+
+
+function addShake(duration=450){
+
+    game.classList.remove("shake");
+
+    void game.offsetWidth;
+
+    game.classList.add("shake");
+
+    setTimeout(()=>{
+
+        game.classList.remove("shake");
+
+    },duration);
+}
+
+
+function flashImpact(){
+
+    impactFlash.classList.remove(
+        "hit"
+    );
+
+    void impactFlash.offsetWidth;
+
+    impactFlash.classList.add(
+        "hit"
+    );
+}
+
+
+function updateHP(){
+
+    hpNumber.textContent=hp;
+
+    hpBar.style.width=
+        hp+"%";
+}
+
+
+/* =========================================================
+   INIZIO
+   ========================================================= */
 
 function startGame(){
 
     hide("home");
 
     show("intro");
-
     show("hud");
 
     const text=
@@ -1877,54 +2490,61 @@ function startGame(){
 
     setTimeout(()=>{
 
-        text.innerHTML=
+        text.textContent=
             "UNIVERSO 7";
 
-        text.style.opacity=1;
+        text.style.opacity="1";
 
     },600);
 
+
     setTimeout(()=>{
 
-        text.style.opacity=0;
+        text.style.opacity="0";
 
     },2100);
 
+
     setTimeout(()=>{
 
-        text.innerHTML=
+        text.textContent=
             "QUALCOSA NON DOVREBBE ESSERE QUI...";
 
-        text.style.opacity=1;
+        text.style.opacity="1";
 
     },2900);
 
+
     setTimeout(()=>{
 
-        text.style.opacity=0;
+        text.style.opacity="0";
 
     },4800);
+
 
     setTimeout(()=>{
 
         hide("intro");
-
         show("scene1");
 
         setTimeout(()=>{
 
             document
-                .getElementById("choices")
-                .style.display="block";
+                .getElementById(
+                    "choices"
+                )
+                .style.display=
+                    "block";
 
-        },900);
+        },800);
 
     },5500);
 }
 
-/* ============================= */
-/* PRIME SCELTE */
-/* ============================= */
+
+/* =========================================================
+   PRIME SCELTE
+   ========================================================= */
 
 function choose(choice){
 
@@ -1933,37 +2553,45 @@ function choose(choice){
             "dialogueText"
         );
 
-    document
-        .getElementById("choices")
-        .style.display="none";
+    const choices=
+        document.getElementById(
+            "choices"
+        );
+
+    choices.style.display="none";
+
 
     if(choice==="lie"){
 
-        dialogue.innerHTML=
+        dialogue.textContent=
             "Il tuo battito è cambiato. Non sei molto bravo a mentire.";
 
         setTimeout(()=>{
 
-            document
-                .getElementById("choices")
-                .style.display="block";
+            choices.style.display=
+                "block";
 
         },1800);
+
+        return;
     }
+
 
     if(choice==="truth"){
 
-        dialogue.innerHTML=
+        dialogue.textContent=
             "La verità non ti renderà più al sicuro.";
 
         setTimeout(()=>{
 
-            document
-                .getElementById("choices")
-                .style.display="block";
+            choices.style.display=
+                "block";
 
         },1800);
+
+        return;
     }
+
 
     if(choice==="attack"){
 
@@ -1977,9 +2605,10 @@ function choose(choice){
     }
 }
 
-/* ============================= */
-/* ATTACCO KAELIOS */
-/* ============================= */
+
+/* =========================================================
+   ATTACCO KAELIOS
+   ========================================================= */
 
 function chargeAttack(){
 
@@ -1988,67 +2617,46 @@ function chargeAttack(){
             "characterArea"
         );
 
-    const ball=
-        document.getElementById(
-            "energyBall"
-        );
-
     area.classList.add(
         "attackMode"
     );
 
-    ball.className="";
+    energyBall.className="";
 
-    void ball.offsetWidth;
+    void energyBall.offsetWidth;
 
-    ball.classList.add(
+    energyBall.classList.add(
         "charge"
     );
 
-    if(navigator.vibrate){
+    vibrate(
+        [60,40,80]
+    );
 
-        navigator.vibrate(
-            [60,40,80]
-        );
-    }
 
     setTimeout(()=>{
 
-        document
-            .getElementById("game")
-            .classList
-            .add("shake");
+        addShake(350);
 
     },550);
 
-    setTimeout(()=>{
-
-        document
-            .getElementById("game")
-            .classList
-            .remove("shake");
-
-    },900);
 
     setTimeout(()=>{
 
-        ball.classList.remove(
+        energyBall.classList.remove(
             "charge"
         );
 
-        void ball.offsetWidth;
+        void energyBall.offsetWidth;
 
-        ball.classList.add(
+        energyBall.classList.add(
             "fly"
         );
 
-        if(navigator.vibrate){
-
-            navigator.vibrate(90);
-
-        }
+        vibrate(90);
 
     },1000);
+
 
     setTimeout(()=>{
 
@@ -2057,49 +2665,43 @@ function chargeAttack(){
     },1480);
 }
 
-/* ============================= */
-/* QTE SCHIVATA */
-/* ============================= */
+
+/* =========================================================
+   QTE
+   ========================================================= */
 
 function activateQTE(){
 
     qteActive=true;
 
-    const overlay=
-        document.getElementById(
-            "qteOverlay"
-        );
-
-    const bar=
-        document.getElementById(
-            "timerBar"
-        );
-
-    overlay.classList.add(
+    qteOverlay.classList.add(
         "active"
     );
 
-    bar.style.transition="none";
+    /*
+       La barra usa transform.
+       È più economico di animare width.
+    */
 
-    bar.style.width="100%";
+    timerBar.style.transition=
+        "none";
 
-    void bar.offsetWidth;
+    timerBar.style.transform=
+        "scaleX(1)";
 
-    setTimeout(()=>{
+    void timerBar.offsetWidth;
 
-        bar.style.transition=
-            "width 1.65s linear";
 
-        bar.style.width="0%";
+    timerBar.style.transition=
+        "transform 1.65s linear";
 
-    },20);
+    timerBar.style.transform=
+        "scaleX(0)";
 
-    if(navigator.vibrate){
+    vibrate(
+        [100,35,100]
+    );
 
-        navigator.vibrate(
-            [100,35,100]
-        );
-    }
 
     qteTimeout=
         setTimeout(()=>{
@@ -2107,13 +2709,15 @@ function activateQTE(){
             if(qteActive){
 
                 failQTE();
-
             }
 
         },1670);
 }
 
-/* SCHIVATA RIUSCITA */
+
+/* =========================================================
+   SCHIVATA RIUSCITA
+   ========================================================= */
 
 function successQTE(){
 
@@ -2131,63 +2735,33 @@ function successQTE(){
 
     xp+=25;
 
-    const overlay=
-        document.getElementById(
-            "qteOverlay"
-        );
-
-    const ball=
-        document.getElementById(
-            "energyBall"
-        );
-
-    overlay.classList.remove(
+    qteOverlay.classList.remove(
         "active"
     );
 
-    const rect=
-        ball.getBoundingClientRect();
 
-    ball.style.animation="none";
+    /*
+       Facciamo uscire la sfera
+       usando solo transform.
+    */
 
-    ball.style.left=
-        (
-            rect.left+
-            rect.width/2
-        )+"px";
+    energyBall.style.animation=
+        "none";
 
-    ball.style.top=
-        (
-            rect.top+
-            rect.height/2
-        )+"px";
+    energyBall.style.opacity=
+        "1";
 
-    ball.style.width=
-        rect.width+"px";
+    energyBall.style.transition=
+        "transform .28s ease-out, opacity .28s";
 
-    ball.style.height=
-        rect.height+"px";
+    energyBall.style.transform=
+        "translate3d(-70vw,190px,0) scale(.7)";
 
-    ball.style.transform=
-        "translate(-50%,-50%)";
+    energyBall.style.opacity=
+        "0";
 
-    void ball.offsetWidth;
+    vibrate(55);
 
-    ball.style.transition=
-        "left .3s ease-out, opacity .3s, transform .3s";
-
-    ball.style.left="-30%";
-
-    ball.style.opacity="0";
-
-    ball.style.transform=
-        "translate(-50%,-50%) scale(.7)";
-
-    if(navigator.vibrate){
-
-        navigator.vibrate(55);
-
-    }
 
     setTimeout(()=>{
 
@@ -2195,10 +2769,13 @@ function successQTE(){
 
         showResultSuccess();
 
-    },400);
+    },300);
 }
 
-/* COLPITO */
+
+/* =========================================================
+   SCHIVATA FALLITA
+   ========================================================= */
 
 function failQTE(){
 
@@ -2214,90 +2791,54 @@ function failQTE(){
 
     lastResult="fail";
 
-    hp-=36;
-
-    if(hp<0){
-        hp=0;
-    }
-
-    document
-        .getElementById(
-            "qteOverlay"
-        )
-        .classList
-        .remove("active");
-
-    document
-        .getElementById(
-            "hpNumber"
-        )
-        .innerHTML=hp;
-
-    document
-        .getElementById(
-            "hpBar"
-        )
-        .style.width=
-            hp+"%";
-
-    const flash=
-        document.getElementById(
-            "impactFlash"
+    hp=
+        Math.max(
+            0,
+            hp-36
         );
 
-    flash.classList.remove(
-        "hit"
+    qteOverlay.classList.remove(
+        "active"
     );
 
-    void flash.offsetWidth;
+    updateHP();
 
-    flash.classList.add(
-        "hit"
+    flashImpact();
+
+    addShake(500);
+
+    vibrate(
+        [180,60,250]
     );
 
-    document
-        .getElementById("game")
-        .classList
-        .add("shake");
-
-    if(navigator.vibrate){
-
-        navigator.vibrate(
-            [180,60,250]
-        );
-    }
 
     setTimeout(()=>{
-
-        document
-            .getElementById("game")
-            .classList
-            .remove("shake");
 
         resetEnergyBall();
 
         showResultFail();
 
-    },550);
+    },500);
 }
 
-/* RESET SFERA */
+
+/* =========================================================
+   RESET SFERA
+   ========================================================= */
 
 function resetEnergyBall(){
 
-    const ball=
-        document.getElementById(
-            "energyBall"
-        );
+    energyBall.className="";
 
-    ball.className="";
-
-    ball.removeAttribute(
+    energyBall.removeAttribute(
         "style"
     );
 }
 
-/* RISULTATI */
+
+/* =========================================================
+   RISULTATI QTE
+   ========================================================= */
 
 function showResultSuccess(){
 
@@ -2309,7 +2850,7 @@ function showResultSuccess(){
         .getElementById(
             "resultText"
         )
-        .innerHTML=
+        .textContent=
             "PERFECT DODGE";
 
     document
@@ -2323,9 +2864,10 @@ function showResultSuccess(){
         .getElementById(
             "reward"
         )
-        .innerHTML=
+        .textContent=
             "+25 XP";
 }
+
 
 function showResultFail(){
 
@@ -2337,7 +2879,7 @@ function showResultFail(){
         .getElementById(
             "resultText"
         )
-        .innerHTML=
+        .textContent=
             "COLPITO";
 
     document
@@ -2353,13 +2895,14 @@ function showResultFail(){
         .getElementById(
             "reward"
         )
-        .innerHTML=
+        .textContent=
             "-36 HP";
 }
 
-/* ============================= */
-/* DOPO COMBATTIMENTO */
-/* ============================= */
+
+/* =========================================================
+   DOPO IL PRIMO ATTACCO
+   ========================================================= */
 
 function continueStory(){
 
@@ -2372,30 +2915,36 @@ function continueStory(){
             "afterText"
         );
 
+    const choices=
+        document.getElementById(
+            "afterChoices"
+        );
+
+
     if(lastResult==="success"){
 
         text.innerHTML=
             "Hai schivato.<br><br>Nessun mortale avrebbe dovuto riuscirci.";
 
-    }
-
-    else{
+    }else{
 
         text.innerHTML=
             "Sei ancora cosciente.<br><br>Forse non ho sbagliato persona.";
-
     }
+
 
     setTimeout(()=>{
 
-        document
-            .getElementById(
-                "afterChoices"
-            )
-            .style.display="block";
+        choices.style.display=
+            "block";
 
-    },900);
+    },800);
 }
+
+
+/* =========================================================
+   SECONDA SCELTA
+   ========================================================= */
 
 function finalChoice(choice){
 
@@ -2404,11 +2953,13 @@ function finalChoice(choice){
             "afterText"
         );
 
-    document
-        .getElementById(
+    const choices=
+        document.getElementById(
             "afterChoices"
-        )
-        .style.display="none";
+        );
+
+    choices.style.display="none";
+
 
     if(choice==="why"){
 
@@ -2416,21 +2967,20 @@ function finalChoice(choice){
             "Perché tra milioni di realtà...<br><br>sei l'unico che non dovrebbe esistere.";
 
         /*
-        Dopo aver ricevuto la risposta,
-        facciamo comparire di nuovo
-        la possibilità di proseguire.
+           Non blocchiamo la storia.
+           Dopo la risposta puoi continuare.
         */
 
         setTimeout(()=>{
 
-            document
-                .getElementById(
-                    "afterChoices"
-                )
-                .style.display="block";
+            choices.style.display=
+                "block";
 
         },1700);
+
+        return;
     }
+
 
     if(choice==="again"){
 
@@ -2445,9 +2995,10 @@ function finalChoice(choice){
     }
 }
 
-/* ============================= */
-/* ATTACCO GIOCATORE */
-/* ============================= */
+
+/* =========================================================
+   ATTACCO DEL GIOCATORE
+   ========================================================= */
 
 function startPlayerAttack(){
 
@@ -2459,49 +3010,35 @@ function startPlayerAttack(){
 
     chargeValue=0;
 
-    document
-        .getElementById(
-            "chargeFill"
-        )
-        .style.width="0%";
+    chargeFill.style.transform=
+        "scaleX(0)";
 
-    document
-        .getElementById(
-            "chargePercent"
-        )
-        .innerHTML="0%";
+    chargePercent.textContent=
+        "0%";
 
-    document
-        .getElementById(
-            "chargeTitle"
-        )
-        .innerHTML="CARICA";
+    chargeTitle.textContent=
+        "CARICA";
 
-    document
-        .getElementById(
-            "holdButton"
-        )
-        .innerHTML=
-            "TIENI PREMUTO";
+    holdButton.textContent=
+        "TIENI PREMUTO";
 
-    document
-        .getElementById(
-            "playerBall"
-        )
-        .className="";
+    playerBall.className="";
 
-    if(navigator.vibrate){
+    playerBall.removeAttribute(
+        "style"
+    );
 
-        navigator.vibrate(40);
-
-    }
+    vibrate(40);
 }
 
-function beginPlayerCharge(e){
 
-    if(e){
-        e.preventDefault();
-    }
+/* =========================================================
+   INIZIO CARICA
+   ========================================================= */
+
+function beginPlayerCharge(event){
+
+    event.preventDefault();
 
     if(playerCharging){
         return;
@@ -2512,35 +3049,24 @@ function beginPlayerCharge(e){
     chargeStart=
         performance.now();
 
-    document
-        .getElementById(
-            "playerBall"
-        )
-        .className=
-            "active";
+    playerBall.className=
+        "active";
 
-    document
-        .getElementById(
-            "holdButton"
-        )
-        .innerHTML=
-            "RILASCIA!";
+    holdButton.textContent=
+        "RILASCIA!";
 
-    document
-        .getElementById(
-            "chargeTitle"
-        )
-        .innerHTML=
-            "ENERGIA";
+    chargeTitle.textContent=
+        "ENERGIA";
 
-    if(navigator.vibrate){
-
-        navigator.vibrate(35);
-
-    }
+    vibrate(35);
 
     updatePlayerCharge();
 }
+
+
+/* =========================================================
+   LOOP CARICA
+   ========================================================= */
 
 function updatePlayerCharge(){
 
@@ -2549,7 +3075,7 @@ function updatePlayerCharge(){
     }
 
     /*
-    0 -> 100 in 1 secondo
+       0 -> 100 in 1 secondo
     */
 
     chargeValue=
@@ -2568,46 +3094,45 @@ function updatePlayerCharge(){
             100
         );
 
-    document
-        .getElementById(
-            "chargeFill"
-        )
-        .style.width=
-            chargeValue+"%";
 
-    document
-        .getElementById(
-            "chargePercent"
-        )
-        .innerHTML=
-            Math.floor(
-                chargeValue
-            )+"%";
+    /*
+       Transform invece di width.
+    */
 
-    const ball=
-        document.getElementById(
-            "playerBall"
-        );
-
-    ball.style.transform=
-        "translateX(-50%) scale("+
+    chargeFill.style.transform=
+        "scaleX("+
         (
-            .35+
-            (
-                chargeValue/100
-            )
-            *
-            1.8
+            chargeValue/100
         )
         +")";
 
-    ball.style.filter=
-        "brightness("+
+
+    chargePercent.textContent=
+        Math.floor(
+            chargeValue
+        )+"%";
+
+
+    /*
+       Solo transform.
+       Nessun brightness aggiornato
+       ogni singolo frame.
+    */
+
+    const scale=
+        .35+
         (
-            1+
-            chargeValue/80
+            chargeValue/100
         )
-        +")";
+        *
+        1.8;
+
+
+    playerBall.style.transform=
+        "translate3d(-50%,0,0) scale("+
+        scale+
+        ")";
+
 
     if(chargeValue>=100){
 
@@ -2618,11 +3143,17 @@ function updatePlayerCharge(){
         return;
     }
 
+
     chargeFrame=
         requestAnimationFrame(
             updatePlayerCharge
         );
 }
+
+
+/* =========================================================
+   RILASCIO
+   ========================================================= */
 
 function releasePlayerCharge(
     forced=false
@@ -2634,12 +3165,16 @@ function releasePlayerCharge(
 
     playerCharging=false;
 
+
     if(chargeFrame){
 
         cancelAnimationFrame(
             chargeFrame
         );
+
+        chargeFrame=null;
     }
+
 
     if(
         chargeValue>=96
@@ -2650,9 +3185,12 @@ function releasePlayerCharge(
         resolvePlayerAttack(
             "overload"
         );
+
+        return;
     }
 
-    else if(
+
+    if(
         chargeValue>=70
         &&
         chargeValue<=90
@@ -2661,217 +3199,169 @@ function releasePlayerCharge(
         resolvePlayerAttack(
             "perfect"
         );
+
+        return;
     }
 
-    else if(
-        chargeValue>90
-    ){
+
+    if(chargeValue>90){
 
         resolvePlayerAttack(
             "late"
         );
+
+        return;
     }
 
-    else{
 
-        resolvePlayerAttack(
-            "weak"
-        );
-    }
+    resolvePlayerAttack(
+        "weak"
+    );
 }
+
+
+/* =========================================================
+   RISOLUZIONE ATTACCO
+   ========================================================= */
 
 function resolvePlayerAttack(type){
 
     playerAttackOutcome=type;
 
-    const ball=
-        document.getElementById(
-            "playerBall"
-        );
-
-    ball.removeAttribute(
+    playerBall.removeAttribute(
         "style"
     );
 
-    ball.className=
+    playerBall.className=
         "active";
 
-    void ball.offsetWidth;
+    void playerBall.offsetWidth;
+
 
     if(type==="perfect"){
 
-        ball.classList.add(
+        playerBall.classList.add(
             "firePerfect"
         );
 
-        document
-            .getElementById(
-                "chargeTitle"
-            )
-            .innerHTML=
-                "PERFECT!";
+        chargeTitle.textContent=
+            "PERFECT!";
 
-        if(navigator.vibrate){
+        vibrate(
+            [70,35,140]
+        );
 
-            navigator.vibrate(
-                [70,35,140]
-            );
-        }
 
         setTimeout(()=>{
 
-            const f=
-                document
-                    .getElementById(
-                        "impactFlash"
-                    );
+            flashImpact();
 
-            f.classList.remove(
-                "hit"
-            );
-
-            void f.offsetWidth;
-
-            f.classList.add(
-                "hit"
-            );
-
-            document
-                .getElementById(
-                    "game"
-                )
-                .classList
-                .add("shake");
+            addShake(400);
 
         },320);
 
-        setTimeout(()=>{
-
-            document
-                .getElementById(
-                    "game"
-                )
-                .classList
-                .remove("shake");
-
-            showPlayerAttackResult();
-
-        },720);
-    }
-
-    else if(type==="weak"){
-
-        ball.classList.add(
-            "fireWeak"
-        );
-
-        document
-            .getElementById(
-                "chargeTitle"
-            )
-            .innerHTML=
-                "TROPPO PRESTO";
-
-        if(navigator.vibrate){
-
-            navigator.vibrate(45);
-
-        }
-
-        setTimeout(
-            showPlayerAttackResult,
-            700
-        );
-    }
-
-    else if(type==="late"){
-
-        ball.classList.add(
-            "fireWeak"
-        );
-
-        document
-            .getElementById(
-                "chargeTitle"
-            )
-            .innerHTML=
-                "TROPPO TARDI";
-
-        if(navigator.vibrate){
-
-            navigator.vibrate(
-                [55,35,55]
-            );
-        }
-
-        setTimeout(
-            showPlayerAttackResult,
-            700
-        );
-    }
-
-    else{
-
-        ball.classList.add(
-            "overload"
-        );
-
-        document
-            .getElementById(
-                "chargeTitle"
-            )
-            .innerHTML=
-                "SOVRACCARICO";
-
-        document
-            .getElementById(
-                "game"
-            )
-            .classList
-            .add("shake");
-
-        if(navigator.vibrate){
-
-            navigator.vibrate(
-                [120,50,180]
-            );
-        }
 
         setTimeout(()=>{
 
-            document
-                .getElementById(
-                    "game"
-                )
-                .classList
-                .remove("shake");
-
             showPlayerAttackResult();
 
-        },600);
+        },700);
+
+        return;
     }
+
+
+    if(type==="weak"){
+
+        playerBall.classList.add(
+            "fireWeak"
+        );
+
+        chargeTitle.textContent=
+            "TROPPO PRESTO";
+
+        vibrate(45);
+
+
+        setTimeout(
+            showPlayerAttackResult,
+            650
+        );
+
+        return;
+    }
+
+
+    if(type==="late"){
+
+        playerBall.classList.add(
+            "fireWeak"
+        );
+
+        chargeTitle.textContent=
+            "TROPPO TARDI";
+
+        vibrate(
+            [55,35,55]
+        );
+
+
+        setTimeout(
+            showPlayerAttackResult,
+            650
+        );
+
+        return;
+    }
+
+
+    playerBall.classList.add(
+        "overload"
+    );
+
+    chargeTitle.textContent=
+        "SOVRACCARICO";
+
+    addShake(450);
+
+    vibrate(
+        [120,50,180]
+    );
+
+
+    setTimeout(()=>{
+
+        showPlayerAttackResult();
+
+    },580);
 }
+
+
+/* =========================================================
+   RISULTATO ATTACCO
+   ========================================================= */
 
 function showPlayerAttackResult(){
 
-    const p=
+    const panel=
         document.getElementById(
             "attackResult"
         );
 
-    const t=
+    const title=
         document.getElementById(
             "attackResultTitle"
         );
 
-    const x=
+    const text=
         document.getElementById(
             "attackResultText"
         );
 
-    p.classList.add(
+    panel.classList.add(
         "active"
     );
+
 
     if(
         playerAttackOutcome
@@ -2881,71 +3371,67 @@ function showPlayerAttackResult(){
 
         xp+=50;
 
-        t.innerHTML=
+        title.textContent=
             "PERFECT CHARGE";
 
-        x.innerHTML=
+        text.innerHTML=
             "L'energia esplode dalla tua mano e investe Kaelios.<br><br>Per la prima volta, il suo sorriso scompare.<br><br><b>+50 XP</b>";
+
+        return;
     }
 
-    else if(
+
+    if(
         playerAttackOutcome
         ===
         "weak"
     ){
 
-        t.innerHTML=
+        title.textContent=
             "ATTACCO DEBOLE";
 
-        x.innerHTML=
+        text.innerHTML=
             "Hai rilasciato l'energia troppo presto.<br><br>Kaelios devia il colpo con una sola mano.";
+
+        return;
     }
 
-    else if(
+
+    if(
         playerAttackOutcome
         ===
         "late"
     ){
 
-        t.innerHTML=
+        title.textContent=
             "TROPPO TARDI";
 
-        x.innerHTML=
+        text.innerHTML=
             "Hai superato il punto ideale. L'energia perde stabilità e Kaelios riesce a deviare il colpo.";
+
+        return;
     }
 
-    else{
 
-        hp=
-            Math.max(
-                0,
-                hp-15
-            );
+    hp=
+        Math.max(
+            0,
+            hp-15
+        );
 
-        document
-            .getElementById(
-                "hpNumber"
-            )
-            .innerHTML=hp;
+    updateHP();
 
-        document
-            .getElementById(
-                "hpBar"
-            )
-            .style.width=
-                hp+"%";
+    title.textContent=
+        "SOVRACCARICO";
 
-        t.innerHTML=
-            "SOVRACCARICO";
-
-        x.innerHTML=
-            "Hai trattenuto l'energia troppo a lungo. La sfera collassa prima di partire.<br><br>L'esplosione ti ferisce.<br><br><b>-15 HP</b>";
-    }
+    text.innerHTML=
+        "Hai trattenuto l'energia troppo a lungo. La sfera collassa prima di partire.<br><br>L'esplosione ti ferisce.<br><br><b>-15 HP</b>";
 }
 
-/* ============================= */
-/* FINE CONTRATTACCO */
-/* ============================= */
+
+/* =========================================================
+   PASSAGGIO ATTO 2
+   ========================================================= */
 
 function finishPlayerAttack(){
 
@@ -2960,7 +3446,7 @@ function finishPlayerAttack(){
 
     show("afterFight");
 
-    const t=
+    const text=
         document.getElementById(
             "afterText"
         );
@@ -2969,7 +3455,9 @@ function finishPlayerAttack(){
         .getElementById(
             "afterChoices"
         )
-        .style.display="none";
+        .style.display=
+            "none";
+
 
     if(
         playerAttackOutcome
@@ -2977,7 +3465,7 @@ function finishPlayerAttack(){
         "perfect"
     ){
 
-        t.innerHTML=
+        text.innerHTML=
             "Kaelios osserva il punto in cui l'hai colpito.<br><br>«Quell'energia... non appartiene a questo universo.»";
     }
 
@@ -2987,7 +3475,7 @@ function finishPlayerAttack(){
         "weak"
     ){
 
-        t.innerHTML=
+        text.innerHTML=
             "Kaelios abbassa lentamente la mano.<br><br>«La forza c'è. Il controllo, ancora no.»";
     }
 
@@ -2997,19 +3485,16 @@ function finishPlayerAttack(){
         "late"
     ){
 
-        t.innerHTML=
+        text.innerHTML=
             "Kaelios devia l'energia all'ultimo istante.<br><br>«Hai esitato. In battaglia, un istante è abbastanza.»";
     }
 
     else{
 
-        t.innerHTML=
+        text.innerHTML=
             "Kaelios ti osserva mentre l'energia si disperde.<br><br>«Se non impari a controllarla, sarà lei a distruggere te.»";
     }
 
-    /*
-    Inizio Atto 2
-    */
 
     setTimeout(()=>{
 
@@ -3018,9 +3503,10 @@ function finishPlayerAttack(){
     },2200);
 }
 
-/* ============================= */
-/* ATTO 2 - LA FRATTURA */
-/* ============================= */
+
+/* =========================================================
+   FRATTURA
+   ========================================================= */
 
 function startRift(){
 
@@ -3040,62 +3526,67 @@ function startRift(){
             "riftText"
         );
 
-    /*
-    Reset necessario
-    */
+    const button=
+        document.getElementById(
+            "riftContinue"
+        );
+
+    const image=
+        document.querySelector(
+            ".riftKaelios"
+        );
+
 
     crack.classList.remove(
         "open"
     );
 
-    document
-        .getElementById(
-            "riftContinue"
-        )
-        .style.display="block";
+    button.style.display=
+        "block";
 
-    text.innerHTML="...";
+    image.style.opacity=
+        ".72";
+
+    text.textContent=
+        "...";
+
+
+    requestAnimationFrame(()=>{
+
+        requestAnimationFrame(()=>{
+
+            crack.classList.add(
+                "open"
+            );
+
+        });
+
+    });
+
 
     setTimeout(()=>{
 
-        crack.classList.add(
-            "open"
+        addShake(420);
+
+        vibrate(
+            [80,40,120]
         );
 
-        document
-            .getElementById(
-                "game"
-            )
-            .classList
-            .add("shake");
+    },450);
 
-        if(navigator.vibrate){
-
-            navigator.vibrate(
-                [80,40,120]
-            );
-        }
-
-        setTimeout(()=>{
-
-            document
-                .getElementById(
-                    "game"
-                )
-                .classList
-                .remove("shake");
-
-        },500);
-
-    },500);
 
     setTimeout(()=>{
 
-        text.innerHTML=
+        text.textContent=
             "No.";
 
     },1200);
 }
+
+
+/* =========================================================
+   DIALOGO FRATTURA
+   ========================================================= */
 
 function advanceRift(){
 
@@ -3106,41 +3597,45 @@ function advanceRift(){
 
     riftStep++;
 
+
     if(riftStep===1){
 
         text.innerHTML=
             "Questa frattura...<br><br>non l'hai aperta tu.";
+
+        return;
     }
 
-    else if(riftStep===2){
 
-        text.innerHTML=
+    if(riftStep===2){
+
+        text.textContent=
             "E se riescono ad attraversarla...";
+
+        return;
     }
 
-    else if(riftStep===3){
 
-        text.innerHTML=
+    if(riftStep===3){
+
+        text.textContent=
             "«Ti hanno già trovato.»";
 
-        if(navigator.vibrate){
+        vibrate(50);
 
-            navigator.vibrate(50);
-
-        }
+        return;
     }
 
-    else{
 
-        hide("riftScene");
+    hide("riftScene");
 
-        show("riftChoice");
-    }
+    show("riftChoice");
 }
 
-/* ============================= */
-/* PRIMA SCELTA IMPORTANTE */
-/* ============================= */
+
+/* =========================================================
+   SCELTA FRATTURA
+   ========================================================= */
 
 function chooseRift(choice){
 
@@ -3155,15 +3650,20 @@ function chooseRift(choice){
             "riftText"
         );
 
-    document
-        .getElementById(
+    const button=
+        document.getElementById(
             "riftContinue"
-        )
-        .style.display="none";
+        );
 
-    /*
-    RESTA CON KAELIOS
-    */
+    const image=
+        document.querySelector(
+            ".riftKaelios"
+        );
+
+
+    button.style.display=
+        "none";
+
 
     if(choice==="stay"){
 
@@ -3172,139 +3672,82 @@ function chooseRift(choice){
         text.innerHTML=
             "Kaelios ti guarda per un istante.<br><br>Non sei scappato.";
 
+
         setTimeout(()=>{
 
             text.innerHTML=
                 "Si mette davanti a te mentre la frattura continua ad aprirsi.<br><br>«Qualunque cosa accada... non lasciare che ti tocchi.»";
 
         },1800);
+
+        return;
     }
 
-    /*
-    SCAPPA
-    */
 
-    else{
+    kaeliosTrust--;
 
-        kaeliosTrust--;
+    image.style.opacity=
+        ".25";
 
-        document
-            .querySelector(
-                ".riftKaelios"
-            )
-            .style.opacity=".25";
+    text.textContent=
+        "Ti volti e corri.";
+
+
+    setTimeout(()=>{
 
         text.innerHTML=
-            "Ti volti e corri.";
+            "Il terreno vibra sotto i tuoi piedi.<br><br>Poi senti una voce provenire dalla frattura.";
 
-        setTimeout(()=>{
+    },1600);
 
-            text.innerHTML=
-                "Il terreno vibra sotto i tuoi piedi.<br><br>Poi senti una voce provenire dalla frattura.";
 
-        },1600);
+    setTimeout(()=>{
 
-        setTimeout(()=>{
+        text.textContent=
+            "«Finalmente.»";
 
-            text.innerHTML=
-                "«Finalmente.»";
-
-        },3300);
-    }
+    },3300);
 }
 
-/* ============================= */
-/* INPUT SWIPE */
-/* ============================= */
+
+/* =========================================================
+   INPUT SWIPE
+   ========================================================= */
 
 document.addEventListener(
-    "mousedown",
-    e=>{
-
-        touchStartX=
-            e.clientX;
-    }
-);
-
-document.addEventListener(
-    "mouseup",
-    e=>{
-
-        if(!qteActive){
-            return;
-        }
-
-        const distance=
-            e.clientX
-            -
-            touchStartX;
-
-        if(distance < -60){
-
-            successQTE();
-
-        }
-    }
-);
-
-document.addEventListener(
-    "touchstart",
-    e=>{
-
-        touchStartX=
-            e.changedTouches[0]
-            .screenX;
-    },
-    {
-        passive:true
-    }
-);
-
-document.addEventListener(
-    "touchend",
-    e=>{
-
-        if(!qteActive){
-            return;
-        }
-
-        const endX=
-            e.changedTouches[0]
-            .screenX;
-
-        const distance=
-            endX
-            -
-            touchStartX;
-
-        if(distance < -50){
-
-            successQTE();
-
-        }
-    },
-    {
-        passive:true
-    }
-);
-
-/* ============================= */
-/* INPUT ATTACCO */
-/* ============================= */
-
-const holdButton=
-    document.getElementById(
-        "holdButton"
-    );
-
-holdButton.addEventListener(
     "pointerdown",
-    beginPlayerCharge
+    event=>{
+
+        if(!qteActive){
+            return;
+        }
+
+        touchStartX=
+            event.clientX;
+    },
+    {
+        passive:true
+    }
 );
 
-window.addEventListener(
+
+document.addEventListener(
     "pointerup",
-    ()=>{
+    event=>{
+
+        if(qteActive){
+
+            const distance=
+                event.clientX
+                -
+                touchStartX;
+
+            if(distance < -50){
+
+                successQTE();
+            }
+        }
+
 
         if(playerCharging){
 
@@ -3312,8 +3755,23 @@ window.addEventListener(
                 false
             );
         }
+
+    },
+    {
+        passive:true
     }
 );
+
+
+/* =========================================================
+   INPUT CARICA
+   ========================================================= */
+
+holdButton.addEventListener(
+    "pointerdown",
+    beginPlayerCharge
+);
+
 
 window.addEventListener(
     "pointercancel",
@@ -3324,6 +3782,40 @@ window.addEventListener(
             releasePlayerCharge(
                 false
             );
+        }
+    }
+);
+
+
+/* =========================================================
+   SICUREZZA QUANDO APP VA IN BACKGROUND
+   ========================================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    ()=>{
+
+        /*
+           Evita loop inutili se l'utente
+           cambia app durante la carica.
+        */
+
+        if(
+            document.hidden
+            &&
+            playerCharging
+        ){
+
+            playerCharging=false;
+
+            if(chargeFrame){
+
+                cancelAnimationFrame(
+                    chargeFrame
+                );
+
+                chargeFrame=null;
+            }
         }
     }
 );
