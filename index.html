@@ -3947,6 +3947,80 @@ button:active{
     -webkit-touch-callout:none !important;
 }
 
+
+/* =========================================================
+   V2.3 — ENTITÀ / PRIMO REWIND
+   ========================================================= */
+#riftScene.cine-entity{
+    background:
+        radial-gradient(circle at 50% 29%,rgba(181,120,255,.18),transparent 22%),
+        radial-gradient(circle at 50% 45%,rgba(75,28,125,.22),transparent 42%),
+        #010105;
+}
+#riftScene.cine-entity .riftKaelios{
+    opacity:.08 !important;
+    transform:translate3d(-50%,10px,0) scale(.9) !important;
+}
+#riftScene.cine-entity #riftCrack{
+    opacity:1 !important;
+    transform:translate3d(-50%,0,0) rotate(2deg) scaleY(1.18) scaleX(1.5) !important;
+}
+#riftScene.cine-entity::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:31%;
+    width:clamp(76px,23vw,118px);
+    height:clamp(190px,46vh,330px);
+    z-index:22;
+    pointer-events:none;
+    border-radius:48% 48% 28% 28% / 18% 18% 12% 12%;
+    background:
+        radial-gradient(circle at 39% 13%,rgba(255,255,255,.95) 0 2px,transparent 3px),
+        radial-gradient(circle at 61% 13%,rgba(194,130,255,.95) 0 2px,transparent 3px),
+        linear-gradient(180deg,rgba(15,10,24,.98),rgba(0,0,3,.99));
+    box-shadow:0 0 26px rgba(139,92,246,.28);
+    transform:translate3d(-50%,0,0);
+    animation:entityBreath 2.2s ease-in-out infinite alternate;
+}
+#riftScene.cine-rewind{
+    background:
+        repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 5px),
+        radial-gradient(circle at 50% 35%,rgba(155,90,255,.28),transparent 35%),
+        #020207;
+}
+#riftScene.cine-rewind .riftKaelios{opacity:.16 !important}
+#riftScene.cine-rewind #riftCrack{
+    opacity:1 !important;
+    transform:translate3d(-50%,0,0) rotate(-3deg) scaleY(1.1) scaleX(1.25) !important;
+}
+#riftScene.cine-rewind::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:210;
+    pointer-events:none;
+    opacity:0;
+    background:linear-gradient(90deg,transparent,rgba(220,190,255,.18),transparent);
+    animation:rewindSweep .55s ease-out;
+}
+.entityChoiceNote{
+    margin-top:9px;
+    text-align:center;
+    font-size:9px;
+    letter-spacing:2px;
+    opacity:.52;
+}
+@keyframes entityBreath{
+    from{transform:translate3d(-50%,2px,0) scale(.985);opacity:.86}
+    to{transform:translate3d(-50%,-3px,0) scale(1.01);opacity:1}
+}
+@keyframes rewindSweep{
+    0%{opacity:0;transform:translateX(35%)}
+    35%{opacity:1}
+    100%{opacity:0;transform:translateX(-35%)}
+}
+
 </style>
 
 </head>
@@ -8146,7 +8220,7 @@ function cineEls(){
 
 function cineVisual(mode){
     const e=cineEls();
-    e.scene.classList.remove("cine-fracture","cine-kaelios","cine-run","cine-alt");
+    e.scene.classList.remove("cine-fracture","cine-kaelios","cine-run","cine-alt","cine-entity","cine-rewind");
     if(mode)e.scene.classList.add("cine-"+mode);
 
     if(mode!=="run" && mode!=="alt" && e.image){
@@ -8501,6 +8575,12 @@ function finishCineDodge(success){
     clearTimeout(cineSwipeTimer);
     document.getElementById("branchQte").classList.remove("active");
 
+    if(entityCombatActive){
+        document.getElementById("branchQteTitle").textContent="SCHIVA!";
+        handleEntityDodgeV23(success);
+        return;
+    }
+
     if(!success){
         hp=Math.max(1,hp-10);
         updateHP();
@@ -8635,8 +8715,10 @@ function startConvergenceV2(){
         {
             speaker:"KAELIOS",
             text:"«...Errore?»",
-            visual:"kaelios",
-            continue:false
+            visual:"kaelios"
+        },
+        {
+            action:startEntityEncounterV23
         }
     ]);
 }
@@ -8803,6 +8885,415 @@ document.addEventListener("touchstart", unifiedTouchStart, {passive:false, captu
 document.addEventListener("touchmove",  unifiedTouchMove,  {passive:false, capture:true});
 document.addEventListener("touchend",   unifiedTouchEnd,   {passive:false, capture:true});
 document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  capture:true});
+
+
+/* =========================================================
+   V2.3 — ENTITÀ, SCELTE PERSISTENTI, PRIMO REWIND
+   ========================================================= */
+
+let entityDisposition=0;          // + = apertura/curiosità, - = ostilità
+let protagonistIndependence=0;   // cresce quando il giocatore decide da sé
+let entityChoiceV23="";
+let entityCombatActive=false;
+let entityCombatPhase="";
+let entityAttackDirection="right";
+let rewindSeen=false;
+
+function startEntityEncounterV23(){
+    show("riftScene");
+
+    startCineSequence([
+        {
+            text:"La frattura cambia forma.",
+            visual:"fracture",
+            effect:"shake"
+        },
+        {
+            text:"Qualcosa attraversa il bordo della realtà.",
+            visual:"entity",
+            pause:true
+        },
+        {
+            speaker:"???",
+            text:"«Non sono qui per te.»",
+            visual:"entity"
+        },
+        {
+            speaker:"KAELIOS",
+            text:"«Chi ti ha mandato?»",
+            visual:"kaelios"
+        },
+        {
+            speaker:"???",
+            text:"«La domanda non è chi mi ha mandato.»",
+            visual:"entity"
+        },
+        {
+            speaker:"???",
+            text:"«È quante volte abbiamo già avuto questa conversazione.»",
+            visual:"entity",
+            effect:"shake"
+        },
+        {
+            speaker:"???",
+            text:"«Vieni con me.»<br><br>«E questa linea temporale sopravvivrà.»",
+            visual:"entity"
+        },
+        {
+            action:showEntityChoiceV23
+        }
+    ]);
+}
+
+function showEntityChoiceV23(){
+    const e=cineEls();
+
+    cineVisual("entity");
+    cineSpeaker("???");
+    e.text.innerHTML="«Vieni con me.»<br><br>«E questa linea temporale sopravvivrà.»";
+    e.cont.style.display="none";
+
+    e.actions.innerHTML=
+        "<button class='branchAction' onclick=\"chooseEntityV23('go')\">VAI CON LUI</button>"+
+        "<button class='branchAction' onclick=\"chooseEntityV23('refuse')\">RIFIUTA</button>"+
+        "<button class='branchAction' onclick=\"chooseEntityV23('kaelios')\">GUARDA KAELIOS</button>"+
+        "<div class='entityChoiceNote'>QUESTA SCELTA VERRÀ RICORDATA</div>";
+
+    e.actions.className="cineChoices";
+    e.actions.style.display="flex";
+}
+
+function chooseEntityV23(choice){
+    entityChoiceV23=choice;
+    const e=cineEls();
+    e.actions.style.display="none";
+
+    if(choice==="go"){
+        kaeliosTrust--;
+        entityDisposition+=2;
+
+        startCineSequence([
+            {
+                text:"Fai un passo verso la figura.",
+                visual:"entity"
+            },
+            {
+                speaker:"KAELIOS",
+                text:"«Non fare un altro passo.»",
+                visual:"kaelios",
+                effect:"shake"
+            },
+            {
+                speaker:"???",
+                text:"«Curioso.»<br><br>«Anche questa volta prova a salvarti.»",
+                visual:"entity"
+            },
+            {
+                action:startEntityRecoveryV23
+            }
+        ]);
+        return;
+    }
+
+    if(choice==="refuse"){
+        entityDisposition-=2;
+        protagonistIndependence+=2;
+
+        startCineSequence([
+            {
+                speaker:"TU",
+                text:"«No.»",
+                visual:"entity"
+            },
+            {
+                speaker:"???",
+                text:"«Lo hai già fatto.»",
+                visual:"entity"
+            },
+            {
+                speaker:"???",
+                text:"«Non è finita bene.»",
+                visual:"entity",
+                effect:"shake"
+            },
+            {
+                action:startEntityRecoveryV23
+            }
+        ]);
+        return;
+    }
+
+    kaeliosTrust+=2;
+    protagonistIndependence++;
+
+    startCineSequence([
+        {
+            text:"Non rispondi. Guardi Kaelios.",
+            visual:"kaelios"
+        },
+        {
+            speaker:"KAELIOS",
+            text:"«Non so cosa sei.»",
+            visual:"kaelios"
+        },
+        {
+            speaker:"KAELIOS",
+            text:"«Ma so cosa succederà se ti prende.»",
+            visual:"kaelios"
+        },
+        {
+            action:startEntityRecoveryV23
+        }
+    ]);
+}
+
+function startEntityRecoveryV23(){
+    startCineSequence([
+        {
+            speaker:"???",
+            text:"«Recupero autorizzato.»",
+            visual:"entity",
+            effect:"shake"
+        },
+        {
+            text:"La figura scompare dalla frattura.",
+            visual:"fracture"
+        },
+        {
+            text:"Un impulso viola taglia lo spazio alla tua destra.",
+            visual:"entity",
+            effect:"shake"
+        },
+        {
+            action:startFirstEntityDodgeV23
+        }
+    ]);
+}
+
+function startFirstEntityDodgeV23(){
+    hide("riftScene");
+
+    entityCombatActive=true;
+    entityCombatPhase="firstDodge";
+    entityAttackDirection = Math.random() < .5 ? "left" : "right";
+
+    startCineDodge(entityAttackDirection);
+}
+
+function handleEntityDodgeV23(success){
+    // Il controller QTE ha già chiuso overlay e timer.
+    if(entityCombatPhase==="firstDodge"){
+        if(!success){
+            hp=Math.max(1,hp-8);
+            updateHP();
+            flashImpact();
+            addShake(260);
+            vibrate([70,30,80]);
+        }
+
+        entityCombatActive=false;
+        show("riftScene");
+
+        startCineSequence([
+            {
+                text:success
+                    ? "L'attacco ti sfiora. Ti sposti appena in tempo."
+                    : "L'impulso ti colpisce di striscio, ma resti in piedi.",
+                visual:"entity"
+            },
+            {
+                speaker:"KAELIOS",
+                text:"«Non dargli il tempo di preparare il prossimo.»",
+                visual:"kaelios"
+            },
+            {
+                action:showCounterChoiceV23
+            }
+        ]);
+        return;
+    }
+
+    if(entityCombatPhase==="impossible"){
+        // Anche una schivata corretta deve fallire: è un evento narrativo.
+        entityCombatActive=false;
+        flashImpact();
+        addShake(420);
+        vibrate([100,35,120]);
+
+        setTimeout(()=>{
+            show("riftScene");
+            startForcedRewindV23(success);
+        },260);
+        return;
+    }
+
+    if(entityCombatPhase==="rewritten"){
+        if(!success){
+            hp=Math.max(1,hp-6);
+            updateHP();
+            flashImpact();
+            addShake(260);
+            vibrate([70,30,80]);
+
+            // La seconda volta il giocatore deve riuscire: riproponiamo lo stesso attacco.
+            setTimeout(()=>{
+                entityCombatActive=true;
+                entityCombatPhase="rewritten";
+                startCineDodge(entityAttackDirection);
+            },420);
+            return;
+        }
+
+        entityCombatActive=false;
+        rewindSeen=true;
+        show("riftScene");
+
+        startCineSequence([
+            {
+                text:"Questa volta ti muovi prima che l'attacco parta.",
+                visual:"entity"
+            },
+            {
+                text:"L'impulso attraversa il punto in cui eri un istante fa.",
+                visual:"rewind"
+            },
+            {
+                speaker:"???",
+                text:"«Confermato.»",
+                visual:"entity",
+                pause:true
+            },
+            {
+                speaker:"???",
+                text:"«Non attraversa le linee temporali.»",
+                visual:"entity"
+            },
+            {
+                speaker:"???",
+                text:"«Le riscrive.»",
+                visual:"entity",
+                effect:"shake",
+                continue:false
+            }
+        ]);
+    }
+}
+
+function showCounterChoiceV23(){
+    const e=cineEls();
+
+    cineVisual("entity");
+    cineSpeaker("");
+    e.text.innerHTML="Per un istante la figura resta scoperta.";
+    e.cont.style.display="none";
+
+    e.actions.innerHTML=
+        "<button class='branchAction' onclick='counterAttackV23()'>CONTRATTACCA</button>";
+
+    e.actions.className="cineChoices";
+    e.actions.style.display="flex";
+}
+
+function counterAttackV23(){
+    const e=cineEls();
+    e.actions.style.display="none";
+
+    startCineSequence([
+        {
+            text:"Scagli la tua energia verso la figura.",
+            visual:"entity",
+            effect:"shake"
+        },
+        {
+            text:"La attraversa.",
+            visual:"entity",
+            pause:true
+        },
+        {
+            speaker:"???",
+            text:"«Troppo lento.»",
+            visual:"entity"
+        },
+        {
+            text:"L'Entità compare alle tue spalle.",
+            visual:"entity",
+            effect:"shake"
+        },
+        {
+            action:startImpossibleDodgeV23
+        }
+    ]);
+}
+
+function startImpossibleDodgeV23(){
+    hide("riftScene");
+
+    entityCombatActive=true;
+    entityCombatPhase="impossible";
+
+    // Direzione fissa: sarà la stessa dopo il rewind.
+    entityAttackDirection="right";
+    startCineDodge(entityAttackDirection);
+}
+
+function startForcedRewindV23(playerHadDodged){
+    startCineSequence([
+        {
+            text:playerHadDodged
+                ? "Hai schivato.<br><br>Eppure l'attacco ti ha colpito."
+                : "L'attacco ti travolge.",
+            visual:"rewind"
+        },
+        {
+            text:"Il suono scompare.",
+            visual:"rewind",
+            pause:true
+        },
+        {
+            text:"L'immagine si spezza.",
+            visual:"rewind",
+            effect:"shake"
+        },
+        {
+            text:"Poi tutto torna indietro.",
+            visual:"rewind"
+        },
+        {
+            text:"L'Entità è di nuovo davanti a te.<br><br>Lo stesso movimento. Lo stesso istante.",
+            visual:"entity"
+        },
+        {
+            speaker:"TU",
+            text:"«...l'ho già visto.»",
+            visual:"entity"
+        },
+        {
+            text:"Sai già da dove arriverà.",
+            visual:"entity"
+        },
+        {
+            action:startRewrittenDodgeV23
+        }
+    ]);
+}
+
+function startRewrittenDodgeV23(){
+    hide("riftScene");
+
+    entityCombatActive=true;
+    entityCombatPhase="rewritten";
+
+    const overlay=document.getElementById("branchQte");
+    document.getElementById("branchQteTitle").textContent="ORA.";
+    startCineDodge(entityAttackDirection);
+
+    // startCineDodge non cambia il titolo, quindi ORA. resta visibile.
+    setTimeout(()=>{
+        if(!entityCombatActive){
+            document.getElementById("branchQteTitle").textContent="SCHIVA!";
+        }
+    },1800);
+}
 
 </script>
 
