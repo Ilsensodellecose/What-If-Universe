@@ -4380,6 +4380,14 @@ button:active{
     pointer-events:auto !important;
 }
 
+
+/* V2.3.7 — GAME OVER */
+#gameOverV237{position:absolute;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));background:rgba(3,1,9,.96);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .24s ease}
+#gameOverV237.active{opacity:1;visibility:visible;pointer-events:auto}
+.goCardV237{width:min(92vw,430px);text-align:center}
+.goEyebrowV237{font-size:11px;letter-spacing:4px;opacity:.55;margin-bottom:12px}
+.goTitleV237{font-size:clamp(25px,8vw,42px);line-height:.98;font-weight:900;letter-spacing:2px;text-shadow:0 0 18px rgba(157,91,220,.28)}
+.goTextV237{margin:16px 0 24px;font-size:13px;opacity:.72}
 </style>
 
 </head>
@@ -5122,6 +5130,15 @@ button:active{
 
         
         
+        <div id="gameOverV237" aria-hidden="true">
+            <div class="goCardV237">
+                <div class="goEyebrowV237">HP 0</div>
+                <div class="goTitleV237">LINEA TEMPORALE<br>COLLASSATA</div>
+                <div class="goTextV237">La tua storia termina qui.</div>
+                <button id="gameOverRetryV237" class="branchAction">RIPROVA DALL'ULTIMO PUNTO</button>
+            </div>
+        </div>
+
         <div id="rewriteGameV233" aria-hidden="true">
             <div class="rwGameCard">
                 <div class="rwGameEyebrow">LA REALTÀ STA CEDENDO</div>
@@ -9475,9 +9492,7 @@ function failRewriteV234(reason){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteFailCountV233++;
 
-    hp=Math.max(1,hp-8);
-    updateHP();
-    flashImpact();
+    if(damagePlayerV237(8)) return;
     vibrate([90,35,90]);
 
     const overlay=document.getElementById("rewriteGameV233");
@@ -9509,6 +9524,47 @@ function closeRewriteGameV233(){
     overlay.style.visibility="";
     overlay.style.opacity="";
     overlay.style.pointerEvents="";
+}
+
+
+/* V2.3.7 — HP 0 / GAME OVER */
+let scriptedDeathV237=false;
+let gameOverActiveV237=false;
+let checkpointV237={hp:64,restart:null};
+
+function setCheckpointV237(restartFn){
+    checkpointV237={hp:Math.max(64,hp),restart:restartFn};
+}
+function checkGameOverV237(){
+    if(scriptedDeathV237 || gameOverActiveV237 || hp>0)return false;
+    hp=0; updateHP();
+    qteActive=false;
+    cineSwipeActive=false;
+    rewriteGameActiveV233=false;
+    try{cancelAnimationFrame(rewriteGameRafV234)}catch(e){}
+    gameOverActiveV237=true;
+    const go=document.getElementById("gameOverV237");
+    go.classList.add("active");
+    go.setAttribute("aria-hidden","false");
+    vibrate([100,45,130]);
+    return true;
+}
+function damagePlayerV237(amount){
+    if(gameOverActiveV237)return true;
+    hp=Math.max(0,hp-amount);
+    updateHP();
+    flashImpact();
+    return checkGameOverV237();
+}
+function retryCheckpointV237(){
+    gameOverActiveV237=false;
+    const go=document.getElementById("gameOverV237");
+    go.classList.remove("active");
+    go.setAttribute("aria-hidden","true");
+    hp=checkpointV237.hp || 64;
+    updateHP();
+    if(typeof checkpointV237.restart==="function")checkpointV237.restart();
+    else location.reload();
 }
 
 /* V2.3.2 — FIRMA VISIVA RISCRITTURA */
@@ -9543,6 +9599,7 @@ let entityAttackDirection="right";
 let rewindSeen=false;
 
 function startEntityEncounterV23(){
+    if(!checkpointV237.restart)setCheckpointV237(startEntityEncounterV23);
     show("riftScene");
 
     startCineSequence([
@@ -9563,13 +9620,7 @@ function startEntityEncounterV23(){
         },
         {
             speaker:"???",
-            text:"«Quante volte credi che abbiamo già avuto questa conversazione?»",
-            visual:"entity",
-            effect:"shake"
-        },
-        {
-            speaker:"???",
-            text:"«Vieni con me. E questa linea temporale sopravvivrà.»",
+            text:"«Non importa. Vieni con me e questa linea temporale sopravvivrà.»",
             visual:"entity"
         },
         {
@@ -9615,11 +9666,6 @@ function chooseEntityV23(choice){
                 effect:"shake"
             },
             {
-                speaker:"???",
-                text:"«Curioso. Anche questa volta prova a salvarti.»",
-                visual:"entity"
-            },
-            {
                 action:startEntityRecoveryV23
             }
         ]);
@@ -9635,12 +9681,6 @@ function chooseEntityV23(choice){
                 speaker:"TU",
                 text:"«No.»",
                 visual:"entity"
-            },
-            {
-                speaker:"???",
-                text:"«Lo hai già fatto. Non è finita bene.»",
-                visual:"entity",
-                effect:"shake"
             },
             {
                 action:startEntityRecoveryV23
@@ -9659,7 +9699,7 @@ function chooseEntityV23(choice){
         },
         {
             speaker:"KAELIOS",
-            text:"«Non so cosa sei. Ma so cosa succederà se ti prende.»",
+            text:"«Non so cosa sia. Ma so cosa succederà se ti prende.»",
             visual:"kaelios"
         },
         {
@@ -9696,9 +9736,7 @@ function handleEntityDodgeV23(success){
     // Il controller QTE ha già chiuso overlay e timer.
     if(entityCombatPhase==="firstDodge"){
         if(!success){
-            hp=Math.max(1,hp-8);
-            updateHP();
-            flashImpact();
+            if(damagePlayerV237(8)) return;
             addShake(260);
             vibrate([70,30,80]);
         }
@@ -9913,6 +9951,7 @@ function startRewrittenDodgeV23(){
 
 
 /* V2.3.3 — input sicuro mobile */
+document.getElementById("gameOverRetryV237").addEventListener("click",retryCheckpointV237);
 const rewriteRetryBtnV233=document.getElementById("rewriteRetryV233");
 rewriteRetryBtnV233.addEventListener("click",retryRewriteV233);
 
