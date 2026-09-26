@@ -4061,7 +4061,8 @@ button:active{
 }
 
 
-/* V2.3.2 — FIRMA VISIVA RISCRITTURA */
+
+
 #rewriteFxV232{position:absolute;inset:0;z-index:260;pointer-events:none;overflow:hidden;opacity:0;visibility:hidden}
 #rewriteFxV232.active{opacity:1;visibility:visible}
 #rewriteFxV232 .rwFlash{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 46%,rgba(255,255,255,.9),rgba(188,125,255,.34) 22%,transparent 58%)}
@@ -4093,6 +4094,291 @@ button:active{
 @keyframes rwTitleV232{0%{opacity:0;letter-spacing:15px;transform:translate3d(-48%,-50%,0) scaleX(1.12)}18%{opacity:.92;transform:translate3d(-53%,-50%,0) scaleX(.88)}38%{opacity:1;letter-spacing:8px;transform:translate3d(-50%,-50%,0) scaleX(1)}72%{opacity:.88}100%{opacity:0}}
 @keyframes rwRiftReverseV232{0%{transform:translate3d(-50%,0,0) scaleY(1.18) scaleX(1.42)}48%{transform:translate3d(-50%,0,0) scaleY(.72) scaleX(.92)}100%{transform:translate3d(-50%,0,0) scaleY(1.08) scaleX(1.24)}}
 @keyframes rwKaeliosReverseV232{0%{transform:translate3d(-50%,8px,0) scale(.94);opacity:.12}50%{transform:translate3d(-50%,-10px,0) scale(.9);opacity:.28}100%{transform:translate3d(-50%,0,0) scale(.94);opacity:.14}}
+
+
+/* =========================================================
+   V2.3.3 — MOBILE LONG PRESS FIX + REWRITE MINIGAME
+   ========================================================= */
+
+/* Nessuna immagine del gioco deve aprire menu/download/drag su mobile */
+#game img{
+    pointer-events:none !important;
+    -webkit-user-drag:none !important;
+    user-drag:none !important;
+    -webkit-touch-callout:none !important;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+}
+#game,
+#game *{
+    -webkit-touch-callout:none;
+}
+
+/* Minigame RISCRITTURA */
+#rewriteGameV233{
+    position:absolute;
+    inset:0;
+    z-index:245;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:
+        calc(20px + env(safe-area-inset-top))
+        calc(18px + env(safe-area-inset-right))
+        calc(20px + env(safe-area-inset-bottom))
+        calc(18px + env(safe-area-inset-left));
+    background:radial-gradient(circle at 50% 42%,rgba(83,34,133,.28),rgba(1,1,6,.93) 58%);
+    touch-action:none;
+}
+#rewriteGameV233.active{display:flex}
+.rwGameCard{
+    width:min(92vw,430px);
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+.rwGameEyebrow{
+    font-size:9px;
+    letter-spacing:3px;
+    opacity:.62;
+    margin-bottom:9px;
+}
+.rwGameTitle{
+    font-size:clamp(20px,6vw,31px);
+    font-weight:900;
+    letter-spacing:5px;
+    margin-bottom:8px;
+}
+.rwGameHint{
+    font-size:11px;
+    line-height:1.45;
+    opacity:.74;
+    margin:0 auto 18px;
+    max-width:310px;
+}
+.rwTimeline{
+    position:relative;
+    width:100%;
+    height:18px;
+    border:1px solid rgba(220,190,255,.26);
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(255,255,255,.055);
+    margin-bottom:16px;
+}
+.rwTimelineTarget{
+    position:absolute;
+    left:68%;
+    top:0;
+    width:20%;
+    height:100%;
+    background:linear-gradient(90deg,rgba(164,91,255,.2),rgba(229,201,255,.72),rgba(164,91,255,.2));
+}
+.rwTimelineFill{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    transform-origin:left center;
+    transform:scaleX(0);
+    background:linear-gradient(90deg,rgba(98,44,159,.72),rgba(218,181,255,.92));
+    will-change:transform;
+}
+.rwTimelineNeedle{
+    position:absolute;
+    top:-5px;
+    left:0;
+    width:2px;
+    height:28px;
+    background:#fff;
+    box-shadow:0 0 9px rgba(225,195,255,.9);
+    transform:translateX(-1px);
+    will-change:left;
+}
+#rewriteHoldV233{
+    width:min(78vw,310px);
+    min-height:52px;
+    border-radius:999px;
+    border:1px solid rgba(220,190,255,.34);
+    background:rgba(121,62,183,.16);
+    color:#fff;
+    font-weight:800;
+    letter-spacing:2px;
+    touch-action:none;
+    -webkit-user-select:none;
+    user-select:none;
+}
+#rewriteHoldV233.pressing{
+    transform:scale(.98);
+    background:rgba(157,90,226,.28);
+}
+#rewriteResultV233{
+    min-height:18px;
+    margin-top:12px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+#rewriteRetryV233{
+    display:none;
+    margin:14px auto 0;
+}
+#rewriteGameV233.failed .rwGameTitle{
+    animation:rwFailPulseV233 .32s ease-out;
+}
+@keyframes rwFailPulseV233{
+    0%{transform:translateX(0)}
+    25%{transform:translateX(-5px)}
+    55%{transform:translateX(5px)}
+    100%{transform:translateX(0)}
+}
+
+
+/* =========================================================
+   V2.3.4 — RISCRITTURA: LETTERE TEMPORALI
+   ========================================================= */
+#rewriteGameV233 .rwGameHint{
+    margin-bottom:12px;
+}
+.rwTimeRowV234{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 auto 13px;
+    width:min(92%,360px);
+}
+.rwTimeTrackV234{
+    flex:1;
+    height:7px;
+    border-radius:999px;
+    overflow:hidden;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(220,190,255,.18);
+}
+#rwTimeFillV234{
+    width:100%;
+    height:100%;
+    transform-origin:left center;
+    transform:scaleX(1);
+    background:linear-gradient(90deg,rgba(135,73,200,.7),rgba(230,205,255,.95));
+    will-change:transform;
+}
+#rwTimeTextV234{
+    min-width:38px;
+    text-align:right;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+#rwSlotsV234{
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    width:100%;
+    margin:8px auto 15px;
+}
+.rwSlotV234{
+    width:clamp(19px,6.3vw,28px);
+    height:clamp(30px,9vw,39px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:2px solid rgba(220,190,255,.35);
+    font-size:clamp(15px,5vw,21px);
+    font-weight:900;
+    opacity:.72;
+}
+.rwSlotV234.filled{
+    opacity:1;
+    border-color:rgba(238,221,255,.95);
+    text-shadow:0 0 10px rgba(194,135,255,.72);
+    animation:rwSlotPopV234 .18s ease-out;
+}
+#rwLettersV234{
+    position:relative;
+    width:min(88vw,370px);
+    height:clamp(175px,29vh,230px);
+    margin:0 auto;
+    touch-action:manipulation;
+}
+.rwLetterV234{
+    position:absolute;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid rgba(225,198,255,.34);
+    background:rgba(86,39,132,.32);
+    color:#fff;
+    font-size:18px;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    touch-action:manipulation;
+    -webkit-user-select:none;
+    user-select:none;
+    box-shadow:0 0 10px rgba(133,73,196,.12);
+    transition:opacity .14s ease, transform .14s ease, background .14s ease;
+}
+.rwLetterV234:active{transform:scale(.9)}
+.rwLetterV234.used{
+    opacity:0;
+    transform:scale(.45);
+    pointer-events:none;
+}
+.rwLetterV234.wrong{
+    animation:rwWrongLetterV234 .25s ease-out;
+    background:rgba(157,54,105,.32);
+}
+#rewriteGameV233.success-v234 .rwGameTitle{
+    animation:rwSuccessTitleV234 .45s ease-out;
+}
+#rewriteGameV233.failed .rwLettersV234,
+#rewriteGameV233.failed #rwSlotsV234{
+    opacity:.48;
+}
+@keyframes rwSlotPopV234{
+    0%{transform:scale(.55)}
+    75%{transform:scale(1.15)}
+    100%{transform:scale(1)}
+}
+@keyframes rwWrongLetterV234{
+    0%,100%{transform:translateX(0)}
+    30%{transform:translateX(-5px)}
+    65%{transform:translateX(5px)}
+}
+@keyframes rwSuccessTitleV234{
+    0%{letter-spacing:5px}
+    50%{letter-spacing:9px;text-shadow:0 0 16px rgba(226,201,255,.85)}
+    100%{letter-spacing:5px}
+}
+@media (max-height:700px){
+    #rwLettersV234{height:150px}
+    .rwLetterV234{width:40px;height:40px;font-size:16px}
+    #rwSlotsV234{margin-bottom:9px}
+}
+
+
+/* =========================================================
+   V2.3.5 — HOTFIX KAELIOS + RISCRITTURA
+   ========================================================= */
+#riftScene.cine-kaelios .riftKaelios{
+    display:block !important;
+    visibility:visible !important;
+    opacity:.92 !important;
+    z-index:18 !important;
+}
+#rewriteGameV233.active{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+}
+#rewriteGameV233.active .rwGameCard{
+    pointer-events:auto !important;
+}
 
 </style>
 
@@ -4835,6 +5121,26 @@ button:active{
 
 
         
+        
+        <div id="rewriteGameV233" aria-hidden="true">
+            <div class="rwGameCard">
+                <div class="rwGameEyebrow">LA REALTÀ STA CEDENDO</div>
+                <div class="rwGameTitle">RISCRIVI</div>
+                <div class="rwGameHint">Ricostruisci <strong>RISCRITTURA</strong> prima che la linea temporale collassi.</div>
+
+                <div class="rwTimeRowV234">
+                    <div class="rwTimeTrackV234"><div id="rwTimeFillV234"></div></div>
+                    <div id="rwTimeTextV234">6.0s</div>
+                </div>
+
+                <div id="rwSlotsV234" aria-label="Parola da ricostruire"></div>
+                <div id="rwLettersV234" aria-label="Lettere sparse"></div>
+
+                <div id="rewriteResultV233" aria-live="polite"></div>
+                <button id="rewriteRetryV233" class="branchAction">RIPROVA</button>
+            </div>
+        </div>
+
         <div id="rewriteFxV232" aria-hidden="true">
             <div class="rwFlash"></div>
             <div class="rwBand b1"></div><div class="rwBand b2"></div>
@@ -8971,6 +9277,240 @@ document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  captu
 
 
 
+/* =========================================================
+   V2.3.4 — MINIGAME RISCRITTURA: RIORDINA LE LETTERE
+   ========================================================= */
+const REWRITE_WORD_V234="RISCRITTURA";
+const REWRITE_DURATION_V234=6000;
+const REWRITE_PENALTY_V234=500;
+
+let rewriteGameActiveV233=false;
+let rewriteGameIndexV234=0;
+let rewriteGameEndV234=0;
+let rewriteGameRafV234=null;
+let rewriteFailCountV233=0;
+let rewriteSuccessCallbackV233=null;
+let rewriteRemainingV234=REWRITE_DURATION_V234;
+
+const rewritePositionsV234=[
+    [4,5],[39,1],[76,8],[18,29],[59,25],[84,38],
+    [3,56],[36,53],[70,61],[20,78],[55,80]
+];
+
+function shuffledRewriteLettersV234(){
+    const arr=REWRITE_WORD_V234.split("").map((letter,id)=>({letter,id}));
+    for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    // Evita che per puro caso appaia già quasi ordinata.
+    if(arr.map(x=>x.letter).join("")===REWRITE_WORD_V234){
+        [arr[0],arr[4]]=[arr[4],arr[0]];
+    }
+    return arr;
+}
+
+function buildRewriteBoardV234(){
+    const slots=document.getElementById("rwSlotsV234");
+    const letters=document.getElementById("rwLettersV234");
+
+    slots.innerHTML="";
+    letters.innerHTML="";
+
+    REWRITE_WORD_V234.split("").forEach((letter,i)=>{
+        const slot=document.createElement("div");
+        slot.className="rwSlotV234";
+        slot.dataset.index=i;
+        slot.textContent="";
+        slots.appendChild(slot);
+    });
+
+    shuffledRewriteLettersV234().forEach((item,i)=>{
+        const btn=document.createElement("button");
+        btn.type="button";
+        btn.className="rwLetterV234";
+        btn.textContent=item.letter;
+        btn.setAttribute("aria-label","Lettera "+item.letter);
+
+        const p=rewritePositionsV234[i % rewritePositionsV234.length];
+        btn.style.left=p[0]+"%";
+        btn.style.top=p[1]+"%";
+
+        btn.addEventListener("pointerdown",e=>{
+            if(e.cancelable)e.preventDefault();
+        });
+        btn.addEventListener("click",()=>chooseRewriteLetterV234(btn,item.letter));
+        btn.addEventListener("contextmenu",e=>e.preventDefault());
+
+        letters.appendChild(btn);
+    });
+}
+
+function resetRewriteGameV233(){
+    cancelAnimationFrame(rewriteGameRafV234);
+    rewriteGameIndexV234=0;
+    rewriteRemainingV234=REWRITE_DURATION_V234;
+
+    const overlay=document.getElementById("rewriteGameV233");
+    const result=document.getElementById("rewriteResultV233");
+    const retry=document.getElementById("rewriteRetryV233");
+
+    overlay.classList.remove("failed","success-v234");
+    result.textContent="";
+    retry.style.display="none";
+    document.getElementById("rwTimeFillV234").style.transform="scaleX(1)";
+    document.getElementById("rwTimeTextV234").textContent="6.0s";
+
+    buildRewriteBoardV234();
+}
+
+function openRewriteGameV233(onSuccess){
+    rewriteSuccessCallbackV233=onSuccess;
+    rewriteGameActiveV233=true;
+
+    // La RISCRITTURA vive dentro riftScene:
+    // la rendiamo esplicitamente visibile prima di aprire il minigame.
+    show("riftScene");
+
+    const overlay=document.getElementById("rewriteGameV233");
+    resetRewriteGameV233();
+
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden","false");
+    overlay.style.display="flex";
+    overlay.style.visibility="visible";
+    overlay.style.opacity="1";
+    overlay.style.pointerEvents="auto";
+
+    rewriteGameEndV234=performance.now()+REWRITE_DURATION_V234;
+    runRewriteTimerV234();
+}
+
+function runRewriteTimerV234(){
+    cancelAnimationFrame(rewriteGameRafV234);
+
+    function tick(now){
+        if(!rewriteGameActiveV233)return;
+
+        rewriteRemainingV234=Math.max(0,rewriteGameEndV234-now);
+        const ratio=Math.max(0,Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234));
+
+        document.getElementById("rwTimeFillV234").style.transform=`scaleX(${ratio})`;
+        document.getElementById("rwTimeTextV234").textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
+
+        if(rewriteRemainingV234<=0){
+            failRewriteV234("TEMPO ESAURITO");
+            return;
+        }
+
+        rewriteGameRafV234=requestAnimationFrame(tick);
+    }
+
+    rewriteGameRafV234=requestAnimationFrame(tick);
+}
+
+function chooseRewriteLetterV234(btn,letter){
+    if(!rewriteGameActiveV233 || btn.classList.contains("used"))return;
+
+    const expected=REWRITE_WORD_V234[rewriteGameIndexV234];
+
+    if(letter!==expected){
+        btn.classList.remove("wrong");
+        void btn.offsetWidth;
+        btn.classList.add("wrong");
+
+        // Errore: mezzo secondo viene strappato alla linea temporale.
+        rewriteGameEndV234-=REWRITE_PENALTY_V234;
+        vibrate([35,25,45]);
+
+        const result=document.getElementById("rewriteResultV233");
+        result.textContent="-0.5s  •  LETTERA ERRATA";
+        setTimeout(()=>{
+            if(rewriteGameActiveV233 && result.textContent.includes("LETTERA ERRATA")){
+                result.textContent="";
+            }
+        },430);
+        return;
+    }
+
+    btn.classList.add("used");
+
+    const slot=document.querySelector(`#rwSlotsV234 .rwSlotV234[data-index="${rewriteGameIndexV234}"]`);
+    slot.textContent=letter;
+    slot.classList.add("filled");
+
+    rewriteGameIndexV234++;
+    vibrate(18);
+
+    if(rewriteGameIndexV234>=REWRITE_WORD_V234.length){
+        succeedRewriteV234();
+    }
+}
+
+function succeedRewriteV234(){
+    if(!rewriteGameActiveV233)return;
+
+    rewriteGameActiveV233=false;
+    cancelAnimationFrame(rewriteGameRafV234);
+
+    const overlay=document.getElementById("rewriteGameV233");
+    const result=document.getElementById("rewriteResultV233");
+
+    overlay.classList.add("success-v234");
+    result.textContent="LINEA TEMPORALE AGGANCIATA";
+    vibrate([30,20,70]);
+
+    setTimeout(()=>{
+        closeRewriteGameV233();
+        const cb=rewriteSuccessCallbackV233;
+        rewriteSuccessCallbackV233=null;
+        if(typeof cb==="function")cb();
+    },520);
+}
+
+function failRewriteV234(reason){
+    if(!rewriteGameActiveV233)return;
+
+    rewriteGameActiveV233=false;
+    cancelAnimationFrame(rewriteGameRafV234);
+    rewriteFailCountV233++;
+
+    hp=Math.max(1,hp-8);
+    updateHP();
+    flashImpact();
+    vibrate([90,35,90]);
+
+    const overlay=document.getElementById("rewriteGameV233");
+    const result=document.getElementById("rewriteResultV233");
+    const retry=document.getElementById("rewriteRetryV233");
+
+    overlay.classList.add("failed");
+    result.textContent=reason+"  •  -8 HP";
+    retry.style.display="inline-block";
+}
+
+function retryRewriteV233(){
+    if(document.getElementById("rewriteRetryV233").style.display==="none")return;
+
+    rewriteGameActiveV233=true;
+    resetRewriteGameV233();
+    rewriteGameEndV234=performance.now()+REWRITE_DURATION_V234;
+    runRewriteTimerV234();
+}
+
+function closeRewriteGameV233(){
+    cancelAnimationFrame(rewriteGameRafV234);
+    rewriteGameActiveV233=false;
+
+    const overlay=document.getElementById("rewriteGameV233");
+    overlay.classList.remove("active","failed","success-v234");
+    overlay.setAttribute("aria-hidden","true");
+    overlay.style.display="";
+    overlay.style.visibility="";
+    overlay.style.opacity="";
+    overlay.style.pointerEvents="";
+}
+
 /* V2.3.2 — FIRMA VISIVA RISCRITTURA */
 let rewriteFxTimerV232=null;
 function playRewriteFxV232(onDone){
@@ -9007,14 +9547,9 @@ function startEntityEncounterV23(){
 
     startCineSequence([
         {
-            text:"La frattura cambia forma.",
-            visual:"fracture",
-            effect:"shake"
-        },
-        {
-            text:"Qualcosa attraversa il bordo della realtà.",
+            text:"La frattura si apre. Una figura attraversa il bordo della realtà.",
             visual:"entity",
-            pause:true
+            effect:"shake"
         },
         {
             speaker:"???",
@@ -9028,18 +9563,13 @@ function startEntityEncounterV23(){
         },
         {
             speaker:"???",
-            text:"«La domanda non è chi mi ha mandato.»",
-            visual:"entity"
-        },
-        {
-            speaker:"???",
-            text:"«È quante volte abbiamo già avuto questa conversazione.»",
+            text:"«Quante volte credi che abbiamo già avuto questa conversazione?»",
             visual:"entity",
             effect:"shake"
         },
         {
             speaker:"???",
-            text:"«Vieni con me.»<br><br>«E questa linea temporale sopravvivrà.»",
+            text:"«Vieni con me. E questa linea temporale sopravvivrà.»",
             visual:"entity"
         },
         {
@@ -9079,10 +9609,6 @@ function chooseEntityV23(choice){
 
         startCineSequence([
             {
-                text:"Fai un passo verso la figura.",
-                visual:"entity"
-            },
-            {
                 speaker:"KAELIOS",
                 text:"«Non fare un altro passo.»",
                 visual:"kaelios",
@@ -9090,7 +9616,7 @@ function chooseEntityV23(choice){
             },
             {
                 speaker:"???",
-                text:"«Curioso.»<br><br>«Anche questa volta prova a salvarti.»",
+                text:"«Curioso. Anche questa volta prova a salvarti.»",
                 visual:"entity"
             },
             {
@@ -9112,12 +9638,7 @@ function chooseEntityV23(choice){
             },
             {
                 speaker:"???",
-                text:"«Lo hai già fatto.»",
-                visual:"entity"
-            },
-            {
-                speaker:"???",
-                text:"«Non è finita bene.»",
+                text:"«Lo hai già fatto. Non è finita bene.»",
                 visual:"entity",
                 effect:"shake"
             },
@@ -9138,12 +9659,7 @@ function chooseEntityV23(choice){
         },
         {
             speaker:"KAELIOS",
-            text:"«Non so cosa sei.»",
-            visual:"kaelios"
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«Ma so cosa succederà se ti prende.»",
+            text:"«Non so cosa sei. Ma so cosa succederà se ti prende.»",
             visual:"kaelios"
         },
         {
@@ -9157,15 +9673,6 @@ function startEntityRecoveryV23(){
         {
             speaker:"???",
             text:"«Recupero autorizzato.»",
-            visual:"entity",
-            effect:"shake"
-        },
-        {
-            text:"La figura scompare dalla frattura.",
-            visual:"fracture"
-        },
-        {
-            text:"Un impulso viola taglia lo spazio alla tua destra.",
             visual:"entity",
             effect:"shake"
         },
@@ -9351,23 +9858,35 @@ function startForcedRewindV23(playerHadDodged){
         },
         {
             action:()=>{
+                show("riftScene");
                 cineVisual("rewind");
-                playRewriteFxV232(()=>{
-                    cineVisual("entity");
-                    startCineSequence([
-                        {
-                            speaker:"TU",
-                            text:"«...l'ho già visto.»",
-                            visual:"entity"
-                        },
-                        {
-                            text:"Sai già da dove arriverà.",
-                            visual:"entity"
-                        },
-                        {
-                            action:startRewrittenDodgeV23
-                        }
-                    ]);
+
+                const cont=document.getElementById("riftContinue");
+                if(cont) cont.style.display="none";
+
+                // Il click su CONTINUA ora apre SEMPRE il minigame.
+                requestAnimationFrame(()=>{
+                    if(typeof openRewriteGameV233!=="function"){
+                        console.error("RISCRITTURA: motore non disponibile");
+                        if(cont) cont.style.display="block";
+                        return;
+                    }
+
+                    openRewriteGameV233(()=>{
+                        playRewriteFxV232(()=>{
+                            cineVisual("entity");
+                            startCineSequence([
+                                {
+                                    speaker:"TU",
+                                    text:"«...l'ho già visto.»",
+                                    visual:"entity"
+                                },
+                                {
+                                    action:startRewrittenDodgeV23
+                                }
+                            ]);
+                        });
+                    });
                 });
             }
         }
@@ -9391,6 +9910,20 @@ function startRewrittenDodgeV23(){
         }
     },1800);
 }
+
+
+/* V2.3.3 — input sicuro mobile */
+const rewriteRetryBtnV233=document.getElementById("rewriteRetryV233");
+rewriteRetryBtnV233.addEventListener("click",retryRewriteV233);
+
+/* Blocca menu contestuale/drag solo dentro il gioco, non nel browser intero */
+document.getElementById("game").addEventListener("contextmenu",e=>{
+    e.preventDefault();
+});
+document.getElementById("game").addEventListener("dragstart",e=>{
+    e.preventDefault();
+});
+
 
 </script>
 
