@@ -4407,7 +4407,7 @@ button:active{
     66%{transform:translate3d(4px,-1px,0)}
 }
 #chapterCompleteV238{
-    position:absolute;inset:0;z-index:950;
+    position:absolute;inset:0;z-index:2000;
     display:flex;align-items:center;justify-content:center;
     padding:calc(24px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
             calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
@@ -4424,6 +4424,27 @@ button:active{
 .chapterMemoryV238{font-size:11px;letter-spacing:2px;opacity:.72}
 .chapterHintV238{font-size:12px;line-height:1.5;opacity:.48;margin-top:22px}
 
+
+.chapterContinueV241{
+    margin:24px auto 0;
+    width:min(100%,320px);
+}
+#chapterCompleteV238.active{
+    display:flex !important;
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+}
+
+#hubTeaserV241{
+    position:absolute;inset:0;z-index:2100;
+    display:flex;align-items:center;justify-content:center;
+    padding:calc(24px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+            calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+    background:radial-gradient(circle at 50% 45%,rgba(83,31,133,.20),rgba(2,1,7,.99) 60%);
+    opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s ease;
+}
+#hubTeaserV241.active{opacity:1;visibility:visible;pointer-events:auto}
 </style>
 
 </head>
@@ -5167,14 +5188,26 @@ button:active{
         
         
         
+        
+        <div id="hubTeaserV241" aria-hidden="true">
+            <div class="chapterCardV238">
+                <div class="chapterEyebrowV238">TRA LE LINEE TEMPORALI</div>
+                <div class="chapterTitleV238">QUALCOSA<br>TI ASPETTA</div>
+                <div class="chapterLineV238"></div>
+                <div class="chapterHintV238">La tua forma non è ancora stabile.</div>
+                <div class="chapterMemoryV238">PROSSIMO: CREA IL TUO PERSONAGGIO</div>
+            </div>
+        </div>
+
         <div id="chapterCompleteV238" aria-hidden="true">
             <div class="chapterCardV238">
                 <div class="chapterEyebrowV238">WHAT IF UNIVERSE</div>
                 <div class="chapterTitleV238">CAPITOLO 01<br>COMPLETATO</div>
                 <div class="chapterLineV238"></div>
-                <div class="chapterRewardV238">+50 💎</div>
+                <div class="chapterRewardV238">+50 💎 &nbsp; • &nbsp; +100 XP</div>
                 <div class="chapterMemoryV238">MEMORIA TEMPORALE ACQUISITA</div>
-                <div class="chapterHintV238">Qualcosa, oltre questa realtà, ti sta aspettando.</div>
+                <div class="chapterHintV238">Hai scoperto di poter ricordare eventi cancellati.</div>
+                <button id="chapterContinueV241" class="branchAction chapterContinueV241">CONTINUA</button>
             </div>
         </div>
 
@@ -10106,24 +10139,35 @@ function showFakeGameOverV238(){
     eyebrow.textContent="HP 0";
     title.innerHTML="LINEA TEMPORALE<br>COLLASSATA";
     textEl.textContent="La tua storia termina qui.";
-    btn.style.display="none";
+    btn.textContent="CONTINUA";
+    btn.style.display="";
 
     go.classList.remove("fake-rewrite-v238");
     go.classList.add("active");
     go.setAttribute("aria-hidden","false");
 
-    /* Qui la pausa è intenzionale: deve sembrare un vero Game Over. */
-    setTimeout(()=>{
-        go.classList.add("fake-rewrite-v238");
-        vibrate([35,25,60]);
+    /* Nessun timer narrativo: resta qui finché il giocatore preme CONTINUA. */
+}
 
-        setTimeout(()=>{
-            title.innerHTML="QUESTA REALTÀ<br>NON DEVE FINIRE COSÌ";
-            textEl.textContent="Ricordi ciò che è appena accaduto.";
-            btn.textContent="RISCRIVI";
-            btn.style.display="";
-        },520);
-    },1450);
+function revealRewriteChoiceV240(){
+    const go=document.getElementById("gameOverV237");
+    const eyebrow=go.querySelector(".goEyebrowV237");
+    const title=go.querySelector(".goTitleV237");
+    const textEl=go.querySelector(".goTextV237");
+    const btn=document.getElementById("gameOverRetryV237");
+
+    btn.style.display="none";
+    go.classList.add("fake-rewrite-v238");
+    vibrate([35,25,60]);
+
+    /* Solo il glitch è automatico e molto breve. */
+    setTimeout(()=>{
+        eyebrow.textContent="MEMORIA TEMPORALE";
+        title.innerHTML="QUESTA REALTÀ<br>NON DEVE FINIRE COSÌ";
+        textEl.textContent="Ricordi ciò che è appena accaduto.";
+        btn.textContent="RISCRIVI";
+        btn.style.display="";
+    },420);
 }
 
 function startVoluntaryRewriteV238(){
@@ -10217,20 +10261,65 @@ function prologueChangedOutcomeV239(){
 }
 
 function completeChapterOneV238(){
-    hide("riftScene");
-    gems+=50;
-    updateGems();
+    /* Chiude esplicitamente tutto ciò che potrebbe coprire il finale. */
+    try{ hide("riftScene"); }catch(e){}
+    try{ hide("qteOverlay"); }catch(e){}
+    try{ hide("branchQte"); }catch(e){}
+
+    const rw=document.getElementById("rewriteGameV233");
+    if(rw){
+        rw.classList.remove("active","failed","success-v234");
+        rw.setAttribute("aria-hidden","true");
+    }
+
+    const fx=document.getElementById("rewriteFxV232");
+    if(fx){
+        fx.classList.remove("active");
+        fx.setAttribute("aria-hidden","true");
+    }
+
+    const go=document.getElementById("gameOverV237");
+    if(go){
+        go.classList.remove("active","fake-rewrite-v238");
+        go.setAttribute("aria-hidden","true");
+    }
+
+    if(!window.chapterRewardGrantedV241){
+        window.chapterRewardGrantedV241=true;
+        gems+=50;
+        xp+=100;
+        updateGems();
+        updateXP();
+    }
 
     const chapter=document.getElementById("chapterCompleteV238");
+    chapter.style.display="flex";
     chapter.classList.add("active");
     chapter.setAttribute("aria-hidden","false");
 }
 
 /* V2.3.3 — input sicuro mobile */
+
+document.getElementById("chapterContinueV241").addEventListener("click",function(){
+    const chapter=document.getElementById("chapterCompleteV238");
+    chapter.classList.remove("active");
+    chapter.setAttribute("aria-hidden","true");
+    chapter.style.display="none";
+
+    const teaser=document.getElementById("hubTeaserV241");
+    teaser.classList.add("active");
+    teaser.setAttribute("aria-hidden","false");
+});
+
 document.getElementById("gameOverRetryV237").addEventListener("click",function(e){
     if(prologueFinalV238 && scriptedDeathV237){
         e.preventDefault();
-        startVoluntaryRewriteV238();
+        const btn=document.getElementById("gameOverRetryV237");
+        if(btn.textContent.trim()==="CONTINUA"){
+            revealRewriteChoiceV240();
+        }else if(btn.textContent.trim()==="RISCRIVI"){
+            startVoluntaryRewriteV238();
+        }
         return;
     }
     retryCheckpointV237();
