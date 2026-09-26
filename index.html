@@ -4021,6 +4021,79 @@ button:active{
     100%{opacity:0;transform:translateX(-35%)}
 }
 
+
+/* =========================================================
+   V2.3.1 — ENTITY CHOICE LAYER FIX
+   ========================================================= */
+
+/* Dialoghi e controlli devono stare sempre davanti alla silhouette */
+#riftScene #cineDialogue,
+#riftScene .cineDialogue,
+#riftScene #cineActions,
+#riftScene .cineChoices{
+    position:relative;
+    z-index:60 !important;
+}
+
+/* Quando compaiono le tre scelte, l'Entità arretra */
+#riftScene.entity-choosing::before{
+    top:20% !important;
+    width:clamp(58px,17vw,88px) !important;
+    height:clamp(145px,34vh,235px) !important;
+    opacity:.58 !important;
+    transform:translate3d(-50%,0,0) scale(.88) !important;
+    animation:none !important;
+}
+
+/* Le scelte diventano il primo piano visivo */
+#riftScene.entity-choosing #cineActions,
+#riftScene.entity-choosing .cineChoices{
+    z-index:80 !important;
+}
+
+/* Telefoni bassi: ulteriore margine tra figura e pulsanti */
+@media (max-height:700px){
+    #riftScene.entity-choosing::before{
+        top:15% !important;
+        width:54px !important;
+        height:138px !important;
+    }
+}
+
+
+/* V2.3.2 — FIRMA VISIVA RISCRITTURA */
+#rewriteFxV232{position:absolute;inset:0;z-index:260;pointer-events:none;overflow:hidden;opacity:0;visibility:hidden}
+#rewriteFxV232.active{opacity:1;visibility:visible}
+#rewriteFxV232 .rwFlash{position:absolute;inset:0;opacity:0;background:radial-gradient(circle at 50% 46%,rgba(255,255,255,.9),rgba(188,125,255,.34) 22%,transparent 58%)}
+#rewriteFxV232.active .rwFlash{animation:rwFlashV232 .72s ease-out both}
+#rewriteFxV232 .rwBand{position:absolute;left:-8%;width:116%;height:25%;opacity:0;background:linear-gradient(90deg,transparent 0 7%,rgba(198,139,255,.12) 22%,rgba(255,255,255,.16) 50%,rgba(150,80,255,.12) 78%,transparent 93%);border-top:1px solid rgba(225,196,255,.22);border-bottom:1px solid rgba(129,68,203,.18)}
+#rewriteFxV232 .b1{top:0} #rewriteFxV232 .b2{top:25%} #rewriteFxV232 .b3{top:50%} #rewriteFxV232 .b4{top:75%}
+#rewriteFxV232.active .b1{animation:rwBandLeftV232 .72s cubic-bezier(.2,.8,.2,1) .14s both}
+#rewriteFxV232.active .b2{animation:rwBandRightV232 .72s cubic-bezier(.2,.8,.2,1) .18s both}
+#rewriteFxV232.active .b3{animation:rwBandLeftV232 .72s cubic-bezier(.2,.8,.2,1) .22s both}
+#rewriteFxV232.active .b4{animation:rwBandRightV232 .72s cubic-bezier(.2,.8,.2,1) .26s both}
+#rewriteFxV232 .rwEcho{position:absolute;left:50%;top:30%;width:min(35vw,150px);height:min(38vh,280px);transform:translate3d(-50%,0,0);opacity:0;border-radius:50% 50% 28% 28% / 18% 18% 12% 12%;background:linear-gradient(180deg,rgba(197,147,255,.18),rgba(54,18,91,.04));border:1px solid rgba(219,186,255,.2)}
+#rewriteFxV232.active .e1{animation:rwEchoBackV232 .82s ease-out .18s both}
+#rewriteFxV232.active .e2{animation:rwEchoBackV232 .82s ease-out .29s both}
+#rewriteFxV232.active .e3{animation:rwEchoBackV232 .82s ease-out .40s both}
+#rewriteFxV232 .rwCore{position:absolute;left:50%;top:47%;width:14px;height:14px;border-radius:50%;opacity:0;transform:translate3d(-50%,-50%,0) scale(.2);background:rgba(244,232,255,.94);box-shadow:0 0 18px rgba(184,116,255,.72)}
+#rewriteFxV232.active .rwCore{animation:rwCoreV232 .9s ease-out .46s both}
+#rewriteFxV232 .rwTitle{position:absolute;left:50%;top:50%;transform:translate3d(-50%,-50%,0);opacity:0;white-space:nowrap;font-size:clamp(13px,4vw,19px);font-weight:800;letter-spacing:clamp(5px,2vw,10px);text-shadow:0 0 12px rgba(196,145,255,.55)}
+#rewriteFxV232.active .rwTitle{animation:rwTitleV232 1.05s ease-out .38s both}
+#riftScene.rewinding-v232 .riftDialogue{opacity:0!important}
+#riftScene.rewinding-v232::before{animation:none!important}
+#riftScene.rewinding-v232 #riftCrack{animation:rwRiftReverseV232 1.05s ease-in-out both!important}
+#riftScene.rewinding-v232 .riftKaelios{animation:rwKaeliosReverseV232 1.05s ease-in-out both!important}
+
+@keyframes rwFlashV232{0%{opacity:0}8%{opacity:.92}22%{opacity:.12}36%{opacity:.48}100%{opacity:0}}
+@keyframes rwBandLeftV232{0%{opacity:0;transform:translate3d(0,0,0)}24%{opacity:.8;transform:translate3d(8%,0,0)}64%{opacity:.48;transform:translate3d(-13%,0,0)}100%{opacity:0;transform:translate3d(0,0,0)}}
+@keyframes rwBandRightV232{0%{opacity:0;transform:translate3d(0,0,0)}24%{opacity:.8;transform:translate3d(-8%,0,0)}64%{opacity:.48;transform:translate3d(13%,0,0)}100%{opacity:0;transform:translate3d(0,0,0)}}
+@keyframes rwEchoBackV232{0%{opacity:0;transform:translate3d(-50%,18px,0) scale(1.08)}22%{opacity:.58}100%{opacity:0;transform:translate3d(-50%,-30px,0) scale(.72)}}
+@keyframes rwCoreV232{0%{opacity:0;transform:translate3d(-50%,-50%,0) scale(.2)}35%{opacity:1;transform:translate3d(-50%,-50%,0) scale(2.5)}100%{opacity:0;transform:translate3d(-50%,-50%,0) scale(13)}}
+@keyframes rwTitleV232{0%{opacity:0;letter-spacing:15px;transform:translate3d(-48%,-50%,0) scaleX(1.12)}18%{opacity:.92;transform:translate3d(-53%,-50%,0) scaleX(.88)}38%{opacity:1;letter-spacing:8px;transform:translate3d(-50%,-50%,0) scaleX(1)}72%{opacity:.88}100%{opacity:0}}
+@keyframes rwRiftReverseV232{0%{transform:translate3d(-50%,0,0) scaleY(1.18) scaleX(1.42)}48%{transform:translate3d(-50%,0,0) scaleY(.72) scaleX(.92)}100%{transform:translate3d(-50%,0,0) scaleY(1.08) scaleX(1.24)}}
+@keyframes rwKaeliosReverseV232{0%{transform:translate3d(-50%,8px,0) scale(.94);opacity:.12}50%{transform:translate3d(-50%,-10px,0) scale(.9);opacity:.28}100%{transform:translate3d(-50%,0,0) scale(.94);opacity:.14}}
+
 </style>
 
 </head>
@@ -4761,7 +4834,17 @@ button:active{
 
 
 
-        <div class="riftDialogue">
+        
+        <div id="rewriteFxV232" aria-hidden="true">
+            <div class="rwFlash"></div>
+            <div class="rwBand b1"></div><div class="rwBand b2"></div>
+            <div class="rwBand b3"></div><div class="rwBand b4"></div>
+            <div class="rwEcho e1"></div><div class="rwEcho e2"></div><div class="rwEcho e3"></div>
+            <div class="rwCore"></div>
+            <div class="rwTitle">RISCRITTURA</div>
+        </div>
+
+<div class="riftDialogue">
 
 
 
@@ -8220,7 +8303,7 @@ function cineEls(){
 
 function cineVisual(mode){
     const e=cineEls();
-    e.scene.classList.remove("cine-fracture","cine-kaelios","cine-run","cine-alt","cine-entity","cine-rewind");
+    e.scene.classList.remove("cine-fracture","cine-kaelios","cine-run","cine-alt","cine-entity","cine-rewind","entity-choosing");
     if(mode)e.scene.classList.add("cine-"+mode);
 
     if(mode!=="run" && mode!=="alt" && e.image){
@@ -8887,6 +8970,26 @@ document.addEventListener("touchend",   unifiedTouchEnd,   {passive:false, captu
 document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  capture:true});
 
 
+
+/* V2.3.2 — FIRMA VISIVA RISCRITTURA */
+let rewriteFxTimerV232=null;
+function playRewriteFxV232(onDone){
+    const scene=document.getElementById("riftScene");
+    const fx=document.getElementById("rewriteFxV232");
+    clearTimeout(rewriteFxTimerV232);
+    scene.classList.add("rewinding-v232");
+    fx.classList.remove("active");
+    void fx.offsetWidth;
+    fx.classList.add("active");
+    vibrate([35,25,55,25,90]);
+
+    rewriteFxTimerV232=setTimeout(()=>{
+        fx.classList.remove("active");
+        scene.classList.remove("rewinding-v232");
+        if(typeof onDone==="function") onDone();
+    },1450);
+}
+
 /* =========================================================
    V2.3 — ENTITÀ, SCELTE PERSISTENTI, PRIMO REWIND
    ========================================================= */
@@ -8949,6 +9052,7 @@ function showEntityChoiceV23(){
     const e=cineEls();
 
     cineVisual("entity");
+    e.scene.classList.add("entity-choosing");
     cineSpeaker("???");
     e.text.innerHTML="«Vieni con me.»<br><br>«E questa linea temporale sopravvivrà.»";
     e.cont.style.display="none";
@@ -8966,6 +9070,7 @@ function showEntityChoiceV23(){
 function chooseEntityV23(choice){
     entityChoiceV23=choice;
     const e=cineEls();
+    e.scene.classList.remove("entity-choosing");
     e.actions.style.display="none";
 
     if(choice==="go"){
@@ -9245,34 +9350,26 @@ function startForcedRewindV23(playerHadDodged){
             visual:"rewind"
         },
         {
-            text:"Il suono scompare.",
-            visual:"rewind",
-            pause:true
-        },
-        {
-            text:"L'immagine si spezza.",
-            visual:"rewind",
-            effect:"shake"
-        },
-        {
-            text:"Poi tutto torna indietro.",
-            visual:"rewind"
-        },
-        {
-            text:"L'Entità è di nuovo davanti a te.<br><br>Lo stesso movimento. Lo stesso istante.",
-            visual:"entity"
-        },
-        {
-            speaker:"TU",
-            text:"«...l'ho già visto.»",
-            visual:"entity"
-        },
-        {
-            text:"Sai già da dove arriverà.",
-            visual:"entity"
-        },
-        {
-            action:startRewrittenDodgeV23
+            action:()=>{
+                cineVisual("rewind");
+                playRewriteFxV232(()=>{
+                    cineVisual("entity");
+                    startCineSequence([
+                        {
+                            speaker:"TU",
+                            text:"«...l'ho già visto.»",
+                            visual:"entity"
+                        },
+                        {
+                            text:"Sai già da dove arriverà.",
+                            visual:"entity"
+                        },
+                        {
+                            action:startRewrittenDodgeV23
+                        }
+                    ]);
+                });
+            }
         }
     ]);
 }
