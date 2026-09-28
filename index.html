@@ -4472,897 +4472,501 @@ button:active{
 #devToggleV25{display:block!important;visibility:visible!important;opacity:1!important}
 
 
-/* =========================================================
-   V2.6 — CHARACTER CREATOR
-   ========================================================= */
-#creatorV26{
-    position:fixed;inset:0;z-index:3200;
-    display:flex;align-items:center;justify-content:center;
-    box-sizing:border-box;overflow:hidden;
-    padding:calc(12px + env(safe-area-inset-top))
-            calc(12px + env(safe-area-inset-right))
-            calc(12px + env(safe-area-inset-bottom))
-            calc(12px + env(safe-area-inset-left));
-    background:
-      radial-gradient(circle at 50% 34%,rgba(128,70,220,.20),transparent 34%),
-      linear-gradient(180deg,#07040e 0%,#0b0615 54%,#030207 100%);
-    opacity:0;visibility:hidden;pointer-events:none;
-    transition:opacity .28s ease;
+/* ==========================================================
+   V3.0 — CHARACTER CREATOR COMPLETAMENTE NUOVO
+   Nessuna dipendenza dal vecchio creator.
+   Lo stage NON cambia mai dimensione cambiando menu.
+   ========================================================== */
+#creatorV30,#creator30Done{
+ position:fixed;inset:0;z-index:310;
+ opacity:0;visibility:hidden;pointer-events:none;
+ background:
+   radial-gradient(circle at 50% 34%,rgba(70,47,190,.26),transparent 34%),
+   linear-gradient(180deg,#080713 0%,#0c091b 100%);
+ color:#fff;overflow:hidden;
+ padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right))
+         max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+ box-sizing:border-box;
 }
-#creatorV26.active{opacity:1;visibility:visible;pointer-events:auto}
-.creatorShellV26{
-    width:min(100%,460px);height:100%;max-height:820px;
-    display:grid;grid-template-rows:auto minmax(150px,1fr) auto auto;
-    gap:8px;min-height:0;
+#creatorV30.active,#creator30Done.active{opacity:1;visibility:visible;pointer-events:auto}
+.creator30Shell{
+ width:min(760px,100%);height:100%;margin:auto;
+ display:grid;
+ grid-template-rows:auto minmax(250px,1fr) auto;
+ gap:8px;
 }
-.creatorHeadV26{text-align:center;padding-top:2px}
-.creatorEyebrowV26{font-size:9px;letter-spacing:4px;opacity:.5}
-.creatorTitleV26{font-size:clamp(20px,6vw,30px);font-weight:950;letter-spacing:1.5px;margin-top:3px}
-.creatorSubV26{font-size:10px;opacity:.48;margin-top:3px}
+.creator30Head{text-align:center;flex:none}
+.creator30Eyebrow{font-size:11px;letter-spacing:.34em;font-weight:900;color:#bca8ff}
+.creator30Head h1{font-size:clamp(25px,5vw,42px);line-height:1;margin:5px 0 3px;letter-spacing:.04em}
+.creator30Head p{font-size:11px;color:#bdb8ce;margin:0}
 
-.avatarStageV26{
-    position:relative;min-height:0;border:1px solid rgba(185,128,255,.18);
-    border-radius:20px;overflow:hidden;
-    background:radial-gradient(circle at 50% 46%,rgba(137,73,218,.16),rgba(255,255,255,.015) 48%,transparent 70%);
+/* STAGE: geometria fissa. Nessun tab può modificarla. */
+.creator30Stage{
+ position:relative;min-height:0;height:100%;
+ border:1px solid rgba(137,104,255,.25);border-radius:22px;
+ overflow:hidden;contain:layout paint;
+ background:
+  radial-gradient(circle at 50% 48%,rgba(67,56,212,.20),transparent 36%),
+  rgba(7,6,18,.40);
 }
-.avatarStageV26:before{
-    content:"";position:absolute;left:50%;top:8%;bottom:8%;width:1px;
-    background:linear-gradient(transparent,rgba(195,151,255,.28),transparent);
+.creator30Halo{
+ position:absolute;width:min(48vh,420px);aspect-ratio:1;border-radius:50%;
+ left:50%;top:51%;transform:translate(-50%,-50%);
+ border:1px solid rgba(116,94,255,.34);
+ box-shadow:inset 0 0 55px rgba(58,48,196,.10);
 }
-.avatarRingV26{
-    position:absolute;left:50%;top:51%;width:min(54vw,230px);aspect-ratio:1;
-    transform:translate(-50%,-50%);border:1px solid rgba(188,137,255,.16);
-    border-radius:50%;box-shadow:0 0 45px rgba(113,49,205,.08) inset;
+/* UNICO frame avatar. Questo non viene MAI modificato dai menu. */
+.creator30Avatar{
+ position:absolute;
+ left:50%;top:50%;
+ width:min(430px,72%);
+ height:100%;
+ transform:translate(-50%,-50%);
+ pointer-events:none;
 }
-.avatarV26{
-    --skin:#c99575;--hair:#17131f;--eye:#9b7cff;--suit:#37204f;--accent:#a975ff;
-    position:absolute;left:50%;bottom:3%;width:142px;height:220px;
-    transform:translateX(-50%);filter:drop-shadow(0 16px 20px rgba(0,0,0,.38));
+.creator30Body{
+ position:absolute;left:50%;bottom:-1%;
+ width:100%;height:100%;
+ transform:translateX(-50%);
+ object-fit:contain;object-position:center bottom;
+ display:none;z-index:1;
 }
-.avatarAuraV26{
-    position:absolute;left:50%;bottom:5%;width:155px;height:205px;transform:translateX(-50%);
-    border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 48%,transparent);
-    opacity:.35;animation:creatorPulseV26 2.6s ease-in-out infinite;
-}
-@keyframes creatorPulseV26{50%{transform:translateX(-50%) scale(1.035);opacity:.55}}
-.avBodyV26{position:absolute;left:26px;bottom:0;width:90px;height:112px;background:var(--suit);border-radius:38px 38px 18px 18px;clip-path:polygon(15% 0,85% 0,100% 100%,0 100%)}
-.avBodyV26:after{content:"";position:absolute;left:42px;top:0;width:6px;height:100%;background:var(--accent);opacity:.75}
-.avNeckV26{position:absolute;left:57px;bottom:105px;width:28px;height:28px;background:var(--skin);border-radius:8px}
-.avHeadV26{position:absolute;left:39px;bottom:126px;width:64px;height:74px;background:var(--skin);border-radius:46% 46% 48% 48%}
-.avEarV26:before,.avEarV26:after{content:"";position:absolute;top:28px;width:8px;height:17px;background:var(--skin);border-radius:8px}
-.avEarV26:before{left:-5px}.avEarV26:after{right:-5px}
-.avEyesV26:before,.avEyesV26:after{content:"";position:absolute;top:35px;width:10px;height:4px;background:var(--eye);border-radius:50%;box-shadow:0 0 8px var(--eye)}
-.avEyesV26:before{left:13px}.avEyesV26:after{right:13px}
-.avHairV26{position:absolute;left:34px;bottom:182px;width:74px;height:58px;background:var(--hair);clip-path:polygon(2% 100%,7% 42%,19% 54%,23% 8%,38% 39%,50% 0,59% 39%,78% 9%,80% 55%,96% 35%,100% 100%)}
-.avatarV26.hair2 .avHairV26{height:48px;bottom:184px;clip-path:polygon(0 100%,8% 40%,25% 19%,44% 34%,62% 8%,80% 34%,100% 45%,100% 100%)}
-.avatarV26.hair3 .avHairV26{height:66px;bottom:180px;clip-path:polygon(0 100%,0 32%,18% 45%,27% 4%,43% 40%,59% 12%,72% 48%,100% 24%,96% 100%)}
-.avatarV26.body2{width:154px}.avatarV26.body2 .avBodyV26{left:24px;width:106px}
-.avatarV26.body3{width:134px}.avatarV26.body3 .avBodyV26{left:28px;width:78px}
-.avatarNameTagV26{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);font-size:9px;letter-spacing:3px;opacity:.55;white-space:nowrap}
+.creator30Body.active{display:block}
 
-.creatorControlsV26{
-    border:1px solid rgba(255,255,255,.10);border-radius:17px;
-    background:rgba(255,255,255,.035);padding:9px;
+/* Outfit: SOLO queste variabili possono essere calibrate in futuro.
+   Non influenzano stage, menu o capelli. */
+#creator30Crimson{width:106%;bottom:-1%}
+#creator30Verdant{width:106%;bottom:-1%}
+
+/* Capelli indipendenti dall'outfit e dal menu */
+.creator30Hair{
+ position:absolute;height:auto;transform:translateX(-50%);
+ object-fit:contain;display:none;z-index:5;
+ pointer-events:none;user-select:none;-webkit-user-drag:none;
 }
-.creatorNameV26{
-    width:100%;height:38px;box-sizing:border-box;border:1px solid rgba(255,255,255,.13);
-    border-radius:11px;background:rgba(0,0,0,.25);color:#fff;text-align:center;
-    font:800 13px system-ui;letter-spacing:1.5px;outline:none;margin-bottom:7px;
+#creator30Hair1{width:38%;left:48.85%;top:-8.7%}
+#creator30Hair2{width:46%;left:48.85%;top:-11%}
+#creator30Hair3{width:48%;left:48.85%;top:-3.2%}
+.creator30Hair.active{display:block}
+
+/* Palette separata dal pannello controlli */
+.creator30Palette{
+ position:absolute;left:max(7px,env(safe-area-inset-left));top:50%;
+ transform:translateY(-50%);
+ display:grid;grid-template-columns:repeat(2,24px);gap:5px;
+ padding:6px;border-radius:12px;
+ background:rgba(8,7,18,.86);border:1px solid rgba(156,104,255,.30);
+ z-index:12;
 }
-.creatorNameV26:focus{border-color:rgba(174,118,255,.55)}
-.creatorTabsV26{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.creatorTabV26{
-    min-height:31px;border:0;border-radius:9px;background:rgba(255,255,255,.055);
-    color:rgba(255,255,255,.58);font:800 9px system-ui;letter-spacing:.4px;
+.creator30Palette.hidden{display:none}
+.creator30Palette button{
+ width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,255,255,.18);padding:0;
 }
-.creatorTabV26.active{background:rgba(159,99,244,.20);color:#fff;box-shadow:inset 0 0 0 1px rgba(190,142,255,.28)}
-.creatorOptionsV26{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:7px}
-.creatorOptionV26{
-    position:relative;min-height:39px;border:1px solid rgba(255,255,255,.10);
-    border-radius:10px;background:rgba(255,255,255,.045);color:#fff;
-    font:800 10px system-ui;
+.creator30Palette button.active{outline:2px solid #bda7ff;outline-offset:1px}
+.creator30Palette [data-hcolor="black"]{background:#17171d}
+.creator30Palette [data-hcolor="brown"]{background:#6a3d25}
+.creator30Palette [data-hcolor="blonde"]{background:#e7c66a}
+.creator30Palette [data-hcolor="red"]{background:#a52d2d}
+.creator30Palette [data-hcolor="white"]{background:#e8e8ee}
+.creator30Palette [data-hcolor="blue"]{background:#315bc5}
+.creator30Palette [data-hcolor="purple"]{background:#7343b8}
+.creator30Palette [data-hcolor="pink"]{background:#d56a9d}
+
+.creator30Controls{
+ flex:none;border:1px solid rgba(137,104,255,.22);border-radius:18px;
+ background:rgba(7,6,18,.76);padding:8px;
+ display:grid;gap:6px;
 }
-.creatorOptionV26.active{border-color:rgba(190,140,255,.58);background:rgba(143,79,226,.17)}
-.creatorOptionV26.locked{opacity:.38}
-.creatorOptionV26.locked:after{content:"🔒";position:absolute;right:4px;top:3px;font-size:8px}
-.creatorBottomV26{display:grid;grid-template-columns:1fr;gap:5px}
-.creatorConfirmV26{
-    min-height:46px;border:1px solid rgba(190,139,255,.40);border-radius:13px;
-    background:linear-gradient(180deg,rgba(142,75,229,.34),rgba(87,40,148,.30));
-    color:#fff;font:950 12px system-ui;letter-spacing:1.2px;
+#creator30Name{
+ width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.10);
+ background:#0b0916;color:#fff;border-radius:11px;padding:9px 12px;
+ text-align:center;font:800 13px inherit;letter-spacing:.12em;outline:none;
 }
-.creatorStatusV26{text-align:center;min-height:12px;font-size:9px;letter-spacing:1px;opacity:.55}
-.creatorLockedToastV26{
-    position:absolute;left:50%;top:12px;transform:translate(-50%,-8px);
-    padding:7px 11px;border-radius:9px;background:rgba(8,5,15,.92);
-    border:1px solid rgba(255,255,255,.12);font-size:9px;letter-spacing:1px;
-    opacity:0;pointer-events:none;transition:.18s;white-space:nowrap;
+.creator30Sex,.creator30Tabs,.creator30Options{display:grid;gap:6px}
+.creator30Sex,.creator30Tabs{grid-template-columns:1fr 1fr}
+.creator30Options{grid-template-columns:repeat(3,1fr)}
+.creator30Options.hidden{display:none}
+.creator30Controls button,#creator30Confirm,#creator30ToNexus{
+ min-height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.10);
+ background:#11101e;color:#eae7f6;font-weight:900;letter-spacing:.06em;
 }
-.creatorLockedToastV26.show{opacity:1;transform:translate(-50%,0)}
-#creatorDoneV26{
-    position:fixed;inset:0;z-index:3250;display:flex;align-items:center;justify-content:center;
-    background:#05030a;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s;
-    text-align:center;padding:20px;
+.creator30Controls button.active{
+ background:linear-gradient(180deg,#35228d,#241764);
+ border-color:#8268ff;box-shadow:0 0 15px rgba(99,69,255,.20)
 }
-#creatorDoneV26.active{opacity:1;visibility:visible;pointer-events:auto}
-.creatorDoneTitleV26{font-size:clamp(24px,8vw,40px);font-weight:950;letter-spacing:2px}
-.creatorDoneSubV26{font-size:10px;letter-spacing:3px;opacity:.5;margin-top:12px}
-@media (max-height:680px){
-    .creatorShellV26{grid-template-rows:auto minmax(125px,1fr) auto auto}
-    .avatarV26{transform:translateX(-50%) scale(.82);transform-origin:50% 100%}
-    .creatorTitleV26{font-size:20px}.creatorSubV26{display:none}
-    .creatorControlsV26{padding:7px}.creatorNameV26{height:34px;margin-bottom:5px}
-    .creatorOptionV26{min-height:34px}.creatorConfirmV26{min-height:40px}
+#creator30Status{text-align:center;font-size:9px;letter-spacing:.18em;color:#aaa2bd}
+#creator30Confirm,#creator30ToNexus{
+ background:linear-gradient(180deg,#3d27a0,#281970);border-color:#8068ff;color:white;
+ font-size:13px;
+}
+#creator30Done{display:flex;align-items:center;justify-content:center}
+.creator30DoneCard{
+ width:min(480px,92%);padding:26px;text-align:center;border-radius:22px;
+ border:1px solid rgba(137,104,255,.32);background:#0c091b;
+}
+.creator30DoneCard h2{font-size:28px;margin:10px 0}
+.creator30DoneCard p{color:#bcb4cf;font-size:12px}
+
+#creator30Hair1[data-color="black"],#creator30Hair2[data-color="black"],#creator30Hair3[data-color="black"]{filter:brightness(.72) saturate(.35) contrast(1.16)}
+#creator30Hair1[data-color="brown"],#creator30Hair2[data-color="brown"],#creator30Hair3[data-color="brown"]{filter:sepia(.82) saturate(1.55) hue-rotate(338deg) brightness(.78) contrast(1.06)}
+#creator30Hair1[data-color="blonde"],#creator30Hair2[data-color="blonde"],#creator30Hair3[data-color="blonde"]{filter:sepia(1) saturate(2.15) hue-rotate(348deg) brightness(1.38) contrast(.88)}
+#creator30Hair1[data-color="red"],#creator30Hair2[data-color="red"],#creator30Hair3[data-color="red"]{filter:sepia(.85) saturate(3.1) hue-rotate(318deg) brightness(.88) contrast(1.02)}
+#creator30Hair1[data-color="white"],#creator30Hair2[data-color="white"],#creator30Hair3[data-color="white"]{filter:grayscale(1) brightness(1.65) contrast(.72)}
+#creator30Hair1[data-color="blue"],#creator30Hair2[data-color="blue"],#creator30Hair3[data-color="blue"]{filter:saturate(2.25) hue-rotate(2deg) brightness(1.08) contrast(1.02)}
+#creator30Hair1[data-color="purple"],#creator30Hair2[data-color="purple"],#creator30Hair3[data-color="purple"]{filter:saturate(2.1) hue-rotate(48deg) brightness(1.03) contrast(1.02)}
+#creator30Hair1[data-color="pink"],#creator30Hair2[data-color="pink"],#creator30Hair3[data-color="pink"]{filter:saturate(1.8) hue-rotate(78deg) brightness(1.25) contrast(.92)}
+
+@media(max-width:600px){
+ .creator30Shell{grid-template-rows:auto minmax(210px,1fr) auto;gap:5px}
+ .creator30Head h1{font-size:25px}
+ .creator30Avatar{width:min(400px,82%)}
+ #creator30Hair1{width:39%;top:-8.7%}
+ #creator30Hair2{width:47%;top:-11.5%}
+ #creator30Hair3{width:49%;top:-3.7%}
+ .creator30Controls{padding:6px;gap:5px}
+ .creator30Controls button,#creator30Confirm{min-height:34px;font-size:11px}
+ #creator30Name{padding:7px 10px}
+}
+@media(max-height:720px){
+ .creator30Shell{grid-template-rows:auto minmax(170px,1fr) auto}
+ .creator30Head p{display:none}
+ .creator30Controls{gap:4px}
+ .creator30Controls button,#creator30Confirm{min-height:31px}
 }
 
 
-/* V2.7 — avatar vettoriale più realistico */
-.avatarRealV27{
-  position:absolute!important;left:50%!important;bottom:-8px!important;
-  width:min(56vw,235px)!important;height:auto!important;aspect-ratio:260/430;
-  transform:translateX(-50%)!important;filter:drop-shadow(0 18px 24px rgba(0,0,0,.42))!important;
+/* V3.0.1 — SOLO calibrazione capelli: più piccoli + più in alto */
+#creator30Hair1{width:33%;left:48.85%;top:-13.5%}
+#creator30Hair2{width:40%;left:48.85%;top:-16%}
+#creator30Hair3{width:42%;left:48.85%;top:-8%}
+
+@media(max-width:600px){
+ #creator30Hair1{width:34%;left:48.85%;top:-13.5%}
+ #creator30Hair2{width:41%;left:48.85%;top:-16.5%}
+ #creator30Hair3{width:43%;left:48.85%;top:-8.5%}
 }
-.avatarRealV27 svg{width:100%;height:100%;overflow:visible}
-.avatarRealV27.body2{width:min(61vw,250px)!important}
-.avatarRealV27.body3{width:min(52vw,220px)!important}
-@media(max-height:680px){
- .avatarRealV27{width:min(47vw,190px)!important;transform:translateX(-50%)!important}
-}
-.creatorOptionsV26{grid-template-columns:repeat(3,1fr)}
-.creatorOptionV26{padding:5px 3px}
 
 
-/* V2.7.1 — framing + anime lineart */
-.avatarStageV26{overflow:hidden!important}
-.avatarRealV27{
-    bottom:18px!important;
-    width:min(46vw,195px)!important;
-    max-height:88%!important;
-    aspect-ratio:260/430!important;
+/* V3.0.2 — calibrazione comune finale: più piccoli + più in alto */
+#creator30Hair1{width:30%;left:48.85%;top:-17%}
+#creator30Hair2{width:36%;left:48.85%;top:-19.5%}
+#creator30Hair3{width:38%;left:48.85%;top:-11.5%}
+
+@media(max-width:600px){
+ #creator30Hair1{width:31%;left:48.85%;top:-17%}
+ #creator30Hair2{width:37%;left:48.85%;top:-20%}
+ #creator30Hair3{width:39%;left:48.85%;top:-12%}
 }
-.avatarRealV27 svg{
-    width:100%!important;height:100%!important;
-    overflow:visible!important;
+
+
+/* V3.0.3 — SOLO capelli ancora più piccoli */
+#creator30Hair1{width:26%;left:48.85%;top:-17%}
+#creator30Hair2{width:31%;left:48.85%;top:-19.5%}
+#creator30Hair3{width:33%;left:48.85%;top:-11.5%}
+
+@media(max-width:600px){
+ #creator30Hair1{width:27%;left:48.85%;top:-17%}
+ #creator30Hair2{width:32%;left:48.85%;top:-20%}
+ #creator30Hair3{width:34%;left:48.85%;top:-12%}
 }
-@media (max-height:680px){
-    .avatarRealV27{
-        bottom:10px!important;
-        width:min(39vw,165px)!important;
-        max-height:84%!important;
+
+
+/* V3.0.4 — SOLO capelli: poco più piccoli + poco più bassi */
+#creator30Hair1{width:24%;left:48.85%;top:-15%}
+#creator30Hair2{width:29%;left:48.85%;top:-17.5%}
+#creator30Hair3{width:31%;left:48.85%;top:-9.5%}
+
+@media(max-width:600px){
+ #creator30Hair1{width:25%;left:48.85%;top:-15%}
+ #creator30Hair2{width:30%;left:48.85%;top:-18%}
+ #creator30Hair3{width:32%;left:48.85%;top:-10%}
+}
+
+
+/* V3.0.5 — dimensioni congelate, SOLO capelli più in basso */
+#creator30Hair1{width:24%;left:48.85%;top:-11%}
+#creator30Hair2{width:29%;left:48.85%;top:-13.5%}
+#creator30Hair3{width:31%;left:48.85%;top:-5.5%}
+
+@media(max-width:600px){
+ #creator30Hair1{width:25%;left:48.85%;top:-11%}
+ #creator30Hair2{width:30%;left:48.85%;top:-14%}
+ #creator30Hair3{width:32%;left:48.85%;top:-6%}
+}
+
+
+/* V3.0.6 — SOLO LUNGO + FRANGIA più piccoli */
+#creator30Hair2{width:26%;left:48.85%;top:-13.5%}
+#creator30Hair3{width:28%;left:48.85%;top:-5.5%}
+
+@media(max-width:600px){
+ #creator30Hair2{width:27%;left:48.85%;top:-14%}
+ #creator30Hair3{width:29%;left:48.85%;top:-6%}
+}
+
+
+/* V3.0.7 — SOLO LUNGO più in basso */
+#creator30Hair2{width:26%;left:48.85%;top:-9.5%}
+
+@media(max-width:600px){
+ #creator30Hair2{width:27%;left:48.85%;top:-10%}
+}
+
+
+/* V3.0.8 — SOLO LUNGO leggermente più in alto */
+#creator30Hair2{width:26%;left:48.85%;top:-11.5%}
+
+@media(max-width:600px){
+ #creator30Hair2{width:27%;left:48.85%;top:-12%}
+}
+
+
+/* ==========================================================
+   V3.1 — CREATOR FEMMINILE
+   Maschile congelato. Hair 3 maschile definitivo top:-2%.
+   Per calibrare la femmina modifica SOLO width / left / top qui.
+   ========================================================== */
+
+/* Valore definitivo comunicato per FRANGIA maschile */
+#creator30Hair3{width:28%;left:48.85%;top:-2%}
+@media(max-width:600px){
+ #creator30Hair3{width:29%;left:48.85%;top:-2%}
+}
+
+/* Outfit femminili: indipendenti da quelli maschili */
+#creator30FemaleCrimson{width:100%;bottom:-1%}
+#creator30FemaleVerdant{width:100%;bottom:-1%}
+
+/* CAPELLI FEMMINILI — questi sono i 3 blocchi da modificare a mano */
+#creator30FemaleHair1{width:28%;left:50%;top:-5%}
+#creator30FemaleHair2{width:36%;left:50%;top:-5%}
+#creator30FemaleHair3{width:30%;left:50%;top:-3%}
+
+@media(max-width:600px){
+ #creator30FemaleHair1{width:29%;left:50%;top:-5%}
+ #creator30FemaleHair2{width:37%;left:50%;top:-5%}
+ #creator30FemaleHair3{width:31%;left:50%;top:-3%}
+}
+
+/* Stessa recolor del maschile, applicata SOLO ai tre capelli femminili */
+#creator30FemaleHair1[data-color="black"],#creator30FemaleHair2[data-color="black"],#creator30FemaleHair3[data-color="black"]{filter:brightness(.72) saturate(.35) contrast(1.16)}
+#creator30FemaleHair1[data-color="brown"],#creator30FemaleHair2[data-color="brown"],#creator30FemaleHair3[data-color="brown"]{filter:sepia(.82) saturate(1.55) hue-rotate(338deg) brightness(.78) contrast(1.06)}
+#creator30FemaleHair1[data-color="blonde"],#creator30FemaleHair2[data-color="blonde"],#creator30FemaleHair3[data-color="blonde"]{filter:sepia(1) saturate(2.15) hue-rotate(348deg) brightness(1.38) contrast(.88)}
+#creator30FemaleHair1[data-color="red"],#creator30FemaleHair2[data-color="red"],#creator30FemaleHair3[data-color="red"]{filter:sepia(.85) saturate(3.1) hue-rotate(318deg) brightness(.88) contrast(1.02)}
+#creator30FemaleHair1[data-color="white"],#creator30FemaleHair2[data-color="white"],#creator30FemaleHair3[data-color="white"]{filter:grayscale(1) brightness(1.65) contrast(.72)}
+#creator30FemaleHair1[data-color="blue"],#creator30FemaleHair2[data-color="blue"],#creator30FemaleHair3[data-color="blue"]{filter:saturate(2.25) hue-rotate(2deg) brightness(1.08) contrast(1.02)}
+#creator30FemaleHair1[data-color="purple"],#creator30FemaleHair2[data-color="purple"],#creator30FemaleHair3[data-color="purple"]{filter:saturate(2.1) hue-rotate(48deg) brightness(1.03) contrast(1.02)}
+#creator30FemaleHair1[data-color="pink"],#creator30FemaleHair2[data-color="pink"],#creator30FemaleHair3[data-color="pink"]{filter:saturate(1.8) hue-rotate(78deg) brightness(1.25) contrast(.92)}
+
+
+/* V3.1.1 — Hair Female 2: rimozione filtro per eliminare artefatto rosa */
+#creator30FemaleHair2{
+    filter:none !important;
+}
+
+
+/* V3.1.2 — Hair Female 2 CLEAN + recolor ripristinato */
+#creator30FemaleHair2[data-color="black"]{filter:brightness(.72) saturate(.35) contrast(1.16)!important}
+#creator30FemaleHair2[data-color="brown"]{filter:sepia(.82) saturate(1.55) hue-rotate(338deg) brightness(.78) contrast(1.06)!important}
+#creator30FemaleHair2[data-color="blonde"]{filter:sepia(1) saturate(2.15) hue-rotate(348deg) brightness(1.38) contrast(.88)!important}
+#creator30FemaleHair2[data-color="red"]{filter:sepia(.85) saturate(3.1) hue-rotate(318deg) brightness(.88) contrast(1.02)!important}
+#creator30FemaleHair2[data-color="white"]{filter:grayscale(1) brightness(1.65) contrast(.72)!important}
+#creator30FemaleHair2[data-color="blue"]{filter:saturate(2.25) hue-rotate(2deg) brightness(1.08) contrast(1.02)!important}
+#creator30FemaleHair2[data-color="purple"]{filter:saturate(2.1) hue-rotate(48deg) brightness(1.03) contrast(1.02)!important}
+#creator30FemaleHair2[data-color="pink"]{filter:saturate(1.8) hue-rotate(78deg) brightness(1.25) contrast(.92)!important}
+
+
+/* V3.1.3 — SOLO HAIR FEMALE 2
+   L'apertura trasparente del capello lungo viene allineata al volto,
+   evitando che mostri soltanto la zona rosa dello scalpo/fronte. */
+#creator30FemaleHair2{
+    width:36%;
+    left:50%;
+    top:1%;
+}
+@media(max-width:600px){
+    #creator30FemaleHair2{
+        width:37%;
+        left:50%;
+        top:1%;
     }
 }
-/* sottili contorni anime, senza effetto cartoon pesante */
-#avatarSvgV27 #faceV27,
-#avatarSvgV27 #torsoV27,
-#avatarSvgV27 #legLV27,
-#avatarSvgV27 #legRV27,
-#avatarSvgV27 #armLV27,
-#avatarSvgV27 #armRV27,
-#avatarSvgV27 #hairMainV27{
-    stroke:#100d13;
-    stroke-width:2.2;
-    stroke-linejoin:round;
-    stroke-linecap:round;
-}
-#avatarSvgV27 #eyeLV27,
-#avatarSvgV27 #eyeRV27{
-    stroke:#0d0b10;
-    stroke-width:1.5;
-}
 
 
-/* V2.7.2 — le corporature sono definite dall'anatomia SVG, non dalla scala dell'intero avatar */
-.avatarRealV27.body1,.avatarRealV27.body2,.avatarRealV27.body3{
-    width:min(46vw,195px)!important;
+/* V3.1.4 — calibrazione mirata
+   1) Hair Male 3 leggermente più alto
+   2) Outfit femminili realmente ingranditi via transform */
+#creator30Hair3{
+    width:28%;
+    left:48.85%;
+    top:-4%;
 }
-@media(max-height:680px){
- .avatarRealV27.body1,.avatarRealV27.body2,.avatarRealV27.body3{
-    width:min(39vw,165px)!important;
- }
+#creator30FemaleCrimson{
+    width:100%;
+    bottom:-1%;
+    transform:translateX(-50%) scale(1.10);
+    transform-origin:50% 100%;
 }
-
-
-/* V2.7.3 — doppia base */
-.creatorBaseV273{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
-.creatorBaseBtnV273{
- min-height:32px;border:1px solid rgba(255,255,255,.10);border-radius:10px;
- background:rgba(255,255,255,.045);color:rgba(255,255,255,.55);
- font:900 9px system-ui;letter-spacing:1px;
+#creator30FemaleVerdant{
+    width:100%;
+    bottom:-1%;
+    transform:translateX(-50%) scale(1.10);
+    transform-origin:50% 100%;
 }
-.creatorBaseBtnV273.active{
- color:#fff;border-color:rgba(190,140,255,.55);background:rgba(143,79,226,.18)
-}
-
-
-/* V2.7.4 — creator a mezzo busto */
-.avatarRealV27{
-    bottom:-118px!important;
-    width:min(66vw,275px)!important;
-    max-height:none!important;
-}
-.avatarRealV27.body1,.avatarRealV27.body2,.avatarRealV27.body3{
-    width:min(66vw,275px)!important;
-}
-@media(max-height:680px){
- .avatarRealV27,.avatarRealV27.body1,.avatarRealV27.body2,.avatarRealV27.body3{
-    bottom:-112px!important;
-    width:min(58vw,240px)!important;
-    max-height:none!important;
- }
-}
-
-
-/* V2.7.5 — framing definitivo del ritratto */
-.avatarRealV27,
-.avatarRealV27.body1,
-.avatarRealV27.body2,
-.avatarRealV27.body3{
-    left:50%!important;
-    top:50%!important;
-    bottom:auto!important;
-    width:min(52vw,215px)!important;
-    height:auto!important;
-    max-height:94%!important;
-    transform:translate(-50%,-48%)!important;
-    transform-origin:center center!important;
-}
-.avatarRealV27 svg{
-    display:block!important;
-    width:100%!important;
-    height:100%!important;
-}
-@media(max-height:680px){
- .avatarRealV27,
- .avatarRealV27.body1,
- .avatarRealV27.body2,
- .avatarRealV27.body3{
-    top:50%!important;
-    bottom:auto!important;
-    width:min(43vw,178px)!important;
-    max-height:90%!important;
-    transform:translate(-50%,-48%)!important;
- }
-}
-
-
-/* V2.7.6 — portrait vero: gambe escluse dal viewBox */
-.avatarRealV27,.avatarRealV27.body1,.avatarRealV27.body2,.avatarRealV27.body3{
- left:50%!important;top:50%!important;bottom:auto!important;
- width:min(57vw,235px)!important;height:min(47vh,330px)!important;
- max-height:94%!important;transform:translate(-50%,-50%)!important;
-}
-.avatarRealV27 svg{width:100%!important;height:100%!important;overflow:hidden!important}
-@media(max-height:680px){
- .avatarRealV27,.avatarRealV27.body1,.avatarRealV27.body2,.avatarRealV27.body3{
-  width:min(49vw,200px)!important;height:min(43vh,285px)!important;
- }
-}
-
-
-/* V2.8.1 — hair polish */
-#hairBackV28,#hairFrontV28{
-    stroke:#100d13!important;
-    stroke-width:2.2!important;
-    fill-opacity:1!important;
-}
-
-#hairColorPickerV283{display:none;text-align:center;margin:3px 0 7px}#hairColorPickerV283.show{display:block}#hairColorPickerV283>span{display:block;font-size:9px;letter-spacing:2px;opacity:.7;margin-bottom:5px}.hairSwatchesV283{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.hairSwatchesV283 button{width:24px;height:24px;border-radius:50%;border:2px solid #ffffff44;padding:0}.hairSwatchesV283 button.active{border-color:#fff;transform:scale(1.14)}.hairSwatchesV283 button:nth-child(1){background:#17131f}.hairSwatchesV283 button:nth-child(2){background:#57351f}.hairSwatchesV283 button:nth-child(3){background:#e5bd58}.hairSwatchesV283 button:nth-child(4){background:#a9342d}.hairSwatchesV283 button:nth-child(5){background:#e8e8ee}.hairSwatchesV283 button:nth-child(6){background:#315ebc}.hairSwatchesV283 button:nth-child(7){background:#7144a8}.hairSwatchesV283 button:nth-child(8){background:#d46f9c}
-/* V2.8.4 — creator viewport + anatomy polish */
-#creatorScreenV26{
-  overflow:hidden!important;
-  padding-top:max(7px,env(safe-area-inset-top))!important;
-  padding-bottom:max(7px,env(safe-area-inset-bottom))!important;
-}
-#creatorScreenV26 .creatorCardV26{
-  max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 14px)!important;
-}
-#creatorScreenV26 .creatorTitleV26{margin-top:0!important;margin-bottom:2px!important}
-#creatorScreenV26 .creatorSubtitleV26{margin-bottom:4px!important}
-#creatorScreenV26 .creatorPreviewV26{
-  min-height:0!important;
-  height:min(38dvh,290px)!important;
-  margin-bottom:4px!important;
-}
-#creatorScreenV26 .creatorTabsV26{margin:3px 0!important}
-#creatorScreenV26 .creatorOptionsV26{gap:5px!important;margin:3px 0!important}
-#creatorScreenV26 .creatorOptionV26{padding:7px 9px!important;font-size:10px!important}
-#hairColorPickerV283{margin:2px 0 5px!important}
-.hairSwatchesV283{gap:5px!important}
-.hairSwatchesV283 button{width:21px!important;height:21px!important}
-@media(max-height:740px){
- #creatorScreenV26 .creatorPreviewV26{height:min(34dvh,235px)!important}
- #creatorScreenV26 .creatorOptionV26{padding:5px 7px!important;font-size:9px!important}
- #creatorScreenV26 .creatorTabsV26 button{padding-top:6px!important;padding-bottom:6px!important}
- .hairSwatchesV283 button{width:18px!important;height:18px!important}
-}
-@media(max-height:650px){
- #creatorScreenV26 .creatorPreviewV26{height:min(30dvh,195px)!important}
- #creatorScreenV26 .creatorTitleV26{font-size:20px!important}
- #creatorScreenV26 .creatorSubtitleV26{font-size:9px!important}
-}
-
-
-/* V2.8.5 — REAL creator layout selectors */
-#creatorV26{
-  overflow:hidden!important;
-  padding:max(6px,env(safe-area-inset-top)) 10px max(6px,env(safe-area-inset-bottom))!important;
-}
-#creatorV26 .creatorShellV26{
-  height:calc(100dvh - max(12px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)))!important;
-  max-height:none!important;
-  grid-template-rows:auto minmax(105px,1fr) auto auto!important;
-  gap:4px!important;
-}
-#creatorV26 .creatorHeadV26{padding-top:0!important}
-#creatorV26 .creatorTitleV26{font-size:clamp(18px,5vw,26px)!important;margin-top:1px!important}
-#creatorV26 .creatorSubV26{font-size:9px!important;margin-top:1px!important}
-#creatorV26 .avatarStageV26{min-height:105px!important}
-#creatorV26 .creatorControlsV26{gap:4px!important}
-#creatorV26 .creatorNameV26{min-height:34px!important;padding:7px 10px!important}
-#creatorV26 .creatorBaseV273{gap:5px!important}
-#creatorV26 .creatorBaseBtnV273{padding:6px 8px!important}
-#creatorV26 .creatorTabsV26{gap:4px!important;margin:0!important}
-#creatorV26 .creatorTabV26{padding:6px 5px!important;font-size:9px!important}
-#creatorV26 .creatorOptionsV26{
-  gap:4px!important;margin:0!important;
-  max-height:58px!important;overflow:hidden!important;
-}
-#creatorV26 .creatorOptionV26{padding:5px 7px!important;font-size:9px!important}
-#creatorV26 .creatorBottomV26{gap:4px!important}
-#creatorV26 .creatorStatusV26{font-size:8px!important}
-#creatorV26 .creatorConfirmV26{padding:8px 10px!important}
-#creatorV26 #hairColorPickerV283{margin:0!important}
-#creatorV26 #hairColorPickerV283>span{font-size:8px!important;margin-bottom:3px!important}
-#creatorV26 .hairSwatchesV283{gap:4px!important;flex-wrap:nowrap!important}
-#creatorV26 .hairSwatchesV283 button{width:18px!important;height:18px!important;flex:0 0 18px!important}
-@media(max-height:700px){
- #creatorV26 .creatorShellV26{grid-template-rows:auto minmax(88px,.8fr) auto auto!important;gap:3px!important}
- #creatorV26 .avatarStageV26{min-height:88px!important}
- #creatorV26 .creatorTitleV26{font-size:18px!important}
- #creatorV26 .creatorSubV26{display:none!important}
- #creatorV26 .creatorNameV26{min-height:30px!important;padding:5px 8px!important}
- #creatorV26 .creatorBaseBtnV273,#creatorV26 .creatorTabV26{padding:4px 5px!important}
- #creatorV26 .creatorOptionV26{padding:4px 6px!important;font-size:8px!important}
- #creatorV26 .creatorOptionsV26{max-height:50px!important}
- #creatorV26 .creatorConfirmV26{padding:6px 8px!important}
- #creatorV26 .hairSwatchesV283 button{width:16px!important;height:16px!important;flex-basis:16px!important}
-}
-
-
-#creatorV26.hairModeV285 .creatorShellV26{grid-template-rows:auto minmax(82px,.72fr) auto auto!important}
-#creatorV26.hairModeV285 .avatarStageV26{min-height:82px!important}
-@media(max-height:700px){
- #creatorV26.hairModeV285 .creatorShellV26{grid-template-rows:auto minmax(70px,.58fr) auto auto!important}
- #creatorV26.hairModeV285 .avatarStageV26{min-height:70px!important}
-}
-
-/* V2.8.6 — test PNG male base */
-#baseMaleImgV286{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:center center;
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-user-drag:none;
-  display:none;
-  z-index:3;
-}
-#creatorV26.malePngTestV286 #baseMaleImgV286{display:block}
-#creatorV26.malePngTestV286 #avatarSvgV27{visibility:hidden}
-
-
-/* V2.8.7 — PNG base male + female */
-#baseFemaleImgV287{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:center center;
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-user-drag:none;
-  display:none;
-  z-index:3;
-}
-#creatorV26.femalePngTestV287 #baseFemaleImgV287{display:block}
-#creatorV26.femalePngTestV287 #avatarSvgV27{visibility:hidden}
-#creatorV26.femalePngTestV287 #baseMaleImgV286{display:none!important}
-#creatorV26.malePngTestV286 #baseFemaleImgV287{display:none!important}
-
-
-/* V2.8.8 — first real PNG hair overlay test */
-#creatorV26{
-  --hair-male-01-width:36%;
-  --hair-male-01-left:50%;
-  --hair-male-01-top:-8%;
-}
-#hairMale01V288{
-  position:absolute;
-  width:var(--hair-male-01-width);
-  height:auto;
-  left:var(--hair-male-01-left);
-  top:var(--hair-male-01-top);
-  transform:translateX(-50%);
-  object-fit:contain;
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-user-drag:none;
-  display:none;
-  z-index:5;
-}
-#creatorV26.malePngTestV286.hairMale01OnV288 #hairMale01V288{display:block}
-#creatorV26.femalePngTestV287 #hairMale01V288{display:none!important}
-
-
-/* V2.8.10 — calibrated hair_male_01 asset */
-#creatorV26{
- --hair-male-01-left:50%;
-}
-@media(max-width:600px){
- #creatorV26{
-  --hair-male-01-width:37%;
-  --hair-male-01-top:-8.5%;
- }
-}
-
-
-/* V2.8.11 — PNG hair color test; approved hair geometry remains untouched */
-#creatorV26 #hairColorPickerV283{display:none!important}
-.pngHairColorV2811{display:none;text-align:center;margin:2px 0 5px}
-#creatorV26.hairModeV285 .pngHairColorV2811{display:block}
-.pngHairColorV2811>span{display:block;font-size:8px;letter-spacing:2px;opacity:.72;margin-bottom:4px}
-.pngHairSwatchesV2811{display:flex;justify-content:center;gap:5px;flex-wrap:nowrap}
-.pngHairSwatchesV2811 button{
- width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.25);
- padding:0;transition:transform .12s,border-color .12s;
-}
-.pngHairSwatchesV2811 button.active{border-color:#fff;transform:scale(1.14)}
-.pngHairSwatchesV2811 button[data-pnghaircolor="black"]{background:#15151b}
-.pngHairSwatchesV2811 button[data-pnghaircolor="brown"]{background:#70452c}
-.pngHairSwatchesV2811 button[data-pnghaircolor="blonde"]{background:#e7c76a}
-.pngHairSwatchesV2811 button[data-pnghaircolor="red"]{background:#b64338}
-.pngHairSwatchesV2811 button[data-pnghaircolor="white"]{background:#eeeef2}
-.pngHairSwatchesV2811 button[data-pnghaircolor="blue"]{background:#3d69c8}
-.pngHairSwatchesV2811 button[data-pnghaircolor="purple"]{background:#7c4fc4}
-.pngHairSwatchesV2811 button[data-pnghaircolor="pink"]{background:#d86fa4}
-
-/* Preset studiati per preservare ombre/luci del PNG originale. */
-#hairMale01V288[data-color="black"]{filter:brightness(.72) saturate(.35) contrast(1.16)}
-#hairMale01V288[data-color="brown"]{filter:sepia(.82) saturate(1.55) hue-rotate(338deg) brightness(.78) contrast(1.06)}
-#hairMale01V288[data-color="blonde"]{filter:sepia(1) saturate(2.15) hue-rotate(348deg) brightness(1.38) contrast(.88)}
-#hairMale01V288[data-color="red"]{filter:sepia(.85) saturate(3.1) hue-rotate(318deg) brightness(.88) contrast(1.02)}
-#hairMale01V288[data-color="white"]{filter:grayscale(1) brightness(1.65) contrast(.72)}
-#hairMale01V288[data-color="blue"]{filter:saturate(2.25) hue-rotate(2deg) brightness(1.08) contrast(1.02)}
-#hairMale01V288[data-color="purple"]{filter:saturate(2.1) hue-rotate(48deg) brightness(1.03) contrast(1.02)}
-#hairMale01V288[data-color="pink"]{filter:saturate(1.8) hue-rotate(78deg) brightness(1.25) contrast(.92)}
-@media(max-height:700px){
- .pngHairSwatchesV2811 button{width:17px;height:17px}
- .pngHairColorV2811>span{margin-bottom:2px}
-}
-
-
-/* V2.8.12 — hair palette floats left; avatar NEVER resizes between tabs */
-#creatorV26.hairModeV285 .creatorShellV26{
-  grid-template-rows:auto minmax(105px,1fr) auto auto!important;
-}
-#creatorV26.hairModeV285 .avatarStageV26{
-  min-height:105px!important;
-}
-/* Palette colori fuori dal flusso: non occupa altezza e non spinge/riduce l'avatar */
-#creatorV26 .pngHairColorV2811{
-  position:absolute!important;
-  left:max(8px,env(safe-area-inset-left))!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-  z-index:20!important;
-  margin:0!important;
-  width:34px!important;
-  pointer-events:auto!important;
-}
-#creatorV26 .pngHairColorV2811>span{
-  writing-mode:vertical-rl;
-  transform:rotate(180deg);
-  font-size:7px!important;
-  letter-spacing:1px!important;
-  margin:0 auto 5px!important;
-}
-#creatorV26 .pngHairSwatchesV2811{
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  gap:5px!important;
-}
-#creatorV26 .pngHairSwatchesV2811 button{
-  width:20px!important;height:20px!important;flex:0 0 20px!important;
-}
-@media(max-height:700px){
- #creatorV26.hairModeV285 .creatorShellV26{
-   grid-template-rows:auto minmax(88px,.8fr) auto auto!important;
- }
- #creatorV26.hairModeV285 .avatarStageV26{min-height:88px!important}
- #creatorV26 .pngHairSwatchesV2811{gap:3px!important}
- #creatorV26 .pngHairSwatchesV2811 button{width:17px!important;height:17px!important;flex-basis:17px!important}
-}
-
-
-/* V2.8.13 — compact horizontal hair palette near avatar */
-#creatorV26 .pngHairColorV2811{
-  position:absolute!important;
-  left:50%!important;
-  top:auto!important;
-  bottom:118px!important;
-  transform:translateX(-50%)!important;
-  width:auto!important;
-  max-width:calc(100% - 24px)!important;
-  margin:0!important;
-  padding:5px 8px!important;
-  border-radius:12px!important;
-  background:rgba(8,7,18,.72)!important;
-  border:1px solid rgba(255,255,255,.10)!important;
-  z-index:20!important;
-  pointer-events:auto!important;
-}
-#creatorV26 .pngHairColorV2811>span{
-  writing-mode:horizontal-tb!important;
-  transform:none!important;
-  display:block!important;
-  font-size:7px!important;
-  letter-spacing:1.4px!important;
-  margin:0 0 4px!important;
-  white-space:nowrap!important;
-}
-#creatorV26 .pngHairSwatchesV2811{
-  display:flex!important;
-  flex-direction:row!important;
-  justify-content:center!important;
-  align-items:center!important;
-  flex-wrap:nowrap!important;
-  gap:5px!important;
-}
-#creatorV26 .pngHairSwatchesV2811 button{
-  width:19px!important;
-  height:19px!important;
-  flex:0 0 19px!important;
-}
-@media(max-height:700px){
- #creatorV26 .pngHairColorV2811{
-   bottom:100px!important;
-   padding:4px 7px!important;
- }
- #creatorV26 .pngHairSwatchesV2811 button{
-   width:17px!important;height:17px!important;flex-basis:17px!important;
- }
-}
-
-
-/* V2.8.14 — compact side palette, smartphone-safe */
-#creatorV26 .pngHairColorV2811{
-  position:absolute!important;
-  left:max(10px,calc(env(safe-area-inset-left) + 8px))!important;
-  right:auto!important;
-  top:44%!important;
-  bottom:auto!important;
-  transform:translateY(-50%)!important;
-  width:72px!important;
-  max-width:72px!important;
-  margin:0!important;
-  padding:6px!important;
-  border-radius:12px!important;
-  background:rgba(8,7,18,.72)!important;
-  border:1px solid rgba(255,255,255,.10)!important;
-  z-index:20!important;
-  box-sizing:border-box!important;
-}
-#creatorV26 .pngHairColorV2811>span{
-  writing-mode:horizontal-tb!important;
-  transform:none!important;
-  display:block!important;
-  text-align:center!important;
-  font-size:7px!important;
-  letter-spacing:1.2px!important;
-  margin:0 0 5px!important;
-}
-#creatorV26 .pngHairSwatchesV2811{
-  display:grid!important;
-  grid-template-columns:repeat(2,20px)!important;
-  justify-content:center!important;
-  align-items:center!important;
-  gap:5px!important;
-}
-#creatorV26 .pngHairSwatchesV2811 button{
-  width:20px!important;
-  height:20px!important;
-  min-width:20px!important;
-  min-height:20px!important;
-  flex:none!important;
-}
-@media(max-width:430px){
- #creatorV26 .pngHairColorV2811{
-   left:max(6px,calc(env(safe-area-inset-left) + 5px))!important;
-   width:62px!important;
-   max-width:62px!important;
-   padding:5px!important;
-   top:43%!important;
- }
- #creatorV26 .pngHairSwatchesV2811{
-   grid-template-columns:repeat(2,18px)!important;
-   gap:4px!important;
- }
- #creatorV26 .pngHairSwatchesV2811 button{
-   width:18px!important;height:18px!important;
-   min-width:18px!important;min-height:18px!important;
- }
-}
-@media(max-height:700px){
- #creatorV26 .pngHairColorV2811{top:42%!important}
-}
-
-
-/* V2.8.15 — second real PNG hairstyle: LUNGO */
-#creatorV26{
-  --hair-male-02-width:39%;
-  --hair-male-02-left:50%;
-  --hair-male-02-top:-7%;
-}
-#hairMale02V2815{
-  position:absolute;
-  width:var(--hair-male-02-width);
-  height:auto;
-  left:var(--hair-male-02-left);
-  top:var(--hair-male-02-top);
-  transform:translateX(-50%);
-  object-fit:contain;
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-user-drag:none;
-  display:none;
-  z-index:5;
-}
-#creatorV26.malePngTestV286.hairMale02OnV2815 #hairMale02V2815{display:block}
-#creatorV26.femalePngTestV287 #hairMale02V2815{display:none!important}
-
-/* Il primo PNG appare soltanto quando è selezionato CORTO (1). */
-#creatorV26.malePngTestV286:not(.hairMale01OnV288) #hairMale01V288{display:none!important}
-
-/* Stessa palette colore per entrambi i PNG */
-#hairMale02V2815[data-color="black"]{filter:brightness(.72) saturate(.35) contrast(1.16)}
-#hairMale02V2815[data-color="brown"]{filter:sepia(.82) saturate(1.55) hue-rotate(338deg) brightness(.78) contrast(1.06)}
-#hairMale02V2815[data-color="blonde"]{filter:sepia(1) saturate(2.15) hue-rotate(348deg) brightness(1.38) contrast(.88)}
-#hairMale02V2815[data-color="red"]{filter:sepia(.85) saturate(3.1) hue-rotate(318deg) brightness(.88) contrast(1.02)}
-#hairMale02V2815[data-color="white"]{filter:grayscale(1) brightness(1.65) contrast(.72)}
-#hairMale02V2815[data-color="blue"]{filter:saturate(2.25) hue-rotate(2deg) brightness(1.08) contrast(1.02)}
-#hairMale02V2815[data-color="purple"]{filter:saturate(2.1) hue-rotate(48deg) brightness(1.03) contrast(1.02)}
-#hairMale02V2815[data-color="pink"]{filter:saturate(1.8) hue-rotate(78deg) brightness(1.25) contrast(.92)}
 
 @media(max-width:600px){
- #creatorV26{
-   --hair-male-02-width:40%;
-   --hair-male-02-top:-7.5%;
- }
+    #creator30Hair3{
+        width:29%;
+        left:48.85%;
+        top:-4%;
+    }
+    #creator30FemaleCrimson,
+    #creator30FemaleVerdant{
+        transform:translateX(-50%) scale(1.10);
+        transform-origin:50% 100%;
+    }
 }
 
 
-/* V2.8.17 — selector reale dei PNG, visibile SOLO nel tab CAPELLI */
-.realHairSelectorV2817{
- display:none;
- width:100%;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:8px;
- margin:5px 0 7px;
-}
-#creatorV26.hairModeV285 .realHairSelectorV2817{display:grid}
-.realHairSelectorV2817 button{
- min-height:38px;
- border-radius:10px;
- border:1px solid rgba(255,255,255,.14);
- background:rgba(18,14,36,.92);
- color:#fff;
- font:700 10px/1 system-ui,sans-serif;
- letter-spacing:1px;
-}
-.realHairSelectorV2817 button.active{
- border-color:#9c68ff;
- box-shadow:0 0 0 1px rgba(156,104,255,.35),0 0 16px rgba(118,65,255,.22);
- background:rgba(78,43,135,.48);
-}
-/* Nel tab capelli nascondiamo il vecchio elenco di tagli SVG:
-   restano SOLO i due tagli PNG realmente disponibili. */
-#creatorV26.hairModeV285 #creatorOptionsV26{display:none!important}
-
-
-/* V2.8.20 — new long hair asset + PNG-only avatar */
-#creatorV26.malePngTestV286 #avatarSvgV27,
-#creatorV26.femalePngTestV287 #avatarSvgV27{
-  display:none!important;
+/* V3.1.5 — micro-calibrazione richiesta */
+#creator30Hair3{
+    width:28%;
+    left:48.85%;
+    top:-5.5%;
 }
 
-/* Nuovo taglio lungo: calibrazione indipendente */
-#creatorV26{
-  --hair-male-02-width:39%;
-  --hair-male-02-left:50%;
-  --hair-male-02-top:-7.5%;
+#creator30FemaleCrimson,
+#creator30FemaleVerdant{
+    width:100%;
+    bottom:-3%;
+    transform:translateX(-50%) scale(1.07);
+    transform-origin:50% 100%;
 }
+
 @media(max-width:600px){
- #creatorV26{
-   --hair-male-02-width:40%;
-   --hair-male-02-left:50%;
-   --hair-male-02-top:-8%;
- }
+    #creator30Hair3{
+        width:29%;
+        left:48.85%;
+        top:-5.5%;
+    }
+    #creator30FemaleCrimson,
+    #creator30FemaleVerdant{
+        bottom:-3%;
+        transform:translateX(-50%) scale(1.07);
+        transform-origin:50% 100%;
+    }
 }
 
 
-/* V2.8.21 — micro alignment + absolutely stable creator geometry */
-#creatorV26{
-  /* entrambi appena a sinistra */
-  --hair-male-01-left:49.35%;
-  --hair-male-02-left:49.35%;
+/* V3.1.6 — outfit femminili più in basso */
+#creator30FemaleCrimson,
+#creator30FemaleVerdant{
+    width:100%;
+    bottom:-8%;
+    transform:translateX(-50%) scale(1.07);
+    transform-origin:50% 100%;
 }
 
-/* CAPELLI non deve modificare in alcun modo altezza/righe della preview */
-#creatorV26.hairModeV285 .creatorShellV26{
-  grid-template-rows:auto minmax(105px,1fr) auto auto!important;
-  gap:4px!important;
-}
-#creatorV26.hairModeV285 .avatarStageV26{
-  min-height:105px!important;
-}
-
-/* Il selettore dei tagli non entra nel flusso verticale:
-   usa lo stesso spazio del pannello opzioni degli altri tab. */
-#creatorV26 .creatorControlsV26{
-  position:relative!important;
-}
-#creatorV26.hairModeV285 .realHairSelectorV2817{
-  position:absolute!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  margin:0!important;
-  z-index:4!important;
-}
-#creatorV26.hairModeV285 #creatorOptionsV26{
-  display:block!important;
-  visibility:hidden!important;
-  pointer-events:none!important;
-}
-
-/* Manteniamo una quota fissa per l'area opzioni in TUTTI i tab,
-   così cambiare menu non sposta mai l'avatar. */
-#creatorV26 .creatorOptionsV26{
-  min-height:38px!important;
-}
-#creatorV26 .realHairSelectorV2817{
-  min-height:38px!important;
-}
-
-@media(max-height:700px){
- #creatorV26.hairModeV285 .creatorShellV26{
-   grid-template-rows:auto minmax(88px,.8fr) auto auto!important;
-   gap:3px!important;
- }
- #creatorV26.hairModeV285 .avatarStageV26{
-   min-height:88px!important;
- }
-}
-
-
-/* V2.8.22 — final micro hair alignment + palette restored outside menu */
-#creatorV26{
-  /* ancora appena più a sinistra e più in alto */
-  --hair-male-01-left:48.85%;
-  --hair-male-01-top:-8.7%;
-  --hair-male-02-left:48.85%;
-  --hair-male-02-top:-8.2%;
-}
-
-/* Palette colori: ancorata alla zona preview, sul lato sinistro.
-   È fuori dal flusso e non può spostare/sovrapporsi al menu inferiore. */
-#creatorV26 .pngHairColorV2811{
-  position:absolute!important;
-  left:max(8px,calc(env(safe-area-inset-left) + 6px))!important;
-  right:auto!important;
-  top:41%!important;
-  bottom:auto!important;
-  transform:translateY(-50%)!important;
-  width:62px!important;
-  max-width:62px!important;
-  margin:0!important;
-  padding:5px!important;
-  box-sizing:border-box!important;
-  z-index:20!important;
-}
-#creatorV26 .pngHairColorV2811>span{
-  writing-mode:horizontal-tb!important;
-  transform:none!important;
-  display:block!important;
-  text-align:center!important;
-  font-size:7px!important;
-  letter-spacing:1px!important;
-  margin:0 0 4px!important;
-}
-#creatorV26 .pngHairSwatchesV2811{
-  display:grid!important;
-  grid-template-columns:repeat(2,18px)!important;
-  justify-content:center!important;
-  align-items:center!important;
-  gap:4px!important;
-}
-#creatorV26 .pngHairSwatchesV2811 button{
-  width:18px!important;
-  height:18px!important;
-  min-width:18px!important;
-  min-height:18px!important;
-  flex:none!important;
-}
-
-/* smartphone stretto: resta sempre entro il bordo */
-@media(max-width:430px){
- #creatorV26 .pngHairColorV2811{
-   left:max(5px,calc(env(safe-area-inset-left) + 4px))!important;
-   width:58px!important;
-   max-width:58px!important;
-   top:40%!important;
-   padding:4px!important;
- }
- #creatorV26 .pngHairSwatchesV2811{
-   grid-template-columns:repeat(2,17px)!important;
-   gap:3px!important;
- }
- #creatorV26 .pngHairSwatchesV2811 button{
-   width:17px!important;height:17px!important;
-   min-width:17px!important;min-height:17px!important;
- }
-}
 @media(max-width:600px){
- #creatorV26{
-   --hair-male-01-left:48.85%;
-   --hair-male-01-top:-8.7%;
-   --hair-male-02-left:48.85%;
-   --hair-male-02-top:-8.7%;
- }
+    #creator30FemaleCrimson,
+    #creator30FemaleVerdant{
+        bottom:-8%;
+        transform:translateX(-50%) scale(1.07);
+        transform-origin:50% 100%;
+    }
 }
 
 
-/* V2.8.23 — palette completely outside the personalization panel */
-#creatorV26 .pngHairColorV2811{
-  position:fixed!important;
-  left:max(8px,calc(env(safe-area-inset-left) + 6px))!important;
-  right:auto!important;
-  top:50%!important;
-  bottom:auto!important;
-  transform:translateY(-50%)!important;
-  width:62px!important;
-  max-width:62px!important;
-  margin:0!important;
-  padding:5px!important;
-  z-index:240!important;
-  box-sizing:border-box!important;
-  background:rgba(8,7,18,.90)!important;
-  border:1px solid rgba(156,104,255,.34)!important;
-  box-shadow:0 8px 24px rgba(0,0,0,.34)!important;
+/* V3.1.7 — micro-calibrazione outfit femminili */
+#creator30FemaleCrimson,
+#creator30FemaleVerdant{
+    width:100%;
+    left:50.7%;
+    bottom:-10%;
+    transform:translateX(-50%) scale(1.07);
+    transform-origin:50% 100%;
 }
-/* Rimane visibile solo quando è aperto CAPELLI */
-#creatorV26:not(.hairModeV285) .pngHairColorV2811{
-  display:none!important;
+
+@media(max-width:600px){
+    #creator30FemaleCrimson,
+    #creator30FemaleVerdant{
+        left:50.7%;
+        bottom:-10%;
+        transform:translateX(-50%) scale(1.07);
+        transform-origin:50% 100%;
+    }
 }
-#creatorV26.hairModeV285 .pngHairColorV2811{
-  display:block!important;
+
+
+/* V3.1.8 — calibrazione capelli femminili */
+#creator30FemaleHair1{
+    width:28%;
+    left:49%;
+    top:-3.5%;
 }
-@media(max-width:430px){
- #creatorV26 .pngHairColorV2811{
-   left:max(5px,calc(env(safe-area-inset-left) + 4px))!important;
-   top:50%!important;
-   width:58px!important;
-   max-width:58px!important;
- }
+#creator30FemaleHair2{
+    width:40%;
+    left:50%;
+    top:1%;
+}
+#creator30FemaleHair3{
+    width:30%;
+    left:49%;
+    top:-1.5%;
+}
+
+@media(max-width:600px){
+    #creator30FemaleHair1{
+        width:29%;
+        left:49%;
+        top:-3.5%;
+    }
+    #creator30FemaleHair2{
+        width:41%;
+        left:50%;
+        top:1%;
+    }
+    #creator30FemaleHair3{
+        width:31%;
+        left:49%;
+        top:-1.5%;
+    }
+}
+
+
+/* V3.1.9 — micro-calibrazione dimensioni capelli femminili */
+#creator30FemaleHair1{
+    width:26.5%;
+    left:49%;
+    top:-3.5%;
+}
+#creator30FemaleHair2{
+    width:43%;
+    left:50%;
+    top:1%;
+}
+#creator30FemaleHair3{
+    width:28.5%;
+    left:49%;
+    top:-1.5%;
+}
+
+@media(max-width:600px){
+    #creator30FemaleHair1{
+        width:27.5%;
+        left:49%;
+        top:-3.5%;
+    }
+    #creator30FemaleHair2{
+        width:44%;
+        left:50%;
+        top:1%;
+    }
+    #creator30FemaleHair3{
+        width:29.5%;
+        left:49%;
+        top:-1.5%;
+    }
 }
 
 </style>
@@ -6110,9 +5714,8 @@ button:active{
                 <div class="chapterEyebrowV238">TRA LE LINEE TEMPORALI</div>
                 <div class="chapterTitleV238">QUALCOSA<br>TI ASPETTA</div>
                 <div class="chapterLineV238"></div>
-                <div class="chapterHintV238">Il tuo aspetto non è ancora stabile.</div>
+                <div class="chapterHintV238">La tua forma non è ancora stabile.</div>
                 <div class="chapterMemoryV238">PROSSIMO: CREA IL TUO PERSONAGGIO</div>
-<button id="openCreatorFromTeaserV26" class="branchAction chapterContinueV241" type="button">CREA IL TUO PERSONAGGIO</button>
             </div>
         </div>
 
@@ -8955,145 +8558,27 @@ function advanceRift(){
 
 
 function chooseRift(choice){
-
-
-
+    cinePath=choice;
     riftPath=choice;
-
-
-
     hide("riftChoice");
-
-
-
     show("riftScene");
 
-
-
-    const text=
-
-        document.getElementById(
-
-            "riftText"
-
-        );
-
-
-
-    const button=
-
-        document.getElementById(
-
-            "riftContinue"
-
-        );
-
-
-
-    const image=
-
-        document.querySelector(
-
-            ".riftKaelios"
-
-        );
-
-
-
-
-
-    button.style.display=
-
-        "none";
-
-
-
-
-
     if(choice==="stay"){
-
-
-
         kaeliosTrust++;
-
-
-
-        text.innerHTML=
-
-            "Kaelios ti guarda per un istante.<br><br>Non sei scappato.";
-
-
-
-
-
-        setTimeout(()=>{
-
-
-
-            text.innerHTML=
-
-                "Si mette davanti a te mentre la frattura continua ad aprirsi.<br><br>«Qualunque cosa accada... non lasciare che ti tocchi.»";
-
-
-
-        },1800);
-
-
-
+        startCineSequence([
+            {speaker:"???", text:"«Anomalia localizzata.»", visual:"fracture", effect:"shake"},
+            {speaker:"KAELIOS", text:"«Dietro di me.»", visual:"kaelios"},
+            {action:showStayChoice}
+        ]);
         return;
-
     }
 
-
-
-
-
     kaeliosTrust--;
-
-
-
-    image.style.opacity=
-
-        ".25";
-
-
-
-    text.textContent=
-
-        "Ti volti e corri.";
-
-
-
-
-
-    setTimeout(()=>{
-
-
-
-        text.innerHTML=
-
-            "Il terreno vibra sotto i tuoi piedi.<br><br>Poi senti una voce provenire dalla frattura.";
-
-
-
-    },1600);
-
-
-
-
-
-    setTimeout(()=>{
-
-
-
-        text.textContent=
-
-            "«Finalmente.»";
-
-
-
-    },3300);
-
+    startCineSequence([
+        {text:"Ti volti e corri. Dietro di te, la frattura si allarga.", visual:"run"},
+        {speaker:"???", text:"«Finalmente.»", visual:"fracture", effect:"shake"},
+        {action:startRunQTE}
+    ]);
 }
 
 
@@ -9791,56 +9276,19 @@ function stayChoiceV2(choice){
 
     if(choice==="ask"){
         startCineSequence([
-            {
-                speaker:"TU",
-                text:"«Chi è?»",
-                visual:"kaelios"
-            },
-            {
-                speaker:"KAELIOS",
-                text:"«Non lo so.»",
-                visual:"kaelios"
-            },
-            {
-                speaker:"KAELIOS",
-                text:"«Ma qualunque cosa ci sia dall'altra parte... sta cercando te.»",
-                visual:"fracture"
-            },
-            {
-                text:"La frattura si contrae all'improvviso. Un'onda di energia esplode verso di voi.",
-                visual:"fracture",
-                effect:"shake"
-            },
-            {
-                speaker:"KAELIOS",
-                text:"«Adesso! Aiutami!»",
-                visual:"kaelios"
-            },
-            {
-                action:startResistanceV2
-            }
+            {speaker:"TU", text:"«Chi è?»", visual:"kaelios"},
+            {speaker:"KAELIOS", text:"«Non lo so. Ma sta cercando te.»", visual:"fracture"},
+            {text:"La frattura pulsa. Un'onda di energia esplode verso di voi.", visual:"fracture", effect:"shake"},
+            {speaker:"KAELIOS", text:"«Adesso! Aiutami!»", visual:"kaelios"},
+            {action:startResistanceV2}
         ]);
     }else{
         kaeliosTrust++;
-
         startCineSequence([
-            {
-                text:"Fai un passo indietro. Kaelios rimane tra te e la frattura.",
-                visual:"kaelios"
-            },
-            {
-                text:"La frattura si contrae all'improvviso. Un'onda di energia esplode verso di voi.",
-                visual:"fracture",
-                effect:"shake"
-            },
-            {
-                speaker:"KAELIOS",
-                text:"«Adesso! Aiutami!»",
-                visual:"kaelios"
-            },
-            {
-                action:startResistanceV2
-            }
+            {text:"Ti sposti dietro Kaelios. La frattura pulsa.", visual:"kaelios"},
+            {text:"Un'onda di energia esplode verso di voi.", visual:"fracture", effect:"shake"},
+            {speaker:"KAELIOS", text:"«Adesso! Aiutami!»", visual:"kaelios"},
+            {action:startResistanceV2}
         ]);
     }
 }
@@ -9904,47 +9352,20 @@ function cancelResistanceV2(){
 
 function completeResistanceV2(){
     cineResistActive=false;
-
     if(cineResistRAF){
         cancelAnimationFrame(cineResistRAF);
         cineResistRAF=null;
     }
-
     document.getElementById("resistFill").style.transform="scaleX(1)";
     document.getElementById("resistButton").textContent="RESISTITO";
     vibrate([60,35,100]);
 
     setTimeout(()=>{
         document.getElementById("resistOverlay").classList.remove("active");
-
         startCineSequence([
-            {
-                text:"L'onda si spezza e si dissolve. Per un istante torna il silenzio.",
-                visual:"fracture"
-            },
-            {
-                speaker:"???",
-                text:"«Confermato.»",
-                visual:"fracture"
-            },
-            {
-                speaker:"???",
-                text:"«L'Errore è cosciente.»",
-                visual:"fracture",
-                effect:"shake"
-            },
-            {
-                text:"Kaelios si volta lentamente verso di te.",
-                visual:"kaelios"
-            },
-            {
-                speaker:"KAELIOS",
-                text:"«...l'Errore?»",
-                visual:"kaelios"
-            },
-            {
-                action:startConvergenceV2
-            }
+            {text:"L'onda si spezza. Per un istante torna il silenzio.", visual:"fracture"},
+            {speaker:"???", text:"«Confermato. L'Errore è cosciente.»", visual:"fracture", effect:"shake"},
+            {action:startConvergenceV2}
         ]);
     },350);
 }
@@ -10017,124 +9438,22 @@ function finishCineDodge(success){
 
 function showAlternateLineV2(){
     show("riftScene");
-
     startCineSequence([
-        {
-            text:"Tutto si ferma.",
-            visual:"run"
-        },
-        {
-            text:"Per un istante, il mondo intorno a te cambia.",
-            visual:"alt"
-        },
-        {
-            text:"Sei nello stesso luogo... ma il cielo è spezzato e ogni cosa intorno a te è distrutta.",
-            visual:"alt"
-        },
-        {
-            speaker:"TU",
-            text:"«Che cosa... ho appena visto?»",
-            visual:"alt"
-        },
-        {
-            text:"La visione scompare. Sei di nuovo nella realtà di prima.",
-            visual:"run"
-        },
-        {
-            speaker:"???",
-            text:"«Interessante.»",
-            visual:"fracture"
-        },
-        {
-            speaker:"???",
-            text:"«L'Errore può vedere le altre linee.»",
-            visual:"fracture",
-            effect:"shake"
-        },
-        {
-            text:"La frattura si apre improvvisamente davanti a te.",
-            visual:"fracture",
-            effect:"shake"
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«Cosa hai visto?»",
-            visual:"kaelios"
-        },
-        {
-            speaker:"TU",
-            text:"«Questo posto.»",
-            visual:"kaelios"
-        },
-        {
-            speaker:"TU",
-            text:"«Ma era completamente distrutto.»",
-            visual:"kaelios"
-        },
-        {
-            text:"Kaelios rimane in silenzio per un istante.",
-            visual:"kaelios",
-            pause:true
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«Non era questo posto.»",
-            visual:"kaelios"
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«Era un'altra linea temporale.»",
-            visual:"kaelios"
-        },
-        {
-            action:startConvergenceV2
-        }
+        {text:"Per un istante, il mondo cambia: stesso luogo, cielo spezzato, tutto distrutto.", visual:"alt"},
+        {speaker:"TU", text:"«Che cosa ho appena visto?»", visual:"alt"},
+        {speaker:"???", text:"«L'Errore può vedere le altre linee.»", visual:"fracture", effect:"shake"},
+        {speaker:"KAELIOS", text:"«Un'altra linea temporale...»", visual:"kaelios"},
+        {action:startConvergenceV2}
     ]);
 }
 
 function startConvergenceV2(){
     show("riftScene");
-
     startCineSequence([
-        {
-            text:"La frattura davanti a voi si spalanca.",
-            visual:"fracture",
-            effect:"shake"
-        },
-        {
-            speaker:"???",
-            text:"«Kaelios.»",
-            visual:"fracture"
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«Mostrati.»",
-            visual:"kaelios"
-        },
-        {
-            text:"Per qualche istante non arriva alcuna risposta.",
-            visual:"fracture",
-            pause:true
-        },
-        {
-            speaker:"???",
-            text:"«Allontanati dall'Errore.»",
-            visual:"fracture",
-            effect:"shake"
-        },
-        {
-            text:"Kaelios non guarda più la frattura. Guarda te.",
-            visual:"kaelios",
-            pause:true
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«...Errore?»",
-            visual:"kaelios"
-        },
-        {
-            action:startEntityEncounterV23
-        }
+        {text:"La frattura davanti a voi si spalanca.", visual:"fracture", effect:"shake"},
+        {speaker:"???", text:"«Kaelios. Allontanati dall'Errore.»", visual:"fracture"},
+        {speaker:"KAELIOS", text:"«Mostrati.»", visual:"kaelios"},
+        {action:startEntityEncounterV23}
     ]);
 }
 
@@ -10615,31 +9934,10 @@ let rewindSeen=false;
 function startEntityEncounterV23(){
     if(!checkpointV237.restart)setCheckpointV237(startEntityEncounterV23);
     show("riftScene");
-
     startCineSequence([
-        {
-            text:"La frattura si apre. Una figura attraversa il bordo della realtà.",
-            visual:"entity",
-            effect:"shake"
-        },
-        {
-            speaker:"???",
-            text:"«Non sono qui per te.»",
-            visual:"entity"
-        },
-        {
-            speaker:"KAELIOS",
-            text:"«Chi ti ha mandato?»",
-            visual:"kaelios"
-        },
-        {
-            speaker:"???",
-            text:"«Non importa. Vieni con me e questa linea temporale sopravvivrà.»",
-            visual:"entity"
-        },
-        {
-            action:showEntityChoiceV23
-        }
+        {text:"Una figura attraversa la frattura.", visual:"entity", effect:"shake"},
+        {speaker:"???", text:"«Vieni con me. Questa linea temporale sopravvivrà.»", visual:"entity"},
+        {action:showEntityChoiceV23}
     ]);
 }
 
@@ -10649,7 +9947,7 @@ function showEntityChoiceV23(){
     cineVisual("entity");
     e.scene.classList.add("entity-choosing");
     cineSpeaker("???");
-    e.text.innerHTML="«Vieni con me.»<br><br>«E questa linea temporale sopravvivrà.»";
+    e.text.innerHTML="«Vieni con me. Questa linea temporale sopravvivrà.»";
     e.cont.style.display="none";
 
     e.actions.innerHTML=
@@ -10713,7 +10011,7 @@ function chooseEntityV23(choice){
         },
         {
             speaker:"KAELIOS",
-            text:"«Non so cosa sia. Ma so cosa succederà se ti prende.»",
+            text:"«Non lasciare che ti prenda.»",
             visual:"kaelios"
         },
         {
@@ -10726,7 +10024,7 @@ function startEntityRecoveryV23(){
     startCineSequence([
         {
             speaker:"???",
-            text:"«Recupero autorizzato.»",
+            text:"«Allora vieni tu.»",
             visual:"entity",
             effect:"shake"
         },
@@ -11313,149 +10611,6 @@ document.getElementById("game").addEventListener("dragstart",e=>{
 
 
 
-
-<div id="creatorV26" aria-hidden="true">
-  <div class="creatorShellV26">
-    <div class="creatorHeadV26">
-      <div class="creatorEyebrowV26">STABILIZZAZIONE TEMPORALE</div>
-      <div class="creatorTitleV26">SCEGLI IL TUO ASPETTO</div>
-      <div class="creatorSubV26">Questa sarà la forma con cui attraverserai le altre realtà.</div>
-    </div>
-
-    <div class="avatarStageV26">
-      <div class="avatarRingV26"></div>
-      <div id="avatarV26" class="avatarV26 avatarRealV27">
-<img id="baseMaleImgV286" src="./base_male.png" alt="Personaggio maschile" draggable="false">
-<img id="baseFemaleImgV287" src="./base_female.png" alt="Personaggio femminile" draggable="false">
-<img id="hairMale01V288" src="./hair_male_01.png" alt="" draggable="false" aria-hidden="true">
-<img id="hairMale02V2815" src="./hair_male_02.png" alt="" draggable="false" aria-hidden="true"><svg id="avatarSvgV27" viewBox="38 0 184 326" aria-label="Anteprima personaggio">
- <defs>
-  <linearGradient id="clothShadeV27" x1="0" x2="1"><stop offset="0" stop-color="#161320"/><stop offset=".52" stop-color="#3a2555"/><stop offset="1" stop-color="#17131f"/></linearGradient>
-  <linearGradient id="skinShadeV27" x1="0" x2="1"><stop offset="0" stop-color="#a96f55"/><stop offset=".48" stop-color="#d7a17f"/><stop offset="1" stop-color="#a96f55"/></linearGradient>
-  <radialGradient id="auraGradV27"><stop offset="0" stop-color="#aa7aff" stop-opacity=".22"/><stop offset="1" stop-color="#aa7aff" stop-opacity="0"/></radialGradient>
- </defs>
- <ellipse id="auraV27" cx="130" cy="238" rx="105" ry="180" fill="url(#auraGradV27)"/>
- <!-- gambe -->
- <path id="legLV27" d="M77 304 L119 304 L113 405 L70 405 Z" fill="#171520"/>
- <path id="legRV27" d="M141 304 L183 304 L190 405 L147 405 Z" fill="#171520"/>
- <path d="M67 397 L114 397 L119 421 L57 421 Q56 406 67 397Z" fill="#0a0910"/>
- <path d="M146 397 L192 397 Q204 406 202 421 L141 421Z" fill="#0a0910"/>
- <!-- braccia -->
- <path id="armLV27" d="M70 183 Q45 198 40 249 L47 317 Q50 331 62 327 L72 315 L69 249 L91 207Z" fill="url(#skinShadeV27)"/>
- <path id="armRV27" d="M190 183 Q215 198 220 249 L213 317 Q210 331 198 327 L188 315 L191 249 L169 207Z" fill="url(#skinShadeV27)"/>
- <!-- torso outfit -->
- <path id="femaleChestV274" d="M96 215 Q111 201 128 211 Q130 213 130 217 Q130 213 132 211 Q149 201 164 215" fill="none" stroke="#100d13" stroke-opacity="0" stroke-width="1.6" stroke-linecap="round"/>
- <path id="femaleNeckBridgeV284" d="M112 137 Q114 151 108 174 Q130 186 152 174 Q146 151 148 137Z" fill="url(#skinShadeV27)" stroke="#100d13" stroke-width="2.2" stroke-linejoin="round" opacity="0"/>
- <path id="neckCleanV281" d="" fill="none" stroke="none"/>
- <path id="torsoV27" d="M83 170 Q104 158 130 158 Q156 158 177 170 L191 246 L180 323 L80 323 L69 246Z" fill="url(#clothShadeV27)"/>
- <path id="outfitAccentV27" d="M127 164 L133 164 L143 300 L130 316 L117 300Z" fill="#a975ff" opacity=".85"/>
- <path d="M83 170 Q104 190 130 190 Q156 190 177 170" fill="none" stroke="#ffffff" stroke-opacity=".12" stroke-width="4"/>
- <!-- collo -->
- <path id="baseNeckV285" d="M111 137 L149 137 L153 174 Q130 188 107 174Z" fill="url(#skinShadeV27)"/>
- <!-- orecchie -->
- <ellipse cx="88" cy="101" rx="11" ry="18" fill="#bd8163"/><ellipse cx="172" cy="101" rx="11" ry="18" fill="#bd8163"/>
- <!-- V2.8 HAIR BACK LAYER -->
- <g id="hairBackV28" fill="#17131f" stroke="#100d13" stroke-width="2.2" stroke-linejoin="round">
-   <path id="hairBackPathV28" d=""/>
- </g>
- <!-- testa -->
- <path id="faceV27" d="M91 62 Q130 35 169 62 L174 103 Q170 145 130 159 Q90 145 86 103Z" fill="url(#skinShadeV27)"/>
- <!-- dettagli volto femminili, attivati via JS -->
- <g id="femaleFaceDetailsV274" opacity="0">
-   <path d="M98 100 Q110 93 122 100 M138 100 Q150 93 162 100" fill="none" stroke="#151018" stroke-width="3" stroke-linecap="round"/>
-   <path d="M99 99 L94 96 M161 99 L166 96" fill="none" stroke="#151018" stroke-width="1.8" stroke-linecap="round"/>
- </g>
- <!-- V2.8 HAIR FRONT LAYER -->
- <g id="hairFrontV28" fill="#17131f" stroke="#100d13" stroke-width="2.2" stroke-linejoin="round">
-   <path id="hairFrontPathV28" d=""/>
- </g>
- <!-- sopracciglia -->
- <path d="M101 91 Q112 85 121 91" fill="none" stroke="#3a2624" stroke-width="4" stroke-linecap="round"/>
- <path d="M139 91 Q149 85 159 91" fill="none" stroke="#3a2624" stroke-width="4" stroke-linecap="round"/>
- <!-- occhi -->
- <path d="M99 102 Q111 95 122 102 Q111 111 99 102Z" fill="#f4e9e1"/>
- <path d="M138 102 Q149 95 161 102 Q149 111 138 102Z" fill="#f4e9e1"/>
- <circle id="eyeLV27" cx="112" cy="102" r="5.5" fill="#9b7cff"/><circle id="eyeRV27" cx="149" cy="102" r="5.5" fill="#9b7cff"/>
- <path d="M99 101 Q111 94 122 101" fill="none" stroke="#151018" stroke-width="2.4" stroke-linecap="round"/>
- <path d="M138 101 Q149 94 161 101" fill="none" stroke="#151018" stroke-width="2.4" stroke-linecap="round"/>
- <circle cx="112" cy="102" r="2" fill="#111"/><circle cx="149" cy="102" r="2" fill="#111"/>
- <!-- ombre anime del volto -->
- <path d="M92 111 Q97 139 124 153 Q105 146 96 132Z" fill="#7d493d" opacity=".13"/>
- <path d="M166 75 Q172 101 161 128" fill="none" stroke="#7f4c40" stroke-width="1.5" opacity=".32"/>
- <!-- naso/bocca -->
- <path d="M130 103 L126 122 L133 123" fill="none" stroke="#9d6654" stroke-width="2.2" stroke-linecap="round"/>
- <path id="maleMouthV275" d="M116 136 Q130 142 144 136" fill="none" stroke="#7b4547" stroke-width="2.6" stroke-linecap="round"/>
- <g id="femaleLipsV275" opacity="0">
-   <path d="M116 136 Q123 131 130 135 Q137 131 144 136 Q137 144 130 144 Q123 144 116 136Z" fill="#b52f4d" stroke="#641c31" stroke-width="1.2" stroke-linejoin="round"/>
-   <path d="M118 136 Q130 139 142 136" fill="none" stroke="#6e1f35" stroke-width="1"/>
-   <path d="M121 135 Q126 133 130 135 Q134 133 139 135" fill="none" stroke="#e56a82" stroke-width="1" opacity=".65"/>
- </g>
- <!-- capelli dinamici -->
- <g id="hairV27" fill="#17131f">
-   <path id="hairMainV27" opacity="0" d="M84 82 Q82 43 105 34 L113 10 L128 31 L145 5 L150 32 L178 21 L168 49 Q181 61 174 91 L162 73 L153 58 L138 70 L126 52 L111 72 L98 60Z"/>
- </g>
- <!-- dettagli outfit -->
- <path d="M78 207 Q91 218 100 244" fill="none" stroke="#0e0c12" stroke-width="1.8" opacity=".65"/>
- <path d="M182 207 Q169 218 160 244" fill="none" stroke="#0e0c12" stroke-width="1.8" opacity=".65"/>
- <path d="M82 317 L178 317" fill="none" stroke="#0e0c12" stroke-width="2" opacity=".65"/>
- <path id="collarV27" d="M105 166 L130 188 L155 166 L166 177 L130 204 L94 177Z" fill="#0f0d16" opacity=".9"/>
-</svg>
-</div>
-<div id="avatarNameTagV26" class="avatarNameTagV26">VIAGGIATORE</div>
-      <div id="creatorToastV26" class="creatorLockedToastV26">SBLOCCABILE NEL NEXUS</div>
-    </div>
-
-    <div class="creatorControlsV26">
-      <input id="creatorNameV26" class="creatorNameV26" maxlength="14" autocomplete="off" spellcheck="false" placeholder="IL TUO NOME">
-      <div class="creatorBaseV273">
-        <button type="button" class="creatorBaseBtnV273 active" data-base="male">MASCHILE</button>
-        <button type="button" class="creatorBaseBtnV273" data-base="female">FEMMINILE</button>
-      </div>
-      <div class="creatorTabsV26">
-        <button class="creatorTabV26 active" data-ctab="body">CORPO</button>
-        <button class="creatorTabV26" data-ctab="hair">CAPELLI</button>
-        <button class="creatorTabV26" data-ctab="eyes">OCCHI</button>
-        <button class="creatorTabV26" data-ctab="outfit">OUTFIT</button>
-      </div>
-      <div id="hairColorPickerV283" class="hairColorPickerV283"><span>COLORE CAPELLI</span><div class="hairSwatchesV283">
-<button data-haircolor="1" title="Nero"></button><button data-haircolor="2" title="Castano"></button><button data-haircolor="3" title="Biondo"></button><button data-haircolor="4" title="Rosso"></button><button data-haircolor="5" title="Bianco"></button><button data-haircolor="6" title="Blu"></button><button data-haircolor="7" title="Viola"></button><button data-haircolor="8" title="Rosa"></button>
-</div></div>
-<div id="pngHairColorV2811" class="pngHairColorV2811" aria-label="Colore capelli">
-  <span>COLORE</span>
-  <div class="pngHairSwatchesV2811">
-    <button type="button" data-pnghaircolor="black" class="active" title="Nero"></button>
-    <button type="button" data-pnghaircolor="brown" title="Castano"></button>
-    <button type="button" data-pnghaircolor="blonde" title="Biondo"></button>
-    <button type="button" data-pnghaircolor="red" title="Rosso"></button>
-    <button type="button" data-pnghaircolor="white" title="Bianco"></button>
-    <button type="button" data-pnghaircolor="blue" title="Blu"></button>
-    <button type="button" data-pnghaircolor="purple" title="Viola"></button>
-    <button type="button" data-pnghaircolor="pink" title="Rosa"></button>
-  </div>
-</div>
-
-<div id="realHairSelectorV2817" class="realHairSelectorV2817" aria-label="Taglio capelli">
-  <button type="button" data-realhair="1">SPETTINATO</button>
-  <button type="button" data-realhair="5">LUNGO</button>
-</div>
-<div id="creatorOptionsV26" class="creatorOptionsV26"></div>
-    </div>
-
-    <div class="creatorBottomV26">
-      <div id="creatorStatusV26" class="creatorStatusV26">ASPETTO TEMPORALE INSTABILE</div>
-      <button id="creatorConfirmV26" class="creatorConfirmV26">STABILIZZA FORMA</button>
-    </div>
-  </div>
-</div>
-
-<div id="creatorDoneV26" aria-hidden="true">
-  <div>
-    <div class="creatorEyebrowV26">IDENTITÀ REGISTRATA</div>
-    <div class="creatorDoneTitleV26">ASPETTO TEMPORALE<br>STABILIZZATO</div>
-    <div id="creatorDoneNameV26" class="creatorDoneSubV26"></div>
-  </div>
-</div>
-
 <button id="devToggleV25" type="button" onclick="var p=document.getElementById('devPanelV25');if(p){p.style.opacity='1';p.style.visibility='visible';p.style.pointerEvents='auto';p.classList.add('active');}if(typeof refreshDevStateV25==='function')refreshDevStateV25();return false;">DEV</button>
 <div id="devPanelV25" aria-hidden="true">
  <div class="devCardV25">
@@ -11481,11 +10636,70 @@ const DEV_MODE_V25=true;
 const SAVE_KEY_V25="whatIfUniverse_save_v25";
 let playerLevelV25=1, chapter1CompleteV25=false, temporalMemoryV25=false, characterCreatedV25=false;
 
-function snapshotSaveV25(){return{version:25,gems:Number(gems)||0,xp:Number(xp)||0,level:Number(playerLevelV25)||1,chapter1Complete:!!chapter1CompleteV25,temporalMemory:!!temporalMemoryV25,characterCreated:!!characterCreatedV25,savedAt:Date.now()}}
-function saveGameV25(){try{localStorage.setItem(SAVE_KEY_V25,JSON.stringify(snapshotSaveV25()))}catch(e){} refreshDevStateV25()}
-function loadGameV25(){try{const raw=localStorage.getItem(SAVE_KEY_V25);if(!raw)return false;const s=JSON.parse(raw);if(Number.isFinite(Number(s.gems)))gems=Number(s.gems);if(Number.isFinite(Number(s.xp)))xp=Number(s.xp);if(Number.isFinite(Number(s.level)))playerLevelV25=Math.max(1,Number(s.level));chapter1CompleteV25=!!s.chapter1Complete;temporalMemoryV25=!!s.temporalMemory;characterCreatedV25=!!s.characterCreated;updateGems();return true}catch(e){return false}}
-function refreshDevStateV25(){const e=document.getElementById("devStateV25");if(e)e.innerHTML="LV."+playerLevelV25+" • "+(Number(xp)||0)+" XP • 💎 "+(Number(gems)||0)+"<br>CAP.1: "+(chapter1CompleteV25?"COMPLETATO":"NON COMPLETATO")+" • MEMORIA: "+(temporalMemoryV25?"SÌ":"NO")}
-function resetSaveV25(){try{localStorage.removeItem(SAVE_KEY_V25)}catch(e){}gems=100;xp=0;playerLevelV25=1;chapter1CompleteV25=false;temporalMemoryV25=false;characterCreatedV25=false;window.chapterRewardGrantedV241=false;updateGems();refreshDevStateV25()}
+function snapshotSaveV25(){
+ const character=(typeof creator30State!=="undefined" && characterCreatedV25)?{
+  name:String(creator30State.name||"").slice(0,14),
+  sex:creator30State.sex==="female"?"female":"male",
+  hair:[1,2,3].includes(Number(creator30State.hair))?Number(creator30State.hair):1,
+  hairColor:String(creator30State.hairColor||"black"),
+  outfit:[1,2,3].includes(Number(creator30State.outfit))?Number(creator30State.outfit):1
+ }:null;
+ return{
+  version:32,
+  gems:Number(gems)||0,
+  xp:Number(xp)||0,
+  level:Number(playerLevelV25)||1,
+  chapter1Complete:!!chapter1CompleteV25,
+  temporalMemory:!!temporalMemoryV25,
+  characterCreated:!!characterCreatedV25,
+  character,
+  savedAt:Date.now()
+ };
+}
+function saveGameV25(force=false){
+ if(!chapter1CompleteV25 && !force){refreshDevStateV25();return false;}
+ try{localStorage.setItem(SAVE_KEY_V25,JSON.stringify(snapshotSaveV25()))}catch(e){}
+ refreshDevStateV25();return true;
+}
+function loadGameV25(){try{
+ const raw=localStorage.getItem(SAVE_KEY_V25);if(!raw)return false;
+ const s=JSON.parse(raw);
+ if(Number.isFinite(Number(s.gems)))gems=Number(s.gems);
+ if(Number.isFinite(Number(s.xp)))xp=Number(s.xp);
+ if(Number.isFinite(Number(s.level)))playerLevelV25=Math.max(1,Number(s.level));
+ chapter1CompleteV25=!!s.chapter1Complete;
+ temporalMemoryV25=!!s.temporalMemory;
+ characterCreatedV25=!!s.characterCreated;
+ if(s.character && typeof s.character==="object"){
+  window.pendingCharacterV32=s.character;
+  characterCreatedV25=true;
+ }
+ updateGems();return true;
+}catch(e){return false}}
+function refreshDevStateV25(){
+ const e=document.getElementById("devStateV25");if(!e)return;
+ let who="NESSUN PERSONAGGIO";
+ if(characterCreatedV25){
+  const c=(typeof creator30State!=="undefined")?creator30State:(window.pendingCharacterV32||{});
+  who=String(c.name||"PERSONAGGIO").toUpperCase()+" • "+(c.sex==="female"?"F":"M")+" • H"+(c.hair||1)+" • O"+(c.outfit||1);
+ }
+ e.innerHTML="LV."+playerLevelV25+" • "+(Number(xp)||0)+" XP • 💎 "+(Number(gems)||0)+
+ "<br>CAP.1: "+(chapter1CompleteV25?"COMPLETATO":"NON COMPLETATO")+" • MEMORIA: "+(temporalMemoryV25?"SÌ":"NO")+
+ "<br>"+who;
+}
+function resetSaveV25(){
+ try{
+  localStorage.removeItem(SAVE_KEY_V25);
+  localStorage.removeItem("whatIfUniverse_character_v30");
+ }catch(e){}
+ gems=100;xp=0;playerLevelV25=1;chapter1CompleteV25=false;temporalMemoryV25=false;characterCreatedV25=false;
+ window.pendingCharacterV32=null;
+ window.chapterRewardGrantedV241=false;
+ if(typeof creator30State!=="undefined"){
+  Object.assign(creator30State,{name:"",sex:"male",tab:"hair",hair:1,hairColor:"black",outfit:1});
+ }
+ updateGems();refreshDevStateV25();
+}
 function grantChapterOneStateV25(){chapter1CompleteV25=true;temporalMemoryV25=true;gems=Math.max(Number(gems)||0,150);xp=Math.max(Number(xp)||0,100);window.chapterRewardGrantedV241=true;updateGems();saveGameV25()}
 function openDevV25(){refreshDevStateV25();const p=document.getElementById("devPanelV25");p.classList.add("active");p.setAttribute("aria-hidden","false")}
 function closeDevV25(){const p=document.getElementById("devPanelV25");p.classList.remove("active");p.setAttribute("aria-hidden","true")}
@@ -11556,7 +10770,7 @@ function devCreatorV253(){
         const hint=t.querySelector(".chapterHintV238");
         const mem=t.querySelector(".chapterMemoryV238");
         if(title) title.innerHTML="QUALCOSA<br>TI ASPETTA";
-        if(hint) hint.textContent="Il tuo aspetto non è ancora stabile.";
+        if(hint) hint.textContent="La tua forma non è ancora stabile.";
         if(mem) mem.textContent="PROSSIMO: CREA IL TUO PERSONAGGIO";
         t.classList.add("active");
         t.setAttribute("aria-hidden","false");
@@ -11678,7 +10892,7 @@ function devShowTeaserV255(mode){
 
     if(mode==="creator"){
         if(title) title.innerHTML="QUALCOSA<br>TI ASPETTA";
-        if(hint) hint.textContent="Il tuo aspetto non è ancora stabile.";
+        if(hint) hint.textContent="La tua forma non è ancora stabile.";
         if(mem) mem.textContent="PROSSIMO: CREA IL TUO PERSONAGGIO";
     }else{
         if(title) title.innerHTML="NEXUS<br>DEV CHECKPOINT";
@@ -11702,336 +10916,288 @@ devRewriteDirectV253=function(){
 
 </script>
 
+<!-- V3.0 — CHARACTER CREATOR RISCRITTO DA ZERO -->
+<section id="creatorV30" aria-hidden="true">
+  <div class="creator30Shell">
+    <header class="creator30Head">
+      <div class="creator30Eyebrow">STABILIZZAZIONE TEMPORALE</div>
+      <h1>SCEGLI IL TUO ASPETTO</h1>
+      <p>Questo sarà il tuo aspetto nelle altre realtà.</p>
+    </header>
+
+    <div id="creator30Stage" class="creator30Stage">
+      <div class="creator30Halo"></div>
+
+      <div id="creator30Avatar" class="creator30Avatar">
+        <img id="creator30BaseMale" class="creator30Body active" src="./base_male.png" alt="">
+        <img id="creator30BaseFemale" class="creator30Body" src="./base_female.png" alt="">
+        <img id="creator30Crimson" class="creator30Body" src="./male_outfit_02.png" alt="">
+        <img id="creator30Verdant" class="creator30Body" src="./male_outfit_03.png" alt="">
+        <img id="creator30FemaleCrimson" class="creator30Body" src="./female_outfit_02.png" alt="">
+        <img id="creator30FemaleVerdant" class="creator30Body" src="./female_outfit_03.png" alt="">
+
+        <img id="creator30Hair1" class="creator30Hair" src="./hair_male_01.png" alt="">
+        <img id="creator30Hair2" class="creator30Hair" src="./hair_male_02.png" alt="">
+        <img id="creator30Hair3" class="creator30Hair" src="./hair_male_03.png" alt="">
+        <img id="creator30FemaleHair1" class="creator30Hair" src="./hair_female_01.png" alt="">
+        <img id="creator30FemaleHair2" class="creator30Hair" src="./hair_female_02_clean.png" alt="">
+        <img id="creator30FemaleHair3" class="creator30Hair" src="./hair_female_03.png" alt="">
+      </div>
+
+      <div id="creator30Palette" class="creator30Palette" aria-label="Colore capelli">
+        <button data-hcolor="black" class="active" aria-label="Nero"></button>
+        <button data-hcolor="brown" aria-label="Castano"></button>
+        <button data-hcolor="blonde" aria-label="Biondo"></button>
+        <button data-hcolor="red" aria-label="Rosso"></button>
+        <button data-hcolor="white" aria-label="Bianco"></button>
+        <button data-hcolor="blue" aria-label="Blu"></button>
+        <button data-hcolor="purple" aria-label="Viola"></button>
+        <button data-hcolor="pink" aria-label="Rosa"></button>
+      </div>
+    </div>
+
+    <div class="creator30Controls">
+      <input id="creator30Name" maxlength="14" placeholder="IL TUO NOME" autocomplete="off">
+
+      <div class="creator30Sex">
+        <button data-sex="male" class="active">MASCHILE</button>
+        <button data-sex="female">FEMMINILE</button>
+      </div>
+
+      <div class="creator30Tabs">
+        <button data-tab="hair" class="active">CAPELLI</button>
+        <button data-tab="outfit">OUTFIT</button>
+      </div>
+
+      <div id="creator30HairOptions" class="creator30Options">
+        <button data-hair="1" class="active">SPETTINATO</button>
+        <button data-hair="2">LUNGO</button>
+        <button data-hair="3">FRANGIA</button>
+      </div>
+
+      <div id="creator30OutfitOptions" class="creator30Options hidden">
+        <button data-outfit="1" class="active">VOID</button>
+        <button data-outfit="2">CRIMSON</button>
+        <button data-outfit="3">VERDANT</button>
+      </div>
+
+      <div id="creator30Status">ASPETTO TEMPORALE INSTABILE</div>
+      <button id="creator30Confirm">STABILIZZA ASPETTO</button>
+    </div>
+  </div>
+</section>
+
+<section id="creator30Done" aria-hidden="true">
+  <div class="creator30DoneCard">
+    <div class="creator30Eyebrow">SINCRONIZZAZIONE COMPLETATA</div>
+    <h2>ASPETTO TEMPORALE<br>STABILIZZATO</h2>
+    <p id="creator30DoneName"></p>
+    <button id="creator30ToNexus">CONTINUA VERSO IL NEXUS</button>
+  </div>
+</section>
+
+
 <script>
-
-/* =========================================================
-   V2.6 — CHARACTER CREATOR
-   ========================================================= */
-let characterV26={name:"",base:"male",body:1,hair:1,eyes:1,outfit:1,hairColor:1,pngHairColor:"black"};
-let creatorTabV26="body";
-
-const creatorDataV26={
- body:[{label:"ATLETICO",v:1},{label:"ROBUSTO",v:2},{label:"SLANCIATO",v:3},{label:"ASCESO",v:4,locked:true}],
- hair:[{label:"SPETTINATO",v:1},{label:"FRANGIA",v:2,locked:true},{label:"LATERALE",v:3,locked:true},{label:"MEDIO",v:4,locked:true},{label:"LUNGO",v:5},{label:"RICCIO",v:6,locked:true},{label:"MOSSO",v:7,locked:true},{label:"VOID",v:8,locked:true}],
- eyes:[{label:"VIOLA",v:1},{label:"AZZURRI",v:2},{label:"AMBRA",v:3},{label:"VERDI",v:4},{label:"GRIGI",v:5},{label:"ROSSI",v:6,locked:true}],
- outfit:[{label:"VOID",v:1},{label:"NOVA",v:2},{label:"ECLIPSE",v:3},{label:"AEON",v:4},{label:"RIFT",v:5},{label:"???",v:6,locked:true}]
+/* ==========================================================
+   V3.0 — CHARACTER CREATOR JS NUOVO
+   ========================================================== */
+const CREATOR30_KEY="whatIfUniverse_character_v30";
+const creator30State={
+ name:"",
+ sex:"male",
+ tab:"hair",
+ hair:1,
+ hairColor:"black",
+ outfit:1
 };
 
-function creatorApplyV26(){
- if(!characterV26.pngHairColor)characterV26.pngHairColor="black";
- applyPngHairColorV2812();
- const creatorRootV286=document.getElementById("creatorV26");
- if(creatorRootV286){
-  const isFemalePngV287=characterV26.base==="female";
-  creatorRootV286.classList.toggle("malePngTestV286",!isFemalePngV287);
-  creatorRootV286.classList.toggle("femalePngTestV287",isFemalePngV287);
-  const selectedHairV2816=Number(characterV26.hair||1);
-  creatorRootV286.classList.toggle("hairMale01OnV288",!isFemalePngV287 && selectedHairV2816===1);
-  creatorRootV286.classList.toggle("hairMale02OnV2815",!isFemalePngV287 && selectedHairV2816===5);
- }
- if(!characterV26.hairColor)characterV26.hairColor=1;
- const a=document.getElementById("avatarV26");if(!a)return;
- const female=characterV26.base==="female";
- a.className="avatarV26 avatarRealV27 body"+characterV26.body+(female?" femaleV273":" maleV273");
-
- const eyeColors={1:"#9b7cff",2:"#59c9ff",3:"#ffc15b",4:"#65d78b",5:"#b7bdc8",6:"#ff5368"};
- const hairColors={1:"#17131f",2:"#29223b",3:"#151820",4:"#4a2936",5:"#d7d9df",6:"#261541"};
- const outfits={1:["#302044","#a975ff"],2:["#17384c","#62caff"],3:["#34202c","#ff86ad"],4:["#3d321d","#ffd36b"],5:["#17342d","#63e0bb"],6:["#2b182e","#e266ff"]};
- const hairColorsV283={1:"#17131f",2:"#57351f",3:"#e5bd58",4:"#a9342d",5:"#e8e8ee",6:"#315ebc",7:"#7144a8",8:"#d46f9c"}; const e=eyeColors[characterV26.eyes]||eyeColors[1],h=hairColorsV283[characterV26.hairColor||1],o=outfits[characterV26.outfit]||outfits[1];
- ["eyeLV27","eyeRV27"].forEach(id=>{const x=document.getElementById(id);if(x)x.setAttribute("fill",e)});
- const hg=document.getElementById("hairV27");if(hg)hg.setAttribute("fill",h);
- const accent=document.getElementById("outfitAccentV27");if(accent)accent.setAttribute("fill",o[1]);
- const torso=document.getElementById("torsoV27");if(torso)torso.setAttribute("fill",o[0]);
-
- const maleBodies={
- 1:["M83 170 Q104 158 130 158 Q156 158 177 170 L191 246 L180 323 L80 323 L69 246Z","M70 183 Q45 198 40 249 L47 317 Q50 331 62 327 L72 315 L69 249 L91 207Z","M190 183 Q215 198 220 249 L213 317 Q210 331 198 327 L188 315 L191 249 L169 207Z"],
- 2:["M70 169 Q101 153 130 155 Q159 153 190 169 L207 245 L188 323 L72 323 L53 245Z","M59 180 Q31 198 28 252 L39 320 Q43 335 58 328 L72 313 L70 243 L91 199Z","M201 180 Q229 198 232 252 L221 320 Q217 335 202 328 L188 313 L190 243 L169 199Z"],
- 3:["M91 171 Q109 160 130 160 Q151 160 169 171 L179 242 L168 323 L92 323 L81 242Z","M80 184 Q60 201 57 248 L61 315 Q63 326 73 324 L82 311 L80 248 L98 205Z","M180 184 Q200 201 203 248 L199 315 Q197 326 187 324 L178 311 L180 248 L162 205Z"]};
- const femaleBodies={
- 1:["M94 171 Q109 161 130 161 Q151 161 166 171 Q174 181 176 195 Q177 207 171 220 Q162 211 151 207 Q141 204 130 211 Q119 204 109 207 Q98 211 89 220 Q83 207 84 195 Q86 181 94 171 L84 250 Q91 276 91 323 L169 323 Q169 276 176 250 L166 171Z","M87 182 Q69 198 66 245 L70 316 Q72 326 81 323 L88 310 L86 246 L102 204Z","M173 182 Q191 198 194 245 L190 316 Q188 326 179 323 L172 310 L174 246 L158 204Z"],
- 2:["M89 170 Q107 158 130 158 Q153 158 171 170 Q181 181 183 196 Q184 211 176 225 Q164 214 151 210 Q140 207 130 215 Q120 207 109 210 Q96 214 84 225 Q76 211 77 196 Q79 181 89 170 L76 250 Q84 277 84 323 L176 323 Q176 277 184 250 L171 170Z","M81 181 Q60 198 57 248 L63 318 Q66 330 76 325 L86 311 L82 245 L100 202Z","M179 181 Q200 198 203 248 L197 318 Q194 330 184 325 L174 311 L178 245 L160 202Z"],
- 3:["M99 173 Q112 163 130 163 Q148 163 161 173 Q168 183 169 195 Q170 206 165 217 Q156 210 147 207 Q138 205 130 211 Q122 205 113 207 Q104 210 95 217 Q90 206 91 195 Q92 183 99 173 L91 247 Q97 274 97 323 L163 323 Q163 274 169 247 L161 173Z","M92 184 Q76 201 74 246 L78 313 Q80 323 88 321 L95 309 L93 245 L106 207Z","M168 184 Q184 201 186 246 L182 313 Q180 323 172 321 L165 309 L167 245 L154 207Z"]};
- const bs=(female?femaleBodies:maleBodies)[characterV26.body]||(female?femaleBodies:maleBodies)[1];
- if(torso)torso.setAttribute("d",bs[0]);
- const al=document.getElementById("armLV27"),ar=document.getElementById("armRV27");
- if(al)al.setAttribute("d",bs[1]);if(ar)ar.setAttribute("d",bs[2]);
-
- const face=document.getElementById("faceV27");
- if(face)face.setAttribute("d",female
-   ?"M96 61 Q130 42 164 61 L169 99 Q165 137 148 150 Q130 162 112 150 Q95 137 91 99Z"
-   :"M91 62 Q130 35 169 62 L174 103 Q170 145 130 159 Q90 145 86 103Z");
- const fdetails=document.getElementById("femaleFaceDetailsV274");if(fdetails)fdetails.setAttribute("opacity",female?"1":"0");
- const femaleLips=document.getElementById("femaleLipsV275");if(femaleLips)femaleLips.setAttribute("opacity",female?"1":"0");
- const maleMouth=document.getElementById("maleMouthV275");if(maleMouth)maleMouth.setAttribute("opacity",female?"0":"1");
- const femaleNeckBridgeV284=document.getElementById("femaleNeckBridgeV284");
- if(femaleNeckBridgeV284)femaleNeckBridgeV284.setAttribute("opacity",female?"1":"0");
- const baseNeckV285=document.getElementById("baseNeckV285");
- if(baseNeckV285)baseNeckV285.setAttribute("opacity",female?"0":"1");
- const collarV27=document.getElementById("collarV27");
- if(collarV27)collarV27.setAttribute("opacity",female?".28":".9");
- const chest=document.getElementById("femaleChestV274");
- if(chest){
-   chest.setAttribute("fill","none");
-   chest.setAttribute("fill-opacity","0");
-   chest.setAttribute("stroke-opacity",female?".65":"0");
- }
-
- const hair=document.getElementById("hairMainV27");
- if(hair)hair.setAttribute("opacity","0");
-
- const hairBack=document.getElementById("hairBackPathV28");
- const hairFront=document.getElementById("hairFrontPathV28");
- const hairBackGroup=document.getElementById("hairBackV28");
- const hairFrontGroup=document.getElementById("hairFrontV28");
- if(hairBackGroup){hairBackGroup.setAttribute("fill",h);hairBackGroup.style.fill=h;}
- if(hairFrontGroup){hairFrontGroup.setAttribute("fill",h);hairFrontGroup.style.fill=h;}
-
- const maleHairV28={
- 1:{ /* CORTO */
-  back:"M91 105 Q82 83 85 61 Q88 40 101 28 L109 30 Q117 20 128 18 L135 23 Q146 17 156 23 L161 31 Q173 38 177 52 Q181 70 173 94 L167 107 L159 88 Q161 67 151 51 Q141 39 128 41 Q113 42 104 55 Q97 69 99 94Z",
-  front:"M99 69 Q108 54 119 50 Q130 46 140 52 Q150 50 159 59 L158 76 Q149 69 141 69 Q134 78 126 82 L128 64 Q118 75 108 78 L112 61 Q104 65 99 69Z"},
- 2:{ /* FRANGIA PIENA */
-  back:"M88 112 Q78 86 81 59 Q84 38 97 25 L106 28 Q114 16 127 14 L134 20 Q145 13 156 19 L161 27 Q175 34 180 50 Q185 70 176 96 L168 114 L160 91 Q163 66 151 47 Q139 33 123 39 Q106 43 98 60 Q92 77 96 103Z",
-  front:"M95 67 Q105 47 119 43 Q133 38 146 46 Q157 49 164 58 L161 80 Q153 72 146 70 L140 88 L132 68 L124 91 L118 67 L107 84 L109 61 Q101 64 95 72Z"},
- 3:{ /* LATERALE */
-  back:"M89 113 Q80 87 83 61 Q86 40 99 27 L108 29 Q116 19 128 17 L135 22 Q147 15 157 22 L162 30 Q175 37 179 53 Q183 74 173 101 L168 114 L159 90 Q161 66 150 50 Q139 37 124 41 Q108 44 100 59 Q93 75 97 101Z",
-  front:"M98 66 Q111 48 126 44 Q142 40 158 51 L162 62 Q149 60 138 66 Q128 72 118 78 Q109 83 101 84 L108 65 Q103 66 98 70Z"},
- 4:{ /* MEDIO */
-  back:"M86 136 Q74 96 79 61 Q82 38 96 23 L105 26 Q113 14 126 12 L134 18 Q146 10 158 18 L163 27 Q178 34 182 54 Q187 82 173 122 L166 139 L157 108 Q161 77 151 52 Q140 33 122 40 Q103 47 96 69 Q91 95 96 127Z",
-  front:"M95 68 Q105 46 120 41 Q135 36 150 46 Q160 51 165 60 L161 81 Q151 69 142 68 Q135 83 124 91 L127 63 Q115 80 103 85 L109 58 Q101 62 95 73Z"},
- 5:{ /* LUNGO */
-  back:"M84 169 Q71 116 76 70 Q79 36 99 18 L108 21 Q116 9 130 8 L137 14 Q150 7 161 16 L166 25 Q181 34 185 58 Q190 92 178 130 L171 171 L158 143 L161 92 Q163 61 150 43 Q136 27 118 37 Q99 48 95 78 L94 169Z",
-  front:"M95 68 Q105 46 120 41 Q134 37 147 45 Q158 49 165 59 L162 81 Q151 69 142 68 Q136 82 126 90 L128 63 Q116 79 104 85 L110 58 Q102 62 95 73Z"},
- 6:{back:"M91 113 C82 110 78 102 82 94 C75 87 77 77 85 72 C80 63 84 53 93 49 C91 39 98 31 108 31 C111 22 121 18 130 23 C138 17 149 20 154 28 C164 27 172 34 171 44 C180 48 183 58 178 66 C185 75 181 86 173 90 C178 101 170 111 160 112 Q158 91 159 74 Q157 55 145 46 Q132 36 119 42 Q104 49 99 65 Q96 83 99 105Z",front:"M96 69 Q104 56 116 51 Q130 45 144 51 Q156 56 164 69 L161 78 Q150 70 140 70 Q130 67 120 70 Q109 70 99 78Z"},
- 7:{back:"M87 143 Q76 112 80 79 Q82 52 96 34 Q104 24 113 29 Q120 15 131 22 Q143 11 153 24 Q166 18 173 34 Q184 44 181 61 Q188 78 178 95 Q181 116 169 141 L159 115 Q164 91 156 70 Q149 49 132 45 Q113 43 102 61 Q93 78 98 112Z",front:"M97 69 Q106 50 119 46 Q128 43 136 49 Q143 43 153 50 Q160 54 164 62 Q156 65 151 74 Q143 69 137 78 Q129 70 122 82 Q114 74 105 82 Q109 63 97 69Z"}
- };
- const femaleHairV28={
- 1:{ /* CORTO */
-  back:"M89 121 Q79 91 82 63 Q85 40 99 26 L108 29 Q116 17 129 15 L136 21 Q148 14 158 21 L163 29 Q176 36 180 53 Q184 75 174 105 L168 123 L158 99 Q161 72 150 52 Q139 36 123 41 Q106 47 99 64 Q93 82 97 111Z",
-  front:"M97 68 Q107 49 121 45 Q134 41 146 48 Q157 51 163 60 L160 80 Q151 70 143 69 Q136 81 126 87 L128 64 Q117 78 106 82 L111 60 Q103 64 97 68Z"},
- 2:{ /* CASCHETTO / FRANGIA */
-  back:"M86 148 Q75 109 79 72 Q82 39 102 22 L111 25 Q119 13 132 12 L139 18 Q151 11 161 20 L166 28 Q180 36 183 57 Q187 84 177 113 L171 150 L158 126 L161 91 Q163 62 149 45 Q135 30 119 39 Q102 49 97 75 L96 148Z",
-  front:"M96 67 Q106 47 120 43 Q134 39 147 46 Q158 50 164 59 L161 81 Q153 72 145 70 L139 87 L132 68 L124 89 L118 67 L107 83 L110 61 Q102 64 96 71Z"},
- 3:{ /* CODA / LATERALE */
-  back:"M85 151 Q74 111 78 72 Q81 38 101 20 L110 23 Q118 11 131 10 L138 16 Q150 9 161 18 L166 27 Q180 35 184 56 Q188 82 178 111 L171 151 L159 126 L162 91 Q163 61 149 44 Q135 29 118 39 Q101 49 96 76 L95 151Z M171 68 Q196 78 197 103 Q197 128 181 148 Q171 158 166 143 Q179 122 176 101 Q174 84 164 77Z",
-  front:"M96 66 Q109 47 125 43 Q141 39 158 51 L163 62 Q150 60 139 66 Q128 73 118 79 Q109 84 101 85 L108 65 Q102 66 96 70Z"},
- 4:{ /* MEDIO MOSSO */
-  back:"M84 169 Q72 120 77 75 Q80 39 101 20 L110 23 Q118 11 131 10 L138 16 Q151 9 162 18 L167 27 Q181 36 185 58 Q190 88 179 122 L172 170 L158 140 L162 93 Q164 62 150 44 Q136 28 118 38 Q100 49 96 78 L95 170Z",
-  front:"M96 69 Q106 48 120 43 Q134 39 147 46 Q158 50 164 60 L161 81 Q151 70 142 69 Q136 83 125 91 L128 63 Q116 80 104 85 L110 58 Q102 62 96 73Z"},
- 5:{ /* LUNGO */
-  back:"M82 190 Q68 130 74 73 Q77 34 99 16 L108 19 Q116 7 130 6 L138 12 Q151 5 163 15 L168 24 Q183 34 187 58 Q192 93 181 132 L174 191 L158 154 L161 92 Q163 59 149 41 Q135 25 117 36 Q98 48 94 79 L93 190Z",
-  front:"M94 67 Q105 45 120 40 Q135 36 149 45 Q160 49 166 59 L162 82 Q151 68 142 68 Q136 83 125 92 L128 62 Q116 81 103 86 L109 57 Q101 61 94 72Z"},
- 6:{back:"M87 164 C77 159 73 149 78 140 C70 132 71 120 80 113 C73 103 76 91 85 85 C78 74 82 61 92 56 C89 44 97 34 108 34 C111 23 122 18 132 24 C141 17 153 21 158 30 C169 29 177 38 175 49 C185 54 188 66 181 75 C188 86 184 99 175 104 C182 117 175 132 166 137 L169 164 Q161 147 159 127 Q163 100 160 77 Q158 57 146 47 Q133 36 119 42 Q103 49 98 67 Q94 91 97 137Z",front:"M95 69 Q104 55 117 50 Q130 44 144 50 Q157 55 165 69 L162 79 Q151 70 140 70 Q130 67 119 70 Q108 70 98 79Z"},
- 7:{back:"M83 187 Q69 140 75 91 Q76 58 91 36 Q100 23 110 29 Q118 13 130 21 Q143 9 154 23 Q169 17 176 35 Q187 48 182 66 Q191 86 180 105 Q185 132 173 188 L159 154 Q163 121 160 93 Q159 63 147 48 Q134 33 118 40 Q101 48 96 74 Q91 111 95 181Z",front:"M95 68 Q104 48 118 43 Q128 40 136 47 Q144 40 155 48 Q163 53 166 62 Q157 65 151 75 Q143 68 137 79 Q129 70 122 84 Q114 74 104 84 Q109 61 95 68Z"}
- };
- const hv=(female?femaleHairV28:maleHairV28)[Math.min(7,characterV26.hair)]||(female?femaleHairV28:maleHairV28)[1];
- if(hairBack)hairBack.setAttribute("d",hv.back);
- if(hairFront)hairFront.setAttribute("d",hv.front);
- document.querySelectorAll(".creatorBaseBtnV273").forEach(b=>b.classList.toggle("active",b.dataset.base===characterV26.base));
- document.getElementById("avatarNameTagV26").textContent=(characterV26.name||"VIAGGIATORE").toUpperCase();
-}
-
-
-function applyPngHairColorV2812(){
- const c=characterV26.pngHairColor||"black";
- ["hairMale01V288","hairMale02V2815"].forEach(id=>{
-   const hair=document.getElementById(id);
-   if(hair){
-     hair.setAttribute("data-color",c);
-     hair.dataset.color=c;
-   }
- });
- document.querySelectorAll("#pngHairColorV2811 [data-pnghaircolor]").forEach(sw=>{
-   sw.classList.toggle("active",sw.dataset.pnghaircolor===c);
- });
-}
-
-
-function syncRealHairSelectorV2817(){
- const box=document.getElementById("realHairSelectorV2817");
- if(!box)return;
- const current=Number(characterV26.hair||1);
- box.querySelectorAll("[data-realhair]").forEach(btn=>{
-   const v=Number(btn.dataset.realhair);
-   btn.classList.toggle("active",current===v);
-   btn.onclick=()=>{
-     characterV26.hair=v;
-     creatorApplyV26();
-     syncRealHairSelectorV2817();
-   };
- });
-}
-
-function creatorRenderOptionsV26(){
- const box=document.getElementById("creatorOptionsV26");
- box.innerHTML="";
- creatorDataV26[creatorTabV26].forEach(o=>{
-  const b=document.createElement("button");
-  b.type="button"; b.className="creatorOptionV26";
-  if(o.locked)b.classList.add("locked");
-  if(characterV26[creatorTabV26]===o.v)b.classList.add("active");
-  b.textContent=o.label;
-  b.addEventListener("click",()=>{
-   if(o.locked){creatorToastV26();return}
-   characterV26[creatorTabV26]=o.v;
-   creatorApplyV26();creatorRenderOptionsV26();
-  });
-  box.appendChild(b);
- });
- const creatorRootV285=document.getElementById("creatorV26"); if(creatorRootV285)creatorRootV285.classList.toggle("hairModeV285",creatorTabV26==="hair");
- const picker=document.getElementById("hairColorPickerV283"); if(picker){picker.classList.toggle("show",creatorTabV26==="hair");picker.querySelectorAll("[data-haircolor]").forEach(sw=>{const n=Number(sw.dataset.haircolor);sw.classList.toggle("active",(characterV26.hairColor||1)===n);sw.onclick=()=>{characterV26.hairColor=n;creatorApplyV26();creatorRenderOptionsV26();};});}
- const pngPaletteV2811=document.getElementById("pngHairColorV2811");
- if(pngPaletteV2811){
-   pngPaletteV2811.querySelectorAll("[data-pnghaircolor]").forEach(sw=>{
-     const c=sw.dataset.pnghaircolor;
-     sw.classList.toggle("active",(characterV26.pngHairColor||"black")===c);
-     sw.onclick=()=>{
-       characterV26.pngHairColor=c;
-       applyPngHairColorV2812();
-     };
+function creator30Load(){
+ try{
+  const saved=(window.pendingCharacterV32 && typeof window.pendingCharacterV32==="object")
+   ? window.pendingCharacterV32
+   : JSON.parse(localStorage.getItem(CREATOR30_KEY)||"null");
+  if(saved && typeof saved==="object"){
+   Object.assign(creator30State,{
+    name:String(saved.name||"").slice(0,14),
+    sex:saved.sex==="female"?"female":"male",
+    hair:[1,2,3].includes(Number(saved.hair))?Number(saved.hair):1,
+    hairColor:String(saved.hairColor||"black"),
+    outfit:[1,2,3].includes(Number(saved.outfit))?Number(saved.outfit):1
    });
+  }
+ }catch(e){}
+}
+function creator30Save(){
+ try{localStorage.setItem(CREATOR30_KEY,JSON.stringify(creator30State));}catch(e){}
+ characterCreatedV25=true;
+ window.pendingCharacterV32={
+  name:creator30State.name,
+  sex:creator30State.sex,
+  hair:Number(creator30State.hair),
+  hairColor:creator30State.hairColor,
+  outfit:Number(creator30State.outfit)
+ };
+ if(typeof saveGameV25==="function") saveGameV25(true);
+}
+function creator30SetActive(selector,attr,value){
+ document.querySelectorAll(selector).forEach(b=>b.classList.toggle("active",String(b.dataset[attr])===String(value)));
+}
+function creator30Render(){
+ const male=creator30State.sex==="male";
+ const outfit=Number(creator30State.outfit)||1;
+
+ ["creator30BaseMale","creator30BaseFemale","creator30Crimson","creator30Verdant","creator30FemaleCrimson","creator30FemaleVerdant"].forEach(id=>{
+  document.getElementById(id).classList.remove("active");
+ });
+
+ if(!male){
+  if(outfit===2){
+   document.getElementById("creator30FemaleCrimson").classList.add("active");
+  }else if(outfit===3){
+   document.getElementById("creator30FemaleVerdant").classList.add("active");
+  }else{
+   document.getElementById("creator30BaseFemale").classList.add("active");
+  }
+ }else if(outfit===2){
+  document.getElementById("creator30Crimson").classList.add("active");
+ }else if(outfit===3){
+  document.getElementById("creator30Verdant").classList.add("active");
+ }else{
+  document.getElementById("creator30BaseMale").classList.add("active");
  }
- applyPngHairColorV2812();
- syncRealHairSelectorV2817();
-}
 
-let creatorToastTimerV26=null;
-function creatorToastV26(){
- const t=document.getElementById("creatorToastV26");
- t.classList.add("show");clearTimeout(creatorToastTimerV26);
- creatorToastTimerV26=setTimeout(()=>t.classList.remove("show"),1100);
- if(navigator.vibrate)navigator.vibrate(25);
-}
+ [1,2,3].forEach(n=>{
+  const hm=document.getElementById("creator30Hair"+n);
+  const hf=document.getElementById("creator30FemaleHair"+n);
+  hm.classList.toggle("active",male && Number(creator30State.hair)===n);
+  hf.classList.toggle("active",!male && Number(creator30State.hair)===n);
+  hm.dataset.color=creator30State.hairColor;
+  hf.dataset.color=creator30State.hairColor;
+ });
 
-function openCreatorV26(){
- characterV26.hair=Number(characterV26.hair||1);
- if(typeof devClearScreensV255==="function")devClearScreensV255();
- const r=document.getElementById("riftScene");if(r)r.classList.add("prologue-overlay-v244");
- const c=document.getElementById("creatorV26");
+ creator30SetActive("#creatorV30 [data-sex]","sex",creator30State.sex);
+ creator30SetActive("#creatorV30 [data-tab]","tab",creator30State.tab);
+ creator30SetActive("#creatorV30 [data-hair]","hair",creator30State.hair);
+ creator30SetActive("#creatorV30 [data-outfit]","outfit",creator30State.outfit);
+ creator30SetActive("#creator30Palette [data-hcolor]","hcolor",creator30State.hairColor);
+
+ const hairMode=creator30State.tab==="hair";
+ document.getElementById("creator30HairOptions").classList.toggle("hidden",!hairMode);
+ document.getElementById("creator30OutfitOptions").classList.toggle("hidden",hairMode);
+ document.getElementById("creator30Palette").classList.toggle("hidden",!hairMode);
+
+ const name=document.getElementById("creator30Name");
+ if(document.activeElement!==name) name.value=creator30State.name||"";
+}
+function openCreatorV30(){
+ const teaser=document.getElementById("hubTeaserV241");
+ if(teaser){teaser.classList.remove("active");teaser.setAttribute("aria-hidden","true");}
+ const oldChapter=document.getElementById("chapterCompleteV238");
+ if(oldChapter){oldChapter.classList.remove("active");oldChapter.style.display="none";}
+ const c=document.getElementById("creatorV30");
  c.classList.add("active");c.setAttribute("aria-hidden","false");
- document.getElementById("creatorNameV26").value=characterV26.name||"";
- creatorApplyV26();creatorRenderOptionsV26();
+ creator30Render();
 }
-
-function closeCreatorV26(){
- const c=document.getElementById("creatorV26");
+function closeCreatorV30(){
+ const c=document.getElementById("creatorV30");
  c.classList.remove("active");c.setAttribute("aria-hidden","true");
 }
-
-function saveCharacterV26(){
- const raw=document.getElementById("creatorNameV26").value.trim();
- if(!raw){
-   const s=document.getElementById("creatorStatusV26");
-   s.textContent="INSERISCI IL TUO NOME";
-   document.getElementById("creatorNameV26").focus();
-   if(navigator.vibrate)navigator.vibrate(30);
-   return;
+function creator30Finish(){
+ const n=(creator30State.name||"").trim();
+ if(!n){
+  const input=document.getElementById("creator30Name");
+  input.focus();
+  document.getElementById("creator30Status").textContent="INSERISCI IL TUO NOME";
+  return;
  }
- characterV26.name=raw.slice(0,14);
- characterCreatedV25=true;
- chapter1CompleteV25=true;
- temporalMemoryV25=true;
- saveGameV25();
-
- closeCreatorV26();
- const done=document.getElementById("creatorDoneV26");
- document.getElementById("creatorDoneNameV26").textContent=characterV26.name.toUpperCase()+" • PROFILO TEMPORALE SALVATO";
+ creator30State.name=n.slice(0,14);
+ creator30Save();
+ closeCreatorV30();
+ const done=document.getElementById("creator30Done");
+ document.getElementById("creator30DoneName").textContent=creator30State.name.toUpperCase()+" • PROFILO TEMPORALE SALVATO";
  done.classList.add("active");done.setAttribute("aria-hidden","false");
-
- setTimeout(()=>{
-   done.classList.remove("active");done.setAttribute("aria-hidden","true");
-   devShowTeaserV255("nexus");
- },1450);
 }
 
-/* Estende il save V2.5 senza rompere i salvataggi già esistenti */
-const snapshotSaveV25_originalV26=snapshotSaveV25;
-snapshotSaveV25=function(){
- const s=snapshotSaveV25_originalV26();
- s.version=26;
- s.character=characterV26;
- return s;
-};
-const loadGameV25_originalV26=loadGameV25;
-loadGameV25=function(){
- const ok=loadGameV25_originalV26();
- try{
-   const raw=localStorage.getItem(SAVE_KEY_V25);
-   if(raw){
-     const s=JSON.parse(raw);
-     if(s.character && typeof s.character==="object"){
-       characterV26={
-        name:String(s.character.name||"").slice(0,14),
-        base:s.character.base==="female"?"female":"male",
-        body:Number(s.character.body)||1,
-        hair:Number(s.character.hair)||1,
-        eyes:Number(s.character.eyes)||1,
-        outfit:Number(s.character.outfit)||1
-       };
-     }
-   }
- }catch(e){}
- creatorApplyV26();
- return ok;
-};
+creator30Load();
+if(chapter1CompleteV25 && creator30State.name){
+ characterCreatedV25=true;
+ window.pendingCharacterV32=getPlayerCharacterV33();
+ saveGameV25(true);
+}
 
-/* Primo vero salvataggio resta DOPO il prologo.
-   I salvataggi DEV continuano a funzionare perché marcano il capitolo completato. */
-document.removeEventListener?.("visibilitychange",()=>{});
-/* I vecchi listener non sono rimovibili perché anonimi: rendiamo saveGame stesso sicuro. */
-const saveGameV25_originalV26=saveGameV25;
-saveGameV25=function(force=false){
- if(!chapter1CompleteV25 && !force){refreshDevStateV25();return false}
- return saveGameV25_originalV26();
-};
-
-/* Tabs */
-document.querySelectorAll(".creatorTabV26").forEach(b=>b.addEventListener("click",()=>{
- creatorTabV26=b.dataset.ctab;
- document.querySelectorAll(".creatorTabV26").forEach(x=>x.classList.toggle("active",x===b));
- creatorRenderOptionsV26();
+document.querySelectorAll("#creatorV30 [data-sex]").forEach(b=>b.addEventListener("click",()=>{
+ creator30State.sex=b.dataset.sex;creator30Render();
 }));
-document.getElementById("creatorNameV26").addEventListener("input",e=>{
- characterV26.name=e.target.value.slice(0,14);creatorApplyV26();
- document.getElementById("creatorStatusV26").textContent="ASPETTO TEMPORALE INSTABILE";
+document.querySelectorAll("#creatorV30 [data-tab]").forEach(b=>b.addEventListener("click",()=>{
+ creator30State.tab=b.dataset.tab;creator30Render();
+}));
+document.querySelectorAll("#creatorV30 [data-hair]").forEach(b=>b.addEventListener("click",()=>{
+ creator30State.hair=Number(b.dataset.hair);creator30Render();
+}));
+document.querySelectorAll("#creatorV30 [data-outfit]").forEach(b=>b.addEventListener("click",()=>{
+ creator30State.outfit=Number(b.dataset.outfit);creator30Render();
+}));
+document.querySelectorAll("#creator30Palette [data-hcolor]").forEach(b=>b.addEventListener("click",()=>{
+ creator30State.hairColor=b.dataset.hcolor;creator30Render();
+}));
+document.getElementById("creator30Name").addEventListener("input",e=>{
+ creator30State.name=e.target.value.slice(0,14);
+ document.getElementById("creator30Status").textContent="ASPETTO TEMPORALE INSTABILE";
 });
-document.getElementById("creatorConfirmV26").addEventListener("click",saveCharacterV26);
-document.getElementById("openCreatorFromTeaserV26").addEventListener("click",openCreatorV26);
-
-/* DEV -> CREATOR ora apre il Creator vero */
-devCreatorV253=function(){
- devEnsureChapterStateV253();
- openCreatorV26();
-};
-
-/* Carica eventuale personaggio già salvato con il nuovo loader */
-loadGameV25();
-creatorApplyV26();
-
-</script>
-
-<script>
-const resetSaveV25_preV26=resetSaveV25;
-resetSaveV25=function(){
- resetSaveV25_preV26();
- characterV26={name:"",base:"male",body:1,hair:1,eyes:1,outfit:1};
- creatorApplyV26();
-};
-</script>
-
-<script>
-
-/* V2.7.3 — scelta base */
-document.querySelectorAll(".creatorBaseBtnV273").forEach(btn=>{
- btn.addEventListener("click",()=>{
-   characterV26.base=btn.dataset.base==="female"?"female":"male";
-   characterV26.hair=1;
-   creatorApplyV26();
-   creatorRenderOptionsV26();
- });
+document.getElementById("creator30Confirm").addEventListener("click",creator30Finish);
+document.getElementById("creator30ToNexus").addEventListener("click",()=>{
+ const done=document.getElementById("creator30Done");
+ done.classList.remove("active");done.setAttribute("aria-hidden","true");
+ if(typeof devShowTeaserV255==="function") devShowTeaserV255("nexus");
 });
 
+
+/* V3.3 — PROFILO PERSONAGGIO PERSISTENTE
+   Usare getPlayerCharacterV33() nel Nexus e nei mondi futuri. */
+function getPlayerCharacterV33(){
+ if(!characterCreatedV25)return null;
+ return{
+  name:creator30State.name,
+  sex:creator30State.sex,
+  hair:Number(creator30State.hair),
+  hairColor:creator30State.hairColor,
+  outfit:Number(creator30State.outfit)
+ };
+}
+function hasPlayerCharacterV33(){
+ return !!(characterCreatedV25 && creator30State.name);
+}
+
+/* Il teaser del prologo ora apre il creator vero */
+(function(){
+ const teaser=document.getElementById("hubTeaserV241");
+ if(!teaser) return;
+ let btn=document.getElementById("openCreatorV30");
+ if(!btn){
+  btn=document.createElement("button");
+  btn.id="openCreatorV30";
+  btn.className="branchAction chapterContinueV241";
+  btn.type="button";
+  btn.textContent="CREA IL TUO PERSONAGGIO";
+  teaser.querySelector(".chapterCardV238").appendChild(btn);
+ }
+ btn.addEventListener("click",openCreatorV30);
+})();
+
+/* DEV -> CREATOR apre direttamente il nuovo creator */
+if(typeof devCreatorV253!=="undefined"){
+ devCreatorV253=function(){
+  if(typeof devEnsureChapterStateV253==="function") devEnsureChapterStateV253();
+  if(typeof devClearScreensV255==="function") devClearScreensV255();
+  openCreatorV30();
+ };
+}
+
+/* Evita menu contestuale/drag sulle immagini */
+document.getElementById("creatorV30").addEventListener("contextmenu",e=>e.preventDefault());
+document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventDefault());
 </script>
+
 </body>
 
 </html>
