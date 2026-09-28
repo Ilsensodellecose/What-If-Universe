@@ -11200,149 +11200,164 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
 
 <!-- =========================================================
-     V3.4.1 — MOBILE HAIR ANCHOR FIX
-     Desktop NON modificato.
-     Su mobile i capelli vengono ancorati al rettangolo reale
-     in cui il body PNG viene renderizzato con object-fit:contain.
+     V3.4.2 — MOBILE HAIR POSITION FIX
+     Desktop invariato.
+     Su mobile mantiene ESATTAMENTE le dimensioni originali dei capelli
+     e corregge solo il loro ancoraggio rispetto al body realmente renderizzato.
      ========================================================= -->
-<style>
-@media (max-width:600px){
-    /* Evita transizioni/animazioni indesiderate mentre il rig si riallinea */
-    #creator30Avatar .creator30Hair{
-        transform-origin:50% 0;
-    }
-}
-</style>
-
 <script>
 (function(){
+
     const avatar = document.getElementById("creator30Avatar");
     if(!avatar) return;
 
-    const HAIR_BASE = {
-        creator30Hair1:       {w:25.0, l:48.85, t:-11.0},
-        creator30Hair2:       {w:27.0, l:48.85, t:-12.0},
-        creator30Hair3:       {w:29.0, l:48.85, t:-5.5},
-        creator30FemaleHair1: {w:27.5, l:49.00, t:-3.5},
-        creator30FemaleHair2: {w:44.0, l:50.00, t: 1.0},
-        creator30FemaleHair3: {w:29.5, l:49.00, t:-1.5}
+    const MOBILE_POS = {
+        creator30Hair1:       { left:48.85, top:-11.0 },
+        creator30Hair2:       { left:48.85, top:-12.0 },
+        creator30Hair3:       { left:48.85, top:-5.5 },
+        creator30FemaleHair1: { left:49.00, top:-3.5 },
+        creator30FemaleHair2: { left:50.00, top: 1.0 },
+        creator30FemaleHair3: { left:49.00, top:-1.5 }
     };
 
-    function isMobileCreator(){
+    function isMobile(){
         return window.matchMedia("(max-width:600px)").matches;
     }
 
-    function clearInlineHairRig(){
-        Object.keys(HAIR_BASE).forEach(id=>{
-            const el=document.getElementById(id);
+    function clearInlinePosition(){
+        Object.keys(MOBILE_POS).forEach(id=>{
+            const el = document.getElementById(id);
             if(!el) return;
-            el.style.removeProperty("width");
             el.style.removeProperty("left");
             el.style.removeProperty("top");
+            /* IMPORTANTE: non tocchiamo MAI width */
         });
     }
 
-    function getActiveBody(){
-        return avatar.querySelector(".creator30Body.active");
+    function getReferenceBody(){
+        const female =
+            typeof creator30State !== "undefined" &&
+            creator30State.sex === "female";
+
+        return document.getElementById(
+            female ? "creator30BaseFemale" : "creator30BaseMale"
+        );
     }
 
-    function syncMobileHairRig(){
-        if(!isMobileCreator()){
-            clearInlineHairRig();
+    function syncHairPosition(){
+
+        if(!isMobile()){
+            clearInlinePosition();
             return;
         }
 
-        const body=getActiveBody();
+        const body = getReferenceBody();
         if(!body) return;
 
-        if(!body.complete || !body.naturalWidth || !body.naturalHeight){
-            body.addEventListener("load",syncMobileHairRig,{once:true});
+        if(
+            !body.complete ||
+            !body.naturalWidth ||
+            !body.naturalHeight
+        ){
+            body.addEventListener("load", syncHairPosition, {once:true});
             return;
         }
 
-        const W=avatar.clientWidth;
-        const H=avatar.clientHeight;
-        if(!W || !H) return;
+        const avatarW = avatar.clientWidth;
+        const avatarH = avatar.clientHeight;
 
-        /* object-fit: contain */
-        const scale=Math.min(
-            W/body.naturalWidth,
-            H/body.naturalHeight
+        if(!avatarW || !avatarH) return;
+
+        /*
+          Il body usa object-fit: contain + object-position:center bottom.
+          Ricaviamo quindi il rettangolo ESATTO nel quale viene disegnato.
+        */
+        const scale = Math.min(
+            avatarW / body.naturalWidth,
+            avatarH / body.naturalHeight
         );
 
-        const renderedW=body.naturalWidth*scale;
-        const renderedH=body.naturalHeight*scale;
+        const bodyW = body.naturalWidth * scale;
+        const bodyH = body.naturalHeight * scale;
 
-        /* object-position:center bottom */
-        const contentLeft=(W-renderedW)/2;
-        const contentTop=H-renderedH;
+        const bodyLeft = (avatarW - bodyW) / 2;
+        const bodyTop  = avatarH - bodyH;
 
-        Object.entries(HAIR_BASE).forEach(([id,p])=>{
-            const hair=document.getElementById(id);
+        Object.entries(MOBILE_POS).forEach(([id,p])=>{
+            const hair = document.getElementById(id);
             if(!hair) return;
 
             /*
-              Le vecchie percentuali restano la nostra calibrazione,
-              ma ora vengono riferite al BODY realmente visibile,
-              non all'intero box variabile dell'avatar.
+              SOLO POSIZIONE:
+              la dimensione resta quella già calibrata nel CSS originale.
             */
-            const widthPx=renderedW*(p.w/100);
-            const leftPx=contentLeft+renderedW*(p.l/100);
-            const topPx=contentTop+renderedH*(p.t/100);
+            const leftPx =
+                bodyLeft + bodyW * (p.left / 100);
 
-            hair.style.width=widthPx+"px";
-            hair.style.left=leftPx+"px";
-            hair.style.top=topPx+"px";
+            const topPx =
+                bodyTop + bodyH * (p.top / 100);
+
+            hair.style.left = leftPx + "px";
+            hair.style.top  = topPx + "px";
         });
     }
 
-    /* Aggiorna quando sesso/outfit cambiano e quindi cambia il body attivo */
-    const observer=new MutationObserver(()=>{
-        requestAnimationFrame(syncMobileHairRig);
+    /*
+      Cambiando sesso/outfit il riferimento può cambiare:
+      riallineiamo senza toccare le dimensioni.
+    */
+    const mutationObserver = new MutationObserver(()=>{
+        requestAnimationFrame(syncHairPosition);
     });
 
-    observer.observe(avatar,{
+    mutationObserver.observe(avatar,{
         subtree:true,
         attributes:true,
         attributeFilter:["class"]
     });
 
-    /* Chrome/Safari mobile possono cambiare viewport con le barre browser */
+    /*
+      Barre di Chrome/Safari, rotazione e resize.
+    */
     if("ResizeObserver" in window){
-        const ro=new ResizeObserver(()=>{
-            requestAnimationFrame(syncMobileHairRig);
+        const ro = new ResizeObserver(()=>{
+            requestAnimationFrame(syncHairPosition);
         });
         ro.observe(avatar);
     }else{
-        window.addEventListener("resize",syncMobileHairRig);
+        window.addEventListener("resize", syncHairPosition);
     }
 
     window.addEventListener("orientationchange",()=>{
-        setTimeout(syncMobileHairRig,120);
+        setTimeout(syncHairPosition,120);
     });
 
-    /* Quando il creator viene aperto */
-    const creator=document.getElementById("creatorV30");
+    /*
+      Quando si apre il creator.
+    */
+    const creator = document.getElementById("creatorV30");
+
     if(creator){
-        const creatorObserver=new MutationObserver(()=>{
+        const creatorObserver = new MutationObserver(()=>{
             if(creator.classList.contains("active")){
                 requestAnimationFrame(()=>{
-                    requestAnimationFrame(syncMobileHairRig);
+                    requestAnimationFrame(syncHairPosition);
                 });
             }
         });
+
         creatorObserver.observe(creator,{
             attributes:true,
             attributeFilter:["class"]
         });
     }
 
-    /* Prima inizializzazione */
     requestAnimationFrame(()=>{
-        requestAnimationFrame(syncMobileHairRig);
+        requestAnimationFrame(syncHairPosition);
     });
 
-    window.syncMobileHairRigV341=syncMobileHairRig;
+    window.syncCreatorHairMobileV342 = syncHairPosition;
+
 })();
 </script>
 
