@@ -11198,6 +11198,155 @@ document.getElementById("creatorV30").addEventListener("contextmenu",e=>e.preven
 document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventDefault());
 </script>
 
+
+<!-- =========================================================
+     V3.4.1 — MOBILE HAIR ANCHOR FIX
+     Desktop NON modificato.
+     Su mobile i capelli vengono ancorati al rettangolo reale
+     in cui il body PNG viene renderizzato con object-fit:contain.
+     ========================================================= -->
+<style>
+@media (max-width:600px){
+    /* Evita transizioni/animazioni indesiderate mentre il rig si riallinea */
+    #creator30Avatar .creator30Hair{
+        transform-origin:50% 0;
+    }
+}
+</style>
+
+<script>
+(function(){
+    const avatar = document.getElementById("creator30Avatar");
+    if(!avatar) return;
+
+    const HAIR_BASE = {
+        creator30Hair1:       {w:25.0, l:48.85, t:-11.0},
+        creator30Hair2:       {w:27.0, l:48.85, t:-12.0},
+        creator30Hair3:       {w:29.0, l:48.85, t:-5.5},
+        creator30FemaleHair1: {w:27.5, l:49.00, t:-3.5},
+        creator30FemaleHair2: {w:44.0, l:50.00, t: 1.0},
+        creator30FemaleHair3: {w:29.5, l:49.00, t:-1.5}
+    };
+
+    function isMobileCreator(){
+        return window.matchMedia("(max-width:600px)").matches;
+    }
+
+    function clearInlineHairRig(){
+        Object.keys(HAIR_BASE).forEach(id=>{
+            const el=document.getElementById(id);
+            if(!el) return;
+            el.style.removeProperty("width");
+            el.style.removeProperty("left");
+            el.style.removeProperty("top");
+        });
+    }
+
+    function getActiveBody(){
+        return avatar.querySelector(".creator30Body.active");
+    }
+
+    function syncMobileHairRig(){
+        if(!isMobileCreator()){
+            clearInlineHairRig();
+            return;
+        }
+
+        const body=getActiveBody();
+        if(!body) return;
+
+        if(!body.complete || !body.naturalWidth || !body.naturalHeight){
+            body.addEventListener("load",syncMobileHairRig,{once:true});
+            return;
+        }
+
+        const W=avatar.clientWidth;
+        const H=avatar.clientHeight;
+        if(!W || !H) return;
+
+        /* object-fit: contain */
+        const scale=Math.min(
+            W/body.naturalWidth,
+            H/body.naturalHeight
+        );
+
+        const renderedW=body.naturalWidth*scale;
+        const renderedH=body.naturalHeight*scale;
+
+        /* object-position:center bottom */
+        const contentLeft=(W-renderedW)/2;
+        const contentTop=H-renderedH;
+
+        Object.entries(HAIR_BASE).forEach(([id,p])=>{
+            const hair=document.getElementById(id);
+            if(!hair) return;
+
+            /*
+              Le vecchie percentuali restano la nostra calibrazione,
+              ma ora vengono riferite al BODY realmente visibile,
+              non all'intero box variabile dell'avatar.
+            */
+            const widthPx=renderedW*(p.w/100);
+            const leftPx=contentLeft+renderedW*(p.l/100);
+            const topPx=contentTop+renderedH*(p.t/100);
+
+            hair.style.width=widthPx+"px";
+            hair.style.left=leftPx+"px";
+            hair.style.top=topPx+"px";
+        });
+    }
+
+    /* Aggiorna quando sesso/outfit cambiano e quindi cambia il body attivo */
+    const observer=new MutationObserver(()=>{
+        requestAnimationFrame(syncMobileHairRig);
+    });
+
+    observer.observe(avatar,{
+        subtree:true,
+        attributes:true,
+        attributeFilter:["class"]
+    });
+
+    /* Chrome/Safari mobile possono cambiare viewport con le barre browser */
+    if("ResizeObserver" in window){
+        const ro=new ResizeObserver(()=>{
+            requestAnimationFrame(syncMobileHairRig);
+        });
+        ro.observe(avatar);
+    }else{
+        window.addEventListener("resize",syncMobileHairRig);
+    }
+
+    window.addEventListener("orientationchange",()=>{
+        setTimeout(syncMobileHairRig,120);
+    });
+
+    /* Quando il creator viene aperto */
+    const creator=document.getElementById("creatorV30");
+    if(creator){
+        const creatorObserver=new MutationObserver(()=>{
+            if(creator.classList.contains("active")){
+                requestAnimationFrame(()=>{
+                    requestAnimationFrame(syncMobileHairRig);
+                });
+            }
+        });
+        creatorObserver.observe(creator,{
+            attributes:true,
+            attributeFilter:["class"]
+        });
+    }
+
+    /* Prima inizializzazione */
+    requestAnimationFrame(()=>{
+        requestAnimationFrame(syncMobileHairRig);
+    });
+
+    window.syncMobileHairRigV341=syncMobileHairRig;
+})();
+</script>
+
+
 </body>
 
 </html>
