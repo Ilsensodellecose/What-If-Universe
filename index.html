@@ -11148,7 +11148,11 @@ document.getElementById("creator30Confirm").addEventListener("click",creator30Fi
 document.getElementById("creator30ToNexus").addEventListener("click",()=>{
  const done=document.getElementById("creator30Done");
  done.classList.remove("active");done.setAttribute("aria-hidden","true");
- if(typeof devShowTeaserV255==="function") devShowTeaserV255("nexus");
+ if(typeof openNexusV41==="function"){
+  openNexusV41({skipIntro:false,newArrival:true});
+ }else if(typeof devShowTeaserV255==="function"){
+  devShowTeaserV255("nexus");
+ }
 });
 
 
@@ -11367,6 +11371,1587 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
     window.syncCreatorHairRigV343 = syncCreatorHairRig;
 
+})();
+</script>
+
+
+
+<!-- ==========================================================
+     V4.1 — NEXUS TOP-DOWN / MAPPA A CHUNK
+     - movimento libero 8 direzioni
+     - camera 2D
+     - caricamento progressivo chunk vicini
+     - Kaelios arriva con il giocatore e guida il tutorial
+     - dialoghi: TU / KAELIOS, una battuta alla volta + CONTINUA
+     - Fiducia e Indipendenza persistenti
+     ========================================================== -->
+
+<style>
+#nexusV41{
+ position:fixed; inset:0; z-index:3600;
+ overflow:hidden;
+ opacity:0; visibility:hidden; pointer-events:none;
+ background:#03020a;
+ color:#fff;
+ font-family:Arial,Helvetica,sans-serif;
+}
+#nexusV41.active{opacity:1;visibility:visible;pointer-events:auto}
+#nexusV41 *{box-sizing:border-box}
+
+#nexus41Viewport{
+ position:absolute; inset:0;
+ overflow:hidden;
+ background:
+  radial-gradient(circle at 50% 38%,rgba(95,52,168,.18),transparent 35%),
+  linear-gradient(180deg,#070615,#03030a 70%);
+ touch-action:none;
+}
+#nexus41World{
+ position:absolute; left:0; top:0;
+ width:3600px; height:3600px;
+ transform:translate3d(0,0,0);
+ transform-origin:0 0;
+ will-change:transform;
+}
+
+/* CHUNK dinamici: esistono solo vicino al giocatore */
+.nexus41Chunk{
+ position:absolute;
+ width:600px;height:600px;
+ overflow:hidden;
+ background:
+  radial-gradient(circle at var(--nx1) var(--ny1),rgba(111,72,190,.16),transparent 30%),
+  radial-gradient(circle at var(--nx2) var(--ny2),rgba(48,90,165,.10),transparent 24%),
+  linear-gradient(135deg,rgba(17,14,34,.98),rgba(7,6,18,.99));
+ border:1px solid rgba(161,126,255,.025);
+ contain:strict;
+}
+.nexus41Chunk::before{
+ content:"";
+ position:absolute;inset:0;
+ opacity:.24;
+ background-image:
+  radial-gradient(circle,rgba(237,231,255,.68) 0 1px,transparent 1.3px);
+ background-size:73px 73px;
+ background-position:var(--sx) var(--sy);
+}
+.nexus41Chunk::after{
+ content:"";
+ position:absolute;inset:-30%;
+ opacity:.13;
+ transform:rotate(var(--rot));
+ background:
+  linear-gradient(90deg,transparent 48%,rgba(153,117,255,.36) 49.5%,transparent 51%),
+  linear-gradient(0deg,transparent 48%,rgba(90,127,205,.20) 49.5%,transparent 51%);
+}
+
+/* Sentieri cosmici */
+.nexus41Path{
+ position:absolute;
+ height:86px;
+ transform-origin:0 50%;
+ border:1px solid rgba(174,145,255,.10);
+ border-radius:45px;
+ background:
+  linear-gradient(180deg,rgba(74,57,113,.18),rgba(25,20,48,.38)),
+  repeating-linear-gradient(90deg,transparent 0 70px,rgba(205,187,255,.035) 71px 73px);
+ box-shadow:
+  inset 0 0 24px rgba(126,87,214,.12),
+  0 0 28px rgba(86,52,149,.07);
+ pointer-events:none;
+}
+.nexus41Path::after{
+ content:"";
+ position:absolute;left:8px;right:8px;top:50%;
+ height:1px;
+ background:linear-gradient(90deg,transparent,rgba(198,178,255,.17),transparent);
+}
+
+/* Piattaforme/zone */
+.nexus41Platform{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ border-radius:50%;
+ border:1px solid rgba(188,158,255,.18);
+ background:
+  radial-gradient(circle,rgba(54,40,91,.62),rgba(15,12,31,.92) 68%,rgba(5,4,13,.98));
+ box-shadow:
+  inset 0 0 50px rgba(122,84,195,.12),
+  0 0 45px rgba(89,55,153,.08);
+ pointer-events:none;
+}
+.nexus41Platform::before{
+ content:"";
+ position:absolute;inset:13%;
+ border-radius:50%;
+ border:1px solid rgba(188,162,255,.09);
+}
+.nexus41Platform.core{
+ width:560px;height:560px;
+}
+.nexus41Platform.small{
+ width:360px;height:360px;
+}
+
+.nexus41ZoneLabel{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ text-align:center;
+ pointer-events:none;
+ text-shadow:0 2px 12px #000;
+}
+.nexus41ZoneLabel strong{
+ display:block;
+ font-size:18px;
+ letter-spacing:.12em;
+}
+.nexus41ZoneLabel span{
+ display:block;
+ margin-top:4px;
+ font-size:9px;
+ color:#aca2be;
+ letter-spacing:.15em;
+}
+
+/* Strutture */
+.nexus41Structure{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ pointer-events:none;
+}
+.nexus41Archive{
+ width:220px;height:170px;
+ border:1px solid rgba(184,151,255,.24);
+ clip-path:polygon(16% 0,84% 0,100% 36%,88% 100%,12% 100%,0 36%);
+ background:
+  linear-gradient(180deg,rgba(83,55,128,.55),rgba(12,9,29,.96));
+ box-shadow:0 0 35px rgba(112,77,184,.15);
+}
+.nexus41Archive::before{
+ content:"";
+ width:92px;height:100px;
+ border:1px solid rgba(215,199,255,.24);
+ border-radius:50% 50% 18px 18px;
+ background:radial-gradient(circle,rgba(154,115,233,.25),rgba(8,7,19,.75));
+}
+
+.nexus41Resonance{
+ width:210px;height:210px;
+ border-radius:50%;
+ border:2px solid rgba(114,154,255,.22);
+ background:
+  radial-gradient(circle,rgba(76,118,213,.22),rgba(15,17,37,.88) 54%,rgba(5,5,13,.98));
+ box-shadow:0 0 45px rgba(73,109,205,.11);
+}
+.nexus41Resonance::before,
+.nexus41Resonance::after{
+ content:"";
+ position:absolute;
+ border-radius:50%;
+ border:1px solid rgba(174,199,255,.19);
+}
+.nexus41Resonance::before{inset:22px}
+.nexus41Resonance::after{inset:55px}
+
+.nexus41PortalHub{
+ width:250px;height:250px;
+ border-radius:50%;
+ border:1px solid rgba(203,175,255,.25);
+ background:
+  radial-gradient(circle,rgba(103,59,181,.20),rgba(8,6,20,.94) 70%);
+}
+.nexus41Portal{
+ position:absolute;
+ width:66px;height:102px;
+ border-radius:50%;
+ border:2px solid rgba(209,188,255,.54);
+ background:radial-gradient(ellipse,rgba(180,120,255,.35),rgba(73,37,145,.13) 45%,rgba(5,4,12,.88) 72%);
+ box-shadow:0 0 22px rgba(145,91,236,.27),inset 0 0 14px rgba(214,193,255,.12);
+ animation:nexus41PortalPulse 2.2s ease-in-out infinite alternate;
+}
+.nexus41Portal.locked{
+ opacity:.33;
+ filter:grayscale(.7);
+ animation:none;
+}
+.nexus41Portal.p1{left:26px;top:76px}
+.nexus41Portal.p2{left:92px;top:38px}
+.nexus41Portal.p3{right:24px;top:76px}
+@keyframes nexus41PortalPulse{
+ from{transform:scale(.96);opacity:.72}
+ to{transform:scale(1.04);opacity:1}
+}
+
+.nexus41Sealed{
+ width:260px;height:190px;
+ border:1px solid rgba(255,84,128,.18);
+ background:
+  linear-gradient(180deg,rgba(76,24,54,.32),rgba(13,8,21,.95));
+ clip-path:polygon(18% 0,82% 0,100% 22%,91% 100%,9% 100%,0 22%);
+}
+.nexus41Sealed::after{
+ content:"SIGILLATO";
+ font-size:11px;
+ font-weight:900;
+ letter-spacing:.28em;
+ color:rgba(255,122,156,.48);
+}
+
+/* Crepa del Varco Zero */
+.nexus41ZeroRift{
+ position:absolute;
+ width:110px;height:155px;
+ transform:translate(-50%,-50%) rotate(-4deg);
+ clip-path:polygon(49% 0,62% 18%,55% 38%,69% 55%,52% 72%,57% 100%,42% 74%,30% 55%,43% 37%,36% 17%);
+ background:linear-gradient(180deg,#e2d6ff,#945dff 35%,#321276 68%,transparent);
+ filter:drop-shadow(0 0 20px rgba(151,93,255,.55));
+ opacity:.72;
+}
+
+/* PLAYER */
+#nexus41Player{
+ position:absolute;
+ z-index:25;
+ width:92px;height:138px;
+ transform:translate(-50%,-72%);
+ pointer-events:none;
+ will-change:left,top;
+}
+#nexus41Player::after{
+ content:"";
+ position:absolute;
+ left:50%;bottom:1px;
+ width:58px;height:18px;
+ transform:translateX(-50%);
+ border-radius:50%;
+ background:rgba(0,0,0,.44);
+ filter:blur(3px);
+}
+#nexus41PlayerVisual{
+ position:absolute;inset:0;
+ transform-origin:50% 100%;
+}
+#nexus41Player.facingLeft #nexus41PlayerVisual{
+ transform:scaleX(-1);
+}
+#nexus41Player.moving #nexus41PlayerVisual{
+ animation:nexus41PlayerBob .30s ease-in-out infinite alternate;
+}
+@keyframes nexus41PlayerBob{
+ from{translate:0 0}
+ to{translate:0 -3px}
+}
+#nexus41PlayerBody,
+#nexus41PlayerHair{
+ position:absolute;
+ user-select:none;
+ -webkit-user-drag:none;
+ pointer-events:none;
+}
+#nexus41PlayerBody{
+ left:50%;bottom:0;
+ width:100%;height:100%;
+ transform:translateX(-50%);
+ object-fit:contain;
+ object-position:center bottom;
+}
+#nexus41PlayerHair{
+ z-index:3;height:auto;
+ transform:translateX(-50%);
+ object-fit:contain;
+}
+
+/* KAELIOS */
+#nexus41Kaelios{
+ position:absolute;
+ z-index:22;
+ width:104px;height:150px;
+ transform:translate(-50%,-74%);
+ pointer-events:none;
+ will-change:left,top;
+}
+#nexus41Kaelios::after{
+ content:"";
+ position:absolute;
+ left:50%;bottom:2px;
+ width:64px;height:19px;
+ transform:translateX(-50%);
+ border-radius:50%;
+ background:rgba(0,0,0,.42);
+ filter:blur(3px);
+ z-index:-1;
+}
+#nexus41Kaelios img{
+ width:100%;height:100%;
+ object-fit:contain;
+ object-position:center bottom;
+ filter:drop-shadow(0 0 10px rgba(143,91,241,.20));
+}
+#nexus41Kaelios.walking img{
+ animation:nexus41KaeliosBob .30s ease-in-out infinite alternate;
+}
+@keyframes nexus41KaeliosBob{
+ from{translate:0 0}
+ to{translate:0 -3px}
+}
+
+/* HUD */
+.nexus41Hud{
+ position:absolute;
+ z-index:60;
+ top:max(10px,env(safe-area-inset-top));
+ left:max(10px,env(safe-area-inset-left));
+ right:max(10px,env(safe-area-inset-right));
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ pointer-events:none;
+}
+.nexus41HudTitle{
+ text-shadow:0 2px 12px #000;
+}
+.nexus41HudTitle span{
+ display:block;
+ color:#b8a4ff;
+ font-size:8px;
+ font-weight:900;
+ letter-spacing:.26em;
+}
+.nexus41HudTitle strong{
+ display:block;
+ margin-top:2px;
+ font-size:25px;
+ letter-spacing:.08em;
+}
+#nexus41HudStats{
+ padding:6px 9px;
+ border:1px solid rgba(190,161,255,.16);
+ border-radius:10px;
+ background:rgba(7,6,17,.70);
+ text-align:right;
+ font-size:9px;
+ font-weight:800;
+ line-height:1.45;
+}
+
+#nexus41Objective{
+ position:absolute;
+ z-index:61;
+ top:calc(max(10px,env(safe-area-inset-top)) + 58px);
+ left:50%;
+ transform:translateX(-50%);
+ padding:7px 12px;
+ border:1px solid rgba(179,151,255,.18);
+ border-radius:30px;
+ background:rgba(7,6,18,.72);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:.17em;
+ text-align:center;
+ pointer-events:none;
+ opacity:0;
+ transition:opacity .2s ease;
+}
+#nexus41Objective.active{opacity:1}
+
+/* LOCATION toast */
+#nexus41Location{
+ position:absolute;
+ z-index:59;
+ left:50%;top:22%;
+ transform:translate(-50%,-50%);
+ text-align:center;
+ pointer-events:none;
+ opacity:0;
+ transition:opacity .4s ease;
+ text-shadow:0 2px 12px #000;
+}
+#nexus41Location.active{opacity:1}
+#nexus41Location strong{
+ display:block;
+ font-size:19px;
+ letter-spacing:.17em;
+}
+#nexus41Location span{
+ display:block;margin-top:4px;
+ color:#aaa1bb;
+ font-size:9px;
+ letter-spacing:.13em;
+}
+
+/* Joystick */
+#nexus41JoystickBase{
+ position:absolute;
+ z-index:70;
+ left:max(18px,calc(env(safe-area-inset-left) + 12px));
+ bottom:max(18px,calc(env(safe-area-inset-bottom) + 12px));
+ width:118px;height:118px;
+ border-radius:50%;
+ border:1px solid rgba(190,162,255,.22);
+ background:rgba(12,10,29,.57);
+ box-shadow:inset 0 0 20px rgba(137,96,220,.08);
+ touch-action:none;
+ user-select:none;
+}
+#nexus41JoystickKnob{
+ position:absolute;
+ left:50%;top:50%;
+ width:52px;height:52px;
+ margin:-26px 0 0 -26px;
+ border-radius:50%;
+ border:1px solid rgba(218,202,255,.32);
+ background:rgba(107,74,174,.63);
+ box-shadow:0 0 15px rgba(139,92,221,.18);
+ transform:translate3d(0,0,0);
+}
+
+#nexus41Interact{
+ position:absolute;
+ z-index:70;
+ right:max(18px,calc(env(safe-area-inset-right) + 12px));
+ bottom:max(24px,calc(env(safe-area-inset-bottom) + 18px));
+ width:104px;height:56px;
+ border-radius:18px;
+ border:1px solid rgba(187,154,255,.30);
+ background:rgba(30,20,53,.90);
+ color:#fff;
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:.10em;
+ opacity:.35;
+ pointer-events:none;
+}
+#nexus41Interact.active{
+ opacity:1;
+ pointer-events:auto;
+}
+
+/* DIALOGHI — standard TU/KAELIOS */
+#nexus41Dialogue{
+ position:absolute;
+ z-index:100;
+ inset:0;
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+ padding:
+  18px
+  max(14px,env(safe-area-inset-right))
+  max(18px,calc(env(safe-area-inset-bottom) + 12px))
+  max(14px,env(safe-area-inset-left));
+ background:linear-gradient(180deg,rgba(2,2,8,.08),rgba(2,2,8,.56));
+ opacity:0;visibility:hidden;pointer-events:none;
+}
+#nexus41Dialogue.active{
+ opacity:1;visibility:visible;pointer-events:auto;
+}
+.nexus41DialogueCard{
+ width:min(620px,100%);
+ padding:15px 15px 13px;
+ border:1px solid rgba(188,155,255,.27);
+ border-radius:17px;
+ background:linear-gradient(180deg,rgba(24,16,45,.97),rgba(8,6,18,.98));
+ box-shadow:0 18px 60px rgba(0,0,0,.45);
+}
+#nexus41Speaker{
+ color:#c4afff;
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:.22em;
+}
+#nexus41Text{
+ margin-top:8px;
+ min-height:48px;
+ font-size:14px;
+ line-height:1.48;
+ color:#f2edf8;
+}
+#nexus41Continue{
+ width:100%;
+ min-height:43px;
+ margin-top:11px;
+ border-radius:12px;
+ border:1px solid rgba(180,144,255,.34);
+ background:rgba(93,56,152,.30);
+ color:#fff;
+ font-weight:900;
+ font-size:11px;
+ letter-spacing:.13em;
+}
+#nexus41Choices{
+ display:none;
+ grid-template-columns:1fr;
+ gap:7px;
+ margin-top:11px;
+}
+#nexus41Choices.active{display:grid}
+.nexus41Choice{
+ min-height:46px;
+ padding:9px 11px;
+ border-radius:12px;
+ border:1px solid rgba(180,145,255,.30);
+ background:rgba(33,23,57,.92);
+ color:#fff;
+ font-size:11px;
+ font-weight:800;
+ line-height:1.3;
+}
+
+/* Interazione POI */
+#nexus41Panel{
+ position:absolute;inset:0;z-index:95;
+ display:flex;align-items:center;justify-content:center;
+ padding:18px;
+ background:rgba(2,2,8,.82);
+ opacity:0;visibility:hidden;pointer-events:none;
+}
+#nexus41Panel.active{
+ opacity:1;visibility:visible;pointer-events:auto;
+}
+.nexus41PanelCard{
+ width:min(390px,92vw);
+ padding:20px;
+ border:1px solid rgba(186,153,255,.26);
+ border-radius:19px;
+ background:linear-gradient(180deg,#17102d,#080613);
+ text-align:center;
+}
+.nexus41PanelCard .eyebrow{
+ color:#beaaff;
+ font-size:9px;font-weight:900;letter-spacing:.22em;
+}
+#nexus41PanelTitle{
+ margin-top:7px;
+ font-size:25px;
+ line-height:1.05;
+}
+#nexus41PanelText{
+ margin-top:9px;
+ color:#b9b1c7;
+ font-size:12px;
+ line-height:1.55;
+}
+#nexus41PanelClose{
+ width:100%;
+ margin-top:15px;
+ min-height:43px;
+}
+
+/* Arrivo */
+#nexus41ArrivalFx{
+ position:absolute;inset:0;z-index:120;
+ display:flex;align-items:center;justify-content:center;
+ pointer-events:none;
+ background:#020107;
+ opacity:0;visibility:hidden;
+}
+#nexus41ArrivalFx.active{
+ visibility:visible;
+ animation:nexus41Arrival 1.35s ease both;
+}
+#nexus41ArrivalFx::before{
+ content:"";
+ width:14px;height:70vh;
+ background:linear-gradient(180deg,transparent,#d8c6ff 32%,#8247ff 58%,transparent);
+ filter:blur(3px) drop-shadow(0 0 22px #9257ff);
+ transform:rotate(12deg);
+}
+@keyframes nexus41Arrival{
+ 0%{opacity:1}
+ 38%{opacity:1}
+ 100%{opacity:0}
+}
+
+@media(min-width:850px){
+ #nexus41JoystickBase{width:104px;height:104px}
+ #nexus41Player{width:104px;height:155px}
+ #nexus41Kaelios{width:116px;height:168px}
+}
+@media(max-height:700px){
+ #nexus41JoystickBase{
+  width:96px;height:96px;
+ }
+ #nexus41JoystickKnob{
+  width:44px;height:44px;
+  margin:-22px 0 0 -22px;
+ }
+ #nexus41Player{width:78px;height:116px}
+ #nexus41Kaelios{width:88px;height:128px}
+ #nexus41Text{font-size:13px;min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){
+ .nexus41Portal,
+ #nexus41Player.moving #nexus41PlayerVisual,
+ #nexus41Kaelios.walking img{animation:none}
+}
+</style>
+
+<section id="nexusV41" aria-hidden="true">
+ <div id="nexus41Viewport">
+  <div id="nexus41World">
+   <div id="nexus41ChunkLayer"></div>
+
+   <!-- Connessioni principali -->
+   <div class="nexus41Path" style="left:1800px;top:2810px;width:1010px;transform:rotate(-90deg)"></div>
+   <div class="nexus41Path" style="left:1770px;top:1770px;width:910px;transform:rotate(179deg)"></div>
+   <div class="nexus41Path" style="left:1830px;top:1770px;width:930px;transform:rotate(1deg)"></div>
+   <div class="nexus41Path" style="left:1800px;top:1510px;width:760px;transform:rotate(-90deg)"></div>
+   <div class="nexus41Path" style="left:2260px;top:1260px;width:720px;transform:rotate(-42deg)"></div>
+
+   <!-- Varco Zero -->
+   <div class="nexus41Platform small" style="left:1800px;top:2940px"></div>
+   <div class="nexus41ZeroRift" style="left:1800px;top:2940px"></div>
+   <div class="nexus41ZoneLabel" style="left:1800px;top:3130px">
+    <strong>VARCO ZERO</strong><span>PUNTO DI INGRESSO</span>
+   </div>
+
+   <!-- Nucleo -->
+   <div class="nexus41Platform core" style="left:1800px;top:1800px"></div>
+   <div class="nexus41ZoneLabel" style="left:1800px;top:1800px">
+    <strong>NUCLEO</strong><span>CUORE DEL NEXUS</span>
+   </div>
+
+   <!-- Archivio -->
+   <div class="nexus41Platform small" style="left:830px;top:1800px"></div>
+   <div class="nexus41Structure nexus41Archive" style="left:830px;top:1770px"></div>
+   <div class="nexus41ZoneLabel" style="left:830px;top:2005px">
+    <strong>ARCHIVIO DELLE FORME</strong><span>OUTFIT E ASPETTI TEMPORALI</span>
+   </div>
+
+   <!-- Risonanza -->
+   <div class="nexus41Platform small" style="left:2770px;top:1800px"></div>
+   <div class="nexus41Structure nexus41Resonance" style="left:2770px;top:1770px"></div>
+   <div class="nexus41ZoneLabel" style="left:2770px;top:2010px">
+    <strong>CAMERA DI RISONANZA</strong><span>TRASFORMAZIONI</span>
+   </div>
+
+   <!-- Portali -->
+   <div class="nexus41Platform small" style="left:1800px;top:770px"></div>
+   <div class="nexus41Structure nexus41PortalHub" style="left:1800px;top:750px">
+    <div class="nexus41Portal p1"></div>
+    <div class="nexus41Portal p2 locked"></div>
+    <div class="nexus41Portal p3 locked"></div>
+   </div>
+   <div class="nexus41ZoneLabel" style="left:1800px;top:990px">
+    <strong>CONVERGENZA</strong><span>ACCESSO ALLE REALTÀ</span>
+   </div>
+
+   <!-- Area sigillata -->
+   <div class="nexus41Platform small" style="left:2910px;top:770px"></div>
+   <div class="nexus41Structure nexus41Sealed" style="left:2910px;top:750px"></div>
+   <div class="nexus41ZoneLabel" style="left:2910px;top:980px">
+    <strong>SETTORE SIGILLATO</strong><span>ACCESSO NON AUTORIZZATO</span>
+   </div>
+
+   <!-- PG + Kaelios -->
+   <div id="nexus41Player">
+    <div id="nexus41PlayerVisual">
+     <img id="nexus41PlayerBody" alt="">
+     <img id="nexus41PlayerHair" alt="">
+    </div>
+   </div>
+
+   <div id="nexus41Kaelios">
+    <img src="./Kaelios.png" alt="Kaelios">
+   </div>
+  </div>
+ </div>
+
+ <div class="nexus41Hud">
+  <div class="nexus41HudTitle">
+   <span>TRA LE LINEE TEMPORALI</span>
+   <strong>NEXUS</strong>
+  </div>
+  <div id="nexus41HudStats"></div>
+ </div>
+
+ <div id="nexus41Objective"></div>
+
+ <div id="nexus41Location">
+  <strong></strong><span></span>
+ </div>
+
+ <div id="nexus41JoystickBase">
+  <div id="nexus41JoystickKnob"></div>
+ </div>
+
+ <button id="nexus41Interact" type="button">INTERAGISCI</button>
+
+ <div id="nexus41Dialogue" aria-hidden="true">
+  <div class="nexus41DialogueCard">
+   <div id="nexus41Speaker">KAELIOS</div>
+   <div id="nexus41Text"></div>
+   <button id="nexus41Continue" type="button">CONTINUA</button>
+   <div id="nexus41Choices"></div>
+  </div>
+ </div>
+
+ <div id="nexus41Panel" aria-hidden="true">
+  <div class="nexus41PanelCard">
+   <div class="eyebrow">NEXUS</div>
+   <div id="nexus41PanelTitle"></div>
+   <div id="nexus41PanelText"></div>
+   <button id="nexus41PanelClose" type="button">CHIUDI</button>
+  </div>
+ </div>
+
+ <div id="nexus41ArrivalFx"></div>
+</section>
+
+<script>
+(function(){
+ const nexus=document.getElementById("nexusV41");
+ if(!nexus)return;
+
+ const viewport=document.getElementById("nexus41Viewport");
+ const world=document.getElementById("nexus41World");
+ const chunkLayer=document.getElementById("nexus41ChunkLayer");
+ const player=document.getElementById("nexus41Player");
+ const pBody=document.getElementById("nexus41PlayerBody");
+ const pHair=document.getElementById("nexus41PlayerHair");
+ const kaelios=document.getElementById("nexus41Kaelios");
+ const hudStats=document.getElementById("nexus41HudStats");
+ const objective=document.getElementById("nexus41Objective");
+ const locationToast=document.getElementById("nexus41Location");
+ const joyBase=document.getElementById("nexus41JoystickBase");
+ const joyKnob=document.getElementById("nexus41JoystickKnob");
+ const interact=document.getElementById("nexus41Interact");
+
+ const dlg=document.getElementById("nexus41Dialogue");
+ const dlgSpeaker=document.getElementById("nexus41Speaker");
+ const dlgText=document.getElementById("nexus41Text");
+ const dlgContinue=document.getElementById("nexus41Continue");
+ const dlgChoices=document.getElementById("nexus41Choices");
+
+ const panel=document.getElementById("nexus41Panel");
+ const panelTitle=document.getElementById("nexus41PanelTitle");
+ const panelText=document.getElementById("nexus41PanelText");
+ const panelClose=document.getElementById("nexus41PanelClose");
+ const arrivalFx=document.getElementById("nexus41ArrivalFx");
+
+ const WORLD_W=3600, WORLD_H=3600, CHUNK=600;
+ const MAP_KEY="whatIfUniverse_nexus_map_v41";
+ const REL_KEY="whatIfUniverse_relationship_v41";
+
+ let active=false;
+ let playerX=1800,playerY=3020;
+ let velocityX=0,velocityY=0;
+ let keyX=0,keyY=0;
+ let joyX=0,joyY=0;
+ let joyPointer=null;
+ let lastT=0,raf=0;
+
+ let kaeliosX=1710,kaeliosY=2970;
+ let guideActive=false;
+ let guideIndex=0;
+ let guideFinished=false;
+ let coreDialogueDone=false;
+ let currentPoi=null;
+ let controlsLocked=true;
+ let lastLocation="";
+ let locationTimer=null;
+
+ let dialogueSteps=[];
+ let dialogueIndex=0;
+ let dialogueDone=null;
+ let currentChoiceStep=null;
+
+ const guideWaypoints=[
+  {x:1740,y:2740},
+  {x:1760,y:2420},
+  {x:1785,y:2110},
+  {x:1800,y:1840}
+ ];
+
+ const POIS=[
+  {
+   id:"zero",x:1800,y:2940,r:175,
+   name:"VARCO ZERO",sub:"PUNTO DI INGRESSO",
+   title:"VARCO ZERO",
+   text:"La frattura da cui tu e Kaelios siete arrivati nel Nexus. Per ora è instabile e non può essere riaperta manualmente."
+  },
+  {
+   id:"core",x:1800,y:1800,r:245,
+   name:"NUCLEO",sub:"CUORE DEL NEXUS",
+   title:"NUCLEO",
+   text:"Il punto centrale del Nexus. Da qui si diramano le principali aree della mappa."
+  },
+  {
+   id:"archive",x:830,y:1800,r:190,
+   name:"ARCHIVIO DELLE FORME",sub:"OUTFIT E ASPETTI TEMPORALI",
+   title:"ARCHIVIO DELLE FORME",
+   text:"Qui potrai ricostruire e acquistare outfit provenienti dalle realtà visitate usando le gemme raccolte durante il viaggio."
+  },
+  {
+   id:"resonance",x:2770,y:1800,r:190,
+   name:"CAMERA DI RISONANZA",sub:"TRASFORMAZIONI",
+   title:"CAMERA DI RISONANZA",
+   text:"Qui verranno gestite le trasformazioni e le forme energetiche che riuscirai a stabilizzare durante le varie realtà."
+  },
+  {
+   id:"portals",x:1800,y:770,r:205,
+   name:"CONVERGENZA",sub:"ACCESSO ALLE REALTÀ",
+   title:"CONVERGENZA",
+   text:"Il primo portale reagisce alla tua firma temporale. Gli altri restano sigillati finché nuove realtà non vengono stabilizzate."
+  },
+  {
+   id:"sealed",x:2910,y:770,r:190,
+   name:"SETTORE SIGILLATO",sub:"ACCESSO NON AUTORIZZATO",
+   title:"SETTORE SIGILLATO",
+   text:"L'accesso a questa zona è bloccato. Kaelios non ti ha ancora spiegato cosa si trovi al suo interno."
+  }
+ ];
+
+ const hairRig={
+  male:{
+   1:{w:52.7,l:47.5,t:-11.0},
+   2:{w:57.1,l:47.5,t:-12.0},
+   3:{w:61.5,l:47.5,t:-5.5}
+  },
+  female:{
+   1:{w:58.2,l:47.8,t:-3.5},
+   2:{w:94.5,l:50,t:1.0},
+   3:{w:62.6,l:47.8,t:-1.5}
+  }
+ };
+
+ const hairFilters={
+  black:"brightness(.72) saturate(.35) contrast(1.16)",
+  brown:"sepia(.82) saturate(1.55) hue-rotate(338deg) brightness(.78) contrast(1.06)",
+  blonde:"sepia(1) saturate(2.15) hue-rotate(348deg) brightness(1.38) contrast(.88)",
+  red:"sepia(.85) saturate(3.1) hue-rotate(318deg) brightness(.88) contrast(1.02)",
+  white:"grayscale(1) brightness(1.65) contrast(.72)",
+  blue:"saturate(2.25) hue-rotate(2deg) brightness(1.08) contrast(1.02)",
+  purple:"saturate(2.1) hue-rotate(48deg) brightness(1.03) contrast(1.02)",
+  pink:"saturate(1.8) hue-rotate(78deg) brightness(1.25) contrast(.92)"
+ };
+
+ function getCharacter(){
+  if(typeof getPlayerCharacterV33==="function"){
+   const c=getPlayerCharacterV33();
+   if(c)return c;
+  }
+  if(window.pendingCharacterV32)return window.pendingCharacterV32;
+  return{name:"PLAYER",sex:"male",hair:1,hairColor:"black",outfit:1};
+ }
+
+ function getPlayerName(){
+  const c=getCharacter();
+  return String(c.name||"PLAYER").trim()||"PLAYER";
+ }
+
+ function getBodySrc(c){
+  const f=c.sex==="female";
+  const o=[1,2,3].includes(Number(c.outfit))?Number(c.outfit):1;
+  if(f){
+   if(o===2)return "./female_outfit_02.png";
+   if(o===3)return "./female_outfit_03.png";
+   return "./base_female.png";
+  }
+  if(o===2)return "./male_outfit_02.png";
+  if(o===3)return "./male_outfit_03.png";
+  return "./base_male.png";
+ }
+
+ function getHairSrc(c){
+  const h=[1,2,3].includes(Number(c.hair))?Number(c.hair):1;
+  if(c.sex==="female"){
+   if(h===2)return "./hair_female_02_clean.png";
+   return "./hair_female_0"+h+".png";
+  }
+  return "./hair_male_0"+h+".png";
+ }
+
+ function renderPlayer(){
+  const c=getCharacter();
+  pBody.src=getBodySrc(c);
+  pHair.src=getHairSrc(c);
+  pHair.style.filter=hairFilters[c.hairColor]||hairFilters.black;
+
+  const sex=c.sex==="female"?"female":"male";
+  const h=[1,2,3].includes(Number(c.hair))?Number(c.hair):1;
+  const rig=hairRig[sex][h];
+
+  function syncHair(){
+   const W=player.clientWidth,H=player.clientHeight;
+   if(!pBody.naturalWidth||!pBody.naturalHeight||!W||!H)return;
+   const s=Math.min(W/pBody.naturalWidth,H/pBody.naturalHeight);
+   const bw=pBody.naturalWidth*s,bh=pBody.naturalHeight*s;
+   const bl=(W-bw)/2,bt=H-bh;
+   pHair.style.width=(bw*rig.w/100)+"px";
+   pHair.style.left=(bl+bw*rig.l/100)+"px";
+   pHair.style.top=(bt+bh*rig.t/100)+"px";
+  }
+
+  pBody.onload=syncHair;
+  pHair.onload=syncHair;
+  setTimeout(syncHair,70);
+
+  hudStats.innerHTML=
+   getPlayerName().toUpperCase()+"<br>"+
+   "LV."+((typeof playerLevelV25!=="undefined")?playerLevelV25:1)+
+   " • 💎 "+((typeof gems!=="undefined")?gems:0);
+ }
+
+ function seedFromPrologueAndLoadRelationship(){
+  let loaded=false;
+  try{
+   const raw=localStorage.getItem(REL_KEY);
+   if(raw){
+    const s=JSON.parse(raw);
+    if(typeof kaeliosTrust!=="undefined" && Number.isFinite(Number(s.trust))){
+     kaeliosTrust=Number(s.trust);
+    }
+    if(typeof protagonistIndependence!=="undefined" && Number.isFinite(Number(s.independence))){
+     protagonistIndependence=Number(s.independence);
+    }
+    loaded=true;
+   }
+  }catch(e){}
+  if(!loaded)saveRelationship();
+ }
+
+ function saveRelationship(){
+  try{
+   localStorage.setItem(REL_KEY,JSON.stringify({
+    trust:(typeof kaeliosTrust!=="undefined")?Number(kaeliosTrust)||0:0,
+    independence:(typeof protagonistIndependence!=="undefined")?Number(protagonistIndependence)||0:0,
+    savedAt:Date.now()
+   }));
+  }catch(e){}
+ }
+
+ function adjustRelationship(dt,di){
+  if(typeof kaeliosTrust!=="undefined")kaeliosTrust+=(Number(dt)||0);
+  if(typeof protagonistIndependence!=="undefined")protagonistIndependence+=(Number(di)||0);
+  saveRelationship();
+ }
+
+ function saveMap(){
+  try{
+   localStorage.setItem(MAP_KEY,JSON.stringify({
+    x:playerX,y:playerY,
+    guideFinished:!!guideFinished,
+    coreDialogueDone:!!coreDialogueDone,
+    savedAt:Date.now()
+   }));
+  }catch(e){}
+ }
+
+ function loadMap(){
+  try{
+   const raw=localStorage.getItem(MAP_KEY);
+   if(!raw)return false;
+   const s=JSON.parse(raw);
+   if(Number.isFinite(Number(s.x)))playerX=Number(s.x);
+   if(Number.isFinite(Number(s.y)))playerY=Number(s.y);
+   guideFinished=!!s.guideFinished;
+   coreDialogueDone=!!s.coreDialogueDone;
+   return true;
+  }catch(e){return false}
+ }
+
+ function resetArrivalPosition(){
+  playerX=1800;playerY=3020;
+  kaeliosX=1710;kaeliosY=2970;
+  guideIndex=0;
+  guideFinished=false;
+  coreDialogueDone=false;
+ }
+
+ /* ==========================================================
+    DIALOG ENGINE
+    ========================================================== */
+ function resolveText(v){
+  if(typeof v==="function")return String(v());
+  return String(v||"");
+ }
+
+ function showDialogue(steps,onDone){
+  dialogueSteps=Array.isArray(steps)?steps:[];
+  dialogueIndex=0;
+  dialogueDone=typeof onDone==="function"?onDone:null;
+  controlsLocked=true;
+  stopMovement();
+  dlg.classList.add("active");
+  dlg.setAttribute("aria-hidden","false");
+  showDialogueStep();
+ }
+
+ function hideDialogue(){
+  dlg.classList.remove("active");
+  dlg.setAttribute("aria-hidden","true");
+  dlgChoices.classList.remove("active");
+  dlgChoices.innerHTML="";
+  currentChoiceStep=null;
+ }
+
+ function showDialogueStep(){
+  if(dialogueIndex>=dialogueSteps.length){
+   hideDialogue();
+   const cb=dialogueDone;
+   dialogueDone=null;
+   if(cb)cb();
+   return;
+  }
+
+  const step=dialogueSteps[dialogueIndex];
+
+  if(step.choices){
+   currentChoiceStep=step;
+   dlgSpeaker.textContent=step.speaker||"";
+   dlgText.textContent=resolveText(step.text);
+   dlgContinue.style.display="none";
+   dlgChoices.innerHTML="";
+   dlgChoices.classList.add("active");
+
+   step.choices.forEach(choice=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="nexus41Choice";
+    b.textContent=resolveText(choice.text);
+    b.addEventListener("click",()=>{
+     dlgChoices.classList.remove("active");
+     dlgChoices.innerHTML="";
+     dlgContinue.style.display="block";
+     if(typeof choice.action==="function")choice.action();
+     dialogueIndex++;
+     if(choice.followup){
+      dialogueSteps.splice(dialogueIndex,0,...choice.followup);
+     }
+     showDialogueStep();
+    });
+    dlgChoices.appendChild(b);
+   });
+   return;
+  }
+
+  currentChoiceStep=null;
+  dlgChoices.classList.remove("active");
+  dlgChoices.innerHTML="";
+  dlgContinue.style.display="block";
+  dlgSpeaker.textContent=step.speaker||"";
+  dlgText.textContent=resolveText(step.text);
+ }
+
+ dlgContinue.addEventListener("click",()=>{
+  if(currentChoiceStep)return;
+  dialogueIndex++;
+  showDialogueStep();
+ });
+
+ function introDialogue(){
+  const n=()=>getPlayerName();
+
+  showDialogue([
+   {speaker:"TU",text:"Dove siamo?"},
+   {speaker:"KAELIOS",text:"Nel Nexus. È uno spazio tra le linee temporali. Qui le alterazioni della realtà sono molto più difficili da individuare."},
+   {speaker:"TU",text:"Quello che è successo prima... io lo ricordo ancora."},
+   {speaker:"KAELIOS",text:()=>`Ed è proprio questo il problema, ${n()}. Hai riscritto qualcosa che era già accaduto, ma la vecchia versione non è scomparsa dalla tua memoria.`},
+   {speaker:"KAELIOS",text:"Questo significa che ora la tua presenza lascia una traccia."},
+   {speaker:"TU",text:"Sono loro che ci stanno inseguendo?"},
+   {speaker:"KAELIOS",text:"Sì. I Custodi della Continuità. Intervengono quando una linea temporale viene alterata troppo."},
+   {speaker:"TU",text:"E perché inseguono te?"},
+   {speaker:"KAELIOS",text:"Perché io alteravo le realtà molto prima che arrivassi tu."},
+   {
+    speaker:"KAELIOS",
+    text:"Posso aiutarti a capire cosa ti sta succedendo. Ma da qui in avanti dovrai decidere quanto fidarti di me.",
+    choices:[
+     {
+      text:"Ti ho seguito fin qui. Dimmi cosa dobbiamo fare.",
+      action:()=>adjustRelationship(2,0),
+      followup:[
+       {speaker:"KAELIOS",text:"Allora cominciamo dalle basi."}
+      ]
+     },
+     {
+      text:"Ti ascolto, ma le decisioni le prendo io.",
+      action:()=>adjustRelationship(1,2),
+      followup:[
+       {speaker:"KAELIOS",text:"Meglio così. Qui seguire qualcuno alla cieca è il modo più veloce per finire nei guai."}
+      ]
+     },
+     {
+      text:"Prima voglio sapere cosa mi stai nascondendo.",
+      action:()=>adjustRelationship(-1,2),
+      followup:[
+       {speaker:"KAELIOS",text:"È giusto che tu lo chieda. Ma prima devi capire cosa stiamo rischiando."}
+      ]
+     }
+    ]
+   },
+   {speaker:"KAELIOS",text:"Vieni. Ti mostro il Nexus."}
+  ],()=>{
+   controlsLocked=false;
+   guideActive=true;
+   setObjective("SEGUI KAELIOS");
+  });
+ }
+
+ function coreDialogue(){
+  if(coreDialogueDone)return;
+  coreDialogueDone=true;
+  guideFinished=true;
+  guideActive=false;
+  setObjective("");
+
+  showDialogue([
+   {speaker:"KAELIOS",text:"Questo è il cuore del Nexus. Da qui possiamo raggiungere realtà diverse, purché siano abbastanza stabili da essere attraversate."},
+   {speaker:"TU",text:"E posso attraversarle anch'io?"},
+   {speaker:"KAELIOS",text:()=>`Fino a poco fa avrei detto di no. Dopo quello che hai fatto, ${getPlayerName()}... dobbiamo scoprirlo.`}
+  ],()=>{
+   controlsLocked=false;
+   showLocation("NUCLEO","IL NEXUS È ORA ESPLORABILE");
+   saveMap();
+  });
+ }
+
+ function setObjective(text){
+  if(text){
+   objective.textContent=text;
+   objective.classList.add("active");
+  }else{
+   objective.classList.remove("active");
+   objective.textContent="";
+  }
+ }
+
+ function showLocation(name,sub){
+  if(!name||name===lastLocation)return;
+  lastLocation=name;
+  locationToast.querySelector("strong").textContent=name;
+  locationToast.querySelector("span").textContent=sub||"";
+  locationToast.classList.add("active");
+  clearTimeout(locationTimer);
+  locationTimer=setTimeout(()=>locationToast.classList.remove("active"),1600);
+ }
+
+ /* ==========================================================
+    CHUNK RENDERING
+    ========================================================== */
+ function hash(a,b){
+  let x=(a*374761393+b*668265263)>>>0;
+  x=(x^(x>>13))*1274126177>>>0;
+  return (x^(x>>16))>>>0;
+ }
+
+ function chunkStyle(cx,cy){
+  const h=hash(cx,cy);
+  const a=10+(h%80);
+  const b=15+((h>>>7)%70);
+  const c=15+((h>>>14)%75);
+  const d=10+((h>>>20)%80);
+  return{
+   x1:a+"%",y1:b+"%",
+   x2:c+"%",y2:d+"%",
+   sx:(h%57)+"px",
+   sy:((h>>>8)%61)+"px",
+   rot:((h%26)-13)+"deg"
+  };
+ }
+
+ const liveChunks=new Map();
+
+ function renderChunks(){
+  const pcx=Math.floor(playerX/CHUNK);
+  const pcy=Math.floor(playerY/CHUNK);
+  const needed=new Set();
+
+  for(let y=pcy-2;y<=pcy+2;y++){
+   for(let x=pcx-2;x<=pcx+2;x++){
+    if(x<0||y<0||x>=WORLD_W/CHUNK||y>=WORLD_H/CHUNK)continue;
+    const key=x+","+y;
+    needed.add(key);
+    if(liveChunks.has(key))continue;
+
+    const s=chunkStyle(x,y);
+    const el=document.createElement("div");
+    el.className="nexus41Chunk";
+    el.style.left=(x*CHUNK)+"px";
+    el.style.top=(y*CHUNK)+"px";
+    el.style.setProperty("--nx1",s.x1);
+    el.style.setProperty("--ny1",s.y1);
+    el.style.setProperty("--nx2",s.x2);
+    el.style.setProperty("--ny2",s.y2);
+    el.style.setProperty("--sx",s.sx);
+    el.style.setProperty("--sy",s.sy);
+    el.style.setProperty("--rot",s.rot);
+    chunkLayer.appendChild(el);
+    liveChunks.set(key,el);
+   }
+  }
+
+  for(const [key,el] of liveChunks){
+   if(!needed.has(key)){
+    el.remove();
+    liveChunks.delete(key);
+   }
+  }
+ }
+
+ /* ==========================================================
+    MAP / CAMERA / MOVEMENT
+    ========================================================== */
+ function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+
+ function distance(ax,ay,bx,by){
+  return Math.hypot(ax-bx,ay-by);
+ }
+
+ function renderPositions(){
+  player.style.left=playerX+"px";
+  player.style.top=playerY+"px";
+  kaelios.style.left=kaeliosX+"px";
+  kaelios.style.top=kaeliosY+"px";
+
+  const vw=viewport.clientWidth||window.innerWidth;
+  const vh=viewport.clientHeight||window.innerHeight;
+
+  let camX=playerX-vw*.5;
+  let camY=playerY-vh*.48;
+
+  camX=clamp(camX,0,Math.max(0,WORLD_W-vw));
+  camY=clamp(camY,0,Math.max(0,WORLD_H-vh));
+
+  world.style.transform=`translate3d(${-camX}px,${-camY}px,0)`;
+ }
+
+ function updatePoi(){
+  let nearest=null,best=Infinity;
+
+  POIS.forEach(p=>{
+   const d=distance(playerX,playerY,p.x,p.y);
+   if(d<best){best=d;nearest=p}
+  });
+
+  if(nearest && best<nearest.r){
+   if(!currentPoi || currentPoi.id!==nearest.id){
+    showLocation(nearest.name,nearest.sub);
+   }
+   currentPoi=nearest;
+   interact.classList.add("active");
+   interact.textContent=nearest.id==="portals"?"PORTALI":"INTERAGISCI";
+  }else{
+   currentPoi=null;
+   interact.classList.remove("active");
+  }
+ }
+
+ function updateGuide(dt){
+  if(!guideActive || guideFinished)return;
+
+  const target=guideWaypoints[guideIndex];
+  if(!target){
+   coreDialogue();
+   return;
+  }
+
+  const playerDist=distance(playerX,playerY,kaeliosX,kaeliosY);
+
+  if(playerDist>315){
+   kaelios.classList.remove("walking");
+   return;
+  }
+
+  const dx=target.x-kaeliosX;
+  const dy=target.y-kaeliosY;
+  const d=Math.hypot(dx,dy);
+
+  if(d<18){
+   guideIndex++;
+   if(guideIndex>=guideWaypoints.length){
+    kaelios.classList.remove("walking");
+    coreDialogue();
+   }
+   return;
+  }
+
+  const speed=124;
+  kaeliosX+=dx/d*speed*dt;
+  kaeliosY+=dy/d*speed*dt;
+  kaelios.classList.add("walking");
+ }
+
+ function getMoveVector(){
+  let x=joyX+keyX;
+  let y=joyY+keyY;
+  const m=Math.hypot(x,y);
+  if(m>1){x/=m;y/=m}
+  return{x,y};
+ }
+
+ function stopMovement(){
+  joyX=joyY=keyX=keyY=0;
+  joyKnob.style.transform="translate3d(0,0,0)";
+  player.classList.remove("moving");
+ }
+
+ function tick(t){
+  if(!active){raf=0;return}
+  if(!lastT)lastT=t;
+  const dt=Math.min(.034,(t-lastT)/1000);
+  lastT=t;
+
+  if(!controlsLocked && !panel.classList.contains("active") && !dlg.classList.contains("active")){
+   const v=getMoveVector();
+   const moving=Math.abs(v.x)>.03||Math.abs(v.y)>.03;
+
+   if(moving){
+    const speed=235;
+    playerX=clamp(playerX+v.x*speed*dt,70,WORLD_W-70);
+    playerY=clamp(playerY+v.y*speed*dt,70,WORLD_H-70);
+    player.classList.add("moving");
+    if(v.x<-.08)player.classList.add("facingLeft");
+    if(v.x>.08)player.classList.remove("facingLeft");
+   }else{
+    player.classList.remove("moving");
+   }
+  }
+
+  updateGuide(dt);
+  renderPositions();
+  updatePoi();
+  renderChunks();
+
+  raf=requestAnimationFrame(tick);
+ }
+
+ /* Joystick analogico */
+ function updateJoy(clientX,clientY){
+  const r=joyBase.getBoundingClientRect();
+  const cx=r.left+r.width/2;
+  const cy=r.top+r.height/2;
+  let dx=clientX-cx,dy=clientY-cy;
+  const max=r.width*.32;
+  const d=Math.hypot(dx,dy)||1;
+  if(d>max){dx=dx/d*max;dy=dy/d*max}
+  joyX=dx/max;
+  joyY=dy/max;
+  joyKnob.style.transform=`translate3d(${dx}px,${dy}px,0)`;
+ }
+
+ joyBase.addEventListener("pointerdown",e=>{
+  if(controlsLocked)return;
+  joyPointer=e.pointerId;
+  try{joyBase.setPointerCapture(e.pointerId)}catch(err){}
+  updateJoy(e.clientX,e.clientY);
+ });
+ joyBase.addEventListener("pointermove",e=>{
+  if(e.pointerId!==joyPointer)return;
+  updateJoy(e.clientX,e.clientY);
+ });
+ function releaseJoy(e){
+  if(joyPointer!==null && e && e.pointerId!==joyPointer)return;
+  joyPointer=null;joyX=joyY=0;
+  joyKnob.style.transform="translate3d(0,0,0)";
+ }
+ joyBase.addEventListener("pointerup",releaseJoy);
+ joyBase.addEventListener("pointercancel",releaseJoy);
+ joyBase.addEventListener("lostpointercapture",()=>releaseJoy());
+
+ /* Tastiera */
+ const keys=new Set();
+ function recalcKeys(){
+  keyX=(keys.has("arrowright")||keys.has("d")?1:0)-(keys.has("arrowleft")||keys.has("a")?1:0);
+  keyY=(keys.has("arrowdown")||keys.has("s")?1:0)-(keys.has("arrowup")||keys.has("w")?1:0);
+  const m=Math.hypot(keyX,keyY);
+  if(m>1){keyX/=m;keyY/=m}
+ }
+
+ window.addEventListener("keydown",e=>{
+  if(!active)return;
+  const k=e.key.toLowerCase();
+  if(["arrowleft","arrowright","arrowup","arrowdown","w","a","s","d"].includes(k)){
+   e.preventDefault();keys.add(k);recalcKeys();
+  }
+  if((k==="e"||e.key==="Enter") && currentPoi && !controlsLocked){
+   e.preventDefault();openPoi(currentPoi);
+  }
+ });
+ window.addEventListener("keyup",e=>{
+  if(!active)return;
+  keys.delete(e.key.toLowerCase());recalcKeys();
+ });
+
+ function openPoi(p){
+  if(!p||controlsLocked)return;
+  stopMovement();
+
+  if(p.id==="portals"){
+   panelTitle.textContent="CONVERGENZA";
+   panelText.innerHTML=
+    "Il primo portale è abbastanza stabile da reagire alla tua firma temporale.<br><br>"+
+    "<b>REALTÀ 01 — LA LINEA SPEZZATA</b><br>"+
+    "Il collegamento con il primo mondo verrà costruito nella prossima fase.<br><br>"+
+    "Gli altri portali resteranno sigillati finché nuove realtà non verranno stabilizzate.";
+  }else{
+   panelTitle.textContent=p.title;
+   panelText.textContent=p.text;
+  }
+
+  panel.classList.add("active");
+  panel.setAttribute("aria-hidden","false");
+ }
+
+ interact.addEventListener("click",()=>{
+  if(currentPoi)openPoi(currentPoi);
+ });
+
+ panelClose.addEventListener("click",()=>{
+  panel.classList.remove("active");
+  panel.setAttribute("aria-hidden","true");
+ });
+
+ function playArrival(){
+  arrivalFx.classList.remove("active");
+  void arrivalFx.offsetWidth;
+  arrivalFx.classList.add("active");
+  setTimeout(()=>arrivalFx.classList.remove("active"),1400);
+ }
+
+ function hideOtherScreens(){
+  const creator=document.getElementById("creatorV30");
+  if(creator){
+   creator.classList.remove("active");
+   creator.setAttribute("aria-hidden","true");
+  }
+  const done=document.getElementById("creator30Done");
+  if(done){
+   done.classList.remove("active");
+   done.setAttribute("aria-hidden","true");
+  }
+  const teaser=document.getElementById("hubTeaserV241");
+  if(teaser){
+   teaser.classList.remove("active");
+   teaser.setAttribute("aria-hidden","true");
+   teaser.style.opacity="";
+   teaser.style.visibility="";
+   teaser.style.pointerEvents="";
+  }
+  const chapter=document.getElementById("chapterCompleteV238");
+  if(chapter){
+   chapter.classList.remove("active");
+   chapter.setAttribute("aria-hidden","true");
+   chapter.style.display="none";
+  }
+  const dev=document.getElementById("devPanelV25");
+  if(dev){
+   dev.classList.remove("active");
+   dev.setAttribute("aria-hidden","true");
+   dev.style.opacity="0";
+   dev.style.visibility="hidden";
+   dev.style.pointerEvents="none";
+  }
+ }
+
+ window.openNexusV41=function(opts={}){
+  const skipIntro=!!opts.skipIntro;
+  const newArrival=!!opts.newArrival;
+
+  hideOtherScreens();
+  seedFromPrologueAndLoadRelationship();
+
+  if(newArrival){
+   resetArrivalPosition();
+   try{localStorage.removeItem(MAP_KEY)}catch(e){}
+  }else{
+   if(!loadMap()){
+    playerX=1800;playerY=1980;
+    kaeliosX=1680;kaeliosY=1810;
+    guideFinished=true;
+    coreDialogueDone=true;
+   }else{
+    kaeliosX=1680;kaeliosY=1810;
+   }
+  }
+
+  renderPlayer();
+  active=true;
+  controlsLocked=skipIntro?false:true;
+  nexus.classList.add("active");
+  nexus.setAttribute("aria-hidden","false");
+
+  renderChunks();
+  renderPositions();
+
+  if(newArrival && !skipIntro){
+   playArrival();
+   setTimeout(introDialogue,820);
+  }else{
+   guideActive=false;
+   setObjective("");
+   showLocation("NUCLEO","HUB TEMPORALE");
+  }
+
+  if(!raf){
+   lastT=0;
+   raf=requestAnimationFrame(tick);
+  }
+ };
+
+ window.closeNexusV41=function(){
+  if(!active)return;
+  saveMap();
+  saveRelationship();
+  active=false;
+  controlsLocked=true;
+  stopMovement();
+  nexus.classList.remove("active");
+  nexus.setAttribute("aria-hidden","true");
+  if(raf){cancelAnimationFrame(raf);raf=0}
+ };
+
+ /* DEV -> NEXUS = salto diretto alla mappa, senza intro */
+ window.devNexusV253=function(){
+  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
+  if(typeof devClearScreensV255==="function")devClearScreensV255();
+  openNexusV41({skipIntro:true,newArrival:false});
+ };
+
+ /* Anche il vecchio dispatcher DEV deve finire sul nuovo Nexus */
+ if(typeof window.devShowTeaserV255==="function"){
+  const oldDevShow=window.devShowTeaserV255;
+  window.devShowTeaserV255=function(mode){
+   if(mode==="nexus"){
+    openNexusV41({skipIntro:true,newArrival:false});
+    return;
+   }
+   return oldDevShow(mode);
+  };
+ }
+
+ /* Reset DEV: pulisce anche Nexus + relazione */
+ if(typeof window.resetSaveV25==="function"){
+  const oldReset=window.resetSaveV25;
+  window.resetSaveV25=function(){
+   oldReset();
+   try{
+    localStorage.removeItem(MAP_KEY);
+    localStorage.removeItem(REL_KEY);
+   }catch(e){}
+   if(typeof kaeliosTrust!=="undefined")kaeliosTrust=0;
+   if(typeof protagonistIndependence!=="undefined")protagonistIndependence=0;
+  };
+ }
+
+ window.addEventListener("resize",()=>{
+  if(active){
+   renderPlayer();
+   renderPositions();
+  }
+ });
+
+ document.addEventListener("visibilitychange",()=>{
+  if(active && document.visibilityState==="hidden"){
+   saveMap();saveRelationship();stopMovement();
+  }
+ });
+ window.addEventListener("pagehide",()=>{
+  if(active){saveMap();saveRelationship()}
+ });
 })();
 </script>
 
