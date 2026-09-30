@@ -4969,6 +4969,478 @@ button:active{
     }
 }
 
+
+
+/* =========================================================
+   PROLOGUE CINEMATIC BACKDROPS V1_10_1_1
+   Layer dedicato dietro a tutto il gameplay.
+   ========================================================= */
+#prologueBackdropV191{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+    background:#03030a;
+}
+
+#prologueBackdropV191 .prologueBgImageV191{
+    position:absolute;
+    inset:-3%;
+    width:106%;
+    height:106%;
+    object-fit:cover;
+    object-position:center center;
+    opacity:.58;
+    filter:saturate(1.04) brightness(.72);
+    transform:scale(1.02);
+    transition:opacity .35s ease, filter .35s ease, transform .6s ease;
+}
+
+#prologueBackdropV191 .prologueBgShadeV191{
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(180deg,
+            rgba(3,2,10,.38) 0%,
+            rgba(4,3,12,.24) 22%,
+            rgba(5,4,14,.30) 48%,
+            rgba(4,3,12,.56) 72%,
+            rgba(2,2,8,.82) 100%),
+        radial-gradient(circle at 50% 18%,rgba(168,85,247,.12),transparent 36%);
+}
+
+#riftScene{
+    isolation:isolate;
+}
+
+/* Tutti gli elementi reali del prologo restano sopra al background */
+#riftCrack,
+#riftScene .riftKaelios,
+#riftScene .riftDialogue,
+#hubTeaserV241,
+#chapterCompleteV238,
+#gameOverV237,
+#rewriteGameV233,
+#rewriteFxV232{
+    z-index:2;
+}
+
+/* Overlay esterni del prologo: background separato e non invasivo */
+#timelineVision,
+#convergenceScreen{
+    background:
+        linear-gradient(rgba(3,2,10,.58),rgba(3,2,10,.78)),
+        var(--prologue-ext-bg, #05030c) center/cover no-repeat !important;
+}
+
+
+
+/* =========================================================
+   V1.10 — CINEMATIC PROLOGUE
+   Transizioni, camera drift, flash, letterbox, polvere.
+   Tutto pointer-events:none per non interferire col gameplay.
+   ========================================================= */
+
+/* Background base */
+#prologueBackdropV191{
+    z-index:0;
+}
+
+#prologueBackdropV191 .prologueBgImageV191{
+    will-change:transform,opacity,filter;
+    transform-origin:center center;
+}
+
+/* Effetto "camera" per ogni momento narrativo */
+#riftScene.bg-fracture #prologueBgImageV191{
+    animation:prologueFractureCamV110 10s ease-in-out infinite alternate;
+}
+#riftScene.bg-kaelios #prologueBgImageV191{
+    animation:prologueKaeliosCamV110 12s ease-in-out infinite alternate;
+}
+#riftScene.bg-run #prologueBgImageV191{
+    animation:prologueRunCamV110 4.8s linear infinite alternate;
+    filter:saturate(1.09) brightness(.70) contrast(1.04);
+}
+#riftScene.bg-alt #prologueBgImageV191{
+    animation:prologueAltCamV110 11s ease-in-out infinite alternate;
+}
+#riftScene.bg-nexus #prologueBgImageV191{
+    animation:prologueNexusCamV110 14s ease-in-out infinite alternate;
+    filter:saturate(1.05) brightness(.78);
+}
+
+@keyframes prologueFractureCamV110{
+    0%{transform:scale(1.045) translate3d(-.8%,0,0) rotate(-.15deg)}
+    100%{transform:scale(1.09) translate3d(.7%,-1.2%,0) rotate(.12deg)}
+}
+@keyframes prologueKaeliosCamV110{
+    0%{transform:scale(1.04) translate3d(0,.5%,0)}
+    100%{transform:scale(1.095) translate3d(0,-1.1%,0)}
+}
+@keyframes prologueRunCamV110{
+    0%{transform:scale(1.08) translate3d(-1.6%,1.1%,0)}
+    100%{transform:scale(1.15) translate3d(1.8%,-1.3%,0)}
+}
+@keyframes prologueAltCamV110{
+    0%{transform:scale(1.055) translate3d(-1%,.8%,0) rotate(-.1deg)}
+    100%{transform:scale(1.10) translate3d(1%,-.8%,0) rotate(.1deg)}
+}
+@keyframes prologueNexusCamV110{
+    0%{transform:scale(1.035) translate3d(0,1%,0)}
+    100%{transform:scale(1.075) translate3d(0,-.7%,0)}
+}
+
+/* Polvere/particelle leggere, senza immagini extra */
+#prologueBackdropV191 .prologueDustV110{
+    position:absolute;
+    inset:-10%;
+    z-index:2;
+    pointer-events:none;
+    opacity:.26;
+    background:
+        radial-gradient(circle at 12% 22%,rgba(255,255,255,.75) 0 1px,transparent 1.8px),
+        radial-gradient(circle at 31% 67%,rgba(222,205,255,.65) 0 1px,transparent 1.7px),
+        radial-gradient(circle at 58% 18%,rgba(255,255,255,.65) 0 1.2px,transparent 2px),
+        radial-gradient(circle at 78% 58%,rgba(196,174,255,.75) 0 1px,transparent 1.8px),
+        radial-gradient(circle at 91% 33%,rgba(255,255,255,.62) 0 1px,transparent 1.7px),
+        radial-gradient(circle at 43% 87%,rgba(216,197,255,.6) 0 1px,transparent 1.6px);
+    background-size:
+        180px 180px,
+        230px 230px,
+        260px 260px,
+        210px 210px,
+        300px 300px,
+        250px 250px;
+    animation:prologueDustMoveV110 18s linear infinite;
+}
+@keyframes prologueDustMoveV110{
+    from{transform:translate3d(0,0,0)}
+    to{transform:translate3d(-3%,4%,0)}
+}
+
+/* Flash di transizione fra immagini */
+#prologueCineFlashV110{
+    position:absolute;
+    inset:0;
+    z-index:18;
+    pointer-events:none;
+    opacity:0;
+    background:
+        radial-gradient(circle at 50% 42%,
+            rgba(255,255,255,.85) 0%,
+            rgba(218,191,255,.40) 20%,
+            rgba(124,75,205,.14) 43%,
+            transparent 68%);
+    mix-blend-mode:screen;
+}
+#prologueCineFlashV110.active{
+    animation:prologueFlashV110 .48s ease-out both;
+}
+@keyframes prologueFlashV110{
+    0%{opacity:0}
+    22%{opacity:.85}
+    100%{opacity:0}
+}
+
+/* Letterbox dinamico: atmosfera cinematografica, non copre UI */
+#prologueLetterboxV110{
+    position:absolute;
+    inset:0;
+    z-index:17;
+    pointer-events:none;
+}
+.prologueBarV110{
+    position:absolute;
+    left:0;
+    width:100%;
+    height:0;
+    background:rgba(0,0,0,.88);
+    transition:height .42s cubic-bezier(.2,.8,.2,1);
+}
+.prologueBarV110.top{top:0}
+.prologueBarV110.bottom{bottom:0}
+#riftScene.cinematic-bars .prologueBarV110{
+    height:max(18px,calc(env(safe-area-inset-top) * .25 + 14px));
+}
+
+/* Transizione breve del pannello dialoghi */
+#riftScene .riftDialogue{
+    will-change:transform,opacity;
+}
+#riftScene.scene-shift .riftDialogue{
+    animation:prologueDialogueShiftV110 .42s ease-out both;
+}
+@keyframes prologueDialogueShiftV110{
+    0%{opacity:.35;transform:translateY(8px) scale(.99)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Piccolo punch visivo durante RUN/QTE */
+#riftScene.bg-run #prologueBackdropV191::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+    background:
+        linear-gradient(90deg,
+            rgba(200,180,255,.08),
+            transparent 24%,
+            transparent 76%,
+            rgba(200,180,255,.08));
+    animation:prologueSpeedPulseV110 .9s ease-in-out infinite alternate;
+}
+@keyframes prologueSpeedPulseV110{
+    from{opacity:.22}
+    to{opacity:.55}
+}
+
+/* Visione e convergenza: reveal più morbido */
+#timelineVision.active{
+    animation:prologueVisionRevealV110 .6s ease-out both;
+}
+@keyframes prologueVisionRevealV110{
+    0%{opacity:0;filter:blur(6px)}
+    100%{opacity:1;filter:blur(0)}
+}
+
+#convergenceScreen:not(.hidden){
+    animation:prologueConvergenceRevealV110 .65s ease-out both;
+}
+@keyframes prologueConvergenceRevealV110{
+    0%{opacity:0;transform:scale(1.025)}
+    100%{opacity:1;transform:scale(1)}
+}
+
+/* Riduzione movimento per chi lo preferisce */
+@media (prefers-reduced-motion: reduce){
+    #prologueBackdropV191 .prologueBgImageV191,
+    #prologueBackdropV191 .prologueDustV110,
+    #riftScene.bg-run #prologueBackdropV191::after{
+        animation:none !important;
+    }
+}
+
+
+
+/* =========================================================
+   V1.10.1 — RISCRITTURA UI FIX
+   Evita sovrapposizioni dopo l'aumento dei font e mantiene
+   RIPROVA sempre visibile in caso di fallimento.
+   ========================================================= */
+
+/* Il minigame deve usare tutta l'altezza disponibile in modo controllato */
+#rewriteGameV233{
+    align-items:flex-start !important;
+    overflow:hidden !important;
+    padding:
+        calc(14px + env(safe-area-inset-top))
+        calc(14px + env(safe-area-inset-right))
+        calc(16px + env(safe-area-inset-bottom))
+        calc(14px + env(safe-area-inset-left)) !important;
+}
+
+#rewriteGameV233 .rwGameCard{
+    width:min(94vw,430px) !important;
+    max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 28px) !important;
+    margin:auto !important;
+    padding:8px 0 84px !important;
+    box-sizing:border-box !important;
+}
+
+/* Titolo ancora grande, ma non invade più l'area giocabile */
+#rewriteGameV233 .rwGameEyebrow{
+    font-size:11.5px !important;
+    line-height:1.15 !important;
+    margin-bottom:6px !important;
+}
+
+#rewriteGameV233 .rwGameTitle{
+    font-size:clamp(34px,10vw,48px) !important;
+    line-height:.96 !important;
+    letter-spacing:3px !important;
+    margin:0 0 7px !important;
+}
+
+#rewriteGameV233 .rwGameHint{
+    max-width:330px !important;
+    font-size:clamp(13px,3.8vw,15px) !important;
+    line-height:1.32 !important;
+    margin:0 auto 10px !important;
+}
+
+/* Timer più compatto */
+#rewriteGameV233 .rwTimeRowV234{
+    margin:0 auto 8px !important;
+}
+
+/* La parola da ricostruire resta ben separata dalle lettere */
+#rewriteGameV233 #rwSlotsV234{
+    margin:5px auto 8px !important;
+    flex-shrink:0 !important;
+}
+
+#rewriteGameV233 .rwSlotV234{
+    width:clamp(18px,5.5vw,25px) !important;
+    height:clamp(27px,7.8vw,34px) !important;
+    font-size:clamp(14px,4.4vw,18px) !important;
+}
+
+/* Area cliccabile delle lettere più compatta ma ancora comoda */
+#rewriteGameV233 #rwLettersV234{
+    width:min(90vw,370px) !important;
+    height:clamp(145px,25dvh,205px) !important;
+    margin:0 auto !important;
+    flex-shrink:1 !important;
+}
+
+#rewriteGameV233 .rwLetterV234{
+    width:42px !important;
+    height:42px !important;
+    font-size:17px !important;
+}
+
+/* Risultato leggibile senza spingere fuori il pulsante */
+#rewriteResultV233{
+    min-height:20px !important;
+    margin-top:7px !important;
+    font-size:13px !important;
+    line-height:1.25 !important;
+    letter-spacing:1.2px !important;
+}
+
+/* FALLIMENTO: il pulsante RIPROVA è sempre dentro lo schermo */
+#rewriteGameV233.failed #rwLettersV234{
+    opacity:.22 !important;
+    filter:blur(.4px);
+    pointer-events:none;
+}
+
+#rewriteGameV233.failed #rewriteResultV233{
+    position:absolute !important;
+    left:50% !important;
+    bottom:calc(72px + env(safe-area-inset-bottom)) !important;
+    transform:translateX(-50%) !important;
+    width:min(88vw,350px) !important;
+    z-index:30 !important;
+    margin:0 !important;
+    padding:7px 10px !important;
+    border-radius:12px !important;
+    background:rgba(9,5,18,.84) !important;
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+}
+
+#rewriteGameV233.failed #rewriteRetryV233{
+    display:block !important;
+    position:absolute !important;
+    left:50% !important;
+    bottom:calc(18px + env(safe-area-inset-bottom)) !important;
+    transform:translateX(-50%) !important;
+    z-index:31 !important;
+    width:min(86vw,320px) !important;
+    min-height:48px !important;
+    margin:0 !important;
+    padding:12px 18px !important;
+    font-size:15px !important;
+    font-weight:950 !important;
+    letter-spacing:1.4px !important;
+    color:#fff !important;
+    border:1px solid rgba(216,188,255,.58) !important;
+    background:rgba(72,34,112,.96) !important;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.40),
+        0 0 22px rgba(162,104,230,.22) !important;
+}
+
+/* Telefoni bassi: ulteriore compressione verticale */
+@media(max-height:720px){
+    #rewriteGameV233 .rwGameCard{
+        padding-top:2px !important;
+    }
+    #rewriteGameV233 .rwGameEyebrow{
+        font-size:10px !important;
+        margin-bottom:3px !important;
+    }
+    #rewriteGameV233 .rwGameTitle{
+        font-size:clamp(29px,8.8vw,39px) !important;
+        margin-bottom:4px !important;
+    }
+    #rewriteGameV233 .rwGameHint{
+        font-size:12px !important;
+        line-height:1.22 !important;
+        margin-bottom:6px !important;
+    }
+    #rewriteGameV233 #rwLettersV234{
+        height:clamp(125px,22dvh,165px) !important;
+    }
+    #rewriteGameV233 .rwLetterV234{
+        width:38px !important;
+        height:38px !important;
+        font-size:16px !important;
+    }
+}
+
+/* Schermi molto stretti */
+@media(max-width:380px){
+    #rewriteGameV233 .rwGameTitle{
+        font-size:32px !important;
+    }
+    #rewriteGameV233 .rwGameHint{
+        font-size:12.5px !important;
+    }
+}
+
+</style>
+
+
+<style id="externalAudioV112Style">
+/* =========================================================
+   V1.12 — EXTERNAL AUDIO SYSTEM
+   ========================================================= */
+#audioToggleV112{
+    position:fixed;
+    top:calc(10px + env(safe-area-inset-top));
+    left:50%;
+    transform:translateX(-50%);
+    z-index:999999;
+    width:40px;
+    height:40px;
+    padding:0;
+    border-radius:50%;
+    border:1px solid rgba(224,203,255,.44);
+    background:rgba(8,6,18,.84);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+    line-height:1;
+    box-shadow:
+        0 8px 26px rgba(0,0,0,.36),
+        0 0 18px rgba(168,115,238,.16);
+    backdrop-filter:blur(9px);
+    -webkit-backdrop-filter:blur(9px);
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    cursor:pointer;
+}
+#audioToggleV112:active{
+    transform:translateX(-50%) scale(.94);
+}
+#audioToggleV112.muted{
+    opacity:.58;
+}
+
+@media(max-width:360px){
+    #audioToggleV112{
+        width:36px;
+        height:36px;
+        font-size:17px;
+    }
+}
 </style>
 
 </head>
@@ -5688,6 +6160,17 @@ button:active{
 
 
     <div id="riftScene" class="screen hidden">
+        <div id="prologueBackdropV191" aria-hidden="true">
+            <img id="prologueBgImageV191" class="prologueBgImageV191"
+                 src="./frattura_cosmica_tra_rovine_celesti.png" alt="">
+            <div class="prologueBgShadeV191"></div>
+            <div class="prologueDustV110"></div>
+        </div>
+        <div id="prologueCineFlashV110" aria-hidden="true"></div>
+        <div id="prologueLetterboxV110" aria-hidden="true">
+            <div class="prologueBarV110 top"></div>
+            <div class="prologueBarV110 bottom"></div>
+        </div>
 
 
 
@@ -6539,6 +7022,9 @@ function chargeAttack(){
 
     );
 
+    /* SFX preciso: Kaelios inizia davvero a caricare l'attacco. */
+    if(window.WIUSoundV112) window.WIUSoundV112.startCharge();
+
 
 
     vibrate(
@@ -6586,6 +7072,12 @@ function chargeAttack(){
             "fly"
 
         );
+
+        /* SFX preciso: fine carica + lancio della sfera. */
+        if(window.WIUSoundV112){
+            window.WIUSoundV112.stopCharge();
+            window.WIUSoundV112.play("release");
+        }
 
 
 
@@ -6735,6 +7227,8 @@ function successQTE(){
 
     qteActive=false;
 
+    if(window.WIUSoundV112) window.WIUSoundV112.play("whoosh");
+
 
 
     clearTimeout(
@@ -6850,6 +7344,8 @@ function failQTE(){
 
 
     qteActive=false;
+
+    if(window.WIUSoundV112) window.WIUSoundV112.play("hit");
 
 
 
@@ -7373,6 +7869,8 @@ function beginPlayerCharge(event){
 
     playerCharging=true;
 
+    if(window.WIUSoundV112) window.WIUSoundV112.startCharge();
+
 
 
     chargeStart=
@@ -7611,6 +8109,11 @@ function releasePlayerCharge(
 
     playerCharging=false;
 
+    if(window.WIUSoundV112){
+        window.WIUSoundV112.stopCharge();
+        window.WIUSoundV112.play("release");
+    }
+
 
 
 
@@ -7790,6 +8293,8 @@ function resolvePlayerAttack(type){
         setTimeout(()=>{
 
 
+
+            if(window.WIUSoundV112) window.WIUSoundV112.play("hit");
 
             flashImpact();
 
@@ -8399,6 +8904,8 @@ function startRift(){
 
             );
 
+            if(window.WIUSoundV112) window.WIUSoundV112.play("fracture");
+
 
 
         });
@@ -8566,7 +9073,8 @@ function chooseRift(choice){
     if(choice==="stay"){
         kaeliosTrust++;
         startCineSequence([
-            {speaker:"???", text:"«Anomalia localizzata.»", visual:"fracture", effect:"shake"},
+            {speaker:"???", text:"«Anomalia localizzata.»", visual:"fracture", effect:"shake",
+                sfx:"anomaly"},
             {speaker:"KAELIOS", text:"«Dietro di me.»", visual:"kaelios"},
             {action:showStayChoice}
         ]);
@@ -8576,7 +9084,8 @@ function chooseRift(choice){
     kaeliosTrust--;
     startCineSequence([
         {text:"Ti volti e corri. Dietro di te, la frattura si allarga.", visual:"run"},
-        {speaker:"???", text:"«Finalmente.»", visual:"fracture", effect:"shake"},
+        {speaker:"???", text:"«Finalmente.»", visual:"fracture",
+            sfx:"anomaly", effect:"shake"},
         {action:startRunQTE}
     ]);
 }
@@ -8779,6 +9288,8 @@ document.addEventListener(
 
             playerCharging=false;
 
+            if(window.WIUSoundV112) window.WIUSoundV112.stopCharge();
+
 
 
             if(chargeFrame){
@@ -8975,6 +9486,10 @@ function successBranchDodge2(){
     branchQteActive2=false;
     clearTimeout(branchTimeout2);
     document.getElementById("branchQte").classList.remove("active");
+
+    /* SFX utente: secondo swoosh sulle schivate della sequenza RUN. */
+    if(window.WIUSoundV112) window.WIUSoundV112.play("whoosh2");
+
     vibrate(45);
 
     if(branchStep2===1){
@@ -9004,6 +9519,7 @@ function failBranchDodge2(){
 }
 
 function showTimelineVision2(){
+    if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite",.72);
     const vision=document.getElementById("timelineVision");
     const text=document.getElementById("visionText");
 
@@ -9151,6 +9667,10 @@ function cineShow(step){
     cineVisual(step.visual || "kaelios");
     cineSpeaker(step.speaker || "");
     e.text.innerHTML=step.text || "";
+
+    if(step.sfx && window.WIUSoundV112){
+        window.WIUSoundV112.play(step.sfx);
+    }
 
     e.cont.classList.add("cineContinue");
     e.cont.style.display=step.continue===false ? "none" : "block";
@@ -9410,6 +9930,11 @@ function finishCineDodge(success){
     cineSwipeActive=false;
     clearTimeout(cineSwipeTimer);
     document.getElementById("branchQte").classList.remove("active");
+
+    /* Ogni schivata riuscita ha il suo swoosh. */
+    if(success && window.WIUSoundV112){
+        window.WIUSoundV112.play("whoosh");
+    }
 
     if(entityCombatActive){
         document.getElementById("branchQteTitle").textContent="SCHIVA!";
@@ -9703,6 +10228,10 @@ function resetRewriteGameV233(){
     overlay.classList.remove("failed","success-v234");
     result.textContent="";
     retry.style.display="none";
+    retry.style.visibility="";
+    retry.style.opacity="";
+    retry.style.pointerEvents="";
+    retry.setAttribute("aria-hidden","true");
     document.getElementById("rwTimeFillV234").style.transform="scaleX(1)";
     document.getElementById("rwTimeTextV234").textContent="6.0s";
 
@@ -9710,6 +10239,7 @@ function resetRewriteGameV233(){
 }
 
 function openRewriteGameV233(onSuccess){
+    if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite");
     rewriteSuccessCallbackV233=onSuccess;
     rewriteGameActiveV233=true;
 
@@ -9802,6 +10332,7 @@ function succeedRewriteV234(){
     const result=document.getElementById("rewriteResultV233");
 
     overlay.classList.add("success-v234");
+    if(window.WIUSoundV112) window.WIUSoundV112.play("success");
     result.textContent="LINEA TEMPORALE AGGANCIATA";
     vibrate([30,20,70]);
 
@@ -9828,14 +10359,21 @@ function failRewriteV234(reason){
     const retry=document.getElementById("rewriteRetryV233");
 
     overlay.classList.add("failed");
+    if(window.WIUSoundV112) window.WIUSoundV112.play("fail");
     result.textContent=reason+"  •  -8 HP";
-    retry.style.display="inline-block";
+    retry.style.display="block";
+    retry.style.visibility="visible";
+    retry.style.opacity="1";
+    retry.style.pointerEvents="auto";
+    retry.setAttribute("aria-hidden","false");
 }
 
 function retryRewriteV233(){
-    if(document.getElementById("rewriteRetryV233").style.display==="none")return;
+    const overlay=document.getElementById("rewriteGameV233");
+    if(!overlay || !overlay.classList.contains("failed"))return;
 
     rewriteGameActiveV233=true;
+    if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite",.82);
     resetRewriteGameV233();
     rewriteGameEndV234=performance.now()+REWRITE_DURATION_V234;
     runRewriteTimerV234();
@@ -10295,6 +10833,7 @@ function prologueStrikeV239(){
     e.cont.onclick=null;
 
     cineVisual("kaelios");
+    if(window.WIUSoundV112) window.WIUSoundV112.play("hit");
     flashImpact();
     addShake(520);
     vibrate([70,35,110]);
@@ -10352,6 +10891,7 @@ function prologueDrainHpV239(){
 
         hp=beats[i];
         updateHP();
+        if(window.WIUSoundV112) window.WIUSoundV112.play("hit");
         flashImpact();
         addShake(i===2?500:260);
         vibrate(i===2?[120,45,160]:[65,25,80]);
@@ -10479,6 +11019,7 @@ function prologueChangedOutcomeV239(){
     cineSpeaker("");
     e.text.innerHTML="";
 
+    if(window.WIUSoundV112) window.WIUSoundV112.play("whoosh");
     flashImpact();
     addShake(260);
     vibrate([40,25,55]);
@@ -10506,7 +11047,8 @@ function prologueChangedOutcomeV239(){
             },
             {
                 text:"Kaelios apre un varco.",
-                visual:"rewind"
+                visual:"rewind",
+                sfx:"portal"
             },
             {
                 text:"Per la prima volta, scegli di attraversarlo.",
@@ -13416,6 +13958,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  function changeArea(target,spawnKey){
   if(!AREAS[target] || controlsLocked)return;
 
+  if(window.WIUSoundV112) window.WIUSoundV112.play("transition");
+
   controlsLocked=true;
   stopMovement();
   currentPoi=null;
@@ -13861,6 +14405,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(!p||controlsLocked)return;
   stopMovement();
 
+  if(window.WIUSoundV112){
+   const pid=String(p.id||"");
+   if(pid==="ascension" || pid.indexOf("portal")===0){
+    window.WIUSoundV112.play("portal");
+   }
+  }
+
   if(p.type==="exit"){
    changeArea(p.target,p.spawn);
    return;
@@ -14120,6 +14671,457 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 })();
 </script>
 
+
+
+
+
+
+<script>
+/* =========================================================
+   PROLOGUE CINEMATIC BACKDROPS V1_9_1_1
+   Background dinamici senza interferire con UI/gameplay.
+   ========================================================= */
+(function(){
+    const BGS={
+        fracture:"./frattura_cosmica_tra_rovine_celesti.png",
+        kaelios:"./vortice_cosmico_tra_rovine_stellari.png",
+        run:"./rovine_celesti_nel_vortice_cosmico.png",
+        alt:"./cattedrale_astrale_dei_mondi_frantumati.png",
+        nexus:"./cittadella_celeste_tra_le_stelle.png"
+    };
+
+    function setRiftBg(key){
+        const scene=document.getElementById("riftScene");
+        const img=document.getElementById("prologueBgImageV191");
+        const flash=document.getElementById("prologueCineFlashV110");
+        if(!img || !scene)return;
+
+        const finalKey=BGS[key]?key:"fracture";
+        const src=BGS[finalKey];
+
+        scene.classList.remove("bg-fracture","bg-kaelios","bg-run","bg-alt","bg-nexus","scene-shift");
+        scene.classList.add("bg-"+finalKey,"cinematic-bars");
+
+        void scene.offsetWidth;
+        scene.classList.add("scene-shift");
+        setTimeout(()=>scene.classList.remove("scene-shift"),460);
+
+        if(img.getAttribute("src")!==src){
+            if(flash){
+                flash.classList.remove("active");
+                void flash.offsetWidth;
+                flash.classList.add("active");
+                setTimeout(()=>flash.classList.remove("active"),520);
+            }
+
+            img.style.opacity=".10";
+
+            const preload=new Image();
+            preload.onload=()=>{
+                img.src=src;
+                requestAnimationFrame(()=>{
+                    img.style.opacity=".58";
+                });
+            };
+            preload.src=src;
+        }else{
+            img.style.opacity=".58";
+        }
+    }
+
+    function setExternalBg(id,key){
+        const el=document.getElementById(id);
+        if(!el)return;
+        el.style.setProperty("--prologue-ext-bg",'url("'+(BGS[key]||BGS.fracture)+'")');
+    }
+
+    function cinematicPulseV110(){
+        const flash=document.getElementById("prologueCineFlashV110");
+        if(!flash)return;
+        flash.classList.remove("active");
+        void flash.offsetWidth;
+        flash.classList.add("active");
+        setTimeout(()=>flash.classList.remove("active"),520);
+    }
+    window.cinematicPulseV110=cinematicPulseV110;
+
+
+    setRiftBg("fracture");
+    setExternalBg("timelineVision","run");
+    setExternalBg("convergenceScreen","alt");
+
+    if(typeof window.cineVisual==="function"){
+        const old=window.cineVisual;
+        window.cineVisual=function(mode){
+            const result=old.apply(this,arguments);
+
+            if(mode==="fracture") setRiftBg("fracture");
+            else if(mode==="run") setRiftBg("run");
+            else if(mode==="alt" || mode==="entity") setRiftBg("alt");
+            else if(mode==="rewind") setRiftBg("fracture");
+            else setRiftBg("kaelios");
+
+            return result;
+        };
+    }
+
+    if(typeof window.startRift==="function"){
+        const old=window.startRift;
+        window.startRift=function(){
+            setRiftBg("fracture");
+            return old.apply(this,arguments);
+        };
+    }
+
+    if(typeof window.showTimelineVision2==="function"){
+        const old=window.showTimelineVision2;
+        window.showTimelineVision2=function(){
+            setExternalBg("timelineVision","run");
+            return old.apply(this,arguments);
+        };
+    }
+
+    if(typeof window.beginConvergence2==="function"){
+        const old=window.beginConvergence2;
+        window.beginConvergence2=function(){
+            setExternalBg("convergenceScreen","alt");
+            return old.apply(this,arguments);
+        };
+    }
+
+    if(typeof window.completeChapterOneV238==="function"){
+        const old=window.completeChapterOneV238;
+        window.completeChapterOneV238=function(){
+            setRiftBg("nexus");
+            return old.apply(this,arguments);
+        };
+    }
+
+    const chapterContinue=document.getElementById("chapterContinueV241");
+    if(chapterContinue){
+        chapterContinue.addEventListener("click",()=>setRiftBg("nexus"),true);
+    }
+})();
+</script>
+
+<button id="audioToggleV112" type="button" aria-label="Disattiva audio" title="Audio">🔊</button>
+
+<script id="externalAudioV112Script">
+/* =========================================================
+   WHAT IF UNIVERSE — CUSTOM EXTERNAL SFX V1.14.2
+   File WAV reali caricati dalla root del progetto.
+   ========================================================= */
+(function(){
+    const STORE_KEY="whatIfUniverse_audio_enabled_v1142";
+
+    const FILES={
+        click:      {src:"./ui_click.wav",         volume:.52},
+        choice:     {src:"./choice_confirm.wav",   volume:.55},
+        fracture:   {src:"./frattura_ok.wav",      volume:.82},
+        whoosh:     {src:"./swoosh.wav",            volume:.72},
+        whoosh2:    {src:"./swoosh2.wav",           volume:.76},
+        hit:        {src:"./impact_hit.wav",        volume:.78},
+        charge:     {src:"./ki_charge_loop.wav",   volume:.68},
+        release:    {src:"./mystic_laser.wav",      volume:.72},
+        rewrite:    {src:"./rewrite_temporal.wav", volume:.68},
+        success:    {src:"./success.wav",          volume:.62},
+        fail:       {src:"./fail.wav",             volume:.68},
+        portal:     {src:"./portal_open.wav",      volume:.66},
+        transition: {src:"./nexus_transition.wav", volume:.58},
+        anomaly:    {src:"./anomaly_warning.wav",  volume:.64}
+    };
+
+    let enabled=true;
+    let unlocked=false;
+    let chargeAudio=null;
+    let chargePrepared=null;
+
+    try{
+        const saved=localStorage.getItem(STORE_KEY);
+        if(saved!==null)enabled=saved==="1";
+    }catch(e){}
+
+    const pools={};
+
+    function makeAudio(key){
+        const cfg=FILES[key];
+        if(!cfg)return null;
+
+        const a=new Audio(cfg.src);
+        a.preload="auto";
+        a.volume=cfg.volume;
+        a.playsInline=true;
+        return a;
+    }
+
+    function getPool(key){
+        if(pools[key])return pools[key];
+
+        const count=
+            key==="fracture" ? 6 :
+            (key==="click" || key==="choice" || key==="whoosh" || key==="whoosh2" || key==="hit") ? 4 : 2;
+        pools[key]=[];
+        for(let i=0;i<count;i++){
+            const a=makeAudio(key);
+            if(a)pools[key].push(a);
+        }
+        return pools[key];
+    }
+
+    function unlock(){
+        if(unlocked)return true;
+
+        /*
+          Sblocco robusto per Safari/Chrome mobile.
+          unlocked diventa true SOLO se il browser ha accettato il play.
+        */
+        const a=makeAudio("click");
+        if(!a)return false;
+
+        a.volume=0;
+
+        try{
+            const p=a.play();
+
+            if(p && typeof p.then==="function"){
+                p.then(()=>{
+                    unlocked=true;
+                    try{
+                        a.pause();
+                        a.currentTime=0;
+                    }catch(e){}
+                }).catch(()=>{
+                    unlocked=false;
+                });
+            }else{
+                unlocked=true;
+                try{
+                    a.pause();
+                    a.currentTime=0;
+                }catch(e){}
+            }
+        }catch(e){
+            unlocked=false;
+        }
+
+        return unlocked;
+    }
+
+    function play(key,volumeMul=1){
+        if(!enabled)return;
+
+        unlock();
+
+        const pool=getPool(key);
+        if(!pool || !pool.length)return;
+
+        let a=pool.find(x=>x.paused || x.ended);
+        if(!a)a=pool[0];
+
+        try{
+            a.pause();
+            a.currentTime=0;
+            a.volume=Math.max(0,Math.min(1,(FILES[key]?.volume||.6)*volumeMul));
+            const p=a.play();
+            if(p && typeof p.catch==="function")p.catch(()=>{});
+        }catch(e){}
+    }
+
+    function startCharge(){
+        if(!enabled)return;
+        unlock();
+
+        stopCharge();
+
+        /*
+          Usa un'istanza già preparata quando possibile: così su mobile
+          il suono di carica parte immediatamente al pointerdown.
+        */
+        chargeAudio=chargePrepared || makeAudio("charge");
+        chargePrepared=null;
+        if(!chargeAudio)return;
+
+        chargeAudio.loop=true;
+        chargeAudio.volume=FILES.charge.volume;
+
+        try{
+            chargeAudio.pause();
+            chargeAudio.currentTime=0;
+            const p=chargeAudio.play();
+            if(p && typeof p.catch==="function")p.catch(()=>{});
+        }catch(e){}
+    }
+
+    function stopCharge(){
+        if(chargeAudio){
+            try{
+                chargeAudio.pause();
+                chargeAudio.currentTime=0;
+            }catch(e){}
+            chargeAudio=null;
+        }
+
+        if(!chargePrepared){
+            chargePrepared=makeAudio("charge");
+            if(chargePrepared){
+                chargePrepared.preload="auto";
+                try{ chargePrepared.load(); }catch(e){}
+            }
+        }
+    }
+
+    function stopAll(){
+        stopCharge();
+        Object.values(pools).forEach(pool=>{
+            pool.forEach(a=>{
+                try{
+                    a.pause();
+                    a.currentTime=0;
+                }catch(e){}
+            });
+        });
+    }
+
+    function updateButton(){
+        const b=document.getElementById("audioToggleV112");
+        if(!b)return;
+        b.textContent=enabled?"🔊":"🔇";
+        b.classList.toggle("muted",!enabled);
+        b.setAttribute("aria-label",enabled?"Disattiva audio":"Attiva audio");
+        b.title=enabled?"Audio attivo":"Audio disattivato";
+    }
+
+    function setEnabled(value){
+        enabled=!!value;
+        try{localStorage.setItem(STORE_KEY,enabled?"1":"0")}catch(e){}
+        if(!enabled)stopAll();
+        else{
+            unlock();
+            play("click",.90);
+        }
+        updateButton();
+    }
+
+    /*
+      Primo gesto: sblocca esplicitamente l'audio.
+      capture=true così avviene prima degli handler del gioco.
+    */
+    function firstAudioGesture(){
+        unlock();
+    }
+
+    document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
+    document.addEventListener("touchstart",firstAudioGesture,{capture:true,passive:true});
+    document.addEventListener("click",firstAudioGesture,{capture:true,passive:true});
+
+    const toggle=document.getElementById("audioToggleV112");
+    if(toggle){
+        updateButton();
+
+        toggle.addEventListener("pointerdown",e=>{
+            e.stopPropagation();
+            unlock();
+        });
+
+        toggle.addEventListener("click",e=>{
+            e.preventDefault();
+            e.stopPropagation();
+            setEnabled(!enabled);
+        });
+    }
+
+    /*
+      Feedback UI di base.
+      Gli eventi narrativi importanti hanno poi il loro SFX specifico.
+    */
+    document.addEventListener("click",e=>{
+        if(!enabled)return;
+
+        const el=e.target.closest("button,.choice,.branchAction");
+        if(!el || el.id==="audioToggleV112")return;
+
+        if(
+            el.classList.contains("choice") ||
+            el.classList.contains("branchAction") ||
+            /choice/i.test(el.className||"")
+        ){
+            play("choice");
+        }else{
+            play("click");
+        }
+    },true);
+
+    function wrap(name,before,after){
+        const original=window[name];
+        if(typeof original!=="function")return false;
+
+        window[name]=function(){
+            if(before){
+                try{before.apply(this,arguments)}catch(e){}
+            }
+            const result=original.apply(this,arguments);
+            if(after){
+                try{after.apply(this,arguments)}catch(e){}
+            }
+            return result;
+        };
+        return true;
+    }
+
+
+    /*
+      SFX narrativi sincronizzati direttamente nei punti reali del gameplay.
+      Nessun suono viene più deciso soltanto dal cambio di visuale.
+    */
+
+    /* Sicurezza mobile */
+    document.addEventListener("visibilitychange",()=>{
+        if(document.hidden)stopCharge();
+    });
+
+    window.WIUSoundV112={
+        play,
+        startCharge,
+        stopCharge,
+        stopAll,
+        setEnabled,
+        isEnabled:()=>enabled,
+        files:FILES
+    };
+
+    /*
+      TRAMBUSTO V1.14.2:
+      ogni vera chiamata alla vibrazione riproduce frattura_ok.wav
+      a volume ridotto. L'apertura della frattura usa già lo stesso
+      file a volume pieno nel punto preciso della scena.
+    */
+    if(typeof window.vibrate==="function"){
+        const originalVibrateV1142=window.vibrate;
+
+        window.vibrate=function(pattern){
+            if(enabled){
+                play("fracture",.24);
+            }
+            return originalVibrateV1142.apply(this,arguments);
+        };
+    }
+
+    /*
+      Preload leggero dopo il load, senza bloccare il rendering.
+    */
+    window.addEventListener("load",()=>{
+        setTimeout(()=>{
+            Object.keys(FILES).forEach(key=>getPool(key));
+
+            chargePrepared=makeAudio("charge");
+            if(chargePrepared){
+                chargePrepared.preload="auto";
+                try{ chargePrepared.load(); }catch(e){}
+            }
+        },350);
+    });
+})();
+</script>
 
 </body>
 
