@@ -5894,6 +5894,68 @@ html.ios-lite-v115 #convergenceScreen:not(.hidden){
 }
 </style>
 
+
+<style id="iosRewritePerformanceV170">
+/* =========================================================
+   V1.7.0 — iOS RISCRITTURA PERFORMANCE TEST
+   Attivo SOLO su iPhone/iPad già marcati ios-lite-v115.
+   ========================================================= */
+
+/* Durante RISCRITTURA il prologo dietro diventa completamente statico. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueBgImageV191{
+    animation:none !important;
+    transition:none !important;
+    filter:none !important;
+    transform:scale(1.02) !important;
+    will-change:auto !important;
+}
+
+html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueDustV110,
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.bg-run #prologueBackdropV191::after,
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-entity::before,
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-alt::before,
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-alt::after,
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-rewind::after{
+    display:none !important;
+    animation:none !important;
+}
+
+/* Personaggi/crepa non servono mentre il minigioco copre la scena. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene .riftKaelios,
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene #riftCrack{
+    visibility:hidden !important;
+    opacity:0 !important;
+    animation:none !important;
+    filter:none !important;
+    will-change:auto !important;
+}
+
+/* Nessun effetto rewind viene compositato mentre il minigioco è attivo. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteFxV232{
+    display:none !important;
+}
+
+/* Sfondo RISCRITTURA più economico su Safari iOS. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233{
+    background:#05020d !important;
+}
+
+/* Semplifica i paint continui delle lettere senza cambiarne dimensione/hitbox. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwLetterV234{
+    box-shadow:none !important;
+    transition:opacity .08s ease, transform .08s ease !important;
+}
+
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwSlotV234.filled{
+    animation:none !important;
+    text-shadow:none !important;
+}
+
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 #rwTimeFillV234{
+    will-change:auto !important;
+}
+</style>
+
 </head>
 
 
@@ -10702,6 +10764,13 @@ function buildRewriteBoardV234(){
     });
 }
 
+
+function setRewriteIOSFocusV170(active){
+    const root=document.documentElement;
+    if(!root.classList.contains("ios-lite-v115"))return;
+    root.classList.toggle("rewrite-ios-focus-v170",!!active);
+}
+
 function resetRewriteGameV233(){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteGameIndexV234=0;
@@ -10728,6 +10797,7 @@ function openRewriteGameV233(onSuccess){
     if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite");
     rewriteSuccessCallbackV233=onSuccess;
     rewriteGameActiveV233=true;
+    setRewriteIOSFocusV170(true);
 
     // La RISCRITTURA vive dentro riftScene:
     // la rendiamo esplicitamente visibile prima di aprire il minigame.
@@ -10759,6 +10829,7 @@ function openFinalAutomaticRewriteV1(onSuccess){
 
     rewriteSuccessCallbackV233=onSuccess;
     rewriteGameActiveV233=true;
+    setRewriteIOSFocusV170(true);
 
     show("riftScene");
 
@@ -10839,14 +10910,44 @@ function openFinalAutomaticRewriteV1(onSuccess){
 function runRewriteTimerV234(){
     cancelAnimationFrame(rewriteGameRafV234);
 
+    const lagSafeIOS=document.documentElement.classList.contains("ios-lite-v115");
+    let lastFrameV170=performance.now();
+    let lastTextUpdateV170=0;
+
+    const fillV170=document.getElementById("rwTimeFillV234");
+    const textV170=document.getElementById("rwTimeTextV234");
+
     function tick(now){
         if(!rewriteGameActiveV233)return;
 
-        rewriteRemainingV234=Math.max(0,rewriteGameEndV234-now);
-        const ratio=Math.max(0,Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234));
+        /*
+          Su iPhone un freeze di Safari non deve consumare il timer.
+          Fino a 55ms/frame il tempo scorre normalmente; oltre quella
+          soglia recuperiamo solo la porzione persa per lag.
+        */
+        const deltaV170=Math.max(0,now-lastFrameV170);
+        lastFrameV170=now;
 
-        document.getElementById("rwTimeFillV234").style.transform=`scaleX(${ratio})`;
-        document.getElementById("rwTimeTextV234").textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
+        if(lagSafeIOS && deltaV170>55){
+            rewriteGameEndV234+=(deltaV170-55);
+        }
+
+        rewriteRemainingV234=Math.max(0,rewriteGameEndV234-now);
+        const ratio=Math.max(
+            0,
+            Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234)
+        );
+
+        fillV170.style.transform=`scaleX(${ratio})`;
+
+        /*
+          Il testo non ha bisogno di 60 aggiornamenti al secondo:
+          10 Hz è visivamente identico ma riduce layout/paint su Safari.
+        */
+        if(now-lastTextUpdateV170>=100 || rewriteRemainingV234<=0){
+            textV170.textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
+            lastTextUpdateV170=now;
+        }
 
         if(rewriteRemainingV234<=0){
             failRewriteV234("TEMPO ESAURITO");
@@ -10957,6 +11058,7 @@ function retryRewriteV233(){
 function closeRewriteGameV233(){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteGameActiveV233=false;
+    setRewriteIOSFocusV170(false);
 
     const overlay=document.getElementById("rewriteGameV233");
     overlay.classList.remove(
@@ -10991,6 +11093,7 @@ function checkGameOverV237(){
     cineSwipeActive=false;
     rewriteGameActiveV233=false;
     try{cancelAnimationFrame(rewriteGameRafV234)}catch(e){}
+    setRewriteIOSFocusV170(false);
 
     gameOverActiveV237=true;
 
