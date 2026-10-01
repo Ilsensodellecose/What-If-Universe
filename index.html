@@ -5869,6 +5869,31 @@ html.ios-lite-v115 #convergenceScreen:not(.hidden){
 }
 </style>
 
+
+<style id="rewriteTouchFixV16">
+/* =========================================================
+   V1.6 — RISCRITTURA: TOUCH FIX MOBILE
+   Il cerchio resta della stessa dimensione visiva, ma la zona
+   tappabile si estende di 8px per lato.
+   ========================================================= */
+#rewriteGameV233 .rwLetterV234{
+    position:absolute !important;
+    overflow:visible !important;
+    touch-action:manipulation !important;
+    -webkit-tap-highlight-color:transparent !important;
+}
+
+/* Estensione invisibile della hitbox: +16px totali. */
+#rewriteGameV233 .rwLetterV234::after{
+    content:"";
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    background:transparent;
+    pointer-events:auto;
+}
+</style>
+
 </head>
 
 
@@ -10634,8 +10659,43 @@ function buildRewriteBoardV234(){
 
         btn.addEventListener("pointerdown",e=>{
             if(e.cancelable)e.preventDefault();
+            try{btn.setPointerCapture(e.pointerId)}catch(err){}
         });
-        btn.addEventListener("click",()=>chooseRewriteLetterV234(btn,item.letter));
+
+        btn.addEventListener("pointerup",e=>{
+            if(e.cancelable)e.preventDefault();
+
+            try{
+                if(btn.hasPointerCapture(e.pointerId)){
+                    btn.releasePointerCapture(e.pointerId);
+                }
+            }catch(err){}
+
+            chooseRewriteLetterV234(btn,item.letter);
+        });
+
+        btn.addEventListener("pointercancel",e=>{
+            try{
+                if(btn.hasPointerCapture(e.pointerId)){
+                    btn.releasePointerCapture(e.pointerId);
+                }
+            }catch(err){}
+        });
+
+        /*
+          Il click successivo al pointerup viene assorbito:
+          l'azione è già stata eseguita e non deve partire due volte.
+          Manteniamo solo il click da tastiera (detail===0) come fallback.
+        */
+        btn.addEventListener("click",e=>{
+            if(e.detail===0){
+                chooseRewriteLetterV234(btn,item.letter);
+            }else{
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
         btn.addEventListener("contextmenu",e=>e.preventDefault());
 
         letters.appendChild(btn);
@@ -15308,709 +15368,4 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   pressedPoi=null;
 
   try{
-   if(interact.hasPointerCapture(e.pointerId)){
-    interact.releasePointerCapture(e.pointerId);
-   }
-  }catch(err){}
-
-  /*
-   * Apriamo QUI, senza aspettare il successivo evento click.
-   * Questo elimina i tap a vuoto tipici dei browser mobile.
-   */
-  if(poi)openPoi(poi);
- });
-
- interact.addEventListener("pointercancel",(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
-  pressedPoi=null;
- });
-
- /*
-  * Il click viene assorbito: l'interazione è già stata eseguita
-  * al pointerup e non deve partire due volte.
-  */
- interact.addEventListener("click",(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
- });
-
- panelClose.addEventListener("click",()=>{
-  panel.classList.remove("active");
-  panel.setAttribute("aria-hidden","true");
- });
-
- function playArrival(){
-  arrivalFx.classList.remove("active");
-  void arrivalFx.offsetWidth;
-  arrivalFx.classList.add("active");
-  setTimeout(()=>arrivalFx.classList.remove("active"),1400);
- }
-
- function hideOtherScreens(){
-  const creator=document.getElementById("creatorV30");
-  if(creator){
-   creator.classList.remove("active");
-   creator.setAttribute("aria-hidden","true");
-  }
-  const done=document.getElementById("creator30Done");
-  if(done){
-   done.classList.remove("active");
-   done.setAttribute("aria-hidden","true");
-  }
-  const teaser=document.getElementById("hubTeaserV241");
-  if(teaser){
-   teaser.classList.remove("active");
-   teaser.setAttribute("aria-hidden","true");
-   teaser.style.opacity="";
-   teaser.style.visibility="";
-   teaser.style.pointerEvents="";
-  }
-  const chapter=document.getElementById("chapterCompleteV238");
-  if(chapter){
-   chapter.classList.remove("active");
-   chapter.setAttribute("aria-hidden","true");
-   chapter.style.display="none";
-  }
-  const dev=document.getElementById("devPanelV25");
-  if(dev){
-   dev.classList.remove("active");
-   dev.setAttribute("aria-hidden","true");
-   dev.style.opacity="0";
-   dev.style.visibility="hidden";
-   dev.style.pointerEvents="none";
-  }
- }
-
- window.openNexusV41=function(opts={}){
-  const skipIntro=!!opts.skipIntro;
-  const newArrival=!!opts.newArrival;
-
-  hideOtherScreens();
-  seedFromPrologueAndLoadRelationship();
-
-  if(newArrival){
-   resetArrivalPosition();
-   try{localStorage.removeItem(MAP_KEY)}catch(e){}
-  }else{
-   if(!loadMap()){
-    currentArea="core";
-    const s=AREAS.core.spawnFromLower;
-    playerX=768;playerY=600;
-    kaeliosX=710;kaeliosY=545;
-    guideFinished=true;
-    coreDialogueDone=true;
-   }
-  }
-
-  renderPlayer();
-  active=true;
-  controlsLocked=skipIntro?false:true;
-  nexus.classList.add("active");
-  nexus.setAttribute("aria-hidden","false");
-
-  applyAreaVisual();
-  renderPositions();
-  renderChunks();
-
-  if(newArrival && !skipIntro){
-   playArrival();
-   setTimeout(introDialogue,820);
-  }else{
-   guideActive=false;
-   setObjective("");
-   controlsLocked=false;
-   showAreaName();
-   showLocation(getArea().name,"HUB TEMPORALE");
-  }
-
-  if(!raf){
-   lastT=0;
-   raf=requestAnimationFrame(tick);
-  }
- };
-
- window.closeNexusV41=function(){
-  if(!active)return;
-  saveMap();
-  saveRelationship();
-  active=false;
-  controlsLocked=true;
-  stopMovement();
-  nexus.classList.remove("active");
-  nexus.setAttribute("aria-hidden","true");
-  if(raf){cancelAnimationFrame(raf);raf=0}
- };
-
- /* DEV -> NEXUS = salto diretto alla mappa, senza intro */
- window.devNexusV253=function(){
-  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
-  if(typeof devClearScreensV255==="function")devClearScreensV255();
-  openNexusV41({skipIntro:true,newArrival:false});
- };
-
-
- /* DEV -> UNIVERSO TRASCENDENTE = accesso diretto di test, bypassa PORTALE 01 */
- window.devTranscendentV482=function(){
-  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
-  if(typeof devClearScreensV255==="function")devClearScreensV255();
-
-  /* Attiva il Nexus senza INTRO e poi forza l'hub di test. */
-  openNexusV41({skipIntro:true,newArrival:false});
-
-  currentArea="transcendent";
-  const s=AREAS.transcendent.spawnFromUpper;
-  playerX=s.x; playerY=s.y;
-  kaeliosX=s.kx; kaeliosY=s.ky;
-  guideActive=false;
-  guideFinished=true;
-  coreDialogueDone=true;
-  controlsLocked=false;
-
-  applyAreaVisual();
-  renderPositions();
-  renderChunks();
-  setObjective("");
-  saveMap();
-
-  /* Stesso titolo temporaneo usato nei cambi zona normali. */
-  showAreaName();
-  showLocation("UNIVERSO TRASCENDENTE","HUB DEI MONDI");
- };
-
- /* Anche il vecchio dispatcher DEV deve finire sul nuovo Nexus */
- if(typeof window.devShowTeaserV255==="function"){
-  const oldDevShow=window.devShowTeaserV255;
-  window.devShowTeaserV255=function(mode){
-   if(mode==="nexus"){
-    openNexusV41({skipIntro:true,newArrival:false});
-    return;
-   }
-   return oldDevShow(mode);
-  };
- }
-
- /* Reset DEV: pulisce anche Nexus + relazione */
- if(typeof window.resetSaveV25==="function"){
-  const oldReset=window.resetSaveV25;
-  window.resetSaveV25=function(){
-   oldReset();
-   try{
-    localStorage.removeItem(MAP_KEY);
-    localStorage.removeItem(REL_KEY);
-    localStorage.removeItem(TRY_COMBAT_KAELIOS_KEY_V48);
-   }catch(e){}
-   if(typeof kaeliosTrust!=="undefined")kaeliosTrust=0;
-   if(typeof protagonistIndependence!=="undefined")protagonistIndependence=0;
-  };
- }
-
- window.addEventListener("resize",()=>{
-  if(active){
-   renderPlayer();
-   renderPositions();
-  }
- });
-
- document.addEventListener("visibilitychange",()=>{
-  if(active && document.visibilityState==="hidden"){
-   saveMap();saveRelationship();stopMovement();
-  }
- });
- window.addEventListener("pagehide",()=>{
-  if(active){saveMap();saveRelationship()}
- });
-})();
-</script>
-
-
-
-
-
-
-<script>
-/* =========================================================
-   PROLOGUE CINEMATIC BACKDROPS V1_9_1_1
-   Background dinamici senza interferire con UI/gameplay.
-   ========================================================= */
-(function(){
-    const BGS={
-        fracture:"./frattura_cosmica_tra_rovine_celesti.png",
-        kaelios:"./vortice_cosmico_tra_rovine_stellari.png",
-        run:"./rovine_celesti_nel_vortice_cosmico.png",
-        alt:"./cattedrale_astrale_dei_mondi_frantumati.png",
-        nexus:"./cittadella_celeste_tra_le_stelle.png"
-    };
-
-    function setRiftBg(key){
-        const scene=document.getElementById("riftScene");
-        const img=document.getElementById("prologueBgImageV191");
-        const flash=document.getElementById("prologueCineFlashV110");
-        if(!img || !scene)return;
-
-        const finalKey=BGS[key]?key:"fracture";
-        const src=BGS[finalKey];
-
-        scene.classList.remove("bg-fracture","bg-kaelios","bg-run","bg-alt","bg-nexus","scene-shift");
-        scene.classList.add("bg-"+finalKey,"cinematic-bars");
-
-        void scene.offsetWidth;
-        scene.classList.add("scene-shift");
-        setTimeout(()=>scene.classList.remove("scene-shift"),460);
-
-        if(img.getAttribute("src")!==src){
-            if(flash){
-                flash.classList.remove("active");
-                void flash.offsetWidth;
-                flash.classList.add("active");
-                setTimeout(()=>flash.classList.remove("active"),520);
-            }
-
-            img.style.opacity=".10";
-
-            const preload=new Image();
-            preload.onload=()=>{
-                img.src=src;
-                requestAnimationFrame(()=>{
-                    img.style.opacity=".58";
-                });
-            };
-            preload.src=src;
-        }else{
-            img.style.opacity=".58";
-        }
-    }
-
-    function setExternalBg(id,key){
-        const el=document.getElementById(id);
-        if(!el)return;
-        el.style.setProperty("--prologue-ext-bg",'url("'+(BGS[key]||BGS.fracture)+'")');
-    }
-
-    function cinematicPulseV110(){
-        const flash=document.getElementById("prologueCineFlashV110");
-        if(!flash)return;
-        flash.classList.remove("active");
-        void flash.offsetWidth;
-        flash.classList.add("active");
-        setTimeout(()=>flash.classList.remove("active"),520);
-    }
-    window.cinematicPulseV110=cinematicPulseV110;
-
-
-    setRiftBg("fracture");
-    setExternalBg("timelineVision","run");
-    setExternalBg("convergenceScreen","alt");
-
-    if(typeof window.cineVisual==="function"){
-        const old=window.cineVisual;
-        window.cineVisual=function(mode){
-            const result=old.apply(this,arguments);
-
-            if(mode==="fracture") setRiftBg("fracture");
-            else if(mode==="run") setRiftBg("run");
-            else if(mode==="alt" || mode==="entity") setRiftBg("alt");
-            else if(mode==="rewind") setRiftBg("fracture");
-            else setRiftBg("kaelios");
-
-            return result;
-        };
-    }
-
-    if(typeof window.startRift==="function"){
-        const old=window.startRift;
-        window.startRift=function(){
-            setRiftBg("fracture");
-            return old.apply(this,arguments);
-        };
-    }
-
-    if(typeof window.showTimelineVision2==="function"){
-        const old=window.showTimelineVision2;
-        window.showTimelineVision2=function(){
-            setExternalBg("timelineVision","run");
-            return old.apply(this,arguments);
-        };
-    }
-
-    if(typeof window.beginConvergence2==="function"){
-        const old=window.beginConvergence2;
-        window.beginConvergence2=function(){
-            setExternalBg("convergenceScreen","alt");
-            return old.apply(this,arguments);
-        };
-    }
-
-    if(typeof window.completeChapterOneV238==="function"){
-        const old=window.completeChapterOneV238;
-        window.completeChapterOneV238=function(){
-            setRiftBg("nexus");
-            return old.apply(this,arguments);
-        };
-    }
-
-    const chapterContinue=document.getElementById("chapterContinueV241");
-    if(chapterContinue){
-        chapterContinue.addEventListener("click",()=>setRiftBg("nexus"),true);
-    }
-})();
-</script>
-
-<button id="audioToggleV112" type="button" aria-label="Disattiva audio" title="Audio">🔊</button>
-
-<script id="externalAudioV112Script">
-/* =========================================================
-   WHAT IF UNIVERSE — CUSTOM EXTERNAL SFX V1.15
-   File WAV reali caricati dalla root del progetto.
-   ========================================================= */
-(function(){
-    const STORE_KEY="whatIfUniverse_audio_enabled_v1142";
-
-    const FILES={
-        click:      {src:"./ui_click.wav",         volume:.52},
-        choice:     {src:"./choice_confirm.wav",   volume:.55},
-        fracture:   {src:"./frattura_ok.wav",      volume:.82},
-        whoosh:     {src:"./swoosh.wav",            volume:.72},
-        whoosh2:    {src:"./swoosh2.wav",           volume:.76},
-        hit:        {src:"./impact_hit.wav",        volume:.78},
-        charge:     {src:"./ki_charge_loop.wav",   volume:.68},
-        release:    {src:"./mystic_laser.wav",      volume:.72},
-        rewrite:    {src:"./rewrite_temporal.wav", volume:.68},
-        success:    {src:"./success.wav",          volume:.62},
-        fail:       {src:"./fail.wav",             volume:.68},
-        portal:     {src:"./portal_open.wav",      volume:.66},
-        transition: {src:"./nexus_transition.wav", volume:.58},
-        anomaly:    {src:"./anomaly_warning.wav",  volume:.64}
-    };
-
-    let enabled=true;
-    let unlocked=false;
-    let chargeAudio=null;
-    let chargePrepared=null;
-
-    try{
-        const saved=localStorage.getItem(STORE_KEY);
-        if(saved!==null)enabled=saved==="1";
-    }catch(e){}
-
-    const pools={};
-
-    function makeAudio(key){
-        const cfg=FILES[key];
-        if(!cfg)return null;
-
-        const a=new Audio(cfg.src);
-        a.preload="auto";
-        a.volume=cfg.volume;
-        a.playsInline=true;
-        return a;
-    }
-
-    function getPool(key){
-        if(pools[key])return pools[key];
-
-        const count=
-            key==="fracture" ? 6 :
-            (key==="click" || key==="choice" || key==="whoosh" || key==="whoosh2" || key==="hit") ? 4 : 2;
-        pools[key]=[];
-        for(let i=0;i<count;i++){
-            const a=makeAudio(key);
-            if(a)pools[key].push(a);
-        }
-        return pools[key];
-    }
-
-    function unlock(){
-        if(unlocked)return true;
-
-        /*
-          Sblocco robusto per Safari/Chrome mobile.
-          unlocked diventa true SOLO se il browser ha accettato il play.
-        */
-        const a=makeAudio("click");
-        if(!a)return false;
-
-        a.volume=0;
-
-        try{
-            const p=a.play();
-
-            if(p && typeof p.then==="function"){
-                p.then(()=>{
-                    unlocked=true;
-                    try{
-                        a.pause();
-                        a.currentTime=0;
-                    }catch(e){}
-                }).catch(()=>{
-                    unlocked=false;
-                });
-            }else{
-                unlocked=true;
-                try{
-                    a.pause();
-                    a.currentTime=0;
-                }catch(e){}
-            }
-        }catch(e){
-            unlocked=false;
-        }
-
-        return unlocked;
-    }
-
-    function play(key,volumeMul=1){
-        if(!enabled)return;
-
-        unlock();
-
-        const pool=getPool(key);
-        if(!pool || !pool.length)return;
-
-        let a=pool.find(x=>x.paused || x.ended);
-        if(!a)a=pool[0];
-
-        try{
-            a.pause();
-            a.currentTime=0;
-            a.volume=Math.max(0,Math.min(1,(FILES[key]?.volume||.6)*volumeMul));
-            const p=a.play();
-            if(p && typeof p.catch==="function")p.catch(()=>{});
-        }catch(e){}
-    }
-
-    function startCharge(){
-        if(!enabled)return;
-        unlock();
-
-        stopCharge();
-
-        /*
-          Usa un'istanza già preparata quando possibile: così su mobile
-          il suono di carica parte immediatamente al pointerdown.
-        */
-        chargeAudio=chargePrepared || makeAudio("charge");
-        chargePrepared=null;
-        if(!chargeAudio)return;
-
-        chargeAudio.loop=true;
-        chargeAudio.volume=FILES.charge.volume;
-
-        try{
-            chargeAudio.pause();
-            chargeAudio.currentTime=0;
-            const p=chargeAudio.play();
-            if(p && typeof p.catch==="function")p.catch(()=>{});
-        }catch(e){}
-    }
-
-    function stopCharge(){
-        if(chargeAudio){
-            try{
-                chargeAudio.pause();
-                chargeAudio.currentTime=0;
-            }catch(e){}
-            chargeAudio=null;
-        }
-
-        if(!chargePrepared){
-            chargePrepared=makeAudio("charge");
-            if(chargePrepared){
-                chargePrepared.preload="auto";
-                try{ chargePrepared.load(); }catch(e){}
-            }
-        }
-    }
-
-    function stopAll(){
-        stopCharge();
-        Object.values(pools).forEach(pool=>{
-            pool.forEach(a=>{
-                try{
-                    a.pause();
-                    a.currentTime=0;
-                }catch(e){}
-            });
-        });
-    }
-
-    function updateButton(){
-        const b=document.getElementById("audioToggleV112");
-        if(!b)return;
-        b.textContent=enabled?"🔊":"🔇";
-        b.classList.toggle("muted",!enabled);
-        b.setAttribute("aria-label",enabled?"Disattiva audio":"Attiva audio");
-        b.title=enabled?"Audio attivo":"Audio disattivato";
-    }
-
-    function setEnabled(value){
-        enabled=!!value;
-        try{localStorage.setItem(STORE_KEY,enabled?"1":"0")}catch(e){}
-        if(!enabled)stopAll();
-        else{
-            unlock();
-            play("click",.90);
-        }
-        updateButton();
-    }
-
-    /*
-      Primo gesto: sblocca esplicitamente l'audio.
-      capture=true così avviene prima degli handler del gioco.
-    */
-    function firstAudioGesture(){
-        unlock();
-    }
-
-    document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
-    document.addEventListener("touchstart",firstAudioGesture,{capture:true,passive:true});
-    document.addEventListener("click",firstAudioGesture,{capture:true,passive:true});
-
-    const toggle=document.getElementById("audioToggleV112");
-    if(toggle){
-        updateButton();
-
-        toggle.addEventListener("pointerdown",e=>{
-            e.stopPropagation();
-            unlock();
-        });
-
-        toggle.addEventListener("click",e=>{
-            e.preventDefault();
-            e.stopPropagation();
-            setEnabled(!enabled);
-        });
-    }
-
-    /*
-      Feedback UI di base.
-      Gli eventi narrativi importanti hanno poi il loro SFX specifico.
-    */
-    document.addEventListener("click",e=>{
-        if(!enabled)return;
-
-        const el=e.target.closest("button,.choice,.branchAction");
-        if(!el || el.id==="audioToggleV112")return;
-
-        if(
-            el.classList.contains("choice") ||
-            el.classList.contains("branchAction") ||
-            /choice/i.test(el.className||"")
-        ){
-            play("choice");
-        }else{
-            play("click");
-        }
-    },true);
-
-    function wrap(name,before,after){
-        const original=window[name];
-        if(typeof original!=="function")return false;
-
-        window[name]=function(){
-            if(before){
-                try{before.apply(this,arguments)}catch(e){}
-            }
-            const result=original.apply(this,arguments);
-            if(after){
-                try{after.apply(this,arguments)}catch(e){}
-            }
-            return result;
-        };
-        return true;
-    }
-
-
-    /*
-      SFX narrativi sincronizzati direttamente nei punti reali del gameplay.
-      Nessun suono viene più deciso soltanto dal cambio di visuale.
-    */
-
-    /* Sicurezza mobile */
-    document.addEventListener("visibilitychange",()=>{
-        if(document.hidden)stopCharge();
-    });
-
-    window.WIUSoundV112={
-        play,
-        startCharge,
-        stopCharge,
-        stopAll,
-        setEnabled,
-        isEnabled:()=>enabled,
-        files:FILES
-    };
-
-    /*
-      TRAMBUSTO V1.14.2:
-      ogni vera chiamata alla vibrazione riproduce frattura_ok.wav
-      a volume ridotto. L'apertura della frattura usa già lo stesso
-      file a volume pieno nel punto preciso della scena.
-    */
-    if(typeof window.vibrate==="function"){
-        const originalVibrateV1142=window.vibrate;
-
-        window.vibrate=function(pattern){
-            if(enabled){
-                play("fracture",.24);
-            }
-            return originalVibrateV1142.apply(this,arguments);
-        };
-    }
-
-    /*
-      Preload leggero dopo il load, senza bloccare il rendering.
-    */
-    window.addEventListener("load",()=>{
-        setTimeout(()=>{
-            Object.keys(FILES).forEach(key=>getPool(key));
-
-            chargePrepared=makeAudio("charge");
-            if(chargePrepared){
-                chargePrepared.preload="auto";
-                try{ chargePrepared.load(); }catch(e){}
-            }
-        },350);
-    });
-})();
-</script>
-
-
-<script id="restartPrologueAutostartV1">
-(function(){
-    function maybeRestartPrologueV1(){
-        let restart=false;
-
-        try{
-            restart=sessionStorage.getItem("whatIfUniverse_restart_prologue_v1")==="1";
-            if(restart){
-                sessionStorage.removeItem("whatIfUniverse_restart_prologue_v1");
-            }
-        }catch(e){}
-
-        if(!restart)return;
-
-        /*
-          startGame() è la funzione originale che avvia il prologo
-          dall'introduzione "UNIVERSO 7".
-        */
-        setTimeout(()=>{
-            if(typeof window.startGame==="function"){
-                window.startGame();
-            }else if(typeof startGame==="function"){
-                startGame();
-            }
-        },80);
-    }
-
-    if(document.readyState==="loading"){
-        document.addEventListener("DOMContentLoaded",maybeRestartPrologueV1,{once:true});
-    }else{
-        maybeRestartPrologueV1();
-    }
-})();
-</script>
-
-</body>
-
-</html>
+   if(i
