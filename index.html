@@ -5393,6 +5393,88 @@ button:active{
     }
 }
 
+
+
+/* =========================================================
+   V1.15 — MEMORY REVEAL + iPHONE PERFORMANCE
+   ========================================================= */
+
+/* La figura oscura sparisce durante Game Over / memoria temporale. */
+#riftScene.memory-reveal-v115.cine-entity::before,
+#riftScene.memory-reveal-v115::before{
+    opacity:0 !important;
+    visibility:hidden !important;
+    animation:none !important;
+}
+
+/* Anche Kaelios e la crepa arretrano: il testo deve essere il solo focus. */
+#riftScene.memory-reveal-v115 .riftKaelios,
+#riftScene.memory-reveal-v115 #riftCrack{
+    opacity:0 !important;
+}
+
+/* Il Game Over diventa completamente opaco: niente elementi dietro in trasparenza. */
+#riftScene.memory-reveal-v115 #gameOverV237{
+    background:#030109 !important;
+}
+
+/* ---------------------------------------------------------
+   iPhone / iPad: modalità alleggerita automatica.
+   Mantiene la resa cinematografica ma elimina le animazioni
+   continue e i filtri più costosi per la GPU mobile.
+   --------------------------------------------------------- */
+html.ios-lite-v115 #prologueBackdropV191 .prologueDustV110{
+    display:none !important;
+}
+
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191{
+    animation:none !important;
+    transform:scale(1.035) !important;
+    filter:none !important;
+    will-change:auto !important;
+}
+
+html.ios-lite-v115 #riftScene.bg-run #prologueBackdropV191::after{
+    display:none !important;
+}
+
+html.ios-lite-v115 #riftScene.cine-entity::before{
+    animation:none !important;
+    box-shadow:0 0 14px rgba(139,92,246,.18) !important;
+}
+
+html.ios-lite-v115 #riftScene.cine-rewind::after{
+    animation-duration:.35s !important;
+}
+
+html.ios-lite-v115 #prologueCineFlashV110.active{
+    animation-duration:.32s !important;
+}
+
+/* backdrop-filter è tra le operazioni più pesanti su Safari iOS */
+html.ios-lite-v115 #audioToggleV112,
+html.ios-lite-v115 #rewriteGameV233.failed #rewriteResultV233{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+
+/* Riduce il costo delle transizioni lunghe senza renderle statiche. */
+html.ios-lite-v115 #timelineVision.active{
+    animation-duration:.38s !important;
+    filter:none !important;
+}
+
+html.ios-lite-v115 #convergenceScreen:not(.hidden){
+    animation-duration:.40s !important;
+}
+
+/* Niente blur animato nel reveal della visione su iPhone. */
+@supports (-webkit-touch-callout:none){
+    html.ios-lite-v115 #timelineVision.active{
+        filter:none !important;
+    }
+}
+
 </style>
 
 
@@ -5440,6 +5522,350 @@ button:active{
         height:36px;
         font-size:17px;
     }
+}
+</style>
+
+
+<script id="iosPerformanceV115">
+(function(){
+    const ua=navigator.userAgent||"";
+    const platform=navigator.platform||"";
+    const maxTouch=navigator.maxTouchPoints||0;
+
+    const isiPhone=/iPhone|iPod/i.test(ua);
+    const isiPad=/iPad/i.test(ua) || (platform==="MacIntel" && maxTouch>1);
+
+    if(isiPhone || isiPad){
+        document.documentElement.classList.add("ios-lite-v115");
+    }
+})();
+</script>
+
+
+<style id="autoFinalRewriteV1Style">
+/* =========================================================
+   AUTO FINAL RISCRITTURA — solo dopo il colpo fatale
+   ========================================================= */
+
+/* Niente countdown: questo evento non può fallire. */
+#rewriteGameV233.auto-final-rewrite-v1 .rwTimeRowV234{
+    display:none !important;
+}
+
+/* Le lettere restano visibili ma non sono cliccabili dall'utente. */
+#rewriteGameV233.auto-final-rewrite-v1 #rwLettersV234{
+    pointer-events:none !important;
+}
+
+/* Simula visivamente la pressione del dito prima del click reale. */
+#rewriteGameV233.auto-final-rewrite-v1 .rwLetterV234.auto-press-final-v1{
+    transform:scale(.82) !important;
+    background:rgba(174,105,242,.62) !important;
+    border-color:rgba(245,230,255,.96) !important;
+    box-shadow:
+        0 0 10px rgba(255,255,255,.34),
+        0 0 24px rgba(174,105,242,.62) !important;
+    transition:
+        transform .09s ease,
+        background .09s ease,
+        box-shadow .09s ease !important;
+}
+
+/* Durante l'evento automatico non esistono retry o errori. */
+#rewriteGameV233.auto-final-rewrite-v1 #rewriteRetryV233{
+    display:none !important;
+}
+</style>
+
+
+<style id="rewriteTrueCenterOnlyV2">
+/* =========================================================
+   SOLO il titolo grande "RISCRITTURA":
+   centratura geometrica rispetto a "LA REALTÀ STA CEDENDO".
+   ========================================================= */
+#rewriteGameV233 .rwGameTitle{
+    position:relative !important;
+    left:50% !important;
+    width:max-content !important;
+    max-width:none !important;
+    min-width:0 !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+    transform:translateX(-50%) !important;
+}
+
+/* Se la RISCRITTURA manuale fallisce, mantiene il centro anche durante lo shake. */
+#rewriteGameV233.failed .rwGameTitle{
+    animation:rwFailPulseCenteredV2 .32s ease-out !important;
+}
+
+@keyframes rwFailPulseCenteredV2{
+    0%{transform:translateX(-50%)}
+    25%{transform:translateX(calc(-50% - 5px))}
+    55%{transform:translateX(calc(-50% + 5px))}
+    100%{transform:translateX(-50%)}
+}
+</style>
+
+
+<style id="realGameOverTopLayerV1">
+/* =========================================================
+   GAME OVER REALE — TOP LAYER
+   ========================================================= */
+
+/* Solo il vero Game Over da HP=0 usa il layer massimo. */
+#gameOverV237.real-game-over-top-v1{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:2147483000 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+    background:rgba(2,1,7,.985) !important;
+    isolation:isolate !important;
+}
+
+/* Copre completamente testi, personaggi e sfondo sottostanti. */
+#gameOverV237.real-game-over-top-v1::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:
+        radial-gradient(circle at 50% 42%,rgba(87,41,133,.16),transparent 34%),
+        rgba(2,1,7,.985);
+    pointer-events:none;
+}
+
+/* Card e controlli stanno sopra al velo. */
+#gameOverV237.real-game-over-top-v1 .goCardV237{
+    position:relative !important;
+    z-index:2 !important;
+    width:min(90vw,430px) !important;
+    text-align:center !important;
+    pointer-events:auto !important;
+}
+
+#gameOverV237.real-game-over-top-v1 .goEyebrowV237{
+    display:none !important;
+}
+
+#gameOverV237.real-game-over-top-v1 .goTitleV237{
+    position:relative !important;
+    z-index:3 !important;
+    margin:0 !important;
+    font-size:clamp(42px,12vw,72px) !important;
+    line-height:.95 !important;
+    font-weight:950 !important;
+    letter-spacing:5px !important;
+    text-align:center !important;
+    color:#fff !important;
+    text-shadow:
+        0 0 18px rgba(181,120,255,.34),
+        0 10px 32px rgba(0,0,0,.55) !important;
+}
+
+#gameOverV237.real-game-over-top-v1 .goTextV237{
+    position:relative !important;
+    z-index:3 !important;
+    margin:18px auto 22px !important;
+    text-align:center !important;
+    opacity:.82 !important;
+}
+
+#gameOverV237.real-game-over-top-v1 #gameOverRetryV237{
+    position:relative !important;
+    z-index:4 !important;
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
+    width:min(82vw,310px) !important;
+    min-height:52px !important;
+    margin:0 auto !important;
+    font-weight:950 !important;
+    letter-spacing:3px !important;
+}
+</style>
+
+
+<style id="collapsedScreenCleanV1">
+/* Solo nella schermata HP 0 / LINEA TEMPORALE COLLASSATA */
+#riftScene.collapsed-screen-clean-v1 .riftDialogue{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+    border-color:transparent !important;
+    background:transparent !important;
+}
+</style>
+
+
+<style id="tryCombatKaeliosV46Style">
+/* =========================================================
+   V4.6 — TRY COMBAT KAELIOS
+   Prima microzona, terrazza a sinistra del corridoio centrale.
+   Visibile subito, interagibile solo dopo il tutorial Arena.
+   ========================================================= */
+
+#nexusTryCombatKaeliosV46{
+    position:absolute;
+    left:145px;
+    top:405px;
+    z-index:4;
+    width:210px;
+    height:210px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatPadV46{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:152px;
+    height:152px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    border:2px solid rgba(173,135,255,.28);
+    background:
+        radial-gradient(circle,
+            rgba(126,72,199,.14) 0%,
+            rgba(58,34,100,.16) 42%,
+            rgba(11,8,24,.52) 68%,
+            rgba(3,2,9,.12) 100%);
+    box-shadow:
+        inset 0 0 28px rgba(163,111,242,.12),
+        0 0 24px rgba(135,82,217,.10);
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatPadV46::before,
+#nexusTryCombatKaeliosV46 .tryCombatPadV46::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    border:1px solid rgba(199,173,255,.20);
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatPadV46::before{
+    inset:18px;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatPadV46::after{
+    inset:43px;
+    border-style:dashed;
+    opacity:.75;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatCrossV46{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:76px;
+    height:76px;
+    transform:translate(-50%,-50%) rotate(45deg);
+    opacity:.30;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatCrossV46::before,
+#nexusTryCombatKaeliosV46 .tryCombatCrossV46::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    border-radius:999px;
+    background:rgba(218,197,255,.62);
+    box-shadow:0 0 10px rgba(171,120,255,.25);
+    transform:translate(-50%,-50%);
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatCrossV46::before{
+    width:76px;
+    height:3px;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatCrossV46::after{
+    width:3px;
+    height:76px;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatLabelV46{
+    position:absolute;
+    left:50%;
+    top:172px;
+    transform:translateX(-50%);
+    width:230px;
+    text-align:center;
+    text-shadow:0 2px 10px rgba(0,0,0,.95);
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatLabelV46 strong{
+    display:block;
+    color:rgba(235,226,255,.74);
+    font-size:13px;
+    font-weight:950;
+    letter-spacing:.10em;
+    white-space:nowrap;
+}
+
+#nexusTryCombatKaeliosV46 .tryCombatLabelV46 span{
+    display:block;
+    margin-top:4px;
+    color:rgba(190,176,210,.58);
+    font-size:7px;
+    font-weight:850;
+    letter-spacing:.16em;
+}
+
+/* Stato iniziale: visibile ma chiaramente inattivo. */
+#nexusTryCombatKaeliosV46.locked{
+    opacity:.72;
+    filter:saturate(.55);
+}
+
+#nexusTryCombatKaeliosV46.locked .tryCombatPadV46{
+    border-color:rgba(174,158,193,.20);
+}
+
+/* Già predisposto per il futuro sblocco dopo il tutorial Arena. */
+#nexusTryCombatKaeliosV46.unlocked{
+    opacity:1;
+    filter:none;
+}
+
+#nexusTryCombatKaeliosV46.unlocked .tryCombatPadV46{
+    border-color:rgba(203,171,255,.64);
+    box-shadow:
+        inset 0 0 32px rgba(168,104,255,.22),
+        0 0 30px rgba(142,84,229,.24);
+}
+</style>
+
+
+<style id="tryCombatKaeliosLabelV47">
+/* TRY COMBAT KAELIOS: label visibile anche quando la zona è bloccata. */
+#nexus41Interact.lockedPromptV47{
+    pointer-events:none !important;
+    cursor:default !important;
+    opacity:.78 !important;
+    background:rgba(13,10,25,.78) !important;
+    border-color:rgba(185,155,255,.22) !important;
+}
+
+#nexus41Interact.lockedPromptV47 .nexus451PoiName{
+    color:rgba(242,236,255,.90) !important;
+}
+
+#nexus41Interact.lockedPromptV47 .nexus451PoiAction{
+    display:none !important;
 }
 </style>
 
@@ -6226,7 +6652,7 @@ button:active{
         <div id="rewriteGameV233" aria-hidden="true">
             <div class="rwGameCard">
                 <div class="rwGameEyebrow">LA REALTÀ STA CEDENDO</div>
-                <div class="rwGameTitle">RISCRIVI</div>
+                <div class="rwGameTitle">RISCRITTURA</div>
                 <div class="rwGameHint">Ricostruisci <strong>RISCRITTURA</strong> prima che la linea temporale collassi.</div>
 
                 <div class="rwTimeRowV234">
@@ -10261,6 +10687,95 @@ function openRewriteGameV233(onSuccess){
     runRewriteTimerV234();
 }
 
+
+/*
+   RISCRITTURA FINALE AUTOMATICA
+   Usa gli stessi pulsanti e lo stesso handler del giocatore.
+   Quindi slot, animazioni, vibrazioni e feedback restano identici
+   a una RISCRITTURA completata manualmente.
+*/
+function openFinalAutomaticRewriteV1(onSuccess){
+    if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite");
+
+    rewriteSuccessCallbackV233=onSuccess;
+    rewriteGameActiveV233=true;
+
+    show("riftScene");
+
+    const overlay=document.getElementById("rewriteGameV233");
+    resetRewriteGameV233();
+
+    overlay.classList.add("active","auto-final-rewrite-v1");
+    overlay.setAttribute("aria-hidden","false");
+    overlay.style.display="flex";
+    overlay.style.visibility="visible";
+    overlay.style.opacity="1";
+    overlay.style.pointerEvents="auto";
+
+    /* Nessun timer: l'evento è obbligatorio e non può fallire. */
+    cancelAnimationFrame(rewriteGameRafV234);
+
+    const timeText=document.getElementById("rwTimeTextV234");
+    if(timeText) timeText.textContent="";
+
+    const result=document.getElementById("rewriteResultV233");
+    if(result) result.textContent="";
+
+    /*
+      Aspettiamo un attimo, poi "premiamo" ogni lettera corretta.
+      btn.click() richiama chooseRewriteLetterV234 esattamente come
+      un click dell'utente.
+    */
+    function pressNextFinalRewriteLetterV1(){
+        if(!rewriteGameActiveV233)return;
+
+        const expected=REWRITE_WORD_V234[rewriteGameIndexV234];
+        if(!expected)return;
+
+        const buttons=[
+            ...document.querySelectorAll(
+                "#rwLettersV234 .rwLetterV234:not(.used)"
+            )
+        ];
+
+        const btn=buttons.find(
+            b=>b.textContent.trim()===expected
+        );
+
+        if(!btn){
+            console.error(
+                "RISCRITTURA automatica: lettera non trovata",
+                expected
+            );
+            return;
+        }
+
+        btn.classList.remove("auto-press-final-v1");
+        void btn.offsetWidth;
+        btn.classList.add("auto-press-final-v1");
+
+        setTimeout(()=>{
+            if(!rewriteGameActiveV233)return;
+
+            /*
+              È un vero evento click DOM: usa lo stesso codice
+              della versione manuale.
+            */
+            btn.click();
+
+            if(rewriteGameActiveV233){
+                setTimeout(
+                    pressNextFinalRewriteLetterV1,
+                    150
+                );
+            }
+        },105);
+    }
+
+    /* Piccola pausa cinematografica prima che inizi a ricomporsi. */
+    setTimeout(pressNextFinalRewriteLetterV1,520);
+}
+
 function runRewriteTimerV234(){
     cancelAnimationFrame(rewriteGameRafV234);
 
@@ -10384,7 +10899,12 @@ function closeRewriteGameV233(){
     rewriteGameActiveV233=false;
 
     const overlay=document.getElementById("rewriteGameV233");
-    overlay.classList.remove("active","failed","success-v234");
+    overlay.classList.remove(
+        "active",
+        "failed",
+        "success-v234",
+        "auto-final-rewrite-v1"
+    );
     overlay.setAttribute("aria-hidden","true");
     overlay.style.display="";
     overlay.style.visibility="";
@@ -10403,18 +10923,47 @@ function setCheckpointV237(restartFn){
 }
 function checkGameOverV237(){
     if(scriptedDeathV237 || gameOverActiveV237 || hp>0)return false;
-    hp=0; updateHP();
+
+    hp=0;
+    updateHP();
+
     qteActive=false;
     cineSwipeActive=false;
     rewriteGameActiveV233=false;
     try{cancelAnimationFrame(rewriteGameRafV234)}catch(e){}
+
     gameOverActiveV237=true;
-    const rift=document.getElementById("riftScene");
-    if(rift) rift.classList.add("prologue-overlay-v244");
 
     const go=document.getElementById("gameOverV237");
-    go.classList.add("active");
+    const title=go.querySelector(".goTitleV237");
+    const textEl=go.querySelector(".goTextV237");
+    const btn=document.getElementById("gameOverRetryV237");
+
+    /*
+      Il vero Game Over viene spostato direttamente sotto #game:
+      così non può rimanere intrappolato nello stacking context
+      dello sfondo/prologo.
+    */
+    const gameRoot=document.getElementById("game");
+    if(gameRoot && go.parentElement!==gameRoot){
+        gameRoot.appendChild(go);
+    }
+
+    go.classList.remove("fake-rewrite-v238");
+    go.classList.add("active","real-game-over-top-v1");
     go.setAttribute("aria-hidden","false");
+
+    if(title) title.textContent="GAME OVER";
+    if(textEl) textEl.textContent="I tuoi HP sono scesi a zero.";
+    if(btn){
+        btn.textContent="RIPROVA";
+        btn.disabled=false;
+        btn.style.display="block";
+        btn.style.visibility="visible";
+        btn.style.opacity="1";
+        btn.style.pointerEvents="auto";
+    }
+
     vibrate([100,45,130]);
     return true;
 }
@@ -10425,10 +10974,25 @@ function damagePlayerV237(amount){
     flashImpact();
     return checkGameOverV237();
 }
+
+function restartPrologueFromBeginningV1(){
+    try{
+        sessionStorage.setItem("whatIfUniverse_restart_prologue_v1","1");
+    }catch(e){}
+
+    try{
+        if(window.WIUSoundV112) window.WIUSoundV112.stopAll();
+    }catch(e){}
+
+    location.reload();
+}
+
 function retryCheckpointV237(){
     gameOverActiveV237=false;
     const rift=document.getElementById("riftScene");
-    if(rift) rift.classList.remove("prologue-overlay-v244");
+    if(rift){
+        rift.classList.remove("prologue-overlay-v244","memory-reveal-v115");
+    }
     const go=document.getElementById("gameOverV237");
     go.classList.remove("active");
     go.setAttribute("aria-hidden","true");
@@ -10913,13 +11477,23 @@ function showFakeGameOverV243(){
     scriptedDeathStageV243="collapsed";
     show("riftScene");
 
+    /*
+      La silhouette dell'Entità non deve restare davanti alla memoria temporale.
+      La nascondiamo appena entra la schermata di collasso.
+    */
+    const riftSceneV115=document.getElementById("riftScene");
+    if(riftSceneV115){
+        riftSceneV115.classList.add("memory-reveal-v115","collapsed-screen-clean-v1");
+        riftSceneV115.classList.remove("entity-choosing");
+    }
+
     const go=document.getElementById("gameOverV237");
     const eyebrow=go.querySelector(".goEyebrowV237");
     const title=go.querySelector(".goTitleV237");
     const textEl=go.querySelector(".goTextV237");
     const btn=document.getElementById("gameOverRetryV237");
 
-    go.classList.remove("fake-rewrite-v238");
+    go.classList.remove("fake-rewrite-v238","real-game-over-top-v1");
     eyebrow.textContent="HP 0";
     title.innerHTML="LINEA TEMPORALE<br>COLLASSATA";
     textEl.textContent="La tua storia termina qui.";
@@ -10935,6 +11509,11 @@ function showFakeGameOverV243(){
 function revealRewriteChoiceV243(){
     if(scriptedDeathStageV243!=="collapsed") return;
 
+    /*
+      Il box dialogo deve restare nascosto anche nella schermata
+      "MEMORIA TEMPORALE / QUESTA REALTÀ NON DEVE FINIRE COSÌ".
+      La classe verrà rimossa solo dopo la RISCRITTURA finale.
+    */
     scriptedDeathStageV243="revealing";
 
     const go=document.getElementById("gameOverV237");
@@ -10954,7 +11533,7 @@ function revealRewriteChoiceV243(){
         eyebrow.textContent="MEMORIA TEMPORALE";
         title.innerHTML="QUESTA REALTÀ<br>NON DEVE FINIRE COSÌ";
         textEl.textContent="Ricordi ciò che è appena accaduto.";
-        btn.textContent="RISCRIVI";
+        btn.textContent="RISCRITTURA";
         btn.disabled=false;
         btn.style.display="";
         scriptedDeathStageV243="rewrite-ready";
@@ -10967,7 +11546,10 @@ function startVoluntaryRewriteV243(){
 
     scriptedDeathStageV243="rewrite-playing";
     const rift=document.getElementById("riftScene");
-    if(rift) rift.classList.remove("prologue-overlay-v244");
+    if(rift) rift.classList.remove(
+        "prologue-overlay-v244",
+        "memory-reveal-v115"
+    );
 
     const go=document.getElementById("gameOverV237");
     const btn=document.getElementById("gameOverRetryV237");
@@ -10985,8 +11567,11 @@ function startVoluntaryRewriteV243(){
     show("riftScene");
     cineVisual("rewind");
 
-    /* Nessun ritardo: apriamo il minigame nello stesso click/tick. */
-    openRewriteGameV233(()=>{
+    /*
+      Dopo il colpo fatale la RISCRITTURA è un evento obbligatorio:
+      si completa da sola, simulando i click sulle lettere.
+    */
+    openFinalAutomaticRewriteV1(()=>{
         scriptedDeathStageV243="rewrite-done";
         playRewriteFxV232(()=>{
             finishVoluntaryRewriteV239();
@@ -10995,6 +11580,11 @@ function startVoluntaryRewriteV243(){
 }
 
 function finishVoluntaryRewriteV239(){
+    const riftSceneCleanV1=document.getElementById("riftScene");
+    if(riftSceneCleanV1){
+        riftSceneCleanV1.classList.remove("collapsed-screen-clean-v1");
+    }
+
     startCineSequence([
         {
             speaker:"TU",
@@ -11133,7 +11723,7 @@ document.getElementById("gameOverRetryV237").addEventListener("click",function(e
         return;
     }
 
-    retryCheckpointV237();
+    restartPrologueFromBeginningV1();
 });
 const rewriteRetryBtnV233=document.getElementById("rewriteRetryV233");
 rewriteRetryBtnV233.addEventListener("click",retryRewriteV233);
@@ -11162,7 +11752,9 @@ document.getElementById("game").addEventListener("dragstart",e=>{
   <div class="devGridV25">
    <button class="devBtnV25" data-dev="prologue" onclick="event.stopPropagation();devPrologueV253();return false;">▶ PROLOGO</button>
    <button class="devBtnV25" data-dev="creator" onclick="event.stopPropagation();devCreatorV253();return false;">👤 CREATOR</button>
+   <button class="devBtnV25" data-dev="intro" onclick="event.stopPropagation();devIntroV256();return false;">▶ INTRO</button>
    <button class="devBtnV25" data-dev="nexus" onclick="event.stopPropagation();devNexusV253();return false;">🌌 NEXUS</button>
+   <button class="devBtnV25 wide" data-dev="transcendent" onclick="event.stopPropagation();devTranscendentV482();return false;">✨ UNIVERSO TRASCENDENTE</button>
    <button class="devBtnV25" data-dev="rewrite" onclick="event.stopPropagation();devRewriteDirectV253();return false;">🔄 RISCRITTURA</button>
    <button class="devBtnV25" data-dev="gems" onclick="event.stopPropagation();devGemsV253();return false;">💎 +100</button>
    <button class="devBtnV25" data-dev="xp" onclick="event.stopPropagation();devXpV253();return false;">XP +100</button>
@@ -11253,7 +11845,7 @@ function initDevV251(){
 if(DEV_MODE_V25){
  document.getElementById("devToggleV25").addEventListener("click",openDevV25);
  document.getElementById("devCloseV25").addEventListener("click",closeDevV25);
- document.getElementById("devPanelV25").addEventListener("click",e=>{const b=e.target.closest("[data-dev]");if(!b)return;const a=b.dataset.dev;if(a==="prologue"){closeDevV25();location.reload()}else if(a==="creator")devTeaserV25("creator");else if(a==="nexus")devTeaserV25("nexus");else if(a==="rewrite")devRewriteV25();else if(a==="gems"){gems+=100;updateGems();saveGameV25()}else if(a==="xp"){xp+=100;saveGameV25()}else if(a==="reset")resetSaveV25()});
+ document.getElementById("devPanelV25").addEventListener("click",e=>{const b=e.target.closest("[data-dev]");if(!b)return;const a=b.dataset.dev;if(a==="prologue"){closeDevV25();location.reload()}else if(a==="creator")devTeaserV25("creator");else if(a==="intro"){if(typeof devIntroV256==="function")devIntroV256();}else if(a==="nexus")devTeaserV25("nexus");else if(a==="transcendent"){if(typeof devTranscendentV482==="function")devTranscendentV482();}else if(a==="rewrite")devRewriteV25();else if(a==="gems"){gems+=100;updateGems();saveGameV25()}else if(a==="xp"){xp+=100;saveGameV25()}else if(a==="reset")resetSaveV25()});
 }else document.getElementById("devToggleV25").style.display="none";
 
 loadGameV25();refreshDevStateV25();
@@ -11341,6 +11933,42 @@ function devNexusV253(){
         t.setAttribute("aria-hidden","false");
     }
 }
+
+/*
+   V2.5.6 — DEV INTRO
+   INTRO = arrivo nel Nexus subito dopo il Creator +
+   dialogo iniziale di Kaelios + scelta FIDUCIA/INDIPENDENZA.
+*/
+function devIntroV256(){
+    if(typeof devEnsureChapterStateV253==="function"){
+        devEnsureChapterStateV253();
+    }
+
+    if(typeof devClearScreensV255==="function"){
+        devClearScreensV255();
+    }else{
+        devCloseHardV253();
+    }
+
+    /*
+      È lo stesso ingresso usato dal pulsante
+      "CONTINUA VERSO IL NEXUS" dopo la creazione personaggio.
+      newArrival:true = posizione iniziale;
+      skipIntro:false = esegue la procedura INTRO completa.
+    */
+    if(typeof window.openNexusV41==="function"){
+        window.openNexusV41({
+            skipIntro:false,
+            newArrival:true
+        });
+    }else if(typeof openNexusV41==="function"){
+        openNexusV41({
+            skipIntro:false,
+            newArrival:true
+        });
+    }
+}
+
 function devRewriteDirectV253(){
     devEnsureChapterStateV253();
     devCloseHardV253();
@@ -13358,6 +13986,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  const CAMERA_SCALE_DESKTOP=1;
  const MAP_KEY="whatIfUniverse_nexus_map_v45";
  const REL_KEY="whatIfUniverse_relationship_v41";
+ const ARENA_TUTORIAL_KEY_V46="whatIfUniverse_arena_tutorial_complete_v1";
+ const TRY_COMBAT_KAELIOS_KEY_V48="whatIfUniverse_try_combat_kaelios_complete_v2";
 
  let currentArea="lower";
  let currentAreaMap=null;
@@ -13424,6 +14054,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      text:"Qui Kaelios ti insegnerà il sistema di combattimento."
     },
     {
+     id:"tryCombatKaelios",x:145,y:405,r:125,
+     name:"TRY COMBAT KAELIOS",sub:"BLOCCATO • COMPLETA IL TUTORIAL ARENA",
+     title:"TRY COMBAT KAELIOS",
+     text:"Area di combattimento libero contro Kaelios.",
+     requiresArenaTutorial:true
+    },
+    {
      id:"toCore",type:"exit",target:"core",spawn:"fromLower",
      x:625,y:92,r:135,
      name:"ACCESSO AL NUCLEO",sub:"MACRO-AREA SUCCESSIVA",
@@ -13479,6 +14116,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    image:"./nexus_macro_3_convergenza.png",
    w:1536,h:1024,
    spawnFromCore:{x:768,y:920,kx:710,ky:860},
+   spawnFromTranscendent:{x:355,y:340,kx:430,ky:360},
    pois:[
     {
      id:"convergence",x:770,y:545,r:220,
@@ -13490,7 +14128,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      id:"portal1",x:355,y:250,r:82,
      name:"PORTALE 01",sub:"MONDO INIZIALE",
      title:"PORTALE 01",
-     text:"Il primo mondo verrà reso accessibile dopo l'addestramento nell'Arena."
+     text:"Questo universo sarà disponibile dopo che avrai completato il combattimento con Kaelios nell'area \"TRY COMBAT KAELIOS\"."
     },
     {
      id:"portal2",x:490,y:205,r:78,
@@ -13529,6 +14167,52 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      label:"VAI AL NUCLEO"
     }
    ]
+  },
+
+  transcendent:{
+   id:"transcendent",
+   name:"UNIVERSO TRASCENDENTE",
+   image:"./cittadella_astrale_dei_quattro_portali.png",
+   w:1254,h:1254,
+   spawnFromUpper:{x:627,y:930,kx:575,ky:875},
+   pois:[
+    {
+     id:"transcendentCore",x:627,y:725,r:250,
+     name:"UNIVERSO TRASCENDENTE",sub:"HUB DEI MONDI",
+     title:"UNIVERSO TRASCENDENTE",
+     text:"Da qui potrai raggiungere i quattro mondi del Portale 01."
+    },
+    {
+     id:"portalVeurs",x:140,y:740,r:100,
+     name:"MONDO VEURS",sub:"PORTALE DEL MONDO",
+     title:"MONDO VEURS",
+     text:"Questo portale ti condurrà al mondo giocabile di Veurs."
+    },
+    {
+     id:"portalZirem",x:395,y:245,r:105,
+     name:"MONDO ZIREM",sub:"PORTALE DEL MONDO",
+     title:"MONDO ZIREM",
+     text:"Questo portale ti condurrà al mondo giocabile di Zirem."
+    },
+    {
+     id:"portalSharak",x:888,y:245,r:110,
+     name:"MONDO SHARAK",sub:"PORTALE DEL MONDO",
+     title:"MONDO SHARAK",
+     text:"Questo portale ti condurrà al mondo giocabile di Sharak."
+    },
+    {
+     id:"portalKilin",x:1100,y:735,r:102,
+     name:"MONDO KILIN",sub:"PORTALE DEL MONDO",
+     title:"MONDO KILIN",
+     text:"Questo portale ti condurrà al mondo giocabile di Kilin."
+    },
+    {
+     id:"toUpperFromTranscendent",type:"exit",target:"upper",spawn:"fromTranscendent",
+     x:627,y:1075,r:110,
+     name:"CONVERGENZA",sub:"TORNA AL NEXUS",
+     label:"TORNA ALLA CONVERGENZA"
+    }
+   ]
   }
  };
 
@@ -13536,9 +14220,47 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   return AREAS[currentArea]||AREAS.lower;
  }
 
+ function isArenaTutorialCompleteV46(){
+  try{
+   return localStorage.getItem(ARENA_TUTORIAL_KEY_V46)==="1";
+  }catch(e){
+   return false;
+  }
+ }
+
+ function isTryCombatKaeliosCompleteV48(){
+  try{
+   return localStorage.getItem(TRY_COMBAT_KAELIOS_KEY_V48)==="1";
+  }catch(e){
+   return false;
+  }
+ }
+
  function getAreaPois(){
   return getArea().pois||[];
  }
+
+ function isPoiInteractableV47(p){
+  if(!p)return false;
+  if(p.requiresArenaTutorial && !isArenaTutorialCompleteV46())return false;
+  return true;
+ }
+
+ /* Hook già pronto per quando costruiremo/completeremo il tutorial Arena. */
+ window.setArenaTutorialCompleteV46=function(done=true){
+  try{
+   localStorage.setItem(ARENA_TUTORIAL_KEY_V46,done?"1":"0");
+  }catch(e){}
+  renderTryCombatKaeliosV46();
+ };
+
+ /* Hook pronto per sbloccare UNIVERSO TRASCENDENTE
+    quando il fight TRY COMBAT KAELIOS verrà completato davvero. */
+ window.setTryCombatKaeliosCompleteV48=function(done=true){
+  try{
+   localStorage.setItem(TRY_COMBAT_KAELIOS_KEY_V48,done?"1":"0");
+  }catch(e){}
+ };
 
  const guideWaypoints=AREAS.lower.guide;
 
@@ -13934,12 +14656,38 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   chunkLayer.appendChild(img);
   currentAreaMap=img;
 
+  renderTryCombatKaeliosV46();
+
   lastLocation="";
   currentPoi=null;
   displayedPoi=null;
   pressedPoi=null;
   interact.classList.remove("active");
   interact.classList.remove("playerOverlap");
+ }
+
+
+ function renderTryCombatKaeliosV46(){
+  const old=document.getElementById("nexusTryCombatKaeliosV46");
+  if(old)old.remove();
+
+  if(currentArea!=="lower")return;
+
+  const unlocked=isArenaTutorialCompleteV46();
+  const zone=document.createElement("div");
+  zone.id="nexusTryCombatKaeliosV46";
+  zone.className=unlocked?"unlocked":"locked";
+  zone.setAttribute("aria-hidden","true");
+
+  zone.innerHTML=
+   '<div class="tryCombatPadV46"></div>'+
+   '<div class="tryCombatCrossV46"></div>'+
+   '<div class="tryCombatLabelV46">'+
+     '<strong>TRY COMBAT KAELIOS</strong>'+
+     '<span>'+(unlocked?"DISPONIBILE":"BLOCCATO • COMPLETA IL TUTORIAL ARENA")+'</span>'+
+   '</div>';
+
+  chunkLayer.appendChild(zone);
  }
 
  function renderChunks(){
@@ -13978,7 +14726,9 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    }else if(target==="core"){
     spawn=spawnKey==="fromUpper"?area.spawnFromUpper:area.spawnFromLower;
    }else if(target==="upper"){
-    spawn=area.spawnFromCore;
+    spawn=spawnKey==="fromTranscendent"?area.spawnFromTranscendent:area.spawnFromCore;
+   }else if(target==="transcendent"){
+    spawn=area.spawnFromUpper;
    }
 
    if(spawn){
@@ -13995,6 +14745,18 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    setTimeout(()=>{
     areaFade.classList.remove("active");
     showAreaName();
+
+    /*
+      Universo Trascendente usa la stessa entrata delle altre macrozone:
+      il nome compare per qualche secondo al centro/sopra la mappa.
+    */
+    if(currentArea==="transcendent"){
+     areaName.textContent="UNIVERSO TRASCENDENTE";
+     areaName.classList.remove("active");
+     void areaName.offsetWidth;
+     areaName.classList.add("active");
+     setTimeout(()=>areaName.classList.remove("active"),2200);
+    }
 
     if(currentArea==="core" && !coreDialogueDone){
      setTimeout(()=>coreDialogue(),260);
@@ -14092,6 +14854,34 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    return false;
   }
 
+  if(currentArea==="transcendent"){
+   /* pedana inferiore e accesso centrale */
+   if(pointInEllipse(x,y,627,930,275,220))return true;
+   if(pointInRect(x,y,560,640,694,1035))return true;
+
+   /* piattaforma centrale */
+   if(pointInEllipse(x,y,627,725,275,235))return true;
+   if(pointInEllipse(x,y,627,640,210,160))return true;
+
+   /* ramo verso Mondo Veurs */
+   if(pointInEllipse(x,y,320,740,285,80))return true;
+   if(pointInEllipse(x,y,140,740,150,150))return true;
+
+   /* ramo verso Mondo Zirem */
+   if(pointInEllipse(x,y,485,430,230,82))return true;
+   if(pointInEllipse(x,y,395,245,165,165))return true;
+
+   /* ramo verso Mondo Sharak */
+   if(pointInEllipse(x,y,790,430,230,82))return true;
+   if(pointInEllipse(x,y,888,245,175,170))return true;
+
+   /* ramo verso Mondo Kilin */
+   if(pointInEllipse(x,y,930,740,280,80))return true;
+   if(pointInEllipse(x,y,1100,735,160,160))return true;
+
+   return false;
+  }
+
   return false;
  }
 
@@ -14178,16 +14968,31 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   });
 
   if(nearest && best<nearest.r){
-   if(!currentPoi || currentPoi.id!==nearest.id){
-    showLocation(nearest.name,nearest.sub);
+   const canInteract=isPoiInteractableV47(nearest);
+
+   if(!displayedPoi || displayedPoi.id!==nearest.id){
+    /*
+      Per TRY COMBAT KAELIOS bloccato non mostriamo una seconda
+      descrizione: la label deve contenere solo il nome.
+    */
+    if(nearest.id==="tryCombatKaelios" && !canInteract){
+     showLocation(nearest.name,"");
+    }else{
+     showLocation(nearest.name,nearest.sub);
+    }
    }
 
-   currentPoi=nearest;
    displayedPoi=nearest;
+   currentPoi=canInteract ? nearest : null;
+
    interact.classList.add("active");
    interact.classList.toggle("exitPrompt",nearest.type==="exit");
+   interact.classList.toggle("lockedPromptV47",!canInteract);
 
-   if(nearest.type==="exit"){
+   if(nearest.id==="tryCombatKaelios" && !canInteract){
+    interact.innerHTML=
+     '<span class="nexus451PoiName">TRY COMBAT KAELIOS</span>';
+   }else if(nearest.type==="exit"){
     interact.innerHTML=
      '<span class="nexus451PoiName">'+(nearest.label||nearest.name||"VAI")+'</span>';
    }else{
@@ -14204,6 +15009,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    interact.classList.remove("active");
    interact.classList.remove("exitPrompt");
    interact.classList.remove("playerOverlap");
+   interact.classList.remove("lockedPromptV47");
   }
  }
 
@@ -14403,6 +15209,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
  function openPoi(p){
   if(!p||controlsLocked)return;
+  if(!isPoiInteractableV47(p))return;
   stopMovement();
 
   if(window.WIUSoundV112){
@@ -14417,7 +15224,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    return;
   }
 
-  if(p.id==="arena"){
+  if(p.id==="tryCombatKaelios"){
+   panelTitle.textContent="TRY COMBAT KAELIOS";
+   panelText.innerHTML=
+    "Area sbloccata dopo il tutorial dell'Arena.<br><br>"+
+    "<b>COMBAT CONTRO KAELIOS</b><br>"+
+    "Una volta completato questo combattimento si sbloccherà il <b>PORTALE 01</b>.";
+  }else if(p.id==="arena"){
    panelTitle.textContent="ARENA";
    panelText.innerHTML=
     "Questa è l'area dedicata all'addestramento e ai combattimenti.<br><br>"+
@@ -14436,10 +15249,19 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    panelText.innerHTML=
     "Da questa zona si raggiungono i mondi What If del Nexus.";
   }else if(p.id==="portal1"){
+   if(isTryCombatKaeliosCompleteV48()){
+    changeArea("transcendent","fromUpper");
+    return;
+   }
    panelTitle.textContent="PORTALE 01";
    panelText.innerHTML=
-    "Il primo mondo sarà disponibile dopo aver completato l'addestramento nell'Arena.";
+    "Questo universo sarà disponibile dopo che avrai completato il combattimento con Kaelios nell'area <b>\"TRY COMBAT KAELIOS\"</b>.";
+  }else if(["portalVeurs","portalZirem","portalSharak","portalKilin"].includes(p.id)){
+   panelTitle.textContent=p.title;
+   panelText.innerHTML=
+    'Questo portale condurrà al <b>'+p.title+'</b>.<br><br>Qui si aprirà un mondo giocabile in cui la trama avanzerà.';
   }else if(p.id==="portal2" || p.id==="portal3" || p.id==="portal4"){
+
    panelTitle.textContent=p.title;
    panelText.innerHTML="Questo portale è ancora <b>sigillato</b>.";
   }else if(p.id==="ascension"){
@@ -14468,7 +15290,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   e.preventDefault();
   e.stopPropagation();
 
-  pressedPoi=displayedPoi||currentPoi;
+  pressedPoi=currentPoi;
 
   /*
    * Catturiamo il puntatore sul prompt.
@@ -14482,7 +15304,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   e.preventDefault();
   e.stopPropagation();
 
-  const poi=pressedPoi||displayedPoi||currentPoi;
+  const poi=pressedPoi||currentPoi;
   pressedPoi=null;
 
   try{
@@ -14627,6 +15449,35 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   openNexusV41({skipIntro:true,newArrival:false});
  };
 
+
+ /* DEV -> UNIVERSO TRASCENDENTE = accesso diretto di test, bypassa PORTALE 01 */
+ window.devTranscendentV482=function(){
+  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
+  if(typeof devClearScreensV255==="function")devClearScreensV255();
+
+  /* Attiva il Nexus senza INTRO e poi forza l'hub di test. */
+  openNexusV41({skipIntro:true,newArrival:false});
+
+  currentArea="transcendent";
+  const s=AREAS.transcendent.spawnFromUpper;
+  playerX=s.x; playerY=s.y;
+  kaeliosX=s.kx; kaeliosY=s.ky;
+  guideActive=false;
+  guideFinished=true;
+  coreDialogueDone=true;
+  controlsLocked=false;
+
+  applyAreaVisual();
+  renderPositions();
+  renderChunks();
+  setObjective("");
+  saveMap();
+
+  /* Stesso titolo temporaneo usato nei cambi zona normali. */
+  showAreaName();
+  showLocation("UNIVERSO TRASCENDENTE","HUB DEI MONDI");
+ };
+
  /* Anche il vecchio dispatcher DEV deve finire sul nuovo Nexus */
  if(typeof window.devShowTeaserV255==="function"){
   const oldDevShow=window.devShowTeaserV255;
@@ -14647,6 +15498,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    try{
     localStorage.removeItem(MAP_KEY);
     localStorage.removeItem(REL_KEY);
+    localStorage.removeItem(TRY_COMBAT_KAELIOS_KEY_V48);
    }catch(e){}
    if(typeof kaeliosTrust!=="undefined")kaeliosTrust=0;
    if(typeof protagonistIndependence!=="undefined")protagonistIndependence=0;
@@ -14808,7 +15660,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
 <script id="externalAudioV112Script">
 /* =========================================================
-   WHAT IF UNIVERSE — CUSTOM EXTERNAL SFX V1.14.2
+   WHAT IF UNIVERSE — CUSTOM EXTERNAL SFX V1.15
    File WAV reali caricati dalla root del progetto.
    ========================================================= */
 (function(){
@@ -15120,6 +15972,42 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
             }
         },350);
     });
+})();
+</script>
+
+
+<script id="restartPrologueAutostartV1">
+(function(){
+    function maybeRestartPrologueV1(){
+        let restart=false;
+
+        try{
+            restart=sessionStorage.getItem("whatIfUniverse_restart_prologue_v1")==="1";
+            if(restart){
+                sessionStorage.removeItem("whatIfUniverse_restart_prologue_v1");
+            }
+        }catch(e){}
+
+        if(!restart)return;
+
+        /*
+          startGame() è la funzione originale che avvia il prologo
+          dall'introduzione "UNIVERSO 7".
+        */
+        setTimeout(()=>{
+            if(typeof window.startGame==="function"){
+                window.startGame();
+            }else if(typeof startGame==="function"){
+                startGame();
+            }
+        },80);
+    }
+
+    if(document.readyState==="loading"){
+        document.addEventListener("DOMContentLoaded",maybeRestartPrologueV1,{once:true});
+    }else{
+        maybeRestartPrologueV1();
+    }
 })();
 </script>
 
