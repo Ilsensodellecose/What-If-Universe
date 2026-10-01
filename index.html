@@ -5956,6 +5956,175 @@ html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 #rwTimeFillV234{
 }
 </style>
 
+
+<style id="iosHardProloguePerformanceV180">
+/* =========================================================
+   V1.8.0 — HARD iOS PROLOGUE PERFORMANCE PASS
+   SOLO iPhone/iPad.
+   Obiettivo: una sola scena realmente renderizzata alla volta.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. SCHERMATE NASCOSTE = FUORI DAL RENDER TREE
+   Prima erano solo opacity:0 + visibility:hidden.
+   --------------------------------------------------------- */
+html.ios-lite-v115 .screen.hidden{
+    display:none !important;
+}
+
+html.ios-lite-v115 .screen{
+    transition:none !important;
+}
+
+/* Overlay del prologo inattivi: non devono consumare paint/compositing. */
+html.ios-lite-v115 #branchQte:not(.active),
+html.ios-lite-v115 #resistOverlay:not(.active),
+html.ios-lite-v115 #timelineVision:not(.active),
+html.ios-lite-v115 #gameOverV237:not(.active),
+html.ios-lite-v115 #chapterCompleteV238:not(.active),
+html.ios-lite-v115 #hubTeaserV241:not(.active),
+html.ios-lite-v115 #attackResult:not(.active),
+html.ios-lite-v115 #rewriteFxV232:not(.active),
+html.ios-lite-v115 #rewriteGameV233:not(.active){
+    display:none !important;
+}
+
+/* ---------------------------------------------------------
+   2. NIENTE ANIMAZIONI INFINITE NEL PROLOGO SU iOS
+   Rimangono gli eventi/flash brevi necessari alla leggibilità.
+   --------------------------------------------------------- */
+html.ios-lite-v115 #kaelios,
+html.ios-lite-v115 #kaeliosAfter,
+html.ios-lite-v115 .aura,
+html.ios-lite-v115 #dodgeText,
+html.ios-lite-v115 .swipeFinger,
+html.ios-lite-v115 .swipeTrail,
+html.ios-lite-v115 #branchArrow,
+html.ios-lite-v115 #riftScene.cine-run,
+html.ios-lite-v115 #riftScene.cine-entity::before,
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191,
+html.ios-lite-v115 #prologueBackdropV191 .prologueDustV110,
+html.ios-lite-v115 #riftScene.bg-run #prologueBackdropV191::after{
+    animation:none !important;
+}
+
+/* Freccia/QTE restano visibili ma statici. */
+html.ios-lite-v115 #dodgeText,
+html.ios-lite-v115 #branchArrow{
+    transform:none !important;
+}
+
+/* ---------------------------------------------------------
+   3. ELIMINA I FILTRI PIÙ COSTOSI DI SAFARI
+   --------------------------------------------------------- */
+html.ios-lite-v115 #kaelios,
+html.ios-lite-v115 #kaeliosAfter,
+html.ios-lite-v115 .playerEnemy,
+html.ios-lite-v115 .riftKaelios,
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191{
+    filter:none !important;
+}
+
+/* Riduce glow pesanti senza togliere la leggibilità. */
+html.ios-lite-v115 #energyBall,
+html.ios-lite-v115 #playerBall{
+    box-shadow:0 0 14px rgba(200,160,255,.55) !important;
+}
+
+html.ios-lite-v115 #riftCrack{
+    box-shadow:
+        0 0 8px rgba(255,255,255,.75),
+        0 0 18px rgba(168,85,247,.42) !important;
+}
+
+html.ios-lite-v115 #riftCrack::before,
+html.ios-lite-v115 #riftCrack::after{
+    box-shadow:0 0 8px rgba(147,51,234,.38) !important;
+}
+
+/* ---------------------------------------------------------
+   4. NON PRE-ALLOCATE LAYER GPU INUTILI
+   will-change persistente può consumare molta memoria su iOS.
+   --------------------------------------------------------- */
+html.ios-lite-v115 #kaelios,
+html.ios-lite-v115 #kaeliosAfter,
+html.ios-lite-v115 .aura,
+html.ios-lite-v115 #energyBall,
+html.ios-lite-v115 #playerBall,
+html.ios-lite-v115 #riftCrack,
+html.ios-lite-v115 #riftScene .riftDialogue,
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191,
+html.ios-lite-v115 #rewriteGameV233 #rwTimeFillV234{
+    will-change:auto !important;
+}
+
+/* ---------------------------------------------------------
+   5. SCENA RUN: background statico anziché background-position
+   animato continuamente.
+   --------------------------------------------------------- */
+html.ios-lite-v115 #riftScene.cine-run{
+    background:
+        radial-gradient(circle at 50% 15%,rgba(126,34,206,.15),transparent 36%),
+        #03030a !important;
+}
+
+/* Pseudo-elementi decorativi non essenziali: eliminati su iOS. */
+html.ios-lite-v115 #riftScene.cine-alt::before,
+html.ios-lite-v115 #riftScene.cine-alt::after,
+html.ios-lite-v115 #riftScene.cine-rewind::after{
+    display:none !important;
+}
+
+/* ---------------------------------------------------------
+   6. RISCRITTURA: ISOLAMENTO MASSIMO
+   --------------------------------------------------------- */
+html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene > *:not(#rewriteGameV233):not(#prologueBackdropV191){
+    /* Gli elementi principali dietro vengono tolti dal paint. */
+    visibility:hidden !important;
+}
+
+/* Mantiene solo un background statico molto economico. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191{
+    display:block !important;
+    background:#05020d !important;
+}
+
+html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueBgImageV191,
+html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueBgShadeV191,
+html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueDustV110{
+    display:none !important;
+}
+
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233{
+    visibility:visible !important;
+    display:flex !important;
+    background:#05020d !important;
+    contain:layout paint style !important;
+}
+
+/* Lettere: niente ombre/filtri durante il gioco temporizzato. */
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwLetterV234,
+html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwSlotV234{
+    box-shadow:none !important;
+    text-shadow:none !important;
+    filter:none !important;
+}
+
+/* ---------------------------------------------------------
+   7. Riduce i costi delle transizioni non essenziali.
+   --------------------------------------------------------- */
+html.ios-lite-v115 #riftScene .riftDialogue,
+html.ios-lite-v115 button,
+html.ios-lite-v115 #hpBar{
+    transition:none !important;
+}
+
+html.ios-lite-v115 #timelineVision.active,
+html.ios-lite-v115 #convergenceScreen:not(.hidden){
+    filter:none !important;
+}
+</style>
+
 </head>
 
 
@@ -10913,6 +11082,7 @@ function runRewriteTimerV234(){
     const lagSafeIOS=document.documentElement.classList.contains("ios-lite-v115");
     let lastFrameV170=performance.now();
     let lastTextUpdateV170=0;
+    let lastBarUpdateV180=0;
 
     const fillV170=document.getElementById("rwTimeFillV234");
     const textV170=document.getElementById("rwTimeTextV234");
@@ -10938,11 +11108,18 @@ function runRewriteTimerV234(){
             Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234)
         );
 
-        fillV170.style.transform=`scaleX(${ratio})`;
+        /*
+          Su iOS aggiorniamo la barra a circa 20 FPS.
+          Il timer logico continua a usare performance.now(), quindi
+          la precisione non cambia, ma riduciamo drasticamente i paint.
+        */
+        if(!lagSafeIOS || now-lastBarUpdateV180>=50 || rewriteRemainingV234<=0){
+            fillV170.style.transform=`scaleX(${ratio})`;
+            lastBarUpdateV180=now;
+        }
 
         /*
-          Il testo non ha bisogno di 60 aggiornamenti al secondo:
-          10 Hz è visivamente identico ma riduce layout/paint su Safari.
+          Il testo numerico viene aggiornato a 10 Hz.
         */
         if(now-lastTextUpdateV170>=100 || rewriteRemainingV234<=0){
             textV170.textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
@@ -11059,6 +11236,14 @@ function closeRewriteGameV233(){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteGameActiveV233=false;
     setRewriteIOSFocusV170(false);
+
+    /*
+      Safari iOS: rilascia il frame della RISCRITTURA prima di
+      ripristinare la scena narrativa.
+    */
+    if(document.documentElement.classList.contains("ios-lite-v115")){
+        void document.body.offsetHeight;
+    }
 
     const overlay=document.getElementById("rewriteGameV233");
     overlay.classList.remove(
