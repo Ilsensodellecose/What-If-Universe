@@ -10671,14 +10671,6 @@ function buildRewriteBoardV234(){
                 }
             }catch(err){}
 
-            /*
-              Il touch fix non dipende più dal click del browser:
-              suoniamo il feedback UI direttamente qui.
-            */
-            if(window.WIUSoundV112){
-                window.WIUSoundV112.play("click");
-            }
-
             chooseRewriteLetterV234(btn,item.letter);
         });
 
@@ -15732,7 +15724,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    File WAV reali caricati dalla root del progetto.
    ========================================================= */
 (function(){
-    const STORE_KEY="whatIfUniverse_audio_enabled_v161_touch_audio";
+    const STORE_KEY="whatIfUniverse_audio_enabled_v1142";
 
     const FILES={
         click:      {src:"./ui_click.wav",         volume:.52},
@@ -15790,19 +15782,15 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
     function unlock(){
         if(unlocked)return true;
-        if(!enabled)return false;
 
         /*
-          V1.6.1 — sblocco mobile robusto.
-          Usiamo un volume quasi impercettibile ma non "muted":
-          Safari/iOS può non considerare un playback totalmente muto
-          come autorizzazione valida per gli audio successivi.
+          Sblocco robusto per Safari/Chrome mobile.
+          unlocked diventa true SOLO se il browser ha accettato il play.
         */
         const a=makeAudio("click");
         if(!a)return false;
 
-        a.muted=false;
-        a.volume=.001;
+        a.volume=0;
 
         try{
             const p=a.play();
@@ -15842,41 +15830,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
         let a=pool.find(x=>x.paused || x.ended);
         if(!a)a=pool[0];
 
-        const targetVolume=Math.max(
-            0,
-            Math.min(1,(FILES[key]?.volume||.6)*volumeMul)
-        );
-
-        function tryFreshFallback(){
-            try{
-                const fresh=makeAudio(key);
-                if(!fresh)return;
-                fresh.volume=targetVolume;
-                const fp=fresh.play();
-                if(fp && typeof fp.catch==="function"){
-                    fp.catch(()=>{});
-                }
-            }catch(err){}
-        }
-
         try{
             a.pause();
             a.currentTime=0;
-            a.volume=targetVolume;
-
+            a.volume=Math.max(0,Math.min(1,(FILES[key]?.volume||.6)*volumeMul));
             const p=a.play();
-            if(p && typeof p.catch==="function"){
-                p.catch(()=>{
-                    /*
-                      Se un'istanza del pool è rimasta in uno stato anomalo
-                      dopo cache/reload mobile, prova un Audio nuovo.
-                    */
-                    tryFreshFallback();
-                });
-            }
-        }catch(e){
-            tryFreshFallback();
-        }
+            if(p && typeof p.catch==="function")p.catch(()=>{});
+        }catch(e){}
     }
 
     function startCharge(){
@@ -16063,19 +16023,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     */
     window.addEventListener("load",()=>{
         setTimeout(()=>{
-            Object.keys(FILES).forEach(key=>{
-                const pool=getPool(key);
-                pool.forEach(a=>{
-                    try{a.load();}catch(e){}
-                });
-            });
+            Object.keys(FILES).forEach(key=>getPool(key));
 
             chargePrepared=makeAudio("charge");
             if(chargePrepared){
                 chargePrepared.preload="auto";
                 try{ chargePrepared.load(); }catch(e){}
             }
-        },220);
+        },350);
     });
 })();
 </script>
