@@ -5297,9 +5297,9 @@ button:active{
 }
 
 #rewriteGameV233 .rwLetterV234{
-    width:42px !important;
-    height:42px !important;
-    font-size:17px !important;
+    width:48px !important;
+    height:48px !important;
+    font-size:19px !important;
 }
 
 /* Risultato leggibile senza spingere fuori il pulsante */
@@ -5377,9 +5377,9 @@ button:active{
         height:clamp(125px,22dvh,165px) !important;
     }
     #rewriteGameV233 .rwLetterV234{
-        width:38px !important;
-        height:38px !important;
-        font-size:16px !important;
+        width:44px !important;
+        height:44px !important;
+        font-size:18px !important;
     }
 }
 
@@ -10577,7 +10577,7 @@ document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  captu
    V2.3.4 — MINIGAME RISCRITTURA: RIORDINA LE LETTERE
    ========================================================= */
 const REWRITE_WORD_V234="RISCRITTURA";
-const REWRITE_DURATION_V234=6000;
+const REWRITE_DURATION_V234=6500;
 const REWRITE_PENALTY_V234=500;
 
 let rewriteGameActiveV233=false;
@@ -10659,7 +10659,7 @@ function resetRewriteGameV233(){
     retry.style.pointerEvents="";
     retry.setAttribute("aria-hidden","true");
     document.getElementById("rwTimeFillV234").style.transform="scaleX(1)";
-    document.getElementById("rwTimeTextV234").textContent="6.0s";
+    document.getElementById("rwTimeTextV234").textContent="6.5s";
 
     buildRewriteBoardV234();
 }
