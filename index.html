@@ -5895,234 +5895,29 @@ html.ios-lite-v115 #convergenceScreen:not(.hidden){
 </style>
 
 
-<style id="iosRewritePerformanceV170">
-/* =========================================================
-   V1.7.0 — iOS RISCRITTURA PERFORMANCE TEST
-   Attivo SOLO su iPhone/iPad già marcati ios-lite-v115.
-   ========================================================= */
-
-/* Durante RISCRITTURA il prologo dietro diventa completamente statico. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueBgImageV191{
-    animation:none !important;
-    transition:none !important;
-    filter:none !important;
-    transform:scale(1.02) !important;
-    will-change:auto !important;
+<style id="iosDiagnosticOverlayStyle">
+#iosDiagV200{
+    position:fixed;
+    left:max(8px, env(safe-area-inset-left));
+    bottom:max(8px, env(safe-area-inset-bottom));
+    z-index:2147483646;
+    width:min(310px, calc(100vw - 16px));
+    padding:8px 10px;
+    border:1px solid rgba(205,180,255,.42);
+    border-radius:10px;
+    background:rgba(4,3,10,.88);
+    color:#fff;
+    font:700 10px/1.35 Arial,sans-serif;
+    text-align:left;
+    pointer-events:none;
+    white-space:pre-line;
+    box-shadow:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
 }
-
-html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueDustV110,
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.bg-run #prologueBackdropV191::after,
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-entity::before,
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-alt::before,
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-alt::after,
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene.cine-rewind::after{
-    display:none !important;
-    animation:none !important;
-}
-
-/* Personaggi/crepa non servono mentre il minigioco copre la scena. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene .riftKaelios,
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene #riftCrack{
-    visibility:hidden !important;
-    opacity:0 !important;
-    animation:none !important;
-    filter:none !important;
-    will-change:auto !important;
-}
-
-/* Nessun effetto rewind viene compositato mentre il minigioco è attivo. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteFxV232{
-    display:none !important;
-}
-
-/* Sfondo RISCRITTURA più economico su Safari iOS. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233{
-    background:#05020d !important;
-}
-
-/* Semplifica i paint continui delle lettere senza cambiarne dimensione/hitbox. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwLetterV234{
-    box-shadow:none !important;
-    transition:opacity .08s ease, transform .08s ease !important;
-}
-
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwSlotV234.filled{
-    animation:none !important;
-    text-shadow:none !important;
-}
-
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 #rwTimeFillV234{
-    will-change:auto !important;
-}
-</style>
-
-
-<style id="iosHardProloguePerformanceV180">
-/* =========================================================
-   V1.8.0 — HARD iOS PROLOGUE PERFORMANCE PASS
-   SOLO iPhone/iPad.
-   Obiettivo: una sola scena realmente renderizzata alla volta.
-   ========================================================= */
-
-/* ---------------------------------------------------------
-   1. SCHERMATE NASCOSTE = FUORI DAL RENDER TREE
-   Prima erano solo opacity:0 + visibility:hidden.
-   --------------------------------------------------------- */
-html.ios-lite-v115 .screen.hidden{
-    display:none !important;
-}
-
-html.ios-lite-v115 .screen{
-    transition:none !important;
-}
-
-/* Overlay del prologo inattivi: non devono consumare paint/compositing. */
-html.ios-lite-v115 #branchQte:not(.active),
-html.ios-lite-v115 #resistOverlay:not(.active),
-html.ios-lite-v115 #timelineVision:not(.active),
-html.ios-lite-v115 #gameOverV237:not(.active),
-html.ios-lite-v115 #chapterCompleteV238:not(.active),
-html.ios-lite-v115 #hubTeaserV241:not(.active),
-html.ios-lite-v115 #attackResult:not(.active),
-html.ios-lite-v115 #rewriteFxV232:not(.active),
-html.ios-lite-v115 #rewriteGameV233:not(.active){
-    display:none !important;
-}
-
-/* ---------------------------------------------------------
-   2. NIENTE ANIMAZIONI INFINITE NEL PROLOGO SU iOS
-   Rimangono gli eventi/flash brevi necessari alla leggibilità.
-   --------------------------------------------------------- */
-html.ios-lite-v115 #kaelios,
-html.ios-lite-v115 #kaeliosAfter,
-html.ios-lite-v115 .aura,
-html.ios-lite-v115 #dodgeText,
-html.ios-lite-v115 .swipeFinger,
-html.ios-lite-v115 .swipeTrail,
-html.ios-lite-v115 #branchArrow,
-html.ios-lite-v115 #riftScene.cine-run,
-html.ios-lite-v115 #riftScene.cine-entity::before,
-html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191,
-html.ios-lite-v115 #prologueBackdropV191 .prologueDustV110,
-html.ios-lite-v115 #riftScene.bg-run #prologueBackdropV191::after{
-    animation:none !important;
-}
-
-/* Freccia/QTE restano visibili ma statici. */
-html.ios-lite-v115 #dodgeText,
-html.ios-lite-v115 #branchArrow{
-    transform:none !important;
-}
-
-/* ---------------------------------------------------------
-   3. ELIMINA I FILTRI PIÙ COSTOSI DI SAFARI
-   --------------------------------------------------------- */
-html.ios-lite-v115 #kaelios,
-html.ios-lite-v115 #kaeliosAfter,
-html.ios-lite-v115 .playerEnemy,
-html.ios-lite-v115 .riftKaelios,
-html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191{
-    filter:none !important;
-}
-
-/* Riduce glow pesanti senza togliere la leggibilità. */
-html.ios-lite-v115 #energyBall,
-html.ios-lite-v115 #playerBall{
-    box-shadow:0 0 14px rgba(200,160,255,.55) !important;
-}
-
-html.ios-lite-v115 #riftCrack{
-    box-shadow:
-        0 0 8px rgba(255,255,255,.75),
-        0 0 18px rgba(168,85,247,.42) !important;
-}
-
-html.ios-lite-v115 #riftCrack::before,
-html.ios-lite-v115 #riftCrack::after{
-    box-shadow:0 0 8px rgba(147,51,234,.38) !important;
-}
-
-/* ---------------------------------------------------------
-   4. NON PRE-ALLOCATE LAYER GPU INUTILI
-   will-change persistente può consumare molta memoria su iOS.
-   --------------------------------------------------------- */
-html.ios-lite-v115 #kaelios,
-html.ios-lite-v115 #kaeliosAfter,
-html.ios-lite-v115 .aura,
-html.ios-lite-v115 #energyBall,
-html.ios-lite-v115 #playerBall,
-html.ios-lite-v115 #riftCrack,
-html.ios-lite-v115 #riftScene .riftDialogue,
-html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191,
-html.ios-lite-v115 #rewriteGameV233 #rwTimeFillV234{
-    will-change:auto !important;
-}
-
-/* ---------------------------------------------------------
-   5. SCENA RUN: background statico anziché background-position
-   animato continuamente.
-   --------------------------------------------------------- */
-html.ios-lite-v115 #riftScene.cine-run{
-    background:
-        radial-gradient(circle at 50% 15%,rgba(126,34,206,.15),transparent 36%),
-        #03030a !important;
-}
-
-/* Pseudo-elementi decorativi non essenziali: eliminati su iOS. */
-html.ios-lite-v115 #riftScene.cine-alt::before,
-html.ios-lite-v115 #riftScene.cine-alt::after,
-html.ios-lite-v115 #riftScene.cine-rewind::after{
-    display:none !important;
-}
-
-/* ---------------------------------------------------------
-   6. RISCRITTURA: ISOLAMENTO MASSIMO
-   --------------------------------------------------------- */
-html.ios-lite-v115.rewrite-ios-focus-v170 #riftScene > *:not(#rewriteGameV233):not(#prologueBackdropV191){
-    /* Gli elementi principali dietro vengono tolti dal paint. */
-    visibility:hidden !important;
-}
-
-/* Mantiene solo un background statico molto economico. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191{
-    display:block !important;
-    background:#05020d !important;
-}
-
-html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueBgImageV191,
-html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueBgShadeV191,
-html.ios-lite-v115.rewrite-ios-focus-v170 #prologueBackdropV191 .prologueDustV110{
-    display:none !important;
-}
-
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233{
-    visibility:visible !important;
-    display:flex !important;
-    background:#05020d !important;
-    contain:layout paint style !important;
-}
-
-/* Lettere: niente ombre/filtri durante il gioco temporizzato. */
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwLetterV234,
-html.ios-lite-v115.rewrite-ios-focus-v170 #rewriteGameV233 .rwSlotV234{
-    box-shadow:none !important;
-    text-shadow:none !important;
-    filter:none !important;
-}
-
-/* ---------------------------------------------------------
-   7. Riduce i costi delle transizioni non essenziali.
-   --------------------------------------------------------- */
-html.ios-lite-v115 #riftScene .riftDialogue,
-html.ios-lite-v115 button,
-html.ios-lite-v115 #hpBar{
-    transition:none !important;
-}
-
-html.ios-lite-v115 #timelineVision.active,
-html.ios-lite-v115 #convergenceScreen:not(.hidden){
-    filter:none !important;
-}
+#iosDiagV200 .good{color:#8dffb0}
+#iosDiagV200 .warn{color:#ffd76b}
+#iosDiagV200 .bad{color:#ff8f8f}
 </style>
 
 </head>
@@ -10933,13 +10728,6 @@ function buildRewriteBoardV234(){
     });
 }
 
-
-function setRewriteIOSFocusV170(active){
-    const root=document.documentElement;
-    if(!root.classList.contains("ios-lite-v115"))return;
-    root.classList.toggle("rewrite-ios-focus-v170",!!active);
-}
-
 function resetRewriteGameV233(){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteGameIndexV234=0;
@@ -10966,7 +10754,6 @@ function openRewriteGameV233(onSuccess){
     if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite");
     rewriteSuccessCallbackV233=onSuccess;
     rewriteGameActiveV233=true;
-    setRewriteIOSFocusV170(true);
 
     // La RISCRITTURA vive dentro riftScene:
     // la rendiamo esplicitamente visibile prima di aprire il minigame.
@@ -10998,7 +10785,6 @@ function openFinalAutomaticRewriteV1(onSuccess){
 
     rewriteSuccessCallbackV233=onSuccess;
     rewriteGameActiveV233=true;
-    setRewriteIOSFocusV170(true);
 
     show("riftScene");
 
@@ -11079,52 +10865,14 @@ function openFinalAutomaticRewriteV1(onSuccess){
 function runRewriteTimerV234(){
     cancelAnimationFrame(rewriteGameRafV234);
 
-    const lagSafeIOS=document.documentElement.classList.contains("ios-lite-v115");
-    let lastFrameV170=performance.now();
-    let lastTextUpdateV170=0;
-    let lastBarUpdateV180=0;
-
-    const fillV170=document.getElementById("rwTimeFillV234");
-    const textV170=document.getElementById("rwTimeTextV234");
-
     function tick(now){
         if(!rewriteGameActiveV233)return;
 
-        /*
-          Su iPhone un freeze di Safari non deve consumare il timer.
-          Fino a 55ms/frame il tempo scorre normalmente; oltre quella
-          soglia recuperiamo solo la porzione persa per lag.
-        */
-        const deltaV170=Math.max(0,now-lastFrameV170);
-        lastFrameV170=now;
-
-        if(lagSafeIOS && deltaV170>55){
-            rewriteGameEndV234+=(deltaV170-55);
-        }
-
         rewriteRemainingV234=Math.max(0,rewriteGameEndV234-now);
-        const ratio=Math.max(
-            0,
-            Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234)
-        );
+        const ratio=Math.max(0,Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234));
 
-        /*
-          Su iOS aggiorniamo la barra a circa 20 FPS.
-          Il timer logico continua a usare performance.now(), quindi
-          la precisione non cambia, ma riduciamo drasticamente i paint.
-        */
-        if(!lagSafeIOS || now-lastBarUpdateV180>=50 || rewriteRemainingV234<=0){
-            fillV170.style.transform=`scaleX(${ratio})`;
-            lastBarUpdateV180=now;
-        }
-
-        /*
-          Il testo numerico viene aggiornato a 10 Hz.
-        */
-        if(now-lastTextUpdateV170>=100 || rewriteRemainingV234<=0){
-            textV170.textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
-            lastTextUpdateV170=now;
-        }
+        document.getElementById("rwTimeFillV234").style.transform=`scaleX(${ratio})`;
+        document.getElementById("rwTimeTextV234").textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
 
         if(rewriteRemainingV234<=0){
             failRewriteV234("TEMPO ESAURITO");
@@ -11235,15 +10983,6 @@ function retryRewriteV233(){
 function closeRewriteGameV233(){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteGameActiveV233=false;
-    setRewriteIOSFocusV170(false);
-
-    /*
-      Safari iOS: rilascia il frame della RISCRITTURA prima di
-      ripristinare la scena narrativa.
-    */
-    if(document.documentElement.classList.contains("ios-lite-v115")){
-        void document.body.offsetHeight;
-    }
 
     const overlay=document.getElementById("rewriteGameV233");
     overlay.classList.remove(
@@ -11278,7 +11017,6 @@ function checkGameOverV237(){
     cineSwipeActive=false;
     rewriteGameActiveV233=false;
     try{cancelAnimationFrame(rewriteGameRafV234)}catch(e){}
-    setRewriteIOSFocusV170(false);
 
     gameOverActiveV237=true;
 
@@ -16356,6 +16094,133 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     }else{
         maybeRestartPrologueV1();
     }
+})();
+</script>
+
+
+<script id="iosDiagnosticOverlayScript">
+(function(){
+    const ua=navigator.userAgent||"";
+    const platform=navigator.platform||"";
+    const maxTouch=navigator.maxTouchPoints||0;
+
+    const isiPhone=/iPhone|iPod/i.test(ua);
+    const isiPad=/iPad/i.test(ua) || (platform==="MacIntel" && maxTouch>1);
+    const detectedIOS=isiPhone||isiPad;
+
+    const box=document.createElement("div");
+    box.id="iosDiagV200";
+    box.textContent="DIAGNOSTICA iOS...";
+    document.body.appendChild(box);
+
+    let frameCount=0;
+    let lastFrame=performance.now();
+    let maxFrameGap=0;
+    let fps=0;
+
+    function frameLoop(now){
+        frameCount++;
+        const gap=now-lastFrame;
+        if(gap>maxFrameGap)maxFrameGap=gap;
+        lastFrame=now;
+        requestAnimationFrame(frameLoop);
+    }
+    requestAnimationFrame(frameLoop);
+
+    let lastSample=performance.now();
+
+    function activeScreenId(){
+        const screens=[...document.querySelectorAll(".screen")];
+        const visible=screens.find(el=>{
+            const cs=getComputedStyle(el);
+            return cs.display!=="none" &&
+                   cs.visibility!=="hidden" &&
+                   parseFloat(cs.opacity||"1")>0.01 &&
+                   !el.classList.contains("hidden");
+        });
+        return visible ? (visible.id||visible.className||"screen") : "N/D";
+    }
+
+    function currentBgInfo(){
+        const img=document.getElementById("prologueBgImageV191");
+        if(!img)return "N/D";
+        const src=(img.getAttribute("src")||"").split("/").pop()||"(vuoto)";
+        const nat=(img.naturalWidth&&img.naturalHeight)
+            ? `${img.naturalWidth}x${img.naturalHeight}`
+            : "non decodificato";
+        return `${src} • ${nat}`;
+    }
+
+    function imgStats(){
+        const imgs=[...document.images];
+        const loaded=imgs.filter(i=>i.complete && i.naturalWidth>0).length;
+        return `${loaded}/${imgs.length}`;
+    }
+
+    function runningAnimations(){
+        try{
+            if(!document.getAnimations)return "N/D";
+            return document.getAnimations().filter(a=>a.playState==="running").length;
+        }catch(e){
+            return "N/D";
+        }
+    }
+
+    function heapInfo(){
+        try{
+            if(performance.memory){
+                const used=(performance.memory.usedJSHeapSize/1048576).toFixed(1);
+                const total=(performance.memory.totalJSHeapSize/1048576).toFixed(1);
+                return `${used}/${total} MB`;
+            }
+        }catch(e){}
+        return "N/D";
+    }
+
+    function vvInfo(){
+        const vv=window.visualViewport;
+        if(!vv)return `${innerWidth}x${innerHeight}`;
+        return `${Math.round(vv.width)}x${Math.round(vv.height)} @${vv.scale.toFixed(2)}`;
+    }
+
+    function colorClassForFps(v){
+        return v>=50 ? "good" : (v>=30 ? "warn" : "bad");
+    }
+
+    function update(){
+        const now=performance.now();
+        const elapsed=(now-lastSample)/1000;
+        fps=Math.round(frameCount/Math.max(.001,elapsed));
+        frameCount=0;
+        lastSample=now;
+
+        const iosLite=document.documentElement.classList.contains("ios-lite-v115");
+        const rewriteFocus=document.documentElement.classList.contains("rewrite-ios-focus-v170");
+        const anims=runningAnimations();
+        const gapClass=maxFrameGap<35?"good":(maxFrameGap<80?"warn":"bad");
+
+        box.innerHTML=
+`<span class="${colorClassForFps(fps)}">FPS: ${fps}</span>   <span class="${gapClass}">MAX GAP: ${Math.round(maxFrameGap)}ms</span>
+iOS DETECT: <span class="${detectedIOS?"good":"bad"}">${detectedIOS?"YES":"NO"}</span>   ios-lite: <span class="${iosLite?"good":"bad"}">${iosLite?"ON":"OFF"}</span>
+REWRITE FOCUS: ${rewriteFocus?"ON":"OFF"}   ANIM RUNNING: ${anims}
+VIEWPORT: ${vvInfo()}   DPR: ${window.devicePixelRatio||1}
+SCREEN: ${activeScreenId()}
+PROLOGUE BG: ${currentBgInfo()}
+IMG LOADED: ${imgStats()}   JS HEAP: ${heapInfo()}
+UA: ${isiPhone?"iPhone":isiPad?"iPad":platform||"altro"}`;
+
+        maxFrameGap=0;
+    }
+
+    setInterval(update,1000);
+    update();
+
+    window.WIUDiagnosticV200={
+        get detectedIOS(){return detectedIOS},
+        get iosLite(){return document.documentElement.classList.contains("ios-lite-v115")},
+        get activeScreen(){return activeScreenId()},
+        get runningAnimations(){return runningAnimations()}
+    };
 })();
 </script>
 
