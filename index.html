@@ -5912,6 +5912,24 @@ html.ios-lite-v115 #prologueBgImageV191{
 }
 </style>
 
+
+<style id="iosInputMemoryV192Style">
+html.ios-lite-v115 #qteOverlay,
+html.ios-lite-v115 #branchQte{
+    touch-action:none !important;
+    overscroll-behavior:none !important;
+}
+
+/* Evita selezione/gesture native durante i momenti interattivi. */
+html.ios-lite-v115 #holdButton,
+html.ios-lite-v115 #resistButton,
+html.ios-lite-v115 #rwLettersV234{
+    touch-action:none !important;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+}
+</style>
+
 </head>
 
 
@@ -6110,7 +6128,7 @@ html.ios-lite-v115 #prologueBgImageV191{
 
                 <img
 
-                    src="./Kaelios.png"
+                    src="./Kaelios.png" decoding="async"
 
                     id="kaelios"
 
@@ -6384,7 +6402,7 @@ html.ios-lite-v115 #prologueBgImageV191{
 
                 <img
 
-                    src="./Kaelios.png"
+                    src="./Kaelios.png" decoding="async"
 
                     id="kaeliosAfter"
 
@@ -6504,7 +6522,7 @@ html.ios-lite-v115 #prologueBgImageV191{
 
         <img
 
-            src="./Kaelios.png"
+            src="./Kaelios.png" decoding="async"
 
             class="playerEnemy"
 
@@ -10509,16 +10527,23 @@ function mobileSwipeEnd(event){
 const originalQteOverlay=document.getElementById("qte");
 const branchQteOverlay=document.getElementById("branchQte");
 
-[originalQteOverlay,branchQteOverlay].forEach(overlay=>{
-    if(!overlay) return;
+/*
+  V2 — iOS usa SOLO Pointer Events.
+  Evitiamo touch handler duplicati e soprattutto listener non-passive
+  che obbligano Safari a sincronizzarsi col main thread.
+*/
+if(!document.documentElement.classList.contains("ios-lite-v115")){
+    [originalQteOverlay,branchQteOverlay].forEach(overlay=>{
+        if(!overlay) return;
 
-    overlay.addEventListener("touchstart",mobileSwipeStart,{passive:false});
-    overlay.addEventListener("touchend",mobileSwipeEnd,{passive:false});
-    overlay.addEventListener("touchcancel",()=>{
-        mobileQteStartX=null;
-        mobileQteStartY=null;
-    },{passive:true});
-});
+        overlay.addEventListener("touchstart",mobileSwipeStart,{passive:false});
+        overlay.addEventListener("touchend",mobileSwipeEnd,{passive:false});
+        overlay.addEventListener("touchcancel",()=>{
+            mobileQteStartX=null;
+            mobileQteStartY=null;
+        },{passive:true});
+    });
+}
 
 
 /* =========================================================
@@ -10589,11 +10614,13 @@ function unifiedTouchCancel(){
     unifiedSwipeStartY = null;
 }
 
-// Capture=true: il QTE riceve il touch prima di eventuali altri listener.
-document.addEventListener("touchstart", unifiedTouchStart, {passive:false, capture:true});
-document.addEventListener("touchmove",  unifiedTouchMove,  {passive:false, capture:true});
-document.addEventListener("touchend",   unifiedTouchEnd,   {passive:false, capture:true});
-document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  capture:true});
+// Android/desktop touch legacy: su iOS NON registriamo questi handler globali.
+if(!document.documentElement.classList.contains("ios-lite-v115")){
+    document.addEventListener("touchstart", unifiedTouchStart, {passive:false, capture:true});
+    document.addEventListener("touchmove",  unifiedTouchMove,  {passive:false, capture:true});
+    document.addEventListener("touchend",   unifiedTouchEnd,   {passive:false, capture:true});
+    document.addEventListener("touchcancel",unifiedTouchCancel,{passive:true,  capture:true});
+}
 
 
 
@@ -12152,19 +12179,19 @@ devRewriteDirectV253=function(){
       <div class="creator30Halo"></div>
 
       <div id="creator30Avatar" class="creator30Avatar">
-        <img id="creator30BaseMale" class="creator30Body active" src="./base_male.png" alt="">
-        <img id="creator30BaseFemale" class="creator30Body" src="./base_female.png" alt="">
-        <img id="creator30Crimson" class="creator30Body" src="./male_outfit_02.png" alt="">
-        <img id="creator30Verdant" class="creator30Body" src="./male_outfit_03.png" alt="">
-        <img id="creator30FemaleCrimson" class="creator30Body" src="./female_outfit_02.png" alt="">
-        <img id="creator30FemaleVerdant" class="creator30Body" src="./female_outfit_03.png" alt="">
+        <img id="creator30BaseMale" class="creator30Body active" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./base_male.png" decoding="async" alt="">
+        <img id="creator30BaseFemale" class="creator30Body" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./base_female.png" decoding="async" alt="">
+        <img id="creator30Crimson" class="creator30Body" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./male_outfit_02.png" decoding="async" alt="">
+        <img id="creator30Verdant" class="creator30Body" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./male_outfit_03.png" decoding="async" alt="">
+        <img id="creator30FemaleCrimson" class="creator30Body" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./female_outfit_02.png" decoding="async" alt="">
+        <img id="creator30FemaleVerdant" class="creator30Body" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./female_outfit_03.png" decoding="async" alt="">
 
-        <img id="creator30Hair1" class="creator30Hair" src="./hair_male_01.png" alt="">
-        <img id="creator30Hair2" class="creator30Hair" src="./hair_male_02.png" alt="">
-        <img id="creator30Hair3" class="creator30Hair" src="./hair_male_03.png" alt="">
-        <img id="creator30FemaleHair1" class="creator30Hair" src="./hair_female_01.png" alt="">
-        <img id="creator30FemaleHair2" class="creator30Hair" src="./hair_female_02_clean.png" alt="">
-        <img id="creator30FemaleHair3" class="creator30Hair" src="./hair_female_03.png" alt="">
+        <img id="creator30Hair1" class="creator30Hair" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./hair_male_01.png" decoding="async" alt="">
+        <img id="creator30Hair2" class="creator30Hair" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./hair_male_02.png" decoding="async" alt="">
+        <img id="creator30Hair3" class="creator30Hair" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./hair_male_03.png" decoding="async" alt="">
+        <img id="creator30FemaleHair1" class="creator30Hair" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./hair_female_01.png" decoding="async" alt="">
+        <img id="creator30FemaleHair2" class="creator30Hair" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./hair_female_02_clean.png" decoding="async" alt="">
+        <img id="creator30FemaleHair3" class="creator30Hair" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="./hair_female_03.png" decoding="async" alt="">
       </div>
 
       <div id="creator30Palette" class="creator30Palette" aria-label="Colore capelli">
@@ -12312,7 +12339,23 @@ function creator30Render(){
  const name=document.getElementById("creator30Name");
  if(document.activeElement!==name) name.value=creator30State.name||"";
 }
+
+let creatorAssetsLoadedV192=false;
+function ensureCreatorAssetsV192(){
+    if(creatorAssetsLoadedV192)return;
+    creatorAssetsLoadedV192=true;
+
+    document.querySelectorAll("#creatorV30 img[data-src]").forEach(img=>{
+        const src=img.dataset.src;
+        if(!src)return;
+        img.src=src;
+        img.removeAttribute("data-src");
+        img.decoding="async";
+    });
+}
+
 function openCreatorV30(){
+ ensureCreatorAssetsV192();
  const teaser=document.getElementById("hubTeaserV241");
  if(teaser){teaser.classList.remove("active");teaser.setAttribute("aria-hidden","true");}
  const oldChapter=document.getElementById("chapterCompleteV238");
@@ -15587,7 +15630,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    Background dinamici senza interferire con UI/gameplay.
    ========================================================= */
 (function(){
-    const BGS={
+    const BGS_DESKTOP={
         fracture:"./frattura_cosmica_tra_rovine_celesti.png",
         kaelios:"./vortice_cosmico_tra_rovine_stellari.png",
         run:"./rovine_celesti_nel_vortice_cosmico.png",
@@ -15595,40 +15638,40 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
         nexus:"./cittadella_celeste_tra_le_stelle.png"
     };
 
+    const BGS_IOS={
+        fracture:"./ios_fracture_bg.webp",
+        kaelios:"./ios_kaelios_bg.webp",
+        run:"./ios_run_bg.webp",
+        alt:"./ios_alt_bg.webp",
+        nexus:"./ios_nexus_bg.webp"
+    };
+
+    const BGS=document.documentElement.classList.contains("ios-lite-v115")
+        ? BGS_IOS
+        : BGS_DESKTOP;
+
     /*
-      iPhone: i background vengono richiesti e decodificati PRIMA
-      delle interazioni narrative. In setRiftBg non creiamo più un
-      nuovo Image() nel momento del click.
+      Preload leggero: scarica i file ma NON chiama img.decode().
+      Su Safari iOS decode() esplicito può forzare la decodifica
+      alla dimensione naturale e aumentare pressione di memoria.
     */
-    const BG_CACHE_V190={};
-
-    function warmPrologueBackgroundsV190(){
+    const BG_CACHE_V192={};
+    function warmPrologueBackgroundsV192(){
         Object.entries(BGS).forEach(([key,src],index)=>{
-            const pre=new Image();
-            BG_CACHE_V190[key]=pre;
-            pre.decoding="async";
-            pre.loading="eager";
-            pre.src=src;
-
-            /*
-              decode() è asincrono. Lo scaglioniamo leggermente per
-              evitare di avviare tutte le decodifiche nello stesso tick.
-            */
             setTimeout(()=>{
-                try{
-                    if(typeof pre.decode==="function"){
-                        pre.decode().catch(()=>{});
-                    }
-                }catch(e){}
-            },80*index);
+                const pre=new Image();
+                BG_CACHE_V192[key]=pre;
+                pre.decoding="async";
+                pre.src=src;
+            },120*index);
         });
     }
 
     if(document.readyState==="complete"){
-        setTimeout(warmPrologueBackgroundsV190,120);
+        setTimeout(warmPrologueBackgroundsV192,150);
     }else{
         window.addEventListener("load",()=>{
-            setTimeout(warmPrologueBackgroundsV190,120);
+            setTimeout(warmPrologueBackgroundsV192,150);
         },{once:true});
     }
 
@@ -15972,9 +16015,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
         unlock();
     }
 
-    document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
-    document.addEventListener("touchstart",firstAudioGesture,{capture:true,passive:true});
-    document.addEventListener("click",firstAudioGesture,{capture:true,passive:true});
+    if(document.documentElement.classList.contains("ios-lite-v115")){
+        document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
+    }else{
+        document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
+        document.addEventListener("touchstart",firstAudioGesture,{capture:true,passive:true});
+        document.addEventListener("click",firstAudioGesture,{capture:true,passive:true});
+    }
 
     const toggle=document.getElementById("audioToggleV112");
     if(toggle){
