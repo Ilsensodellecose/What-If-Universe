@@ -5930,6 +5930,202 @@ html.ios-lite-v115 #rwLettersV234{
 }
 </style>
 
+
+<style id="iosUltraLiteV300Style">
+/* =========================================================
+   iOS ULTRA LITE V3
+   Obiettivo: stabilità e input prima degli effetti cosmetici.
+   SOLO iPhone/iPad.
+   ========================================================= */
+
+/* Schermate davvero fuori dal render tree quando nascoste. */
+html.ios-lite-v115 .screen.hidden{
+    display:none !important;
+}
+
+/* Sistemi non attivi fuori dal rendering. */
+html.ios-lite-v115 #creatorV30:not(.active),
+html.ios-lite-v115 #nexusV41:not(.active),
+html.ios-lite-v115 #branchQte:not(.active),
+html.ios-lite-v115 #resistOverlay:not(.active),
+html.ios-lite-v115 #timelineVision:not(.active),
+html.ios-lite-v115 #rewriteGameV233:not(.active),
+html.ios-lite-v115 #rewriteFxV232:not(.active),
+html.ios-lite-v115 #gameOverV237:not(.active),
+html.ios-lite-v115 #chapterCompleteV238:not(.active),
+html.ios-lite-v115 #hubTeaserV241:not(.active){
+    display:none !important;
+}
+
+/* Una scena iOS deve essere il più possibile isolata. */
+html.ios-lite-v115 .screen,
+html.ios-lite-v115 #qteOverlay,
+html.ios-lite-v115 #branchQte,
+html.ios-lite-v115 #resistOverlay,
+html.ios-lite-v115 #rewriteGameV233{
+    contain:layout paint style !important;
+}
+
+/* Sfondo semplice nelle sezioni iniziali del prologo. */
+html.ios-lite-v115 #scene1,
+html.ios-lite-v115 #afterFight,
+html.ios-lite-v115 #playerAttack,
+html.ios-lite-v115 #result,
+html.ios-lite-v115 #riftChoice{
+    background:#05030c !important;
+}
+
+/* Niente animazioni decorative continue. */
+html.ios-lite-v115 #kaelios,
+html.ios-lite-v115 #kaeliosAfter,
+html.ios-lite-v115 .aura,
+html.ios-lite-v115 .riftKaelios,
+html.ios-lite-v115 #dodgeText,
+html.ios-lite-v115 .swipeFinger,
+html.ios-lite-v115 .swipeTrail,
+html.ios-lite-v115 #branchArrow,
+html.ios-lite-v115 #riftScene.cine-run,
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191,
+html.ios-lite-v115 #prologueBackdropV191 .prologueDustV110,
+html.ios-lite-v115 #riftScene.bg-run #prologueBackdropV191::after,
+html.ios-lite-v115 .cinePause{
+    animation:none !important;
+}
+
+/* Effetti puramente cosmetici eliminati. */
+html.ios-lite-v115 .aura,
+html.ios-lite-v115 #prologueBackdropV191 .prologueDustV110,
+html.ios-lite-v115 #prologueCineFlashV110,
+html.ios-lite-v115 #prologueLetterboxV110,
+html.ios-lite-v115 #riftScene.cine-alt::before,
+html.ios-lite-v115 #riftScene.cine-alt::after,
+html.ios-lite-v115 #riftScene.cine-entity::before,
+html.ios-lite-v115 #riftScene.cine-rewind::after{
+    display:none !important;
+}
+
+/* Nessun filtro GPU nelle immagini/personaggi del prologo. */
+html.ios-lite-v115 #kaelios,
+html.ios-lite-v115 #kaeliosAfter,
+html.ios-lite-v115 .riftKaelios,
+html.ios-lite-v115 .playerEnemy,
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191{
+    filter:none !important;
+    will-change:auto !important;
+}
+
+/* Background: singola immagine statica WebP, niente camera drift. */
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191{
+    inset:0 !important;
+    width:100% !important;
+    height:100% !important;
+    transform:none !important;
+    transition:none !important;
+    opacity:.52 !important;
+}
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgShadeV191{
+    background:linear-gradient(
+        180deg,
+        rgba(3,2,10,.34),
+        rgba(3,2,10,.50) 62%,
+        rgba(2,2,8,.80)
+    ) !important;
+}
+
+/* Scene cinematiche: niente background animato aggiuntivo. */
+html.ios-lite-v115 #riftScene.cine-run{
+    animation:none !important;
+    background:#05030c !important;
+}
+
+/* Ombre/glow sono costosi a DPR 3: li riduciamo drasticamente. */
+html.ios-lite-v115 #energyBall,
+html.ios-lite-v115 #playerBall,
+html.ios-lite-v115 .dialogue,
+html.ios-lite-v115 .riftDialogue,
+html.ios-lite-v115 .choice,
+html.ios-lite-v115 .branchAction,
+html.ios-lite-v115 button{
+    filter:none !important;
+    box-shadow:none !important;
+    text-shadow:none !important;
+}
+
+/* Crack ancora visibile, ma senza glow multipli. */
+html.ios-lite-v115 #riftCrack,
+html.ios-lite-v115 #riftCrack::before,
+html.ios-lite-v115 #riftCrack::after{
+    box-shadow:none !important;
+    filter:none !important;
+    will-change:auto !important;
+}
+
+/* Niente transizioni cosmetiche su UI/dialoghi. */
+html.ios-lite-v115 .dialogue,
+html.ios-lite-v115 .riftDialogue,
+html.ios-lite-v115 .choice,
+html.ios-lite-v115 .branchAction,
+html.ios-lite-v115 #hpBar,
+html.ios-lite-v115 #prologueBackdropV191 .prologueBgImageV191{
+    transition:none !important;
+}
+
+/* Manteniamo SOLO le animazioni funzionali degli attacchi. */
+html.ios-lite-v115 #energyBall.charge{
+    animation:chargeEnergy .9s ease-out forwards !important;
+}
+html.ios-lite-v115 #energyBall.fly{
+    animation:flyEnergy 1.25s cubic-bezier(.15,.55,.2,1) forwards !important;
+}
+html.ios-lite-v115 #playerBall.fireWeak{
+    animation:playerShotWeak .6s ease-in forwards !important;
+}
+html.ios-lite-v115 #playerBall.firePerfect{
+    animation:playerShotPerfect .5s cubic-bezier(.2,.75,.2,1) forwards !important;
+}
+html.ios-lite-v115 #playerBall.overload{
+    animation:playerOverload .42s ease-out forwards !important;
+}
+
+/* QTE e hold: niente transizioni CSS concorrenti con WAAPI. */
+html.ios-lite-v115 #timerBar,
+html.ios-lite-v115 #branchTimerBar,
+html.ios-lite-v115 #resistFill,
+html.ios-lite-v115 #chargeFill{
+    transition:none !important;
+    will-change:auto !important;
+}
+
+/* Evita gesture native che possono competere con il gameplay. */
+html.ios-lite-v115 #holdButton,
+html.ios-lite-v115 #resistButton,
+html.ios-lite-v115 #qteOverlay,
+html.ios-lite-v115 #branchQte,
+html.ios-lite-v115 #rwLettersV234{
+    touch-action:none !important;
+    overscroll-behavior:none !important;
+    -webkit-user-select:none !important;
+    user-select:none !important;
+}
+</style>
+
+
+<style id="iosRewriteIsolationV300">
+html.ios-lite-v115.rewrite-focus-v300 #riftScene > *:not(#rewriteGameV233){
+    display:none !important;
+}
+html.ios-lite-v115.rewrite-focus-v300 #rewriteGameV233{
+    display:flex !important;
+    background:#05020d !important;
+}
+html.ios-lite-v115.rewrite-focus-v300 #rewriteGameV233 .rwLetterV234,
+html.ios-lite-v115.rewrite-focus-v300 #rewriteGameV233 .rwSlotV234{
+    box-shadow:none !important;
+    text-shadow:none !important;
+    filter:none !important;
+}
+</style>
+
 </head>
 
 
@@ -6961,6 +7157,12 @@ let chargeFrame=null;
 
 let chargeStart=0;
 
+/* iOS: logica CARICA indipendente dagli FPS */
+let chargeStartEventTsV300=0;
+let chargePercentTimerV300=null;
+let chargeFillAnimationV300=null;
+let chargeBallAnimationV300=null;
+
 let playerAttackOutcome="";
 
 
@@ -7066,35 +7268,39 @@ const holdButton=
 
 
 function hide(id){
+    const el=document.getElementById(id);
+    if(!el)return;
 
+    el.classList.add("hidden");
 
-
-    document
-
-        .getElementById(id)
-
-        .classList
-
-        .add("hidden");
-
+    if(document.documentElement.classList.contains("ios-lite-v115") &&
+       el.classList.contains("screen")){
+        el.style.display="none";
+    }
 }
 
-
-
-
-
 function show(id){
+    const el=document.getElementById(id);
+    if(!el)return;
 
+    const isiOS=document.documentElement.classList.contains("ios-lite-v115");
 
+    /*
+      Safari iOS: una sola schermata narrativa nel render tree.
+      Gli overlay interni (QTE/RISCRITTURA) non hanno .screen e
+      continuano a funzionare sopra la schermata richiesta.
+    */
+    if(isiOS && el.classList.contains("screen")){
+        document.querySelectorAll(".screen").forEach(other=>{
+            if(other===el)return;
+            other.classList.add("hidden");
+            other.style.display="none";
+        });
 
-    document
+        el.style.display="flex";
+    }
 
-        .getElementById(id)
-
-        .classList
-
-        .remove("hidden");
-
+    el.classList.remove("hidden");
 }
 
 
@@ -7124,6 +7330,31 @@ function vibrate(pattern){
    iOS MAIN-THREAD TEST V1
    Riavvio animazioni senza letture sincrone di layout.
    ========================================================= */
+let qteDeadlineV300=0;
+let cineSwipeDeadlineV300=0;
+let cineResistStartEventTsV300=0;
+let cineResistAnimationV300=null;
+let cineResistTimeoutV300=null;
+
+function isIOSLiteV300(){
+    return document.documentElement.classList.contains("ios-lite-v115");
+}
+
+function eventStampV300(e){
+    let t=e && Number(e.timeStamp);
+    if(!Number.isFinite(t) || t<=0)return performance.now();
+
+    /*
+      Alcune implementazioni storiche di WebKit usano timestamp epoch-based.
+      Li riportiamo allo stesso riferimento temporale di performance.now().
+    */
+    if(t>1e12 && Number.isFinite(performance.timeOrigin)){
+        t-=performance.timeOrigin;
+    }
+
+    return t;
+}
+
 function restartClassAsyncIOSV190(el,className){
     if(!el)return;
     el.classList.remove(className);
@@ -7630,6 +7861,7 @@ function activateQTE(){
 
 
     qteActive=true;
+    qteDeadlineV300=performance.now()+1650;
 
 
 
@@ -7681,7 +7913,7 @@ function activateQTE(){
 
 
 
-        },1670);
+        },isIOSLiteV300()?2050:1670);
 
 }
 
@@ -8336,57 +8568,72 @@ function startPlayerAttack(){
 
 
 function beginPlayerCharge(event){
-
-
-
     event.preventDefault();
 
+    if(playerCharging)return;
 
-
-    if(playerCharging){
-
-        return;
-
-    }
-
-
+    try{
+        holdButton.setPointerCapture(event.pointerId);
+    }catch(e){}
 
     playerCharging=true;
-
     if(window.WIUSoundV112) window.WIUSoundV112.startCharge();
 
+    chargeStart=performance.now();
+    chargeStartEventTsV300=eventStampV300(event);
+    chargeValue=0;
 
-
-    chargeStart=
-
-        performance.now();
-
-
-
-    playerBall.className=
-
-        "active";
-
-
-
-    holdButton.textContent=
-
-        "RILASCIA!";
-
-
-
-    chargeTitle.textContent=
-
-        "ENERGIA";
-
-
-
+    playerBall.className="active";
+    holdButton.textContent="RILASCIA!";
+    chargeTitle.textContent="ENERGIA";
+    chargePercent.textContent="0%";
+    chargeFill.style.transform="scaleX(0)";
     vibrate(35);
 
+    if(isIOSLiteV300()){
+        /*
+          Visuale affidata al compositor.
+          La logica NON legge questa animazione.
+        */
+        try{
+            if(chargeFillAnimationV300)chargeFillAnimationV300.cancel();
+            chargeFillAnimationV300=chargeFill.animate(
+                [{transform:"scaleX(0)"},{transform:"scaleX(1)"}],
+                {duration:1000,easing:"linear",fill:"forwards"}
+            );
+        }catch(e){}
 
+        try{
+            if(chargeBallAnimationV300)chargeBallAnimationV300.cancel();
+            chargeBallAnimationV300=playerBall.animate(
+                [
+                    {transform:"translate3d(-50%,0,0) scale(.35)"},
+                    {transform:"translate3d(-50%,0,0) scale(2.15)"}
+                ],
+                {duration:1000,easing:"linear",fill:"forwards"}
+            );
+        }catch(e){}
+
+        /*
+          Solo il numero viene aggiornato a 10 Hz.
+          Anche se Safari salta frame, il rilascio viene giudicato
+          usando i timestamp pointerdown/pointerup.
+        */
+        clearInterval(chargePercentTimerV300);
+        chargePercentTimerV300=setInterval(()=>{
+            if(!playerCharging){
+                clearInterval(chargePercentTimerV300);
+                chargePercentTimerV300=null;
+                return;
+            }
+            const elapsed=Math.max(0,performance.now()-chargeStart);
+            chargePercent.textContent=Math.min(100,Math.floor(elapsed/10))+"%";
+        },100);
+
+        return;
+    }
 
     updatePlayerCharge();
-
 }
 
 
@@ -8403,7 +8650,9 @@ function beginPlayerCharge(event){
 
 function updatePlayerCharge(){
 
-
+    if(isIOSLiteV300()){
+        return;
+    }
 
     if(!playerCharging){
 
@@ -8576,9 +8825,8 @@ function updatePlayerCharge(){
 
 
 function releasePlayerCharge(
-
-    forced=false
-
+    forced=false,
+    sourceEvent=null
 ){
 
 
@@ -8592,6 +8840,34 @@ function releasePlayerCharge(
 
 
     playerCharging=false;
+
+    if(isIOSLiteV300()){
+        clearInterval(chargePercentTimerV300);
+        chargePercentTimerV300=null;
+
+        /*
+          QUESTO è il valore reale del gesto.
+          Nessun requestAnimationFrame può alterarlo.
+        */
+        if(!forced){
+            let elapsed=eventStampV300(sourceEvent)-chargeStartEventTsV300;
+            if(!Number.isFinite(elapsed) || elapsed<0 || elapsed>5000){
+                elapsed=performance.now()-chargeStart;
+            }
+            chargeValue=Math.max(0,Math.min(100,(elapsed/1000)*100));
+        }else{
+            chargeValue=100;
+        }
+
+        chargePercent.textContent=Math.floor(chargeValue)+"%";
+
+        try{
+            if(chargeFillAnimationV300)chargeFillAnimationV300.cancel();
+            if(chargeBallAnimationV300)chargeBallAnimationV300.cancel();
+        }catch(e){}
+        chargeFillAnimationV300=null;
+        chargeBallAnimationV300=null;
+    }
 
     if(window.WIUSoundV112){
         window.WIUSoundV112.stopCharge();
@@ -9637,11 +9913,8 @@ document.addEventListener(
 
 
             if(distance < -50){
-
-
-
-                successQTE();
-
+                const inTime=!isIOSLiteV300() || eventStampV300(event)<=qteDeadlineV300;
+                if(inTime)successQTE();
             }
 
         }
@@ -9651,15 +9924,7 @@ document.addEventListener(
 
 
         if(playerCharging){
-
-
-
-            releasePlayerCharge(
-
-                false
-
-            );
-
+            releasePlayerCharge(false,event);
         }
 
 
@@ -9687,11 +9952,34 @@ document.addEventListener(
 
 
 holdButton.addEventListener(
-
     "pointerdown",
-
     beginPlayerCharge
+);
 
+holdButton.addEventListener(
+    "pointerup",
+    event=>{
+        if(playerCharging){
+            event.preventDefault();
+            releasePlayerCharge(false,event);
+        }
+        try{
+            if(holdButton.hasPointerCapture(event.pointerId)){
+                holdButton.releasePointerCapture(event.pointerId);
+            }
+        }catch(e){}
+    },
+    {passive:false}
+);
+
+holdButton.addEventListener(
+    "pointercancel",
+    event=>{
+        if(playerCharging){
+            releasePlayerCharge(false,event);
+        }
+    },
+    {passive:true}
 );
 
 
@@ -9765,6 +10053,12 @@ document.addEventListener(
 
 
             playerCharging=false;
+            clearInterval(chargePercentTimerV300);
+            chargePercentTimerV300=null;
+            try{
+                if(chargeFillAnimationV300)chargeFillAnimationV300.cancel();
+                if(chargeBallAnimationV300)chargeBallAnimationV300.cancel();
+            }catch(e){}
 
             if(window.WIUSoundV112) window.WIUSoundV112.stopCharge();
 
@@ -10297,7 +10591,7 @@ function startResistanceV2(){
     button.textContent="TIENI PREMUTO";
 
     button.addEventListener("pointerdown",beginResistanceV2);
-    button.addEventListener("pointerup",cancelResistanceV2);
+    button.addEventListener("pointerup",endResistanceV300);
     button.addEventListener("pointercancel",cancelResistanceV2);
 
     overlay.classList.add("active");
@@ -10309,12 +10603,53 @@ function beginResistanceV2(e){
 
     cineResistActive=true;
     cineResistStart=performance.now();
+    cineResistStartEventTsV300=eventStampV300(e);
     document.getElementById("resistButton").textContent="NON MOLLARE";
     vibrate(35);
+
+    if(isIOSLiteV300()){
+        const fill=document.getElementById("resistFill");
+        try{
+            if(cineResistAnimationV300)cineResistAnimationV300.cancel();
+            cineResistAnimationV300=fill.animate(
+                [{transform:"scaleX(0)"},{transform:"scaleX(1)"}],
+                {duration:1800,easing:"linear",fill:"forwards"}
+            );
+        }catch(err){}
+
+        clearTimeout(cineResistTimeoutV300);
+        cineResistTimeoutV300=setTimeout(()=>{
+            if(cineResistActive)completeResistanceV2();
+        },1800);
+        return;
+    }
+
     resistanceFrameV2();
 }
 
+function endResistanceV300(e){
+    if(!cineResistActive)return;
+
+    if(!isIOSLiteV300()){
+        cancelResistanceV2();
+        return;
+    }
+
+    const elapsed=eventStampV300(e)-cineResistStartEventTsV300;
+
+    /*
+      Il hold vale se il dito è rimasto giù 1.8 secondi reali,
+      indipendentemente dal numero di frame disegnati.
+    */
+    if(elapsed>=1800){
+        completeResistanceV2();
+    }else{
+        cancelResistanceV2();
+    }
+}
+
 function resistanceFrameV2(){
+    if(isIOSLiteV300())return;
     if(!cineResistActive)return;
 
     const p=Math.min(1,(performance.now()-cineResistStart)/1800);
@@ -10332,6 +10667,12 @@ function cancelResistanceV2(){
     if(!cineResistActive)return;
 
     cineResistActive=false;
+    clearTimeout(cineResistTimeoutV300);
+    cineResistTimeoutV300=null;
+    try{
+        if(cineResistAnimationV300)cineResistAnimationV300.cancel();
+    }catch(e){}
+    cineResistAnimationV300=null;
 
     if(cineResistRAF){
         cancelAnimationFrame(cineResistRAF);
@@ -10344,6 +10685,12 @@ function cancelResistanceV2(){
 
 function completeResistanceV2(){
     cineResistActive=false;
+    clearTimeout(cineResistTimeoutV300);
+    cineResistTimeoutV300=null;
+    try{
+        if(cineResistAnimationV300)cineResistAnimationV300.cancel();
+    }catch(e){}
+    cineResistAnimationV300=null;
     if(cineResistRAF){
         cancelAnimationFrame(cineResistRAF);
         cineResistRAF=null;
@@ -10371,6 +10718,7 @@ function startRunQTE(){
 function startCineDodge(direction){
     cineSwipeActive=true;
     cineSwipeDirection=direction;
+    cineSwipeDeadlineV300=performance.now()+1650;
 
     const overlay=document.getElementById("branchQte");
     const arrow=document.getElementById("branchArrow");
@@ -10389,7 +10737,7 @@ function startCineDodge(direction){
     clearTimeout(cineSwipeTimer);
     cineSwipeTimer=setTimeout(()=>{
         if(cineSwipeActive)finishCineDodge(false);
-    },1670);
+    },isIOSLiteV300()?2050:1670);
 }
 
 function finishCineDodge(success){
@@ -10462,7 +10810,10 @@ document.addEventListener("pointerup",e=>{
         (cineSwipeDirection==="left" && d < -50) ||
         (cineSwipeDirection==="right" && d > 50);
 
-    if(ok)finishCineDodge(true);
+    if(ok){
+        const inTime=!isIOSLiteV300() || eventStampV300(e)<=cineSwipeDeadlineV300;
+        if(inTime)finishCineDodge(true);
+    }
 },{passive:true});
 
 
@@ -10751,6 +11102,7 @@ function resetRewriteGameV233(){
 }
 
 function openRewriteGameV233(onSuccess){
+    if(isIOSLiteV300())document.documentElement.classList.add("rewrite-focus-v300");
     if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite");
     rewriteSuccessCallbackV233=onSuccess;
     rewriteGameActiveV233=true;
@@ -10781,6 +11133,7 @@ function openRewriteGameV233(onSuccess){
    a una RISCRITTURA completata manualmente.
 */
 function openFinalAutomaticRewriteV1(onSuccess){
+    if(isIOSLiteV300())document.documentElement.classList.add("rewrite-focus-v300");
     if(window.WIUSoundV112) window.WIUSoundV112.play("rewrite");
 
     rewriteSuccessCallbackV233=onSuccess;
@@ -10863,14 +11216,40 @@ function openFinalAutomaticRewriteV1(onSuccess){
 function runRewriteTimerV234(){
     cancelAnimationFrame(rewriteGameRafV234);
 
+    const isiOS=isIOSLiteV300();
+    let lastFrame=performance.now();
+    let lastBarUpdate=0;
+    let lastTextUpdate=0;
+
+    const fill=document.getElementById("rwTimeFillV234");
+    const text=document.getElementById("rwTimeTextV234");
+
     function tick(now){
         if(!rewriteGameActiveV233)return;
+
+        const delta=Math.max(0,now-lastFrame);
+        lastFrame=now;
+
+        /*
+          Un freeze di Safari non deve sottrarre tempo al giocatore.
+          Conserviamo al massimo 50ms per frame; il resto è browser lag.
+        */
+        if(isiOS && delta>50){
+            rewriteGameEndV234+=(delta-50);
+        }
 
         rewriteRemainingV234=Math.max(0,rewriteGameEndV234-now);
         const ratio=Math.max(0,Math.min(1,rewriteRemainingV234/REWRITE_DURATION_V234));
 
-        document.getElementById("rwTimeFillV234").style.transform=`scaleX(${ratio})`;
-        document.getElementById("rwTimeTextV234").textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
+        if(!isiOS || now-lastBarUpdate>=50 || rewriteRemainingV234<=0){
+            fill.style.transform=`scaleX(${ratio})`;
+            lastBarUpdate=now;
+        }
+
+        if(!isiOS || now-lastTextUpdate>=100 || rewriteRemainingV234<=0){
+            text.textContent=(rewriteRemainingV234/1000).toFixed(1)+"s";
+            lastTextUpdate=now;
+        }
 
         if(rewriteRemainingV234<=0){
             failRewriteV234("TEMPO ESAURITO");
@@ -10979,6 +11358,7 @@ function retryRewriteV233(){
 function closeRewriteGameV233(){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteGameActiveV233=false;
+    document.documentElement.classList.remove("rewrite-focus-v300");
 
     const overlay=document.getElementById("rewriteGameV233");
     overlay.classList.remove(
