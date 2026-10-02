@@ -5895,29 +5895,21 @@ html.ios-lite-v115 #convergenceScreen:not(.hidden){
 </style>
 
 
-<style id="iosDiagnosticOverlayStyle">
-#iosDiagV200{
-    position:fixed;
-    left:max(8px, env(safe-area-inset-left));
-    bottom:max(8px, env(safe-area-inset-bottom));
-    z-index:2147483646;
-    width:min(310px, calc(100vw - 16px));
-    padding:8px 10px;
-    border:1px solid rgba(205,180,255,.42);
-    border-radius:10px;
-    background:rgba(4,3,10,.88);
-    color:#fff;
-    font:700 10px/1.35 Arial,sans-serif;
-    text-align:left;
-    pointer-events:none;
-    white-space:pre-line;
-    box-shadow:none;
-    backdrop-filter:none;
-    -webkit-backdrop-filter:none;
+<style id="iosMainThreadTestV190Style">
+/* =========================================================
+   iOS MAIN-THREAD TEST V1
+   Grafica invariata, ma niente transizioni CSS superflue
+   sulle barre temporizzate: vengono gestite via WAAPI.
+   ========================================================= */
+html.ios-lite-v115 #timerBar,
+html.ios-lite-v115 #branchTimerBar{
+    transition:none !important;
+    will-change:auto !important;
 }
-#iosDiagV200 .good{color:#8dffb0}
-#iosDiagV200 .warn{color:#ffd76b}
-#iosDiagV200 .bad{color:#ff8f8f}
+
+html.ios-lite-v115 #prologueBgImageV191{
+    decoding:async;
+}
 </style>
 
 </head>
@@ -7109,19 +7101,84 @@ function vibrate(pattern){
 
 
 
+
+/* =========================================================
+   iOS MAIN-THREAD TEST V1
+   Riavvio animazioni senza letture sincrone di layout.
+   ========================================================= */
+function restartClassAsyncIOSV190(el,className){
+    if(!el)return;
+    el.classList.remove(className);
+
+    const isiOS=document.documentElement.classList.contains("ios-lite-v115");
+
+    if(!isiOS){
+        /* Desktop/Android: comportamento originale. */
+        void el.offsetWidth;
+        el.classList.add(className);
+        return;
+    }
+
+    /* iPhone/iPad: nessun forced reflow. */
+    requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+            el.classList.add(className);
+        });
+    });
+}
+
+function restartTransformTimerIOSV190(el,durationMs){
+    if(!el)return;
+
+    const isiOS=document.documentElement.classList.contains("ios-lite-v115");
+
+    if(!isiOS){
+        el.style.transition="none";
+        el.style.transform="scaleX(1)";
+        void el.offsetWidth;
+        el.style.transition=`transform ${durationMs/1000}s linear`;
+        el.style.transform="scaleX(0)";
+        return;
+    }
+
+    /*
+      Web Animations API: evita il flush sincrono del layout
+      necessario al vecchio reset CSS.
+    */
+    try{
+        if(el._wiuTimerAnimationV190){
+            el._wiuTimerAnimationV190.cancel();
+        }
+        el.style.transition="none";
+        el.style.transform="scaleX(1)";
+
+        el._wiuTimerAnimationV190=el.animate(
+            [
+                {transform:"scaleX(1)"},
+                {transform:"scaleX(0)"}
+            ],
+            {
+                duration:durationMs,
+                easing:"linear",
+                fill:"forwards"
+            }
+        );
+    }catch(err){
+        /* Fallback asincrono senza offsetWidth. */
+        requestAnimationFrame(()=>{
+            requestAnimationFrame(()=>{
+                el.style.transition=`transform ${durationMs/1000}s linear`;
+                el.style.transform="scaleX(0)";
+            });
+        });
+    }
+}
+
 function addShake(duration=450){
 
 
 
-    game.classList.remove("shake");
-
-
-
-    void game.offsetWidth;
-
-
-
-    game.classList.add("shake");
+    restartClassAsyncIOSV190(game,"shake");
 
 
 
@@ -7145,23 +7202,7 @@ function flashImpact(){
 
 
 
-    impactFlash.classList.remove(
-
-        "hit"
-
-    );
-
-
-
-    void impactFlash.offsetWidth;
-
-
-
-    impactFlash.classList.add(
-
-        "hit"
-
-    );
+    restartClassAsyncIOSV190(impactFlash,"hit");
 
 }
 
@@ -7486,18 +7527,7 @@ function chargeAttack(){
 
 
     energyBall.className="";
-
-
-
-    void energyBall.offsetWidth;
-
-
-
-    energyBall.classList.add(
-
-        "charge"
-
-    );
+    restartClassAsyncIOSV190(energyBall,"charge");
 
     /* SFX preciso: Kaelios inizia davvero a caricare l'attacco. */
     if(window.WIUSoundV112) window.WIUSoundV112.startCharge();
@@ -7532,23 +7562,8 @@ function chargeAttack(){
 
 
 
-        energyBall.classList.remove(
-
-            "charge"
-
-        );
-
-
-
-        void energyBall.offsetWidth;
-
-
-
-        energyBall.classList.add(
-
-            "fly"
-
-        );
+        energyBall.classList.remove("charge");
+        restartClassAsyncIOSV190(energyBall,"fly");
 
         /* SFX preciso: fine carica + lancio della sfera. */
         if(window.WIUSoundV112){
@@ -7618,33 +7633,7 @@ function activateQTE(){
 
 
 
-    timerBar.style.transition=
-
-        "none";
-
-
-
-    timerBar.style.transform=
-
-        "scaleX(1)";
-
-
-
-    void timerBar.offsetWidth;
-
-
-
-
-
-    timerBar.style.transition=
-
-        "transform 1.65s linear";
-
-
-
-    timerBar.style.transform=
-
-        "scaleX(0)";
+    restartTransformTimerIOSV190(timerBar,1650);
 
 
 
@@ -8727,13 +8716,7 @@ function resolvePlayerAttack(type){
 
 
 
-    playerBall.className=
-
-        "active";
-
-
-
-    void playerBall.offsetWidth;
+    playerBall.className="active";
 
 
 
@@ -8743,11 +8726,11 @@ function resolvePlayerAttack(type){
 
 
 
-        playerBall.classList.add(
-
-            "firePerfect"
-
-        );
+        if(document.documentElement.classList.contains("ios-lite-v115")){
+            restartClassAsyncIOSV190(playerBall,"firePerfect");
+        }else{
+            playerBall.classList.add("firePerfect");
+        }
 
 
 
@@ -8811,11 +8794,11 @@ function resolvePlayerAttack(type){
 
 
 
-        playerBall.classList.add(
-
-            "fireWeak"
-
-        );
+        if(document.documentElement.classList.contains("ios-lite-v115")){
+            restartClassAsyncIOSV190(playerBall,"fireWeak");
+        }else{
+            playerBall.classList.add("fireWeak");
+        }
 
 
 
@@ -9947,11 +9930,7 @@ function startBranchDodge2(direction,step){
     hint.textContent=direction==="left"?"SCORRI VERSO SINISTRA":"SCORRI VERSO DESTRA";
     overlay.classList.add("active");
 
-    bar.style.transition="none";
-    bar.style.transform="scaleX(1)";
-    void bar.offsetWidth;
-    bar.style.transition="transform 1.55s linear";
-    bar.style.transform="scaleX(0)";
+    restartTransformTimerIOSV190(bar,1550);
 
     vibrate([70,30,70]);
     clearTimeout(branchTimeout2);
@@ -10160,9 +10139,7 @@ function cineShow(step){
     }
 
     if(step.pause){
-        e.text.classList.remove("cinePause");
-        void e.text.offsetWidth;
-        e.text.classList.add("cinePause");
+        restartClassAsyncIOSV190(e.text,"cinePause");
     }
 }
 
@@ -10387,11 +10364,7 @@ function startCineDodge(direction){
 
     overlay.classList.add("active");
 
-    bar.style.transition="none";
-    bar.style.transform="scaleX(1)";
-    void bar.offsetWidth;
-    bar.style.transition="transform 1.65s linear";
-    bar.style.transform="scaleX(0)";
+    restartTransformTimerIOSV190(bar,1650);
 
     vibrate([55,25,55]);
 
@@ -10836,9 +10809,7 @@ function openFinalAutomaticRewriteV1(onSuccess){
             return;
         }
 
-        btn.classList.remove("auto-press-final-v1");
-        void btn.offsetWidth;
-        btn.classList.add("auto-press-final-v1");
+        restartClassAsyncIOSV190(btn,"auto-press-final-v1");
 
         setTimeout(()=>{
             if(!rewriteGameActiveV233)return;
@@ -10891,9 +10862,7 @@ function chooseRewriteLetterV234(btn,letter){
     const expected=REWRITE_WORD_V234[rewriteGameIndexV234];
 
     if(letter!==expected){
-        btn.classList.remove("wrong");
-        void btn.offsetWidth;
-        btn.classList.add("wrong");
+        restartClassAsyncIOSV190(btn,"wrong");
 
         // Errore: mezzo secondo viene strappato alla linea temporale.
         rewriteGameEndV234-=REWRITE_PENALTY_V234;
@@ -11095,9 +11064,7 @@ function playRewriteFxV232(onDone){
     const fx=document.getElementById("rewriteFxV232");
     clearTimeout(rewriteFxTimerV232);
     scene.classList.add("rewinding-v232");
-    fx.classList.remove("active");
-    void fx.offsetWidth;
-    fx.classList.add("active");
+    restartClassAsyncIOSV190(fx,"active");
     vibrate([35,25,55,25,90]);
 
     rewriteFxTimerV232=setTimeout(()=>{
@@ -15628,6 +15595,43 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
         nexus:"./cittadella_celeste_tra_le_stelle.png"
     };
 
+    /*
+      iPhone: i background vengono richiesti e decodificati PRIMA
+      delle interazioni narrative. In setRiftBg non creiamo più un
+      nuovo Image() nel momento del click.
+    */
+    const BG_CACHE_V190={};
+
+    function warmPrologueBackgroundsV190(){
+        Object.entries(BGS).forEach(([key,src],index)=>{
+            const pre=new Image();
+            BG_CACHE_V190[key]=pre;
+            pre.decoding="async";
+            pre.loading="eager";
+            pre.src=src;
+
+            /*
+              decode() è asincrono. Lo scaglioniamo leggermente per
+              evitare di avviare tutte le decodifiche nello stesso tick.
+            */
+            setTimeout(()=>{
+                try{
+                    if(typeof pre.decode==="function"){
+                        pre.decode().catch(()=>{});
+                    }
+                }catch(e){}
+            },80*index);
+        });
+    }
+
+    if(document.readyState==="complete"){
+        setTimeout(warmPrologueBackgroundsV190,120);
+    }else{
+        window.addEventListener("load",()=>{
+            setTimeout(warmPrologueBackgroundsV190,120);
+        },{once:true});
+    }
+
     function setRiftBg(key){
         const scene=document.getElementById("riftScene");
         const img=document.getElementById("prologueBgImageV191");
@@ -15640,28 +15644,44 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
         scene.classList.remove("bg-fracture","bg-kaelios","bg-run","bg-alt","bg-nexus","scene-shift");
         scene.classList.add("bg-"+finalKey,"cinematic-bars");
 
-        void scene.offsetWidth;
-        scene.classList.add("scene-shift");
-        setTimeout(()=>scene.classList.remove("scene-shift"),460);
+        if(document.documentElement.classList.contains("ios-lite-v115")){
+            /* Nessun forced layout: la transizione parte asincrona. */
+            requestAnimationFrame(()=>{
+                scene.classList.add("scene-shift");
+                setTimeout(()=>scene.classList.remove("scene-shift"),460);
+            });
+        }else{
+            void scene.offsetWidth;
+            scene.classList.add("scene-shift");
+            setTimeout(()=>scene.classList.remove("scene-shift"),460);
+        }
 
         if(img.getAttribute("src")!==src){
             if(flash){
-                flash.classList.remove("active");
-                void flash.offsetWidth;
-                flash.classList.add("active");
+                if(document.documentElement.classList.contains("ios-lite-v115")){
+                    restartClassAsyncIOSV190(flash,"active");
+                }else{
+                    flash.classList.remove("active");
+                    void flash.offsetWidth;
+                    flash.classList.add("active");
+                }
                 setTimeout(()=>flash.classList.remove("active"),520);
             }
 
             img.style.opacity=".10";
 
-            const preload=new Image();
-            preload.onload=()=>{
-                img.src=src;
+            /*
+              Usa direttamente il file già richiesto in BG_CACHE.
+              Se la decodifica non è ancora terminata, Safari completerà
+              il caricamento in modo asincrono senza creare un nuovo Image
+              nel gesto del giocatore.
+            */
+            img.src=src;
+            requestAnimationFrame(()=>{
                 requestAnimationFrame(()=>{
                     img.style.opacity=".58";
                 });
-            };
-            preload.src=src;
+            });
         }else{
             img.style.opacity=".58";
         }
@@ -15676,9 +15696,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     function cinematicPulseV110(){
         const flash=document.getElementById("prologueCineFlashV110");
         if(!flash)return;
-        flash.classList.remove("active");
-        void flash.offsetWidth;
-        flash.classList.add("active");
+        if(document.documentElement.classList.contains("ios-lite-v115")){
+            restartClassAsyncIOSV190(flash,"active");
+        }else{
+            flash.classList.remove("active");
+            void flash.offsetWidth;
+            flash.classList.add("active");
+        }
         setTimeout(()=>flash.classList.remove("active"),520);
     }
     window.cinematicPulseV110=cinematicPulseV110;
@@ -16037,9 +16061,17 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
         const originalVibrateV1142=window.vibrate;
 
         window.vibrate=function(pattern){
-            if(enabled){
+            const isiOS=document.documentElement.classList.contains("ios-lite-v115");
+
+            /*
+              TEST iOS:
+              niente fracture.wav automatico su ogni pseudo-vibrazione.
+              Restano intatti tutti gli SFX narrativi espliciti.
+            */
+            if(enabled && !isiOS){
                 play("fracture",.24);
             }
+
             return originalVibrateV1142.apply(this,arguments);
         };
     }
@@ -16094,133 +16126,6 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     }else{
         maybeRestartPrologueV1();
     }
-})();
-</script>
-
-
-<script id="iosDiagnosticOverlayScript">
-(function(){
-    const ua=navigator.userAgent||"";
-    const platform=navigator.platform||"";
-    const maxTouch=navigator.maxTouchPoints||0;
-
-    const isiPhone=/iPhone|iPod/i.test(ua);
-    const isiPad=/iPad/i.test(ua) || (platform==="MacIntel" && maxTouch>1);
-    const detectedIOS=isiPhone||isiPad;
-
-    const box=document.createElement("div");
-    box.id="iosDiagV200";
-    box.textContent="DIAGNOSTICA iOS...";
-    document.body.appendChild(box);
-
-    let frameCount=0;
-    let lastFrame=performance.now();
-    let maxFrameGap=0;
-    let fps=0;
-
-    function frameLoop(now){
-        frameCount++;
-        const gap=now-lastFrame;
-        if(gap>maxFrameGap)maxFrameGap=gap;
-        lastFrame=now;
-        requestAnimationFrame(frameLoop);
-    }
-    requestAnimationFrame(frameLoop);
-
-    let lastSample=performance.now();
-
-    function activeScreenId(){
-        const screens=[...document.querySelectorAll(".screen")];
-        const visible=screens.find(el=>{
-            const cs=getComputedStyle(el);
-            return cs.display!=="none" &&
-                   cs.visibility!=="hidden" &&
-                   parseFloat(cs.opacity||"1")>0.01 &&
-                   !el.classList.contains("hidden");
-        });
-        return visible ? (visible.id||visible.className||"screen") : "N/D";
-    }
-
-    function currentBgInfo(){
-        const img=document.getElementById("prologueBgImageV191");
-        if(!img)return "N/D";
-        const src=(img.getAttribute("src")||"").split("/").pop()||"(vuoto)";
-        const nat=(img.naturalWidth&&img.naturalHeight)
-            ? `${img.naturalWidth}x${img.naturalHeight}`
-            : "non decodificato";
-        return `${src} • ${nat}`;
-    }
-
-    function imgStats(){
-        const imgs=[...document.images];
-        const loaded=imgs.filter(i=>i.complete && i.naturalWidth>0).length;
-        return `${loaded}/${imgs.length}`;
-    }
-
-    function runningAnimations(){
-        try{
-            if(!document.getAnimations)return "N/D";
-            return document.getAnimations().filter(a=>a.playState==="running").length;
-        }catch(e){
-            return "N/D";
-        }
-    }
-
-    function heapInfo(){
-        try{
-            if(performance.memory){
-                const used=(performance.memory.usedJSHeapSize/1048576).toFixed(1);
-                const total=(performance.memory.totalJSHeapSize/1048576).toFixed(1);
-                return `${used}/${total} MB`;
-            }
-        }catch(e){}
-        return "N/D";
-    }
-
-    function vvInfo(){
-        const vv=window.visualViewport;
-        if(!vv)return `${innerWidth}x${innerHeight}`;
-        return `${Math.round(vv.width)}x${Math.round(vv.height)} @${vv.scale.toFixed(2)}`;
-    }
-
-    function colorClassForFps(v){
-        return v>=50 ? "good" : (v>=30 ? "warn" : "bad");
-    }
-
-    function update(){
-        const now=performance.now();
-        const elapsed=(now-lastSample)/1000;
-        fps=Math.round(frameCount/Math.max(.001,elapsed));
-        frameCount=0;
-        lastSample=now;
-
-        const iosLite=document.documentElement.classList.contains("ios-lite-v115");
-        const rewriteFocus=document.documentElement.classList.contains("rewrite-ios-focus-v170");
-        const anims=runningAnimations();
-        const gapClass=maxFrameGap<35?"good":(maxFrameGap<80?"warn":"bad");
-
-        box.innerHTML=
-`<span class="${colorClassForFps(fps)}">FPS: ${fps}</span>   <span class="${gapClass}">MAX GAP: ${Math.round(maxFrameGap)}ms</span>
-iOS DETECT: <span class="${detectedIOS?"good":"bad"}">${detectedIOS?"YES":"NO"}</span>   ios-lite: <span class="${iosLite?"good":"bad"}">${iosLite?"ON":"OFF"}</span>
-REWRITE FOCUS: ${rewriteFocus?"ON":"OFF"}   ANIM RUNNING: ${anims}
-VIEWPORT: ${vvInfo()}   DPR: ${window.devicePixelRatio||1}
-SCREEN: ${activeScreenId()}
-PROLOGUE BG: ${currentBgInfo()}
-IMG LOADED: ${imgStats()}   JS HEAP: ${heapInfo()}
-UA: ${isiPhone?"iPhone":isiPad?"iPad":platform||"altro"}`;
-
-        maxFrameGap=0;
-    }
-
-    setInterval(update,1000);
-    update();
-
-    window.WIUDiagnosticV200={
-        get detectedIOS(){return detectedIOS},
-        get iosLite(){return document.documentElement.classList.contains("ios-lite-v115")},
-        get activeScreen(){return activeScreenId()},
-        get runningAnimations(){return runningAnimations()}
-    };
 })();
 </script>
 
