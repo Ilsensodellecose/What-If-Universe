@@ -16074,3 +16074,4038 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     {speaker:"KAELIOS",text:"Ma non aspettarti lo stesso combattimento due volte. Ogni volta che riuscirai a battermi, la sfida successiva diventerà più difficile."}
    ]
   },
+  {
+   area:"lower",
+   x:865,y:470,
+   location:"ARENA",
+   sub:"TUTORIAL DI COMBATTIMENTO",
+   objective:"SEGUI KAELIOS • ARENA",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questa è l'Arena."},
+    {speaker:"KAELIOS",text:"Qui imparerai a combattere davvero: attacco, difesa, schivata, gestione dell'energia e tecniche."},
+    {speaker:"KAELIOS",text:"Non sarà un test di statistiche. Il tuo livello conterà, ma dovrai anche imparare a leggere l'avversario e usare bene ciò che hai sbloccato."}
+   ]
+  },
+  {
+   area:"lower",
+   x:625,y:175,
+   transition:"core",
+   spawn:"fromLower",
+   objective:"SEGUI KAELIOS • ACCESSO AL NUCLEO"
+  },
+
+  {
+   area:"core",
+   x:768,y:555,
+   location:"NUCLEO",
+   sub:"MICROZONA 2",
+   objective:"SEGUI KAELIOS • NUCLEO",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questo è il Nucleo. Il cuore energetico del Nexus."},
+    {speaker:"KAELIOS",text:"Le strutture che vedi intorno a noi utilizzano la sua energia per stabilizzare il tuo corpo, le tue tecniche e i collegamenti con le altre realtà."}
+   ]
+  },
+  {
+   area:"core",
+   x:440,y:350,
+   location:"ARCHIVIO DELLE FORME",
+   sub:"OUTFIT • ASPETTI",
+   objective:"SEGUI KAELIOS • ARCHIVIO DELLE FORME",
+   dialogue:[
+    {speaker:"KAELIOS",text:"A sinistra c'è l'Archivio delle Forme."},
+    {speaker:"KAELIOS",text:"Qui potrai modificare outfit e aspetto senza dover ricreare il tuo personaggio."}
+   ]
+  },
+  {
+   area:"core",
+   x:1085,y:355,
+   location:"CAMERA DI RISONANZA",
+   sub:"TECNICHE • TRASFORMAZIONI",
+   objective:"SEGUI KAELIOS • CAMERA DI RISONANZA",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questa invece è la Camera di Risonanza."},
+    {speaker:"KAELIOS",text:"Diventerà il punto in cui gestirai tecniche, trasformazioni e potenziamenti sbloccati durante la tua progressione."},
+    {speaker:"KAELIOS",text:"Avere più potere non basterà. Dovrai decidere quale potere portare con te."}
+   ]
+  },
+  {
+   area:"core",
+   x:768,y:125,
+   transition:"upper",
+   spawn:"fromCore",
+   objective:"SEGUI KAELIOS • CONVERGENZA"
+  },
+
+  {
+   area:"upper",
+   x:770,y:555,
+   location:"CONVERGENZA",
+   sub:"MICROZONA 3",
+   objective:"SEGUI KAELIOS • CONVERGENZA",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questa è la Convergenza."},
+    {speaker:"KAELIOS",text:"Da qui il Nexus si collega alle realtà che possiamo attraversare."}
+   ]
+  },
+  {
+   area:"upper",
+   x:430,y:300,
+   location:"PORTALE 01",
+   sub:"PRIMO UNIVERSO",
+   objective:"SEGUI KAELIOS • PORTALE 01",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Il primo portale conduce all'Universo Trascendente."},
+    {speaker:"KAELIOS",text:"Lì troverai quattro mondi. Entrando in quei mondi la trama continuerà e incontrerai realtà che non avrebbero dovuto esistere."}
+   ]
+  },
+  {
+   area:"upper",
+   x:760,y:265,
+   location:"PORTALI DELLE REALTÀ",
+   sub:"PROGRESSIONE",
+   objective:"SEGUI KAELIOS • PORTALI DELLE REALTÀ",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Gli altri portali sono ancora sigillati. Si apriranno man mano che avanzerai."},
+    {speaker:"KAELIOS",text:"Quello al centro è il Portale di Ascensione. Non conduce a un singolo mondo: si attiverà quando avrai completato ciò che questo Nexus può offrirti e permetterà di raggiungere un nuovo hub."}
+   ]
+  },
+  {
+   area:"upper",
+   x:1210,y:235,
+   location:"SETTORE SIGILLATO",
+   sub:"ACCESSO PROIBITO",
+   objective:"SEGUI KAELIOS • SETTORE SIGILLATO",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Quella zona, invece, resta chiusa."},
+    {speaker:"TU",text:"Perché?"},
+    {speaker:"KAELIOS",text:"Perché alcune cose nel Nexus è meglio non raggiungerle prima di essere pronti."}
+   ]
+  },
+  {
+   area:"upper",
+   x:780,y:430,
+   location:"CONVERGENZA",
+   sub:"FINE DEL TOUR",
+   objective:"SEGUI KAELIOS • FINE DEL TOUR",
+   final:true,
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questi portali sono il motivo per cui siamo qui. Attraversandoli continueremo a seguire la frattura e capiremo chi ti sta cercando."},
+    {speaker:"KAELIOS",text:"Ma non entrerai nel primo mondo adesso."},
+    {speaker:"TU",text:"Cosa devo fare prima?"},
+    {speaker:"KAELIOS",text:"Torna all'Arena e completa il tutorial di combattimento."},
+    {speaker:"KAELIOS",text:"Quando avrai imparato le basi, raggiungimi nell'area TRY COMBAT KAELIOS e affrontami davvero."},
+    {speaker:"KAELIOS",text:"La prima volta che riuscirai a sconfiggermi, il Portale 01 verrà sbloccato."},
+    {speaker:"KAELIOS",text:()=>`Da quel momento, ${getPlayerName()}, il Nexus smetterà di essere un rifugio. Diventerà il punto da cui scegli quale realtà affrontare.`}
+   ]
+  }
+ ];
+
+ function getIntroTourStepV500(){
+  return introTourStepsV500[introTourIndexV500]||null;
+ }
+
+ function setIntroTourObjectiveV500(){
+  const step=getIntroTourStepV500();
+  if(step && step.objective){
+   setObjective(step.objective);
+  }else if(introTourActiveV500){
+   setObjective("SEGUI KAELIOS");
+  }
+ }
+
+ function startIntroTourV500(){
+  introTourActiveV500=true;
+  introTourIndexV500=0;
+  introTourBusyV500=false;
+
+  /*
+    Disattiva il vecchio mini-tour della sola prima microzona.
+    La nuova INTRO gestisce l'intero Nexus.
+  */
+  guideActive=false;
+  guideFinished=false;
+
+  /*
+    Evita che il vecchio dialogo automatico del Nucleo interrompa
+    il tour quando entriamo nella microzona 2.
+  */
+  coreDialogueDone=true;
+
+  controlsLocked=false;
+  setIntroTourObjectiveV500();
+ }
+
+ function introTourNextV500(){
+  introTourIndexV500++;
+  introTourBusyV500=false;
+
+  const next=getIntroTourStepV500();
+  if(!next){
+   finishIntroTourV500();
+   return;
+  }
+
+  controlsLocked=false;
+  setIntroTourObjectiveV500();
+ }
+
+ function finishIntroTourV500(){
+  introTourActiveV500=false;
+  introTourBusyV500=false;
+  guideActive=false;
+  guideFinished=true;
+  coreDialogueDone=true;
+  controlsLocked=false;
+
+  setObjective("TORNA ALL'ARENA • COMPLETA IL TUTORIAL DI COMBATTIMENTO");
+  showLocation("TOUR COMPLETATO","PROSSIMO OBIETTIVO • ARENA");
+  saveMap();
+
+  /*
+    Il prossimo step del progetto collegherà l'interazione ARENA
+    al tutorial di combattimento vero.
+  */
+  setTimeout(()=>{
+   if(!introTourActiveV500){
+    setObjective("RAGGIUNGI L'ARENA");
+   }
+  },5200);
+ }
+
+ function introTourTransitionV500(target,spawnKey){
+  if(!AREAS[target] || introTourBusyV500)return;
+
+  introTourBusyV500=true;
+  controlsLocked=true;
+  stopMovement();
+
+  if(window.WIUSoundV112)window.WIUSoundV112.play("transition");
+
+  currentPoi=null;
+  displayedPoi=null;
+  pressedPoi=null;
+  interact.classList.remove("active");
+
+  areaFadeText.textContent=AREAS[target].name;
+  areaFade.classList.add("active");
+
+  setTimeout(()=>{
+   currentArea=target;
+   const area=getArea();
+
+   let spawn=null;
+   if(target==="core"){
+    spawn=area.spawnFromLower;
+   }else if(target==="upper"){
+    spawn=area.spawnFromCore;
+   }else if(target==="lower"){
+    spawn=area.spawnFromCore;
+   }
+
+   if(spawn){
+    playerX=spawn.x;
+    playerY=spawn.y;
+    kaeliosX=spawn.kx;
+    kaeliosY=spawn.ky;
+   }
+
+   applyAreaVisual();
+   renderPositions();
+   renderChunks();
+
+   setTimeout(()=>{
+    areaFade.classList.remove("active");
+    showAreaName();
+
+    introTourIndexV500++;
+    introTourBusyV500=false;
+    controlsLocked=false;
+    setIntroTourObjectiveV500();
+   },150);
+  },240);
+ }
+
+ function updateIntroTourV500(dt){
+  if(!introTourActiveV500 || introTourBusyV500)return;
+  if(dlg.classList.contains("active") || panel.classList.contains("active"))return;
+
+  const step=getIntroTourStepV500();
+  if(!step){
+   finishIntroTourV500();
+   return;
+  }
+
+  if(currentArea!==step.area){
+   /*
+     Le transizioni normali sono gestite da step dedicati:
+     se per qualche motivo il giocatore è altrove, il tour aspetta.
+   */
+   kaelios.classList.remove("walking");
+   return;
+  }
+
+  const playerDist=distance(playerX,playerY,kaeliosX,kaeliosY);
+
+  /*
+    Kaelios non scappa via dal giocatore.
+    Se rimani indietro, si ferma e aspetta.
+  */
+  if(playerDist>280){
+   kaelios.classList.remove("walking");
+   return;
+  }
+
+  const dx=step.x-kaeliosX;
+  const dy=step.y-kaeliosY;
+  const d=Math.hypot(dx,dy);
+
+  if(d>18){
+   const speed=132;
+   kaeliosX+=dx/d*speed*dt;
+   kaeliosY+=dy/d*speed*dt;
+   kaelios.classList.add("walking");
+   return;
+  }
+
+  kaelios.classList.remove("walking");
+
+  /*
+    Kaelios aspetta che il giocatore arrivi davvero accanto a lui
+    prima di spiegare l'area o attraversare il passaggio.
+  */
+  if(playerDist>225)return;
+
+  if(step.transition){
+   introTourTransitionV500(step.transition,step.spawn);
+   return;
+  }
+
+  if(step.dialogue){
+   introTourBusyV500=true;
+   if(step.location){
+    showLocation(step.location,step.sub||"");
+   }
+
+   showDialogue(step.dialogue,()=>{
+    if(step.final){
+     finishIntroTourV500();
+     return;
+    }
+    introTourNextV500();
+   });
+  }
+ }
+
+
+ function coreDialogue(){
+  if(coreDialogueDone)return;
+  coreDialogueDone=true;
+  guideFinished=true;
+  guideActive=false;
+  setObjective("");
+
+  showDialogue([
+   {speaker:"KAELIOS",text:"Questo è il cuore del Nexus. Da qui possiamo raggiungere realtà diverse, purché siano abbastanza stabili da essere attraversate."},
+   {speaker:"TU",text:"E posso attraversarle anch'io?"},
+   {speaker:"KAELIOS",text:()=>`Fino a poco fa avrei detto di no. Dopo quello che hai fatto, ${getPlayerName()}... dobbiamo scoprirlo.`}
+  ],()=>{
+   controlsLocked=false;
+   showLocation("NUCLEO","IL NEXUS È ORA ESPLORABILE");
+   setObjective("ESPLORA IL NEXUS • L'ARENA È A SUD-EST");
+   setTimeout(()=>setObjective(""),4200);
+   saveMap();
+  });
+ }
+
+ function setObjective(text){
+  if(text){
+   objective.textContent=text;
+   objective.classList.add("active");
+  }else{
+   objective.classList.remove("active");
+   objective.textContent="";
+  }
+ }
+
+ function showLocation(name,sub){
+  if(!name||name===lastLocation)return;
+  lastLocation=name;
+  locationToast.querySelector("strong").textContent=name;
+  locationToast.querySelector("span").textContent=sub||"";
+  locationToast.classList.add("active");
+  clearTimeout(locationTimer);
+  locationTimer=setTimeout(()=>locationToast.classList.remove("active"),1600);
+ }
+
+ /* ==========================================================
+    MACRO AREA RENDERING — V4.5
+    Una sola immagine originale HD caricata per volta.
+    ========================================================== */
+ function applyAreaVisual(){
+  const area=getArea();
+
+  WORLD_W=area.w;
+  WORLD_H=area.h;
+
+  world.style.setProperty("width",WORLD_W+"px","important");
+  world.style.setProperty("height",WORLD_H+"px","important");
+
+  chunkLayer.innerHTML="";
+
+  const img=document.createElement("img");
+  img.className="nexus45AreaMap";
+  img.src=area.image;
+  img.alt="";
+  img.draggable=false;
+  img.width=area.w;
+  img.height=area.h;
+  chunkLayer.appendChild(img);
+  currentAreaMap=img;
+
+  renderTryCombatKaeliosV46();
+
+  lastLocation="";
+  currentPoi=null;
+  displayedPoi=null;
+  pressedPoi=null;
+  interact.classList.remove("active");
+  interact.classList.remove("playerOverlap");
+ }
+
+
+ function renderTryCombatKaeliosV46(){
+  const old=document.getElementById("nexusTryCombatKaeliosV46");
+  if(old)old.remove();
+
+  if(currentArea!=="lower")return;
+
+  const unlocked=isArenaTutorialCompleteV46();
+  const zone=document.createElement("div");
+  zone.id="nexusTryCombatKaeliosV46";
+  zone.className=unlocked?"unlocked":"locked";
+  zone.setAttribute("aria-hidden","true");
+
+  zone.innerHTML=
+   '<div class="tryCombatPadV46"></div>'+
+   '<div class="tryCombatCrossV46"></div>'+
+   '<div class="tryCombatLabelV46">'+
+     '<strong>TRY COMBAT KAELIOS</strong>'+
+     '<span>'+(unlocked?"DISPONIBILE":"BLOCCATO • COMPLETA IL TUTORIAL ARENA")+'</span>'+
+   '</div>';
+
+  chunkLayer.appendChild(zone);
+ }
+
+ function renderChunks(){
+  if(!currentAreaMap || currentAreaMap.src.indexOf(getArea().image.split("/").pop())===-1){
+   applyAreaVisual();
+  }
+ }
+
+ function showAreaName(){
+  const area=getArea();
+  areaName.textContent=area.name;
+  areaName.classList.add("active");
+  setTimeout(()=>areaName.classList.remove("active"),1500);
+ }
+
+ function changeArea(target,spawnKey){
+  if(!AREAS[target] || controlsLocked)return;
+
+  if(window.WIUSoundV112) window.WIUSoundV112.play("transition");
+
+  controlsLocked=true;
+  stopMovement();
+  currentPoi=null;
+  interact.classList.remove("active");
+
+  areaFadeText.textContent=AREAS[target].name;
+  areaFade.classList.add("active");
+
+  setTimeout(()=>{
+   currentArea=target;
+   const area=getArea();
+
+   let spawn=null;
+   if(target==="lower"){
+    spawn=spawnKey==="fromCore"?area.spawnFromCore:area.spawnFromCreator;
+   }else if(target==="core"){
+    spawn=spawnKey==="fromUpper"?area.spawnFromUpper:area.spawnFromLower;
+   }else if(target==="upper"){
+    spawn=spawnKey==="fromTranscendent"?area.spawnFromTranscendent:area.spawnFromCore;
+   }else if(target==="transcendent"){
+    spawn=area.spawnFromUpper;
+   }
+
+   if(spawn){
+    playerX=spawn.x;playerY=spawn.y;
+    kaeliosX=spawn.kx;kaeliosY=spawn.ky;
+   }
+
+   guideActive=false;
+   applyAreaVisual();
+   renderPositions();
+   renderChunks();
+   saveMap();
+
+   setTimeout(()=>{
+    areaFade.classList.remove("active");
+    showAreaName();
+
+    /*
+      Universo Trascendente usa la stessa entrata delle altre macrozone:
+      il nome compare per qualche secondo al centro/sopra la mappa.
+    */
+    if(currentArea==="transcendent"){
+     areaName.textContent="UNIVERSO TRASCENDENTE";
+     areaName.classList.remove("active");
+     void areaName.offsetWidth;
+     areaName.classList.add("active");
+     setTimeout(()=>areaName.classList.remove("active"),2200);
+    }
+
+    if(currentArea==="core" && !coreDialogueDone){
+     setTimeout(()=>coreDialogue(),260);
+    }else{
+     controlsLocked=false;
+    }
+   },130);
+  },230);
+ }
+
+ /* ==========================================================
+    MAP / CAMERA / MOVEMENT
+    ========================================================== */
+ function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+
+ function distance(ax,ay,bx,by){
+  return Math.hypot(ax-bx,ay-by);
+ }
+
+ function pointInRect(x,y,l,t,r,b){
+  return x>=l && x<=r && y>=t && y<=b;
+ }
+
+ function pointInCircle(x,y,cx,cy,r){
+  return Math.hypot(x-cx,y-cy)<=r;
+ }
+
+ function pointInEllipse(x,y,cx,cy,rx,ry){
+  const dx=(x-cx)/rx;
+  const dy=(y-cy)/ry;
+  return dx*dx+dy*dy<=1;
+ }
+
+ function isWalkable(x,y){
+  if(currentArea==="lower"){
+   if(pointInEllipse(x,y,625,930,245,250))return true;
+   if(pointInRect(x,y,525,650,725,1010))return true;
+   if(pointInEllipse(x,y,615,475,425,285))return true;
+   if(pointInRect(x,y,525,40,725,700))return true;
+
+   /* Arena + ponte */
+   if(pointInEllipse(x,y,1040,455,230,230))return true;
+   if(pointInEllipse(x,y,835,470,300,95))return true;
+
+   /* Piccola terrazza laterale sinistra */
+   if(pointInEllipse(x,y,145,405,170,170))return true;
+   if(pointInEllipse(x,y,320,420,220,80))return true;
+
+   return false;
+  }
+
+  if(currentArea==="core"){
+   /* Nucleo centrale */
+   if(pointInEllipse(x,y,768,335,360,255))return true;
+
+   /* Piazza inferiore + ingresso */
+   if(pointInEllipse(x,y,768,770,430,210))return true;
+   if(pointInRect(x,y,650,690,885,1024))return true;
+   if(pointInRect(x,y,650,0,885,360))return true;
+
+   /* Archivio e collegamento */
+   if(pointInEllipse(x,y,190,300,190,225))return true;
+   if(pointInEllipse(x,y,445,350,300,88))return true;
+
+   /* Risonanza e collegamento */
+   if(pointInEllipse(x,y,1320,315,200,230))return true;
+   if(pointInEllipse(x,y,1085,355,300,90))return true;
+
+   return false;
+  }
+
+  if(currentArea==="upper"){
+   /* ingresso basso */
+   if(pointInRect(x,y,650,680,890,1024))return true;
+   if(pointInEllipse(x,y,768,790,430,200))return true;
+
+   /* piazza centrale/convergenza */
+   if(pointInEllipse(x,y,770,535,430,265))return true;
+
+   /* terrazza dei portali */
+   if(pointInEllipse(x,y,770,200,650,190))return true;
+   if(pointInRect(x,y,650,170,890,610))return true;
+
+   /* piattaforme portali */
+   if(pointInEllipse(x,y,370,195,150,150))return true;
+   if(pointInEllipse(x,y,575,150,145,140))return true;
+   if(pointInEllipse(x,y,765,125,155,145))return true;
+   if(pointInEllipse(x,y,960,160,145,140))return true;
+   if(pointInEllipse(x,y,1135,210,150,145))return true;
+
+   /* ponte e settore sigillato */
+   if(pointInEllipse(x,y,1280,185,260,70))return true;
+   if(pointInEllipse(x,y,1400,185,165,165))return true;
+
+   return false;
+  }
+
+  if(currentArea==="transcendent"){
+   /* pedana inferiore e accesso centrale */
+   if(pointInEllipse(x,y,627,930,275,220))return true;
+   if(pointInRect(x,y,560,640,694,1035))return true;
+
+   /* piattaforma centrale */
+   if(pointInEllipse(x,y,627,725,275,235))return true;
+   if(pointInEllipse(x,y,627,640,210,160))return true;
+
+   /* ramo verso Mondo Veurs */
+   if(pointInEllipse(x,y,320,740,285,80))return true;
+   if(pointInEllipse(x,y,140,740,150,150))return true;
+
+   /* ramo verso Mondo Zirem */
+   if(pointInEllipse(x,y,485,430,230,82))return true;
+   if(pointInEllipse(x,y,395,245,165,165))return true;
+
+   /* ramo verso Mondo Sharak */
+   if(pointInEllipse(x,y,790,430,230,82))return true;
+   if(pointInEllipse(x,y,888,245,175,170))return true;
+
+   /* ramo verso Mondo Kilin */
+   if(pointInEllipse(x,y,930,740,280,80))return true;
+   if(pointInEllipse(x,y,1100,735,160,160))return true;
+
+   return false;
+  }
+
+  return false;
+ }
+
+ function renderPositions(){
+  player.style.left=playerX+"px";
+  player.style.top=playerY+"px";
+  kaelios.style.left=kaeliosX+"px";
+  kaelios.style.top=kaeliosY+"px";
+
+  const vw=viewport.clientWidth||window.innerWidth;
+  const vh=viewport.clientHeight||window.innerHeight;
+  const cameraScale=vw<700?CAMERA_SCALE_MOBILE:CAMERA_SCALE_DESKTOP;
+  const visibleW=vw/cameraScale;
+  const visibleH=vh/cameraScale;
+
+  let camX=playerX-visibleW*.5;
+  let camY=playerY-visibleH*.48;
+
+  const maxCamX=Math.max(0,WORLD_W-visibleW);
+  const maxCamY=Math.max(0,WORLD_H-visibleH);
+
+  camX=clamp(camX,0,maxCamX);
+  camY=clamp(camY,0,maxCamY);
+
+  cameraX=camX;
+  cameraY=camY;
+
+  let extraX=0,extraY=0;
+  if(WORLD_W*cameraScale<vw)extraX=(vw-WORLD_W*cameraScale)/2;
+  if(WORLD_H*cameraScale<vh)extraY=(vh-WORLD_H*cameraScale)/2;
+
+  world.style.transform=`translate3d(${extraX-camX*cameraScale}px,${extraY-camY*cameraScale}px,0) scale(${cameraScale})`;
+
+  /* Se il pulsante è attivo, resta ancorato visivamente sopra al POI. */
+  if(currentPoi && interact.classList.contains("active")){
+   positionInteractButton(currentPoi);
+  }
+ }
+
+ function positionInteractButton(p){
+  if(!p)return;
+
+  const vw=viewport.clientWidth||window.innerWidth;
+  const vh=viewport.clientHeight||window.innerHeight;
+
+  const cameraScale=vw<700?CAMERA_SCALE_MOBILE:CAMERA_SCALE_DESKTOP;
+  let extraX=0,extraY=0;
+  if(WORLD_W*cameraScale<vw)extraX=(vw-WORLD_W*cameraScale)/2;
+  if(WORLD_H*cameraScale<vh)extraY=(vh-WORLD_H*cameraScale)/2;
+  let sx=extraX+(p.x-cameraX)*cameraScale;
+  let sy=extraY+(p.y-cameraY)*cameraScale;
+
+  /* Sopra la struttura/POI, ma sempre dentro lo schermo. */
+  const verticalOffset=(p.id==="core")?125:105;
+  sx=clamp(sx,72,vw-72);
+  sy=clamp(sy-verticalOffset,86,vh-92);
+
+  interact.style.left=sx+"px";
+  interact.style.top=sy+"px";
+
+  /*
+    Se l'etichetta passa sopra al personaggio, resta cliccabile
+    ma diventa traslucida per non nasconderlo.
+  */
+  const playerRect=player.getBoundingClientRect();
+  const promptRect=interact.getBoundingClientRect();
+
+  const overlap=!(
+   promptRect.right < playerRect.left-6 ||
+   promptRect.left > playerRect.right+6 ||
+   promptRect.bottom < playerRect.top-6 ||
+   promptRect.top > playerRect.bottom+6
+  );
+
+  interact.classList.toggle("playerOverlap",overlap);
+ }
+
+ function updatePoi(){
+  let nearest=null,best=Infinity;
+
+  getAreaPois().forEach(p=>{
+   const d=distance(playerX,playerY,p.x,p.y);
+   if(d<best){best=d;nearest=p}
+  });
+
+  if(nearest && best<nearest.r){
+   const canInteract=isPoiInteractableV47(nearest);
+
+   if(!displayedPoi || displayedPoi.id!==nearest.id){
+    /*
+      Per TRY COMBAT KAELIOS bloccato non mostriamo una seconda
+      descrizione: la label deve contenere solo il nome.
+    */
+    if(nearest.id==="tryCombatKaelios" && !canInteract){
+     showLocation(nearest.name,"");
+    }else{
+     showLocation(nearest.name,nearest.sub);
+    }
+   }
+
+   displayedPoi=nearest;
+   currentPoi=canInteract ? nearest : null;
+
+   interact.classList.add("active");
+   interact.classList.toggle("exitPrompt",nearest.type==="exit");
+   interact.classList.toggle("lockedPromptV47",!canInteract);
+
+   if(nearest.id==="tryCombatKaelios" && !canInteract){
+    interact.innerHTML=
+     '<span class="nexus451PoiName">TRY COMBAT KAELIOS</span>';
+   }else if(nearest.type==="exit"){
+    interact.innerHTML=
+     '<span class="nexus451PoiName">'+(nearest.label||nearest.name||"VAI")+'</span>';
+   }else{
+    interact.innerHTML=
+     '<span class="nexus451PoiName">'+(nearest.name||nearest.title||"INTERAGISCI")+'</span>'+
+     '<span class="nexus451PoiAction">INTERAGISCI</span>';
+   }
+
+   positionInteractButton(nearest);
+  }else{
+   currentPoi=null;
+   displayedPoi=null;
+   pressedPoi=null;
+   interact.classList.remove("active");
+   interact.classList.remove("exitPrompt");
+   interact.classList.remove("playerOverlap");
+   interact.classList.remove("lockedPromptV47");
+  }
+ }
+
+ function updateGuide(dt){
+  if(!guideActive || guideFinished || currentArea!=="lower")return;
+
+  const target=guideWaypoints[guideIndex];
+
+  if(!target){
+   guideActive=false;
+   guideFinished=true;
+   kaelios.classList.remove("walking");
+   setObjective("RAGGIUNGI IL NUCLEO");
+   saveMap();
+   return;
+  }
+
+  const playerDist=distance(playerX,playerY,kaeliosX,kaeliosY);
+
+  if(playerDist>265){
+   kaelios.classList.remove("walking");
+   return;
+  }
+
+  const dx=target.x-kaeliosX;
+  const dy=target.y-kaeliosY;
+  const d=Math.hypot(dx,dy);
+
+  if(d<15){
+   guideIndex++;
+   if(guideIndex>=guideWaypoints.length){
+    guideActive=false;
+    guideFinished=true;
+    kaelios.classList.remove("walking");
+    setObjective("RAGGIUNGI IL NUCLEO");
+    saveMap();
+   }
+   return;
+  }
+
+  const speed=118;
+  kaeliosX+=dx/d*speed*dt;
+  kaeliosY+=dy/d*speed*dt;
+  kaelios.classList.add("walking");
+ }
+
+ function getMoveVector(){
+  let x=joyX+keyX;
+  let y=joyY+keyY;
+  const m=Math.hypot(x,y);
+  if(m>1){x/=m;y/=m}
+  return{x,y};
+ }
+
+ function stopMovement(){
+  joyX=joyY=keyX=keyY=0;
+  joyPointer=null;
+  joyKnob.style.transform="translate3d(0,0,0)";
+  joyBase.classList.remove("active");
+  player.classList.remove("moving");
+ }
+
+ function tick(t){
+  if(!active){raf=0;return}
+  if(!lastT)lastT=t;
+  const dt=Math.min(.034,(t-lastT)/1000);
+  lastT=t;
+
+  if(!controlsLocked && !panel.classList.contains("active") && !dlg.classList.contains("active")){
+   const v=getMoveVector();
+   const moving=Math.abs(v.x)>.03||Math.abs(v.y)>.03;
+
+   if(moving){
+    const speed=220;
+    const nx=clamp(playerX+v.x*speed*dt,45,WORLD_W-45);
+    const ny=clamp(playerY+v.y*speed*dt,45,WORLD_H-45);
+
+    /* Scorrimento sugli assi: se la diagonale urta, prova X e Y separatamente. */
+    if(isWalkable(nx,ny)){
+     playerX=nx;playerY=ny;
+    }else if(isWalkable(nx,playerY)){
+     playerX=nx;
+    }else if(isWalkable(playerX,ny)){
+     playerY=ny;
+    }
+
+    player.classList.add("moving");
+    if(v.x<-.08)player.classList.add("facingLeft");
+    if(v.x>.08)player.classList.remove("facingLeft");
+   }else{
+    player.classList.remove("moving");
+   }
+  }
+
+  updateIntroTourV500(dt);
+  updateGuide(dt);
+  renderPositions();
+  updatePoi();
+  renderChunks();
+
+  raf=requestAnimationFrame(tick);
+ }
+
+ /* Joystick dinamico/flottante.
+    Nasce nel punto in cui tocchi l'area libera di gioco,
+    resta visibile mentre tieni premuto e scompare al rilascio. */
+ function canStartFloatingJoystick(e){
+  if(!active || controlsLocked)return false;
+  if(dlg.classList.contains("active") || panel.classList.contains("active"))return false;
+
+  const target=e.target;
+  if(target && target.closest && target.closest(
+   "button,#nexus41Dialogue,#nexus41Panel,.nexus41Hud,#nexus41Objective,#nexus41Location"
+  ))return false;
+
+  return true;
+ }
+
+ function beginFloatingJoystick(e){
+  if(!canStartFloatingJoystick(e))return;
+  if(joyPointer!==null)return;
+
+  joyPointer=e.pointerId;
+  joyOriginX=e.clientX;
+  joyOriginY=e.clientY;
+
+  joyBase.style.left=joyOriginX+"px";
+  joyBase.style.top=joyOriginY+"px";
+  joyBase.classList.add("active");
+  joyKnob.style.transform="translate3d(0,0,0)";
+
+  try{viewport.setPointerCapture(e.pointerId)}catch(err){}
+  e.preventDefault();
+ }
+
+ function updateFloatingJoystick(e){
+  if(e.pointerId!==joyPointer)return;
+
+  const rect=joyBase.getBoundingClientRect();
+  const max=Math.max(30,rect.width*.32);
+
+  let dx=e.clientX-joyOriginX;
+  let dy=e.clientY-joyOriginY;
+  const d=Math.hypot(dx,dy)||1;
+
+  if(d>max){
+   dx=dx/d*max;
+   dy=dy/d*max;
+  }
+
+  joyX=dx/max;
+  joyY=dy/max;
+  joyKnob.style.transform=`translate3d(${dx}px,${dy}px,0)`;
+
+  e.preventDefault();
+ }
+
+ function endFloatingJoystick(e){
+  if(joyPointer===null)return;
+  if(e && typeof e.pointerId!=="undefined" && e.pointerId!==joyPointer)return;
+
+  joyPointer=null;
+  joyX=0;
+  joyY=0;
+  joyKnob.style.transform="translate3d(0,0,0)";
+  joyBase.classList.remove("active");
+ }
+
+ viewport.addEventListener("pointerdown",beginFloatingJoystick,{passive:false});
+ viewport.addEventListener("pointermove",updateFloatingJoystick,{passive:false});
+ viewport.addEventListener("pointerup",endFloatingJoystick,{passive:false});
+ viewport.addEventListener("pointercancel",endFloatingJoystick,{passive:false});
+ viewport.addEventListener("lostpointercapture",endFloatingJoystick);
+
+ /* Tastiera */
+ const keys=new Set();
+ function recalcKeys(){
+  keyX=(keys.has("arrowright")||keys.has("d")?1:0)-(keys.has("arrowleft")||keys.has("a")?1:0);
+  keyY=(keys.has("arrowdown")||keys.has("s")?1:0)-(keys.has("arrowup")||keys.has("w")?1:0);
+  const m=Math.hypot(keyX,keyY);
+  if(m>1){keyX/=m;keyY/=m}
+ }
+
+ window.addEventListener("keydown",e=>{
+  if(!active)return;
+  const k=e.key.toLowerCase();
+  if(["arrowleft","arrowright","arrowup","arrowdown","w","a","s","d"].includes(k)){
+   e.preventDefault();keys.add(k);recalcKeys();
+  }
+  if((k==="e"||e.key==="Enter") && currentPoi && !controlsLocked){
+   e.preventDefault();openPoi(currentPoi);
+  }
+ });
+ window.addEventListener("keyup",e=>{
+  if(!active)return;
+  keys.delete(e.key.toLowerCase());recalcKeys();
+ });
+
+ function openPoi(p){
+  if(!p||controlsLocked)return;
+
+  if(arenaStartBtnV600)arenaStartBtnV600.style.display="none";
+
+  /*
+    Durante la INTRO i cambi macrozona sono controllati da Kaelios:
+    il giocatore non può anticipare il tour usando manualmente le uscite.
+  */
+  if(introTourActiveV500 && p.type==="exit")return;
+
+  if(!isPoiInteractableV47(p))return;
+  stopMovement();
+
+  if(window.WIUSoundV112){
+   const pid=String(p.id||"");
+   if(pid==="ascension" || pid.indexOf("portal")===0){
+    window.WIUSoundV112.play("portal");
+   }
+  }
+
+  if(p.type==="exit"){
+   changeArea(p.target,p.spawn);
+   return;
+  }
+
+  if(p.id==="tryCombatKaelios"){
+   panelTitle.textContent="TRY COMBAT KAELIOS";
+   panelText.innerHTML=
+    "Area sbloccata dopo il tutorial dell'Arena.<br><br>"+
+    "<b>COMBAT CONTRO KAELIOS</b><br>"+
+    "Una volta completato questo combattimento si sbloccherà il <b>PORTALE 01</b>.";
+  }else if(p.id==="arena"){
+   panelTitle.textContent="ARENA";
+
+   const done=isArenaTutorialCompleteV46();
+   panelText.innerHTML=
+    "Qui impari il sistema di combattimento reale.<br><br>"+
+    "<b>COMBO</b> • sequenze di swipe<br>"+
+    "<b>GUARDIA</b> • abbassala per aprire combo più potenti<br>"+
+    "<b>KI</b> • traccia configurazioni energetiche<br>"+
+    "<b>DIFESA</b> • swipe inversi e contro-configurazioni.";
+
+   if(arenaStartBtnV600){
+    arenaStartBtnV600.textContent=done?"RIPETI TUTORIAL":"INIZIA TUTORIAL";
+    arenaStartBtnV600.style.display="block";
+   }
+  }else if(p.id==="archive"){
+   panelTitle.textContent="ARCHIVIO DELLE FORME";
+   panelText.innerHTML=
+    "Qui verranno gestiti <b>outfit, aspetti e personalizzazioni</b> del personaggio.";
+  }else if(p.id==="resonance"){
+   panelTitle.textContent="CAMERA DI RISONANZA";
+   panelText.innerHTML=
+    "Qui verranno gestite <b>trasformazioni, forme energetiche e potenziamenti</b>.";
+  }else if(p.id==="convergence"){
+   panelTitle.textContent="CONVERGENZA";
+   panelText.innerHTML=
+    "Da questa zona si raggiungono i mondi What If del Nexus.";
+  }else if(p.id==="portal1"){
+   if(isTryCombatKaeliosCompleteV48()){
+    changeArea("transcendent","fromUpper");
+    return;
+   }
+   panelTitle.textContent="PORTALE 01";
+   panelText.innerHTML=
+    "Questo universo sarà disponibile dopo che avrai completato il combattimento con Kaelios nell'area <b>\"TRY COMBAT KAELIOS\"</b>.";
+  }else if(["portalVeurs","portalZirem","portalSharak","portalKilin"].includes(p.id)){
+   panelTitle.textContent=p.title;
+   panelText.innerHTML=
+    'Questo portale condurrà al <b>'+p.title+'</b>.<br><br>Qui si aprirà un mondo giocabile in cui la trama avanzerà.';
+  }else if(p.id==="portal2" || p.id==="portal3" || p.id==="portal4"){
+
+   panelTitle.textContent=p.title;
+   panelText.innerHTML="Questo portale è ancora <b>sigillato</b>.";
+  }else if(p.id==="ascension"){
+   panelTitle.textContent="PORTALE DI ASCENSIONE";
+   panelText.innerHTML=
+    "Questo portale condurrà al <b>prossimo hub esplorabile</b> dopo aver completato i mondi del Nexus.";
+  }else if(p.id==="sealed"){
+   panelTitle.textContent="SETTORE SIGILLATO";
+   panelText.innerHTML=
+    "L'accesso a questa zona è attualmente <b>proibito</b>.";
+  }else{
+   panelTitle.textContent=p.title;
+   panelText.textContent=p.text||"";
+  }
+
+  panel.classList.add("active");
+  panel.setAttribute("aria-hidden","false");
+ }
+
+ /*
+  V4.5.2 — Il POI viene catturato appena tocchi il prompt.
+  Non dipendiamo più dalla posizione millimetrica del PG
+  nel frame esatto in cui viene emesso il click.
+ */
+ interact.addEventListener("pointerdown",(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+
+  pressedPoi=currentPoi;
+
+  /*
+   * Catturiamo il puntatore sul prompt.
+   * Anche se il dito si sposta di qualche pixel prima del rilascio,
+   * il pointerup torna comunque qui.
+   */
+  try{interact.setPointerCapture(e.pointerId)}catch(err){}
+ });
+
+ interact.addEventListener("pointerup",(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+
+  const poi=pressedPoi||currentPoi;
+  pressedPoi=null;
+
+  try{
+   if(interact.hasPointerCapture(e.pointerId)){
+    interact.releasePointerCapture(e.pointerId);
+   }
+  }catch(err){}
+
+  /*
+   * Apriamo QUI, senza aspettare il successivo evento click.
+   * Questo elimina i tap a vuoto tipici dei browser mobile.
+   */
+  if(poi)openPoi(poi);
+ });
+
+ interact.addEventListener("pointercancel",(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+  pressedPoi=null;
+ });
+
+ /*
+  * Il click viene assorbito: l'interazione è già stata eseguita
+  * al pointerup e non deve partire due volte.
+  */
+ interact.addEventListener("click",(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+ });
+
+ panelClose.addEventListener("click",()=>{
+  panel.classList.remove("active");
+  panel.setAttribute("aria-hidden","true");
+ });
+
+ function playArrival(){
+  arrivalFx.classList.remove("active");
+  void arrivalFx.offsetWidth;
+  arrivalFx.classList.add("active");
+  setTimeout(()=>arrivalFx.classList.remove("active"),1400);
+ }
+
+ function hideOtherScreens(){
+  const creator=document.getElementById("creatorV30");
+  if(creator){
+   creator.classList.remove("active");
+   creator.setAttribute("aria-hidden","true");
+  }
+  const done=document.getElementById("creator30Done");
+  if(done){
+   done.classList.remove("active");
+   done.setAttribute("aria-hidden","true");
+  }
+  const teaser=document.getElementById("hubTeaserV241");
+  if(teaser){
+   teaser.classList.remove("active");
+   teaser.setAttribute("aria-hidden","true");
+   teaser.style.opacity="";
+   teaser.style.visibility="";
+   teaser.style.pointerEvents="";
+  }
+  const chapter=document.getElementById("chapterCompleteV238");
+  if(chapter){
+   chapter.classList.remove("active");
+   chapter.setAttribute("aria-hidden","true");
+   chapter.style.display="none";
+  }
+  const dev=document.getElementById("devPanelV25");
+  if(dev){
+   dev.classList.remove("active");
+   dev.setAttribute("aria-hidden","true");
+   dev.style.opacity="0";
+   dev.style.visibility="hidden";
+   dev.style.pointerEvents="none";
+  }
+ }
+
+
+ /* =========================================================
+    ARENA COMBAT SYSTEM V1 — TUTORIAL GIOCABILE
+    ========================================================= */
+
+ const ARENA_COMBOS_V600={
+  rapid:{
+   id:"rapid",
+   name:"ASSALTO RAPIDO",
+   seq:["R","L","R"],
+   hitDamage:[5,4,5],
+   guardDamagePerHit:7,
+   guardThreshold:100,
+   kiPerHit:5,
+   desc:"3 colpi • 14 DMG MAX • SEMPRE DISPONIBILE"
+  },
+  pressure:{
+   id:"pressure",
+   name:"COMBO INCALZANTE",
+   seq:["U","R","L","D"],
+   hitDamage:[5,5,6,6],
+   guardDamagePerHit:9,
+   guardThreshold:75,
+   kiPerHit:5,
+   desc:"4 colpi • 22 DMG MAX • GUARDIA NEMICA ≤75"
+  },
+  burst:{
+   id:"burst",
+   name:"RAFFICA DEVASTANTE",
+   seq:["R","U","L","D","R","U"],
+   hitDamage:[6,6,6,6,6,6],
+   guardDamagePerHit:11,
+   guardThreshold:40,
+   kiPerHit:4,
+   desc:"6 colpi • 36 DMG MAX • GUARDIA NEMICA ≤40"
+  }
+ };
+
+ const ARENA_TRACE_V600={
+  ki:{
+   name:"KI BLAST",
+   cost:25,
+   damage:18,
+   points:[[.18,.72],[.36,.50],[.61,.43],[.82,.23]]
+  },
+  special:{
+   name:"IMPULSO RISONANTE",
+   cost:55,
+   damage:30,
+   points:[[.17,.24],[.52,.24],[.34,.48],[.72,.48],[.48,.76],[.83,.76]]
+  },
+  enemy:{
+   points:[[.18,.22],[.44,.38],[.70,.20],[.83,.54],[.63,.78]]
+  },
+  enemySpecial:{
+   points:[[.15,.20],[.39,.36],[.66,.18],[.82,.42],[.60,.58],[.82,.82]]
+  }
+ };
+ ARENA_TRACE_V600.defense={
+  points:ARENA_TRACE_V600.enemy.points.map(p=>[1-p[0],p[1]])
+ };
+ ARENA_TRACE_V600.defenseSpecial={
+  points:ARENA_TRACE_V600.enemySpecial.points.map(p=>[1-p[0],p[1]])
+ };
+
+ let arenaV600=null;
+ let arenaV600Refs=null;
+ let arenaStateV600={
+  active:false,
+  phase:0,
+  playerHP:100,
+  enemyHP:120,
+  playerGuard:100,
+  enemyGuard:100,
+  ki:0,
+  gestureMode:"",
+  combo:null,
+  seqIndex:0,
+  comboResults:[],
+  comboDamageDone:0,
+  comboParries:0,
+  enemyGuardBlocksRemaining:0,
+  playerTurnCount:0,
+  traceTimer:null,
+  traceTimerAnim:null,
+  traceDefenseType:"",
+  traceDefenseDamage:0,
+  defenseSeq:[],
+  defenseIndex:0,
+  defenseResults:[],
+  defenseHitDamage:6,
+  defenseTimer:null,
+  comboStepTimer:null,
+  comboStepAnim:null,
+  comboStepToken:0,
+  comboStepResolved:false,
+  comboPointerStep:-1,
+  defenseStepToken:0,
+  defenseStepResolved:false,
+  defensePointerStep:-1,
+  rewriteAvailable:1,
+  rewritePending:false,
+  rewriteTimer:null,
+  rewriteAnim:null,
+  rewriteHPBefore:100,
+  rewriteDefenseIndex:0,
+  rewriteDefenseDir:"",
+  tutorialInfoCallback:null,
+  resultContinueCallback:null,
+  resultRewriteCallback:null,
+  defenseComboHPBefore:100,
+  defenseDamageTaken:0,
+  defensePerfects:0,
+  defensePartials:0,
+  defenseMisses:0,
+  defenseLevel:"",
+  pointerId:null,
+  startX:0,
+  startY:0,
+  startTs:0,
+  defenseDeadline:0,
+  trace:null,
+  traceIndex:0,
+  tracePoints:[],
+  traceStarted:false,
+  traceDeadline:0,
+  traceKind:""
+ };
+
+ const ARENA_DIR_SYMBOL_V600={R:"→",L:"←",U:"↑",D:"↓"};
+
+ function arenaCreateDOMV600(){
+  if(document.getElementById("arenaCombatV600")){
+   arenaV600=document.getElementById("arenaCombatV600");
+   return;
+  }
+
+  const el=document.createElement("section");
+  el.id="arenaCombatV600";
+  el.setAttribute("aria-hidden","true");
+  el.innerHTML=`
+   <div class="arenaV600Top">
+    <div class="arenaV600FighterHud">
+     <div class="arenaV600Name" id="arenaV600PlayerName">TU</div>
+     <div class="arenaV600HpText" id="arenaV600PlayerHpText">HP 100/100</div>
+     <div class="arenaV600Bar"><span id="arenaV600PlayerHpFill"></span></div>
+     <div class="arenaV650GuardRow">
+      <div class="arenaV650GuardHead"><span>GUARDIA</span><b id="arenaV650PlayerGuardText">100/100</b></div>
+      <div class="arenaV650GuardBar"><span id="arenaV650PlayerGuardFill"></span></div>
+     </div>
+    </div>
+    <button id="arenaV600Exit" type="button">ESCI</button>
+    <div class="arenaV600FighterHud enemy">
+     <div class="arenaV600Name">OLOGRAMMA NEXUS</div>
+     <div class="arenaV600HpText" id="arenaV600EnemyHpText">HP 120/120</div>
+     <div class="arenaV600Bar"><span id="arenaV600EnemyHpFill"></span></div>
+     <div class="arenaV650GuardRow">
+      <div class="arenaV650GuardHead"><span>GUARDIA</span><b id="arenaV650EnemyGuardText">100/100</b></div>
+      <div class="arenaV650GuardBar"><span id="arenaV650EnemyGuardFill"></span></div>
+     </div>
+    </div>
+   </div>
+
+   <div class="arenaV600Battle">
+    <div id="arenaV600Coach">
+     <strong>KAELIOS</strong>
+     <span id="arenaV600CoachText"></span>
+    </div>
+
+    <div class="arenaV600Stage">
+     <div class="arenaV600Platform player"></div>
+     <div class="arenaV600Platform enemy"></div>
+
+     <div id="arenaV600Player">
+      <img id="arenaV600PlayerBody" alt="">
+      <img id="arenaV600PlayerHair" alt="">
+     </div>
+
+     <div id="arenaV600Enemy">
+      <div class="arenaV600EnemyRing"></div>
+      <div class="arenaV600EnemyCore"></div>
+      <div class="arenaV600EnemyLabel">BERSAGLIO DI ADDESTRAMENTO</div>
+     </div>
+    </div>
+
+    <div id="arenaV600Resources">
+     <div class="arenaV600Resource">
+      <div class="arenaV600ResourceHead"><span>KI</span><b id="arenaV600KiText">0/100</b></div>
+      <div class="arenaV600Bar"><span id="arenaV600KiFill"></span></div>
+     </div>
+     <div class="arenaV600Resource">
+      <div class="arenaV600ResourceHead"><span>RISCRITTURA</span><b id="arenaV600RewriteText">1/1</b></div>
+      <div class="arenaV600Bar"><span id="arenaV600RewriteFill"></span></div>
+     </div>
+    </div>
+
+    <div id="arenaV600Actions"></div>
+
+    <div id="arenaV600Gesture">
+     <div id="arenaV600GestureTitle"></div>
+     <div id="arenaV600TraceTimer"><span id="arenaV600TraceTimerFill"></span></div>
+     <div id="arenaV600TraceProgress"></div>
+     <div id="arenaV600Sequence"></div>
+     <div id="arenaV600CurrentInput">
+      <div id="arenaV600CurrentArrow">→</div>
+      <div id="arenaV600CurrentMeta"></div>
+      <div id="arenaV600CurrentDamage"></div>
+      <div id="arenaV600InputTimer"><span id="arenaV600InputTimerFill"></span></div>
+     </div>
+     <svg id="arenaV600TraceSvg" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"></svg>
+     <div id="arenaV600DefensePrompt"></div>
+     <div id="arenaV600GestureHint"></div>
+    </div>
+
+    <div id="arenaV600Feedback"></div>
+
+    <div id="arenaV600TutorialInfo">
+     <div class="arenaV620InfoCard">
+      <div class="arenaV620InfoEyebrow" id="arenaV600InfoEyebrow">TUTORIAL</div>
+      <h3 id="arenaV600InfoTitle"></h3>
+      <p id="arenaV600InfoText"></p>
+      <button id="arenaV600InfoContinue" type="button">HO CAPITO</button>
+     </div>
+    </div>
+
+    <div id="arenaV600TurnBanner">
+     <div id="arenaV600TurnText">IL TUO TURNO</div>
+    </div>
+
+    <div id="arenaV600ResultModal">
+     <div class="arenaV640ResultCard">
+      <div id="arenaV600ResultEyebrow">RISULTATO</div>
+      <h3 id="arenaV600ResultTitle">AZIONE COMPLETATA</h3>
+      <div id="arenaV600ResultText"></div>
+      <div id="arenaV600ResultActions">
+       <button id="arenaV600ResultContinue" type="button">CONTINUA</button>
+       <button id="arenaV600ResultRewrite" type="button" style="display:none">RISCRITTURA</button>
+      </div>
+     </div>
+    </div>
+
+    <div id="arenaV600RewritePrompt">
+     <div class="arenaV620InfoCard">
+      <div class="arenaV620InfoEyebrow">RISCRITTURA DISPONIBILE • 1/1</div>
+      <h3>Quel colpo può ancora cambiare.</h3>
+      <p>
+       Hai pochissimo tempo. Consumando la tua unica RISCRITTURA
+       torni immediatamente a prima del colpo e puoi provare a schivarlo di nuovo.
+      </p>
+      <div id="arenaV600RewriteTimer"><span id="arenaV600RewriteTimerFill"></span></div>
+      <button id="arenaV600RewriteUse" type="button">RISCRITTURA</button>
+     </div>
+    </div>
+
+    <div id="arenaV600IntroCard" class="active">
+     <div class="arenaV600Modal">
+      <div class="arenaV600Eyebrow">ARENA • TUTORIAL</div>
+      <h2>COMBAT SYSTEM</h2>
+      <p>
+       Nessun movimento libero. Scegli un'azione e poi devi eseguirla:
+       combo fisiche con swipe, attacchi Ki con configurazioni continue
+       e difesa reattiva.
+      </p>
+      <button id="arenaV600Begin" type="button">INIZIA ADDESTRAMENTO</button>
+     </div>
+    </div>
+
+    <div id="arenaV600Complete">
+     <div class="arenaV600Modal">
+      <div class="arenaV600Eyebrow">ADDESTRAMENTO COMPLETATO</div>
+      <h2>ARENA SUPERATA</h2>
+      <p>
+       Hai imparato turni alternati, Guardia e parate,
+       economia del Ki, difesa fisica, contro-configurazioni energetiche
+       e RISCRITTURA.
+       Ora l'area TRY COMBAT KAELIOS è disponibile.
+      </p>
+      <button id="arenaV600Return" type="button">TORNA AL NEXUS</button>
+     </div>
+    </div>
+   </div>
+  `;
+
+  document.body.appendChild(el);
+  arenaV600=el;
+
+  arenaV600Refs={
+   playerName:el.querySelector("#arenaV600PlayerName"),
+   playerHpText:el.querySelector("#arenaV600PlayerHpText"),
+   playerHpFill:el.querySelector("#arenaV600PlayerHpFill"),
+   playerGuardText:el.querySelector("#arenaV650PlayerGuardText"),
+   playerGuardFill:el.querySelector("#arenaV650PlayerGuardFill"),
+   enemyHpText:el.querySelector("#arenaV600EnemyHpText"),
+   enemyHpFill:el.querySelector("#arenaV600EnemyHpFill"),
+   enemyGuardText:el.querySelector("#arenaV650EnemyGuardText"),
+   enemyGuardFill:el.querySelector("#arenaV650EnemyGuardFill"),
+   kiText:el.querySelector("#arenaV600KiText"),
+   kiFill:el.querySelector("#arenaV600KiFill"),
+   rewriteText:el.querySelector("#arenaV600RewriteText"),
+   rewriteFill:el.querySelector("#arenaV600RewriteFill"),
+   coachText:el.querySelector("#arenaV600CoachText"),
+   actions:el.querySelector("#arenaV600Actions"),
+   gesture:el.querySelector("#arenaV600Gesture"),
+   gestureTitle:el.querySelector("#arenaV600GestureTitle"),
+   traceTimer:el.querySelector("#arenaV600TraceTimer"),
+   traceTimerFill:el.querySelector("#arenaV600TraceTimerFill"),
+   traceProgress:el.querySelector("#arenaV600TraceProgress"),
+   sequence:el.querySelector("#arenaV600Sequence"),
+   currentInput:el.querySelector("#arenaV600CurrentInput"),
+   currentArrow:el.querySelector("#arenaV600CurrentArrow"),
+   currentMeta:el.querySelector("#arenaV600CurrentMeta"),
+   currentDamage:el.querySelector("#arenaV600CurrentDamage"),
+   inputTimerFill:el.querySelector("#arenaV600InputTimerFill"),
+   traceSvg:el.querySelector("#arenaV600TraceSvg"),
+   defensePrompt:el.querySelector("#arenaV600DefensePrompt"),
+   gestureHint:el.querySelector("#arenaV600GestureHint"),
+   feedback:el.querySelector("#arenaV600Feedback"),
+   tutorialInfo:el.querySelector("#arenaV600TutorialInfo"),
+   infoEyebrow:el.querySelector("#arenaV600InfoEyebrow"),
+   infoTitle:el.querySelector("#arenaV600InfoTitle"),
+   infoText:el.querySelector("#arenaV600InfoText"),
+   infoContinue:el.querySelector("#arenaV600InfoContinue"),
+   turnBanner:el.querySelector("#arenaV600TurnBanner"),
+   turnText:el.querySelector("#arenaV600TurnText"),
+   rewritePrompt:el.querySelector("#arenaV600RewritePrompt"),
+   rewriteTimerFill:el.querySelector("#arenaV600RewriteTimerFill"),
+   rewriteUse:el.querySelector("#arenaV600RewriteUse"),
+   resultModal:el.querySelector("#arenaV600ResultModal"),
+   resultEyebrow:el.querySelector("#arenaV600ResultEyebrow"),
+   resultTitle:el.querySelector("#arenaV600ResultTitle"),
+   resultText:el.querySelector("#arenaV600ResultText"),
+   resultActions:el.querySelector("#arenaV600ResultActions"),
+   resultContinue:el.querySelector("#arenaV600ResultContinue"),
+   resultRewrite:el.querySelector("#arenaV600ResultRewrite"),
+   intro:el.querySelector("#arenaV600IntroCard"),
+   complete:el.querySelector("#arenaV600Complete"),
+   begin:el.querySelector("#arenaV600Begin"),
+   back:el.querySelector("#arenaV600Return"),
+   exit:el.querySelector("#arenaV600Exit"),
+   player:el.querySelector("#arenaV600Player"),
+   enemy:el.querySelector("#arenaV600Enemy"),
+   enemyLabel:el.querySelector(".arenaV600EnemyLabel"),
+   body:el.querySelector("#arenaV600PlayerBody"),
+   hair:el.querySelector("#arenaV600PlayerHair")
+  };
+
+  arenaV600Refs.begin.addEventListener("click",()=>{
+   arenaV600Refs.intro.classList.remove("active");
+
+   arenaShowInfoV620(
+    "TURNI E RISORSE",
+    "Il combattimento procede sempre <b>un'azione a testa</b>: TU → AVVERSARIO → TU.<br><br>"+
+    "Entrambi iniziate con <b>GUARDIA 100/100</b>. Gli attacchi fisici la consumano: più scende, meno l'avversario riesce a parare e più combo diventano disponibili. A Guardia 0 la difesa fisica è completamente aperta.<br><br>"+
+    "Un <b>PERFECT DODGE</b> recupera una piccola quantità di Guardia (+4).<br><br>"+
+    "Inizi anche con <b>25 KI</b>. Dal secondo tuo turno recuperi automaticamente <b>+8 KI</b>, mentre alcune combo fisiche ne generano altro.",
+    ()=>arenaSetPhaseV600(1),
+    "ARENA • REGOLE BASE"
+   );
+  });
+
+  arenaV600Refs.back.addEventListener("click",()=>{
+   arenaCloseV600(true);
+  });
+
+  arenaV600Refs.exit.addEventListener("click",()=>{
+   arenaCloseV600(false);
+  });
+
+  arenaV600Refs.infoContinue.addEventListener("click",()=>{
+   arenaV600Refs.tutorialInfo.classList.remove("active");
+   const cb=arenaStateV600.tutorialInfoCallback;
+   arenaStateV600.tutorialInfoCallback=null;
+   if(cb)cb();
+  });
+
+  arenaV600Refs.resultContinue.addEventListener("click",()=>{
+   const cb=arenaStateV600.resultContinueCallback;
+   arenaStateV600.resultContinueCallback=null;
+   arenaStateV600.resultRewriteCallback=null;
+   arenaCloseResultV640();
+   if(cb)cb();
+  });
+
+  arenaV600Refs.resultRewrite.addEventListener("click",()=>{
+   if(
+    arenaStateV600.rewriteAvailable<=0 ||
+    typeof arenaStateV600.resultRewriteCallback!=="function"
+   )return;
+
+   const cb=arenaStateV600.resultRewriteCallback;
+   arenaStateV600.resultContinueCallback=null;
+   arenaStateV600.resultRewriteCallback=null;
+
+   arenaStateV600.rewriteAvailable=0;
+   arenaUpdateHudV600();
+   arenaCloseResultV640();
+
+   if(window.WIUSoundV112)window.WIUSoundV112.play("rewrite");
+   cb();
+  });
+
+  arenaV600Refs.actions.addEventListener("click",e=>{
+   const b=e.target.closest("[data-arena-action]");
+   if(!b || b.disabled)return;
+
+   const action=b.dataset.arenaAction;
+
+   if(action==="rapid"){
+    arenaShowInfoV620(
+     "COMBO FISICHE",
+     "La sequenza completa rimane in alto. Al centro vedrai <b>un solo input alla volta</b>.<br><br>"+
+     "Ogni freccia è un colpo e ha un tempo limite. <b>Un drag = una freccia</b>: rilascia il mouse/dito e poi inizia il gesto successivo. Se sbagli, perdi quel colpo ma la combo continua.<br><br>"+
+     "L'avversario può <b>PARARE anche uno swipe corretto</b>. Quel colpo non farà danno agli HP, ma abbasserà comunque la sua <b>GUARDIA</b>.<br><br>"+
+     "La Guardia è quindi anche la tua misura di apertura offensiva: più la porti verso 0, meno parate potrà effettuare e più combo potrai usare.",
+     ()=>arenaStartComboV600("rapid")
+    );
+   }else if(action==="pressure"){
+    arenaShowInfoV620(
+     "ROMPERE LA GUARDIA",
+     "Da ora c'è <b>una sola statistica</b>: la GUARDIA.<br><br>"+
+     "Ogni colpo fisico corretto la abbassa, anche se viene parato. Più scende, meno l'avversario riesce a difendersi e più combo diventano disponibili.<br><br>"+
+     "Nel combattimento reale: <b>COMBO INCALZANTE con Guardia nemica ≤75</b>; <b>RAFFICA DEVASTANTE con Guardia nemica ≤40</b>.",
+     ()=>arenaStartComboV600("pressure"),
+     "MECCANICA • GUARDIA"
+    );
+   }else if(action==="burst"){
+    arenaShowInfoV620(
+     "COMBO AVANZATE",
+     "RAFFICA DEVASTANTE ha più colpi e una finestra più stretta per ogni swipe.<br><br>"+
+     "Nei combattimenti reali si sblocca quando la <b>Guardia nemica scende a 40 o meno</b>. Se perdi un input, perdi soltanto il danno di quel singolo colpo.",
+     ()=>arenaStartComboV600("burst")
+    );
+   }else if(action==="ki"){
+    arenaShowInfoV620(
+     "ATTACCHI KI",
+     "Gli attacchi energetici consumano Ki. <b>KI BLAST costa 25 KI</b> e ha un tempo limite.<br><br>"+
+     "Devi tracciare una configurazione continua attraversando i nodi nell'ordine. La linea è solo una guida: non devi seguirla al pixel.<br><br>"+
+     "L'avversario può contrastare anche il Ki, ma non con la normale guardia fisica.",
+     ()=>arenaStartTraceV600("ki")
+    );
+   }else if(action==="special"){
+    arenaShowInfoV620(
+     "TECNICA SPECIALE",
+     "IMPULSO RISONANTE costa <b>55 KI</b>. È più potente e usa una configurazione più articolata.<br><br>"+
+     "Le tecniche speciali sono intenzionalmente <b>molto più difficili da bloccare</b>: chi si difende ha meno tempo per completare la contro-configurazione.<br><br>"+
+     "La difesa Ki è graduale: completare 25%, 50%, 75% o 100% della forma blocca la stessa percentuale del danno.",
+     ()=>arenaStartTraceV600("special")
+    );
+   }
+  });
+
+  arenaV600Refs.gesture.addEventListener("pointerdown",arenaGestureDownV600,{passive:false});
+  arenaV600Refs.gesture.addEventListener("pointermove",arenaGestureMoveV600,{passive:false});
+  arenaV600Refs.gesture.addEventListener("pointerup",arenaGestureUpV600,{passive:false});
+  arenaV600Refs.gesture.addEventListener("pointercancel",arenaGestureCancelV600,{passive:false});
+ }
+
+ function arenaRenderPlayerV600(){
+  if(!arenaV600Refs)return;
+
+  const c=getCharacter();
+  const body=arenaV600Refs.body;
+  const hair=arenaV600Refs.hair;
+  const holder=arenaV600Refs.player;
+
+  const outfit=[1,2,3].includes(Number(c.outfit))?Number(c.outfit):1;
+  const female=c.sex==="female";
+
+  body.style.left="50%";
+  body.style.bottom="-1%";
+  body.style.width="100%";
+  body.style.height="100%";
+  body.style.transform="translateX(-50%)";
+
+  if(!female && (outfit===2 || outfit===3)){
+   body.style.width="106%";
+  }
+
+  if(female && (outfit===2 || outfit===3)){
+   body.style.width="100%";
+   body.style.left="50.7%";
+   body.style.bottom="-10%";
+   body.style.transform="translateX(-50%) scale(1.07)";
+  }
+
+  body.src=getBodySrc(c);
+  hair.src=getHairSrc(c);
+  hair.style.filter=hairFilters[c.hairColor]||hairFilters.black;
+
+  const sex=female?"female":"male";
+  const h=[1,2,3].includes(Number(c.hair))?Number(c.hair):1;
+  const rig=hairRig[sex][h];
+
+  function syncHair(){
+   const W=holder.clientWidth,H=holder.clientHeight;
+   if(!body.naturalWidth||!body.naturalHeight||!W||!H)return;
+
+   const s=Math.min(W/body.naturalWidth,H/body.naturalHeight);
+   const bw=body.naturalWidth*s,bh=body.naturalHeight*s;
+   const bl=(W-bw)/2,bt=H-bh;
+
+   hair.style.width=(bw*rig.w/100)+"px";
+   hair.style.left=(bl+bw*rig.l/100)+"px";
+   hair.style.top=(bt+bh*rig.t/100)+"px";
+  }
+
+  body.onload=syncHair;
+  hair.onload=syncHair;
+  setTimeout(syncHair,60);
+
+  arenaV600Refs.playerName.textContent=getPlayerName().toUpperCase();
+ }
+
+ function arenaResetStateV600(){
+  arenaStateV600.active=true;
+  arenaStateV600.phase=0;
+  arenaStateV600.playerHP=100;
+  arenaStateV600.enemyHP=120;
+  arenaStateV600.playerGuard=100;
+  arenaStateV600.enemyGuard=100;
+  arenaStateV600.ki=25;
+  arenaStateV600.gestureMode="";
+  arenaStateV600.combo=null;
+  arenaStateV600.seqIndex=0;
+  arenaStateV600.comboResults=[];
+  arenaStateV600.comboDamageDone=0;
+  arenaStateV600.comboParries=0;
+  arenaStateV600.enemyGuardBlocksRemaining=0;
+  arenaStateV600.playerTurnCount=0;
+  clearTimeout(arenaStateV600.traceTimer);
+  arenaStateV600.traceTimer=null;
+  try{
+   if(arenaStateV600.traceTimerAnim)arenaStateV600.traceTimerAnim.cancel();
+  }catch(e){}
+  arenaStateV600.traceTimerAnim=null;
+  arenaStateV600.traceDefenseType="";
+  arenaStateV600.traceDefenseDamage=0;
+  arenaStateV600.defenseSeq=[];
+  arenaStateV600.defenseIndex=0;
+  arenaStateV600.defenseResults=[];
+  clearTimeout(arenaStateV600.defenseTimer);
+  clearTimeout(arenaStateV600.comboStepTimer);
+  clearTimeout(arenaStateV600.rewriteTimer);
+  arenaStateV600.defenseTimer=null;
+  arenaStateV600.comboStepTimer=null;
+  arenaStateV600.rewriteTimer=null;
+  try{
+   if(arenaStateV600.comboStepAnim)arenaStateV600.comboStepAnim.cancel();
+   if(arenaStateV600.rewriteAnim)arenaStateV600.rewriteAnim.cancel();
+  }catch(e){}
+  arenaStateV600.comboStepAnim=null;
+  arenaStateV600.rewriteAnim=null;
+  arenaStateV600.rewriteAvailable=1;
+  arenaStateV600.rewritePending=false;
+  arenaStateV600.tutorialInfoCallback=null;
+  arenaStateV600.resultContinueCallback=null;
+  arenaStateV600.resultRewriteCallback=null;
+  arenaStateV600.defenseComboHPBefore=100;
+  arenaStateV600.defenseDamageTaken=0;
+  arenaStateV600.defensePerfects=0;
+  arenaStateV600.defensePartials=0;
+  arenaStateV600.defenseMisses=0;
+  arenaStateV600.defenseLevel="";
+  arenaStateV600.pointerId=null;
+  arenaStateV600.trace=null;
+  arenaStateV600.traceIndex=0;
+  arenaStateV600.tracePoints=[];
+  arenaStateV600.traceStarted=false;
+  arenaStateV600.traceDeadline=0;
+  arenaStateV600.traceKind="";
+
+  arenaV600Refs.intro.classList.add("active");
+  arenaV600Refs.complete.classList.remove("active");
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.actions.innerHTML="";
+  arenaV600Refs.coachText.textContent="Prima devi imparare le regole.";
+  arenaUpdateHudV600();
+ }
+
+ function arenaUpdateHudV600(){
+  if(!arenaV600Refs)return;
+
+  const p=Math.max(0,Math.min(100,arenaStateV600.playerHP));
+  const e=Math.max(0,Math.min(120,arenaStateV600.enemyHP));
+  const ki=Math.max(0,Math.min(100,arenaStateV600.ki));
+
+  arenaV600Refs.playerHpText.textContent="HP "+Math.round(p)+"/100";
+  arenaV600Refs.playerHpFill.style.transform="scaleX("+(p/100)+")";
+
+  arenaV600Refs.enemyHpText.textContent="HP "+Math.round(e)+"/120";
+  arenaV600Refs.enemyHpFill.style.transform="scaleX("+(e/120)+")";
+
+  const pg=Math.max(0,Math.min(100,arenaStateV600.playerGuard));
+  const eg=Math.max(0,Math.min(100,arenaStateV600.enemyGuard));
+
+  arenaV600Refs.playerGuardText.textContent=Math.round(pg)+"/100";
+  arenaV600Refs.playerGuardFill.style.transform="scaleX("+(pg/100)+")";
+  arenaV600Refs.playerGuardText.classList.toggle("arenaV650GuardBroken",pg<=0);
+
+  arenaV600Refs.enemyGuardText.textContent=Math.round(eg)+"/100";
+  arenaV600Refs.enemyGuardFill.style.transform="scaleX("+(eg/100)+")";
+  arenaV600Refs.enemyGuardText.classList.toggle("arenaV650GuardBroken",eg<=0);
+
+  arenaV600Refs.kiText.textContent=Math.round(ki)+"/100";
+  arenaV600Refs.kiFill.style.transform="scaleX("+(ki/100)+")";
+
+  arenaV600Refs.rewriteText.textContent=arenaStateV600.rewriteAvailable+"/1";
+  arenaV600Refs.rewriteFill.style.transform=
+   "scaleX("+(arenaStateV600.rewriteAvailable?1:0)+")";
+ }
+
+ function arenaFeedbackV600(text){
+  const f=arenaV600Refs.feedback;
+  f.textContent=text;
+  f.classList.add("show");
+  clearTimeout(f._arenaTimer);
+  f._arenaTimer=setTimeout(()=>f.classList.remove("show"),450);
+ }
+
+
+ function arenaShowResultV640({
+  eyebrow="RISULTATO",
+  title="AZIONE COMPLETATA",
+  text="",
+  onContinue=null,
+  allowRewrite=false,
+  onRewrite=null
+ }={}){
+  arenaStateV600.resultContinueCallback=onContinue;
+  arenaStateV600.resultRewriteCallback=onRewrite;
+
+  arenaV600Refs.resultEyebrow.textContent=eyebrow;
+  arenaV600Refs.resultTitle.textContent=title;
+  arenaV600Refs.resultText.innerHTML=text;
+
+  const showRewrite=
+   !!allowRewrite &&
+   arenaStateV600.rewriteAvailable>0 &&
+   typeof onRewrite==="function";
+
+  arenaV600Refs.resultRewrite.style.display=showRewrite?"block":"none";
+  arenaV600Refs.resultRewrite.disabled=!showRewrite;
+  arenaV600Refs.resultActions.classList.toggle("two",showRewrite);
+
+  arenaV600Refs.resultModal.classList.add("active");
+ }
+
+ function arenaCloseResultV640(){
+  arenaV600Refs.resultModal.classList.remove("active");
+  arenaV600Refs.resultActions.classList.remove("two");
+  arenaV600Refs.resultRewrite.style.display="none";
+ }
+
+ function arenaRandomDefenseSeqV640(length){
+  const dirs=["L","R","U","D"];
+  const seq=[];
+  let last="";
+
+  for(let i=0;i<length;i++){
+   let pool=dirs.filter(d=>d!==last);
+   const dir=pool[Math.floor(Math.random()*pool.length)];
+   seq.push(dir);
+   last=dir;
+  }
+
+  return seq;
+ }
+
+ function arenaDefenseStepDurationV640(){
+  const cfg=arenaStateV600.defenseConfig||ARENA_DEFENSE_V620.easy;
+  const i=arenaStateV600.defenseIndex;
+
+  /* Progressivo, ma meno punitivo del test precedente. */
+  if(cfg.label==="COMBO FACILE"){
+   return Math.max(950,1150-(i*100));
+  }
+  if(cfg.label==="COMBO MEDIA"){
+   return Math.max(700,900-(i*60));
+  }
+  return Math.max(520,700-(i*36));
+ }
+
+ function arenaComboStepDurationProgressiveV640(c){
+  const i=arenaStateV600.seqIndex;
+
+  if(c.id==="rapid"){
+   return Math.max(950,1200-(i*110));
+  }
+  if(c.id==="pressure"){
+   return Math.max(700,950-(i*70));
+  }
+  return Math.max(520,750-(i*42));
+ }
+
+ function arenaShowInfoV620(title,text,callback,eyebrow="TUTORIAL"){
+  arenaStateV600.tutorialInfoCallback=callback||null;
+  arenaV600Refs.infoEyebrow.textContent=eyebrow;
+  arenaV600Refs.infoTitle.textContent=title;
+  arenaV600Refs.infoText.innerHTML=text;
+  arenaV600Refs.tutorialInfo.classList.add("active");
+ }
+
+ function arenaShowTurnV620(who,callback){
+  const enemy=who==="enemy";
+  arenaV600Refs.turnText.textContent=enemy?"TURNO AVVERSARIO":"IL TUO TURNO";
+  arenaV600Refs.turnText.className=enemy?"enemy":"player";
+  arenaV600Refs.turnBanner.classList.add("active");
+
+  setTimeout(()=>{
+   arenaV600Refs.turnBanner.classList.remove("active");
+   if(callback)callback();
+  },700);
+ }
+
+ function arenaClearComboStepTimerV620(){
+  clearTimeout(arenaStateV600.comboStepTimer);
+  arenaStateV600.comboStepTimer=null;
+  arenaStateV600.comboStepToken=0;
+  arenaStateV600.comboStepResolved=false;
+  arenaStateV600.comboPointerStep=-1;
+  arenaStateV600.defenseStepToken=0;
+  arenaStateV600.defenseStepResolved=false;
+  arenaStateV600.defensePointerStep=-1;
+  try{
+   if(arenaStateV600.comboStepAnim)arenaStateV600.comboStepAnim.cancel();
+  }catch(e){}
+  arenaStateV600.comboStepAnim=null;
+  if(arenaV600Refs.inputTimerFill){
+   arenaV600Refs.inputTimerFill.style.transform="scaleX(1)";
+  }
+ }
+
+ function arenaFlashCurrentV620(kind,callback){
+  const el=arenaV600Refs.currentArrow;
+  el.classList.remove("miss","ok");
+  el.classList.add(kind);
+  setTimeout(()=>{
+   el.classList.remove("miss","ok");
+   if(callback)callback();
+  },170);
+ }
+
+ function arenaComboStepDurationV620(c){
+  return arenaComboStepDurationProgressiveV640(c);
+ }
+
+ function arenaBeginComboStepV620(){
+  arenaClearComboStepTimerV620();
+
+  const c=arenaStateV600.combo;
+  if(!c || arenaStateV600.seqIndex>=c.seq.length)return;
+
+  /*
+    Ogni freccia ha un token proprio.
+    Serve soprattutto su PC: pointerup e timeout non possono più
+    risolvere lo stesso step quasi contemporaneamente.
+  */
+  arenaStateV600.comboStepToken++;
+  const token=arenaStateV600.comboStepToken;
+  const stepIndex=arenaStateV600.seqIndex;
+
+  arenaStateV600.comboStepResolved=false;
+  arenaStateV600.comboPointerStep=-1;
+  arenaStateV600.pointerId=null;
+
+  arenaRenderComboSequenceV600();
+
+  const duration=arenaComboStepDurationV620(c);
+  const fill=arenaV600Refs.inputTimerFill;
+
+  try{
+   arenaStateV600.comboStepAnim=fill.animate(
+    [{transform:"scaleX(1)"},{transform:"scaleX(0)"}],
+    {duration,easing:"linear",fill:"forwards"}
+   );
+  }catch(e){}
+
+  arenaStateV600.comboStepTimer=setTimeout(()=>{
+   if(
+    arenaStateV600.active &&
+    arenaStateV600.gestureMode==="combo" &&
+    arenaStateV600.comboStepToken===token &&
+    arenaStateV600.seqIndex===stepIndex &&
+    !arenaStateV600.comboStepResolved
+   ){
+    arenaResolveComboSwipeV600("",true,token,stepIndex);
+   }
+  },duration);
+ }
+
+ function arenaOfferRewriteV620(onUse,onExpire){
+  if(
+   arenaStateV600.rewriteAvailable<=0 ||
+   arenaStateV600.rewritePending
+  ){
+   if(onExpire)onExpire();
+   return;
+  }
+
+  arenaStateV600.rewritePending=true;
+  arenaV600Refs.rewritePrompt.classList.add("active");
+
+  const duration=1300;
+  const fill=arenaV600Refs.rewriteTimerFill;
+  fill.style.transform="scaleX(1)";
+
+  try{
+   arenaStateV600.rewriteAnim=fill.animate(
+    [{transform:"scaleX(1)"},{transform:"scaleX(0)"}],
+    {duration,easing:"linear",fill:"forwards"}
+   );
+  }catch(e){}
+
+  clearTimeout(arenaStateV600.rewriteTimer);
+  arenaStateV600.rewriteTimer=setTimeout(()=>{
+   arenaStateV600.rewritePending=false;
+   arenaV600Refs.rewritePrompt.classList.remove("active");
+   if(onExpire)onExpire();
+  },duration);
+
+  arenaV600Refs.rewriteUse.onclick=()=>{
+   if(!arenaStateV600.rewritePending)return;
+
+   clearTimeout(arenaStateV600.rewriteTimer);
+   arenaStateV600.rewritePending=false;
+   arenaStateV600.rewriteAvailable=0;
+   try{
+    if(arenaStateV600.rewriteAnim)arenaStateV600.rewriteAnim.cancel();
+   }catch(e){}
+   arenaV600Refs.rewritePrompt.classList.remove("active");
+   arenaUpdateHudV600();
+
+   if(window.WIUSoundV112)window.WIUSoundV112.play("rewrite");
+
+   if(onUse)onUse();
+  };
+ }
+
+
+
+ function arenaBeginPlayerTurnV630(callback){
+  arenaStateV600.playerTurnCount++;
+
+  let gained=0;
+  if(arenaStateV600.playerTurnCount>1){
+   const before=arenaStateV600.ki;
+   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+8);
+   gained=arenaStateV600.ki-before;
+   arenaUpdateHudV600();
+  }
+
+  arenaShowTurnV620("player",()=>{
+   if(gained>0)arenaFeedbackV600("+"+gained+" KI");
+   if(callback)callback();
+  });
+ }
+
+ function arenaEnemyGuardBlocksV630(guard){
+  /* Guardia alta = più parate disponibili. */
+  if(guard>=70)return 2;
+  if(guard>=35)return 1;
+  return 0;
+ }
+
+ function arenaEnemyGuardFlashV630(){
+  const enemy=arenaV600Refs.enemy;
+  const label=arenaV600Refs.enemyLabel;
+  if(!enemy||!label)return;
+
+  enemy.classList.add("guard-flash");
+  label.classList.add("guard-label");
+  label.textContent="PARATA";
+
+  clearTimeout(enemy._guardTimer);
+  enemy._guardTimer=setTimeout(()=>{
+   enemy.classList.remove("guard-flash");
+   label.classList.remove("guard-label");
+   label.textContent="BERSAGLIO DI ADDESTRAMENTO";
+  },360);
+ }
+
+ function arenaClearTraceTimerV630(){
+  clearTimeout(arenaStateV600.traceTimer);
+  arenaStateV600.traceTimer=null;
+  try{
+   if(arenaStateV600.traceTimerAnim)arenaStateV600.traceTimerAnim.cancel();
+  }catch(e){}
+  arenaStateV600.traceTimerAnim=null;
+
+  if(arenaV600Refs.traceTimer){
+   arenaV600Refs.traceTimer.classList.remove("active");
+  }
+  if(arenaV600Refs.traceProgress){
+   arenaV600Refs.traceProgress.classList.remove("active");
+  }
+ }
+
+ function arenaStartTraceTimerV630(duration,onTimeout){
+  arenaClearTraceTimerV630();
+
+  const wrap=arenaV600Refs.traceTimer;
+  const fill=arenaV600Refs.traceTimerFill;
+  wrap.classList.add("active");
+  arenaV600Refs.traceProgress.classList.add("active");
+  fill.style.transform="scaleX(1)";
+
+  try{
+   arenaStateV600.traceTimerAnim=fill.animate(
+    [{transform:"scaleX(1)"},{transform:"scaleX(0)"}],
+    {duration,easing:"linear",fill:"forwards"}
+   );
+  }catch(e){}
+
+  arenaStateV600.traceTimer=setTimeout(()=>{
+   if(onTimeout)onTimeout();
+  },duration);
+ }
+
+ function arenaTraceCompletionV630(){
+  const total=arenaStateV600.trace ? arenaStateV600.trace.length : 0;
+  if(!total)return 0;
+  return Math.max(0,Math.min(1,arenaStateV600.traceIndex/total));
+ }
+
+ function arenaBlockTierV630(progress){
+  if(progress>=1)return 1;
+  if(progress>=.75)return .75;
+  if(progress>=.50)return .50;
+  if(progress>=.25)return .25;
+  return 0;
+ }
+
+ function arenaAdvanceAfterPlayerActionV630(){
+  const p=arenaStateV600.phase;
+  if(p===1)arenaSetPhaseV600(2);
+  else if(p===3)arenaSetPhaseV600(4);
+  else if(p===5)arenaSetPhaseV600(6);
+  else if(p===7)arenaSetPhaseV600(8);
+  else if(p===9)arenaSetPhaseV600(10);
+ }
+
+ function arenaAdvanceAfterEnemyActionV630(){
+  const p=arenaStateV600.phase;
+  if(p===2){ arenaSetPhaseV600(3); return; }
+  if(p===4){ arenaSetPhaseV600(5); return; }
+  if(p===6){ arenaSetPhaseV600(7); return; }
+  if(p===8){ arenaSetPhaseV600(9); return; }
+  if(p===10){ arenaSetPhaseV600(11); return; }
+ }
+
+ function arenaRenderActionsV600(target){
+  const a=arenaV600Refs.actions;
+  a.innerHTML="";
+
+  if(target==="rapid" || target==="pressure" || target==="burst"){
+   ["rapid","pressure","burst"].forEach(id=>{
+    const c=ARENA_COMBOS_V600[id];
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="arenaV600Action"+(id===target?" target":"");
+    b.dataset.arenaAction=id;
+
+    const enough=
+     c.id==="rapid" ||
+     arenaStateV600.enemyGuard<=c.guardThreshold;
+
+    /*
+      Tutorial: la mossa insegnata resta sempre utilizzabile.
+      Nei futuri Trial/scontri reali verrà rispettata la soglia Guardia.
+    */
+    const tutorialOverride=id===target;
+    b.disabled=(id!==target)||(!enough&&!tutorialOverride);
+
+    const lock=(!enough && tutorialOverride)
+     ?"<span>TUTORIAL • normalmente: "+c.desc+"</span>"
+     :"<span>"+c.desc+"</span>";
+
+    b.innerHTML="<strong>"+c.name+"</strong>"+lock;
+    a.appendChild(b);
+   });
+   return;
+  }
+
+  if(target==="ki" || target==="special"){
+   const defs=[
+    {id:"ki",label:"KI BLAST",sub:"25 KI • CONFIGURAZIONE BASE",cost:25},
+    {id:"special",label:"IMPULSO RISONANTE",sub:"55 KI • TECNICA SPECIALE",cost:55}
+   ];
+
+   defs.forEach(d=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="arenaV600Action"+(d.id===target?" target":"");
+    b.dataset.arenaAction=d.id;
+
+    /*
+      Tutorial: la tecnica che stiamo insegnando non deve mai
+      bloccare la progressione per mancanza di Ki.
+    */
+    const tutorialOverride=d.id===target;
+    b.disabled=d.id!==target;
+
+    const needsKi=arenaStateV600.ki<d.cost;
+    const sub=(tutorialOverride && needsKi)
+     ?d.sub+" • KI DI PROVA"
+     :d.sub;
+
+    b.innerHTML="<strong>"+d.label+"</strong><span>"+sub+"</span>";
+    a.appendChild(b);
+   });
+
+   const filler=document.createElement("button");
+   filler.type="button";
+   filler.className="arenaV600Action";
+   filler.disabled=true;
+   filler.innerHTML="<strong>TECNICA</strong><span>NUOVI SLOT SI SBLOCCHERANNO PROGREDENDO</span>";
+   a.appendChild(filler);
+  }
+ }
+
+ function arenaSetPhaseV600(phase){
+  arenaStateV600.phase=phase;
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.currentInput.classList.remove("active");
+  arenaV600Refs.actions.innerHTML="";
+  arenaClearComboStepTimerV620();
+  arenaClearTraceTimerV630();
+  arenaUpdateHudV600();
+
+  /* 1 — giocatore: combo facile */
+  if(phase===1){
+   arenaV600Refs.coachText.textContent=
+    "Il tuo turno. ASSALTO RAPIDO genera Ki e comincia a consumare la Guardia nemica, anche quando un colpo viene parato.";
+   arenaBeginPlayerTurnV630(()=>arenaRenderActionsV600("rapid"));
+   return;
+  }
+
+  /* 2 — avversario: combo facile */
+  if(phase===2){
+   arenaShowTurnV620("enemy",()=>{
+    arenaShowInfoV620(
+     "TURNO AVVERSARIO",
+     "Hai concluso la tua azione: ora l'Ologramma ne esegue una sua.<br><br>"+
+     "La sequenza nemica cambia a ogni tentativo, quindi devi realmente reagire.<br><br>"+
+     "Se rispondi molto velocemente ottieni <b>PERFECT DODGE</b>: non subisci danno e recuperi <b>+4 Guardia</b>.<br><br>"+
+     "Se la direzione è corretta ma reagisci più tardi, ottieni una <b>PARATA PARZIALE</b>: subisci metà danno ma consumi Guardia. Un colpo pieno consuma ancora più Guardia.<br><br>"+
+     "A Guardia 0 una risposta lenta non basta più: devi fare Perfect Dodge oppure subirai il colpo pieno.<br><br>"+
+     "La <b>RISCRITTURA 1/1</b> può essere scelta soltanto alla fine dell'intera combo e ripristina anche la Guardia precedente.",
+     ()=>arenaStartDefenseComboV620("easy"),
+     "DIFESA • COMBO FACILE"
+    );
+   });
+   return;
+  }
+
+  /* 3 — giocatore: combo media */
+  if(phase===3){
+   arenaV600Refs.coachText.textContent=
+    "Ora proviamo COMBO INCALZANTE. Nel tutorial la puoi usare comunque; in uno scontro reale richiede Guardia nemica a 75 o meno.";
+   arenaBeginPlayerTurnV630(()=>{
+    arenaRenderActionsV600("pressure");
+   });
+   return;
+  }
+
+  /* 4 — avversario: combo media */
+  if(phase===4){
+   arenaShowTurnV620("enemy",()=>{
+    arenaShowInfoV620(
+     "COMBO NEMICA MEDIA",
+     "L'Ologramma passa a 4 colpi casuali. Il tempo per rispondere è più breve e <b>si restringe ancora durante la combo</b>.<br><br>"+
+     "Rispondere correttamente non basta sempre: devi farlo abbastanza presto per evitare completamente il danno.",
+     ()=>arenaStartDefenseComboV620("medium"),
+     "TURNO AVVERSARIO"
+    );
+   });
+   return;
+  }
+
+  /* 5 — giocatore: combo forte */
+  if(phase===5){
+   arenaV600Refs.coachText.textContent=
+    "Ora proviamo RAFFICA DEVASTANTE. Nel tutorial la puoi usare comunque; in uno scontro reale richiede Guardia nemica a 40 o meno.";
+   arenaBeginPlayerTurnV630(()=>{
+    arenaRenderActionsV600("burst");
+   });
+   return;
+  }
+
+  /* 6 — avversario: combo difficile */
+  if(phase===6){
+   arenaShowTurnV620("enemy",()=>{
+    arenaShowInfoV620(
+     "COMBO NEMICA DIFFICILE",
+     "Adesso arrivano 6 colpi casuali con una finestra molto stretta che accelera progressivamente.<br><br>"+
+     "Qui PERFECT DODGE, parata parziale e colpo pieno fanno davvero la differenza.",
+     ()=>arenaStartDefenseComboV620("hard"),
+     "TURNO AVVERSARIO"
+    );
+   });
+   return;
+  }
+
+  /* 7 — giocatore: Ki Blast */
+  if(phase===7){
+   arenaV600Refs.coachText.textContent=
+    "È di nuovo il tuo turno. Hai accumulato Ki con combo, difese riuscite e rigenerazione naturale.";
+   arenaBeginPlayerTurnV630(()=>arenaRenderActionsV600("ki"));
+   return;
+  }
+
+  /* 8 — avversario: Ki base */
+  if(phase===8){
+   arenaShowTurnV620("enemy",()=>{
+    arenaShowInfoV620(
+     "DIFESA KI • BLOCCO GRADUALE",
+     "Contro il Ki non esiste soltanto successo o fallimento.<br><br>"+
+     "Alla scadenza del tempo, la porzione di contro-configurazione completata determina quanto blocchi: <b>25% • 50% • 75% • 100%</b>.<br><br>"+
+     "Questo Ki Blast ha una finestra relativamente comoda.",
+     ()=>arenaStartKiDefenseV600("base"),
+     "TURNO AVVERSARIO"
+    );
+   });
+   return;
+  }
+
+  /* 9 — giocatore: speciale */
+  if(phase===9){
+   arenaV600Refs.coachText.textContent=
+    "Adesso spendi una grossa quantità di Ki per la tecnica speciale. L'Ologramma proverà a contrastarla, ma avrà più difficoltà.";
+   arenaBeginPlayerTurnV630(()=>arenaRenderActionsV600("special"));
+   return;
+  }
+
+  /* 10 — avversario: speciale Ki */
+  if(phase===10){
+   arenaShowTurnV620("enemy",()=>{
+    arenaShowInfoV620(
+     "DIFENDITI DA UNA TECNICA SPECIALE",
+     "Le tecniche più potenti sono difficili da bloccare proprio perché consumano molto Ki.<br><br>"+
+     "Questa configurazione è più lunga e avrai <b>molto meno tempo</b>. Anche se non arrivi al 100%, raggiungere 25%, 50% o 75% ridurrà comunque il danno.",
+     ()=>arenaStartKiDefenseV600("special"),
+     "TURNO AVVERSARIO • TECNICA SPECIALE"
+    );
+   });
+   return;
+  }
+
+  if(phase===11){
+   arenaCompleteTutorialV600();
+  }
+ }
+
+ function arenaStartComboV600(id){
+  const c=ARENA_COMBOS_V600[id];
+  if(!c)return;
+
+  arenaStateV600.combo=c;
+  arenaStateV600.seqIndex=0;
+  arenaStateV600.comboResults=[];
+  arenaStateV600.comboDamageDone=0;
+  arenaStateV600.comboParries=0;
+  arenaStateV600.enemyGuardBlocksRemaining=
+   arenaEnemyGuardBlocksV630(arenaStateV600.enemyGuard);
+  arenaStateV600.gestureMode="combo";
+
+  arenaV600Refs.actions.innerHTML="";
+  arenaV600Refs.gesture.className="active combo-mode";
+  arenaV600Refs.gestureTitle.textContent=c.name+" • COMBO COMPLETA";
+  arenaV600Refs.gestureHint.textContent="Freccia grande = swipe da eseguire adesso.";
+  arenaV600Refs.defensePrompt.innerHTML="";
+  arenaV600Refs.traceSvg.innerHTML="";
+  arenaRenderComboSequenceV600();
+  arenaBeginComboStepV620();
+ }
+
+ function arenaRenderComboSequenceV600(){
+  const c=arenaStateV600.combo;
+  arenaV600Refs.sequence.innerHTML="";
+
+  c.seq.forEach((dir,i)=>{
+   const d=document.createElement("div");
+   d.className="arenaV600Dir";
+
+   const result=arenaStateV600.comboResults[i];
+   if(result==="hit")d.classList.add("hit");
+   if(result==="parry")d.classList.add("parried");
+   if(result==="miss")d.classList.add("missed");
+   if(i===arenaStateV600.seqIndex)d.classList.add("current");
+
+   d.textContent=ARENA_DIR_SYMBOL_V600[dir];
+   arenaV600Refs.sequence.appendChild(d);
+  });
+
+  const i=arenaStateV600.seqIndex;
+  if(i<c.seq.length){
+   arenaV600Refs.currentInput.classList.add("active");
+   arenaV600Refs.currentArrow.textContent=ARENA_DIR_SYMBOL_V600[c.seq[i]];
+   arenaV600Refs.currentMeta.textContent="COLPO "+(i+1)+" / "+c.seq.length;
+   arenaV600Refs.currentDamage.textContent="";
+  }else{
+   arenaV600Refs.currentInput.classList.remove("active");
+  }
+ }
+
+ function arenaDirectionFromSwipeV600(dx,dy){
+  if(Math.max(Math.abs(dx),Math.abs(dy))<34)return "";
+  if(Math.abs(dx)>=Math.abs(dy)){
+   return dx>0?"R":"L";
+  }
+  return dy>0?"D":"U";
+ }
+
+ function arenaResolveComboSwipeV600(
+  dir,
+  timedOut=false,
+  token=arenaStateV600.comboStepToken,
+  stepIndex=arenaStateV600.seqIndex
+ ){
+  const c=arenaStateV600.combo;
+  const i=arenaStateV600.seqIndex;
+  const expected=c && c.seq[i];
+
+  if(!expected)return;
+
+  /*
+    Ignora eventi vecchi o duplicati.
+    Un singolo drag del mouse può risolvere UNA sola freccia.
+  */
+  if(
+   arenaStateV600.comboStepResolved ||
+   token!==arenaStateV600.comboStepToken ||
+   stepIndex!==i
+  ){
+   return;
+  }
+
+  arenaStateV600.comboStepResolved=true;
+  arenaClearComboStepTimerV620();
+
+  const correct=!timedOut && dir===expected;
+
+  if(correct){
+   arenaStateV600.ki=Math.min(
+    100,
+    arenaStateV600.ki+(c.kiPerHit||0)
+   );
+
+   /* Anche un colpo parato consuma Guardia nemica. */
+   arenaStateV600.enemyGuard=Math.max(
+    0,
+    arenaStateV600.enemyGuard-(c.guardDamagePerHit||0)
+   );
+
+   const parried=arenaStateV600.enemyGuardBlocksRemaining>0;
+
+   if(parried){
+    arenaStateV600.enemyGuardBlocksRemaining--;
+    arenaStateV600.comboParries++;
+    arenaStateV600.comboResults[i]="parry";
+    arenaEnemyGuardFlashV630();
+   }else{
+    const dmg=c.hitDamage[i];
+    arenaStateV600.comboResults[i]="hit";
+    arenaStateV600.comboDamageDone+=dmg;
+    arenaStateV600.enemyHP=Math.max(0,arenaStateV600.enemyHP-dmg);
+
+    if(window.WIUSoundV112){
+     window.WIUSoundV112.play("whoosh");
+    }
+   }
+
+   arenaStateV600.seqIndex++;
+   arenaUpdateHudV600();
+
+   arenaFlashCurrentV620("ok",()=>{
+    if(arenaStateV600.seqIndex<c.seq.length){
+     arenaBeginComboStepV620();
+    }else{
+     arenaApplyComboV600(c);
+    }
+   });
+   return;
+  }
+
+  /* Anche uno swipe troppo corto è un errore e fa avanzare lo step. */
+  arenaStateV600.comboResults[i]="miss";
+  arenaStateV600.seqIndex++;
+
+  arenaFlashCurrentV620("miss",()=>{
+   if(arenaStateV600.seqIndex<c.seq.length){
+    arenaBeginComboStepV620();
+   }else{
+    arenaApplyComboV600(c);
+   }
+  });
+ }
+
+ function arenaApplyComboV600(c){
+  arenaUpdateHudV600();
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.currentInput.classList.remove("active");
+
+  const executed=arenaStateV600.comboResults.filter(
+   x=>x==="hit"||x==="parry"
+  ).length;
+  const missed=arenaStateV600.comboResults.filter(
+   x=>x==="miss"
+  ).length;
+
+  arenaShowResultV640({
+   eyebrow:"FINE AZIONE • IL TUO TURNO",
+   title:c.name,
+   text:
+    "<b>"+executed+"/"+c.seq.length+" colpi eseguiti</b><br>"+
+    missed+" mancati • "+
+    arenaStateV600.comboParries+" parati<br>"+
+    "<b>"+arenaStateV600.comboDamageDone+" danni inflitti</b><br><br>"+
+    "Guardia nemica: "+Math.round(arenaStateV600.enemyGuard)+"/100<br>"+
+    "Ki: "+Math.round(arenaStateV600.ki)+"/100",
+   onContinue:arenaAdvanceAfterPlayerActionV630
+  });
+ }
+
+ const ARENA_DEFENSE_V620={
+  easy:{
+   length:3,
+   damage:6,
+   label:"COMBO FACILE"
+  },
+  medium:{
+   length:4,
+   damage:8,
+   label:"COMBO MEDIA"
+  },
+  hard:{
+   length:6,
+   damage:10,
+   label:"COMBO DIFFICILE"
+  }
+ };
+
+ function arenaStartPhysicalDefenseV600(){
+  arenaStartDefenseComboV620("easy");
+ }
+
+ function arenaStartDefenseComboV620(level){
+  const cfg=ARENA_DEFENSE_V620[level];
+  if(!cfg)return;
+
+  arenaStateV600.gestureMode="defense-combo";
+  arenaStateV600.defenseLevel=level;
+  arenaStateV600.defenseSeq=arenaRandomDefenseSeqV640(cfg.length);
+  arenaStateV600.defenseIndex=0;
+  arenaStateV600.defenseResults=[];
+  arenaStateV600.defenseHitDamage=cfg.damage;
+  arenaStateV600.defenseConfig=cfg;
+
+  arenaStateV600.defenseComboHPBefore=arenaStateV600.playerHP;
+  arenaStateV600.defenseComboGuardBefore=arenaStateV600.playerGuard;
+  arenaStateV600.defenseDamageTaken=0;
+  arenaStateV600.defensePerfects=0;
+  arenaStateV600.defensePartials=0;
+  arenaStateV600.defenseMisses=0;
+
+  arenaV600Refs.gesture.className="active defense-combo-mode";
+  arenaV600Refs.traceSvg.innerHTML="";
+  arenaV600Refs.gestureTitle.textContent=
+   "TURNO AVVERSARIO • "+cfg.label;
+  arenaV600Refs.gestureHint.textContent=
+   "Reagisci subito: VELOCE = PERFECT DODGE • più tardi = PARATA PARZIALE.";
+
+  arenaRenderDefenseComboV610();
+  arenaBeginDefenseStepV610();
+ }
+
+ function arenaRenderDefenseComboV610(){
+  arenaV600Refs.sequence.innerHTML="";
+
+  arenaStateV600.defenseSeq.forEach((dir,i)=>{
+   const d=document.createElement("div");
+   d.className="arenaV600Dir";
+
+   const result=arenaStateV600.defenseResults[i];
+   if(result==="perfect")d.classList.add("perfect");
+   if(result==="partial")d.classList.add("partial");
+   if(result==="miss")d.classList.add("missed");
+   if(i===arenaStateV600.defenseIndex)d.classList.add("current");
+
+   d.textContent=ARENA_DIR_SYMBOL_V600[dir];
+   arenaV600Refs.sequence.appendChild(d);
+  });
+
+  const i=arenaStateV600.defenseIndex;
+  if(i<arenaStateV600.defenseSeq.length){
+   arenaV600Refs.currentInput.classList.add("active");
+   arenaV600Refs.currentArrow.textContent=
+    ARENA_DIR_SYMBOL_V600[arenaStateV600.defenseSeq[i]];
+   arenaV600Refs.currentMeta.innerHTML=
+    "SCHIVATA "+(i+1)+" / "+arenaStateV600.defenseSeq.length+
+    "<br><span class='arenaV640Fast'>PRIMA REAGISCI, MEGLIO DIFENDI</span>";
+   arenaV600Refs.currentDamage.textContent="";
+  }else{
+   arenaV600Refs.currentInput.classList.remove("active");
+  }
+ }
+
+ function arenaBeginDefenseStepV610(){
+  clearTimeout(arenaStateV600.defenseTimer);
+
+  if(arenaStateV600.defenseIndex>=arenaStateV600.defenseSeq.length){
+   arenaFinishDefenseComboV610();
+   return;
+  }
+
+  const duration=arenaDefenseStepDurationV640();
+
+  arenaStateV600.defenseStepToken++;
+  const token=arenaStateV600.defenseStepToken;
+  const stepIndex=arenaStateV600.defenseIndex;
+
+  arenaStateV600.defenseStepResolved=false;
+  arenaStateV600.defensePointerStep=-1;
+  arenaStateV600.pointerId=null;
+
+  arenaStateV600.defenseStepStart=performance.now();
+  arenaStateV600.defenseDeadline=
+   arenaStateV600.defenseStepStart+duration;
+  arenaRenderDefenseComboV610();
+
+  /* Riusa la stessa barra timing delle combo. */
+  arenaClearComboStepTimerV620();
+  const fill=arenaV600Refs.inputTimerFill;
+  try{
+   arenaStateV600.comboStepAnim=fill.animate(
+    [{transform:"scaleX(1)"},{transform:"scaleX(0)"}],
+    {duration,easing:"linear",fill:"forwards"}
+   );
+  }catch(e){}
+
+  arenaStateV600.defenseTimer=setTimeout(()=>{
+   if(
+    arenaStateV600.active &&
+    arenaStateV600.gestureMode==="defense-combo" &&
+    arenaStateV600.defenseStepToken===token &&
+    arenaStateV600.defenseIndex===stepIndex &&
+    !arenaStateV600.defenseStepResolved
+   ){
+    arenaResolveDefenseStepV610("",true,token,stepIndex);
+   }
+  },duration);
+ }
+
+ function arenaResolveDefenseStepV610(
+  dir,
+  timedOut=false,
+  token=arenaStateV600.defenseStepToken,
+  stepIndex=arenaStateV600.defenseIndex
+ ){
+  if(arenaStateV600.gestureMode!=="defense-combo")return;
+
+  if(
+   arenaStateV600.defenseStepResolved ||
+   token!==arenaStateV600.defenseStepToken ||
+   stepIndex!==arenaStateV600.defenseIndex
+  ){
+   return;
+  }
+
+  arenaStateV600.defenseStepResolved=true;
+
+  clearTimeout(arenaStateV600.defenseTimer);
+  arenaClearComboStepTimerV620();
+
+  const i=arenaStateV600.defenseIndex;
+  const expected=arenaStateV600.defenseSeq[i];
+  const now=performance.now();
+  const elapsed=Math.max(
+   0,
+   now-(arenaStateV600.defenseStepStart||now)
+  );
+  const total=Math.max(
+   1,
+   arenaStateV600.defenseDeadline-
+   (arenaStateV600.defenseStepStart||now)
+  );
+  const reactionRatio=elapsed/total;
+
+  const correct=!timedOut && dir===expected;
+
+  let outcome="miss";
+  let damage=arenaStateV600.defenseHitDamage;
+
+  if(correct && reactionRatio<=.46){
+   outcome="perfect";
+   damage=0;
+  }else if(correct && arenaStateV600.playerGuard>0){
+   outcome="partial";
+   damage=Math.max(
+    1,
+    Math.round(arenaStateV600.defenseHitDamage*.50)
+   );
+  }else if(correct){
+   /* Guardia spezzata: una risposta lenta non basta più. */
+   outcome="miss";
+   damage=arenaStateV600.defenseHitDamage;
+  }
+
+  arenaStateV600.defenseResults[i]=outcome;
+
+  if(outcome==="perfect"){
+   arenaStateV600.defensePerfects++;
+   arenaStateV600.playerGuard=Math.min(100,arenaStateV600.playerGuard+4);
+   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+6);
+   if(window.WIUSoundV112)window.WIUSoundV112.play("whoosh");
+  }else if(outcome==="partial"){
+   arenaStateV600.defensePartials++;
+   arenaStateV600.playerGuard=Math.max(0,arenaStateV600.playerGuard-8);
+   arenaStateV600.playerHP=Math.max(1,arenaStateV600.playerHP-damage);
+   arenaStateV600.defenseDamageTaken+=damage;
+   if(window.WIUSoundV112)window.WIUSoundV112.play("hit");
+  }else{
+   arenaStateV600.defenseMisses++;
+   arenaStateV600.playerGuard=Math.max(0,arenaStateV600.playerGuard-12);
+   arenaStateV600.playerHP=Math.max(1,arenaStateV600.playerHP-damage);
+   arenaStateV600.defenseDamageTaken+=damage;
+   if(window.WIUSoundV112)window.WIUSoundV112.play("hit");
+  }
+
+  arenaStateV600.defenseIndex++;
+  arenaUpdateHudV600();
+  arenaRenderDefenseComboV610();
+
+  const flashKind=outcome==="perfect" ? "ok" : "miss";
+
+  arenaFlashCurrentV620(flashKind,()=>{
+   setTimeout(arenaBeginDefenseStepV610,130);
+  });
+ }
+
+ function arenaFinishDefenseComboV610(){
+  clearTimeout(arenaStateV600.defenseTimer);
+  arenaClearComboStepTimerV620();
+  arenaStateV600.defenseTimer=null;
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.currentInput.classList.remove("active");
+
+  const level=arenaStateV600.defenseLevel;
+  const total=arenaStateV600.defenseSeq.length;
+  const damage=arenaStateV600.defenseDamageTaken;
+
+  arenaShowResultV640({
+   eyebrow:"FINE COMBO • TURNO AVVERSARIO",
+   title:
+    damage===0
+     ?"DIFESA PERFETTA"
+     :"COMBO NEMICA TERMINATA",
+   text:
+    "<b>"+arenaStateV600.defensePerfects+" PERFECT DODGE</b><br>"+
+    arenaStateV600.defensePartials+" parate parziali • "+
+    arenaStateV600.defenseMisses+" colpi pieni<br>"+
+    "<b>"+damage+" danni subiti</b><br><br>"+
+    "HP: "+Math.round(arenaStateV600.playerHP)+"/100 • "+
+    "Guardia: "+Math.round(arenaStateV600.playerGuard)+"/100",
+   onContinue:arenaAdvanceAfterEnemyActionV630,
+   allowRewrite:damage>0,
+   onRewrite:()=>{
+    /*
+      RISCRITTURA SOLO A FINE COMBO:
+      ripristina gli HP precedenti e fa ripetere l'intera azione nemica.
+    */
+    arenaStateV600.playerHP=arenaStateV600.defenseComboHPBefore;
+    arenaStateV600.playerGuard=arenaStateV600.defenseComboGuardBefore;
+    arenaUpdateHudV600();
+
+    arenaV600Refs.coachText.textContent=
+     "RISCRITTURA usata. Torni all'inizio della combo: questa volta devi difenderti di nuovo da tutta la sequenza.";
+
+    setTimeout(
+     ()=>arenaStartDefenseComboV620(level),
+     300
+    );
+   }
+  });
+ }
+
+ function arenaPointToSvgV600(p){
+  return [p[0]*1000,p[1]*600];
+ }
+
+ function arenaPathPointsV600(points){
+  return points.map(p=>{
+   const q=arenaPointToSvgV600(p);
+   return q[0]+","+q[1];
+  }).join(" ");
+ }
+
+ function arenaRenderTraceV600(kind){
+  const svg=arenaV600Refs.traceSvg;
+
+  let def=ARENA_TRACE_V600[kind];
+  let enemy="";
+
+  if(kind==="defense"){
+   def=ARENA_TRACE_V600.defense;
+   enemy=
+    "<polyline class='arenaV600EnemyTrace' points='"+
+    arenaPathPointsV600(ARENA_TRACE_V600.enemy.points)+
+    "'></polyline>";
+  }else if(kind==="defenseSpecial"){
+   def=ARENA_TRACE_V600.defenseSpecial;
+   enemy=
+    "<polyline class='arenaV600EnemyTrace' points='"+
+    arenaPathPointsV600(ARENA_TRACE_V600.enemySpecial.points)+
+    "'></polyline>";
+  }
+
+  const pts=def.points;
+
+  const checks=pts.map((p,i)=>{
+   const q=arenaPointToSvgV600(p);
+   return "<circle class='arenaV600Checkpoint' data-trace-index='"+i+
+    "' cx='"+q[0]+"' cy='"+q[1]+"' r='26'></circle>";
+  }).join("");
+
+  svg.innerHTML=
+   enemy+
+   "<polyline class='arenaV600TargetLine' points='"+
+   arenaPathPointsV600(pts)+"'></polyline>"+
+   checks+
+   "<polyline id='arenaV600UserTrace' class='arenaV600UserLine' points=''></polyline>";
+ }
+
+ function arenaStartTraceV600(kind){
+  const def=ARENA_TRACE_V600[kind];
+  const cost=kind==="ki" ? 25 : 55;
+
+  /*
+    Solo nel tutorial: se hai generato poco Ki perché hai sbagliato
+    le combo precedenti, Kaelios integra il minimo necessario
+    per mostrarti comunque la meccanica.
+  */
+  const tutorialKiPhase=
+   (kind==="ki" && arenaStateV600.phase===7) ||
+   (kind==="special" && arenaStateV600.phase===9);
+
+  if(arenaStateV600.ki<cost){
+   if(tutorialKiPhase){
+    arenaStateV600.ki=cost;
+    arenaUpdateHudV600();
+   }else{
+    return;
+   }
+  }
+
+  /* Il costo viene consumato quando tenti la tecnica. */
+  arenaStateV600.ki=Math.max(0,arenaStateV600.ki-cost);
+  arenaUpdateHudV600();
+
+  arenaStateV600.traceKind=kind;
+  arenaStateV600.trace=def.points;
+  arenaStateV600.traceIndex=0;
+  arenaStateV600.tracePoints=[];
+  arenaStateV600.traceStarted=false;
+  arenaStateV600.gestureMode="trace";
+
+  const duration=kind==="special" ? 4000 : 3200;
+  arenaStateV600.traceDeadline=performance.now()+duration;
+
+  arenaV600Refs.actions.innerHTML="";
+  arenaV600Refs.gesture.className="active trace-mode";
+  arenaV600Refs.sequence.innerHTML="";
+  arenaV600Refs.defensePrompt.innerHTML="";
+  arenaV600Refs.gestureTitle.textContent=
+   def.name+" • TRACCIA PRIMA CHE SCADA IL TEMPO";
+  arenaV600Refs.gestureHint.textContent=
+   "Attraversa i nodi nell'ordine. Il Ki è già stato consumato.";
+  arenaRenderTraceV600(kind);
+  arenaUpdateTraceV600();
+
+  arenaStartTraceTimerV630(duration,()=>{
+   if(
+    arenaStateV600.active &&
+    arenaStateV600.gestureMode==="trace"
+   ){
+    arenaStateV600.traceStarted=false;
+    arenaFailTraceV600(true);
+   }
+  });
+ }
+
+ function arenaStartKiDefenseV600(type="base"){
+  const special=type==="special";
+
+  arenaStateV600.traceDefenseType=type;
+  arenaStateV600.traceDefenseDamage=special ? 36 : 20;
+  arenaStateV600.traceKind=special ? "defenseSpecial" : "defense";
+  arenaStateV600.trace=
+   special
+    ? ARENA_TRACE_V600.defenseSpecial.points
+    : ARENA_TRACE_V600.defense.points;
+
+  arenaStateV600.traceIndex=0;
+  arenaStateV600.tracePoints=[];
+  arenaStateV600.traceStarted=false;
+  arenaStateV600.gestureMode="trace-defense";
+
+  /*
+    Tecnica più potente = meno tempo per neutralizzarla.
+  */
+  const duration=special ? 2200 : 3400;
+  arenaStateV600.traceDeadline=performance.now()+duration;
+
+  arenaV600Refs.gesture.className="active trace-mode";
+  arenaV600Refs.sequence.innerHTML="";
+  arenaV600Refs.defensePrompt.innerHTML="";
+  arenaV600Refs.gestureTitle.textContent=
+   special
+    ?"TECNICA SPECIALE IN ARRIVO • CONTRO-CONFIGURAZIONE"
+    :"KI BLAST IN ARRIVO • CONTRO-CONFIGURAZIONE";
+  arenaV600Refs.gestureHint.textContent=
+   "Completa più forma possibile: 25% • 50% • 75% • 100% = stessa quota di danno bloccata.";
+
+  arenaRenderTraceV600(
+   special ? "defenseSpecial" : "defense"
+  );
+  arenaUpdateTraceV600();
+
+  arenaStartTraceTimerV630(duration,()=>{
+   if(
+    arenaStateV600.active &&
+    arenaStateV600.gestureMode==="trace-defense"
+   ){
+    arenaResolveKiDefenseV630();
+   }
+  });
+ }
+
+ function arenaResolveKiDefenseV630(){
+  if(arenaStateV600.gestureMode!=="trace-defense")return;
+
+  arenaClearTraceTimerV630();
+
+  const progress=arenaTraceCompletionV630();
+  const block=arenaBlockTierV630(progress);
+  const damage=Math.round(
+   arenaStateV600.traceDefenseDamage*(1-block)
+  );
+  const hpBefore=arenaStateV600.playerHP;
+  const type=arenaStateV600.traceDefenseType;
+
+  arenaStateV600.gestureMode="";
+  arenaStateV600.traceStarted=false;
+  arenaV600Refs.gesture.className="";
+
+  if(damage>0){
+   arenaStateV600.playerHP=Math.max(
+    1,
+    arenaStateV600.playerHP-damage
+   );
+   if(window.WIUSoundV112)window.WIUSoundV112.play("hit");
+  }else{
+   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+6);
+   if(window.WIUSoundV112)window.WIUSoundV112.play("whoosh");
+  }
+
+  arenaUpdateHudV600();
+
+  arenaShowResultV640({
+   eyebrow:"FINE AZIONE • TURNO AVVERSARIO",
+   title:
+    block>=1
+     ?"KI COMPLETAMENTE RESPINTO"
+     :"ATTACCO KI TERMINATO",
+   text:
+    "Contro-configurazione completata: <b>"+
+    Math.round(progress*100)+"%</b><br>"+
+    "Danno bloccato: <b>"+Math.round(block*100)+"%</b><br>"+
+    "<b>"+damage+" danni subiti</b><br><br>"+
+    "HP: "+Math.round(arenaStateV600.playerHP)+"/100",
+   onContinue:arenaAdvanceAfterEnemyActionV630,
+   allowRewrite:damage>0,
+   onRewrite:()=>{
+    /*
+      Anche qui la Riscrittura viene proposta SOLO a fine azione,
+      mai durante l'attacco.
+    */
+    arenaStateV600.playerHP=hpBefore;
+    arenaUpdateHudV600();
+
+    arenaV600Refs.coachText.textContent=
+     "RISCRITTURA usata. La tecnica energetica sta per essere lanciata di nuovo.";
+
+    setTimeout(
+     ()=>arenaStartKiDefenseV600(type),
+     300
+    );
+   }
+  });
+ }
+
+ function arenaGestureRectV600(){
+  return arenaV600Refs.traceSvg.getBoundingClientRect();
+ }
+
+ function arenaNormalizedPointerV600(e){
+  const r=arenaGestureRectV600();
+  if(!r.width||!r.height)return [0,0];
+  return [
+   Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),
+   Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))
+  ];
+ }
+
+ function arenaTraceDistanceV600(a,b){
+  const dx=a[0]-b[0],dy=a[1]-b[1];
+  return Math.hypot(dx,dy);
+ }
+
+ function arenaPointSegmentDistanceV610(p,a,b){
+  const abx=b[0]-a[0],aby=b[1]-a[1];
+  const apx=p[0]-a[0],apy=p[1]-a[1];
+  const den=abx*abx+aby*aby;
+
+  let t=den?((apx*abx+apy*aby)/den):0;
+  t=Math.max(0,Math.min(1,t));
+
+  const q=[a[0]+abx*t,a[1]+aby*t];
+  return arenaTraceDistanceV600(p,q);
+ }
+
+ function arenaGestureDownV600(e){
+  if(!arenaStateV600.active)return;
+  if(e.cancelable)e.preventDefault();
+
+  /*
+    Se un pointer è già attivo, ignora un secondo down.
+    Evita anomalie mouse/trackpad e doppi input.
+  */
+  if(arenaStateV600.pointerId!==null)return;
+
+  arenaStateV600.pointerId=e.pointerId;
+  arenaStateV600.startX=e.clientX;
+  arenaStateV600.startY=e.clientY;
+  arenaStateV600.startTs=Number(e.timeStamp)||performance.now();
+
+  if(arenaStateV600.gestureMode==="combo"){
+   arenaStateV600.comboPointerStep=arenaStateV600.seqIndex;
+  }else if(arenaStateV600.gestureMode==="defense-combo"){
+   arenaStateV600.defensePointerStep=arenaStateV600.defenseIndex;
+  }
+
+  try{arenaV600Refs.gesture.setPointerCapture(e.pointerId)}catch(err){}
+
+  if(arenaStateV600.gestureMode==="trace" ||
+     arenaStateV600.gestureMode==="trace-defense"){
+
+   const p=arenaNormalizedPointerV600(e);
+   const start=arenaStateV600.trace[0];
+
+   const isComplex=
+    arenaStateV600.traceKind==="special" ||
+    arenaStateV600.traceKind==="defenseSpecial";
+   const startTolerance=isComplex ? .34 : .27;
+
+   if(arenaTraceDistanceV600(p,start)>startTolerance){
+    arenaFeedbackV600("PARTI DAL PRIMO NODO");
+    arenaStateV600.traceStarted=false;
+    return;
+   }
+
+   arenaStateV600.traceStarted=true;
+   arenaStateV600.traceIndex=1;
+   arenaStateV600.tracePoints=[p];
+   arenaUpdateTraceV600();
+  }
+ }
+
+ function arenaGestureMoveV600(e){
+  if(!arenaStateV600.active || e.pointerId!==arenaStateV600.pointerId)return;
+  if(e.cancelable)e.preventDefault();
+
+  if(!(arenaStateV600.gestureMode==="trace" ||
+       arenaStateV600.gestureMode==="trace-defense"))return;
+
+  if(!arenaStateV600.traceStarted)return;
+
+  const p=arenaNormalizedPointerV600(e);
+  const prev=arenaStateV600.tracePoints.length
+   ?arenaStateV600.tracePoints[arenaStateV600.tracePoints.length-1]
+   :p;
+
+  arenaStateV600.tracePoints.push(p);
+
+  /*
+    Tolleranza ampia + controllo sul segmento prev→p:
+    funziona molto meglio anche col mouse, dove gli eventi possono
+    essere più distanti tra loro.
+  */
+  const special=
+   arenaStateV600.traceKind==="special" ||
+   arenaStateV600.traceKind==="defenseSpecial";
+  const directTol=special ? .30 : .24;
+  const crossedTol=special ? .25 : .20;
+
+  while(arenaStateV600.traceIndex<arenaStateV600.trace.length){
+   const expected=arenaStateV600.trace[arenaStateV600.traceIndex];
+   const direct=arenaTraceDistanceV600(p,expected);
+   const crossed=arenaPointSegmentDistanceV610(expected,prev,p);
+
+   if(direct<directTol || crossed<crossedTol){
+    arenaStateV600.traceIndex++;
+   }else{
+    break;
+   }
+  }
+
+  arenaUpdateTraceV600();
+ }
+
+ function arenaUpdateTraceV600(){
+  const line=arenaV600Refs.traceSvg.querySelector("#arenaV600UserTrace");
+  if(line){
+   line.setAttribute(
+    "points",
+    arenaPathPointsV600(arenaStateV600.tracePoints)
+   );
+  }
+
+  arenaV600Refs.traceSvg.querySelectorAll("[data-trace-index]").forEach(c=>{
+   const i=Number(c.dataset.traceIndex);
+   c.classList.toggle("done",i<arenaStateV600.traceIndex);
+  });
+
+  if(arenaV600Refs.traceProgress){
+   const pct=Math.round(arenaTraceCompletionV630()*100);
+
+   if(arenaStateV600.gestureMode==="trace-defense"){
+    const block=Math.round(
+     arenaBlockTierV630(arenaTraceCompletionV630())*100
+    );
+    arenaV600Refs.traceProgress.textContent=
+     "CONFIGURAZIONE "+pct+"% • BLOCCO ATTUALE "+block+"%";
+   }else if(arenaStateV600.gestureMode==="trace"){
+    arenaV600Refs.traceProgress.textContent=
+     "CONFIGURAZIONE "+pct+"%";
+   }else{
+    arenaV600Refs.traceProgress.textContent="";
+   }
+  }
+ }
+
+ function arenaGestureUpV600(e){
+  if(!arenaStateV600.active || e.pointerId!==arenaStateV600.pointerId)return;
+  if(e.cancelable)e.preventDefault();
+
+  try{
+   if(arenaV600Refs.gesture.hasPointerCapture(e.pointerId)){
+    arenaV600Refs.gesture.releasePointerCapture(e.pointerId);
+   }
+  }catch(err){}
+
+  const mode=arenaStateV600.gestureMode;
+  arenaStateV600.pointerId=null;
+
+  if(mode==="combo"){
+   const dx=e.clientX-arenaStateV600.startX;
+   const dy=e.clientY-arenaStateV600.startY;
+   const dir=arenaDirectionFromSwipeV600(dx,dy);
+   const stepIndex=arenaStateV600.comboPointerStep;
+
+   arenaResolveComboSwipeV600(
+    dir,
+    !dir,
+    arenaStateV600.comboStepToken,
+    stepIndex
+   );
+
+   arenaStateV600.comboPointerStep=-1;
+   return;
+  }
+
+  if(mode==="defense-combo"){
+   const now=Number(e.timeStamp)||performance.now();
+   const dx=e.clientX-arenaStateV600.startX;
+   const dy=e.clientY-arenaStateV600.startY;
+   const dir=arenaDirectionFromSwipeV600(dx,dy);
+   const stepIndex=arenaStateV600.defensePointerStep;
+
+   arenaResolveDefenseStepV610(
+    dir,
+    !dir || now>arenaStateV600.defenseDeadline,
+    arenaStateV600.defenseStepToken,
+    stepIndex
+   );
+
+   arenaStateV600.defensePointerStep=-1;
+   return;
+  }
+
+  if(mode==="trace" || mode==="trace-defense"){
+   if(!arenaStateV600.traceStarted){
+    arenaFailTraceV600();
+    return;
+   }
+
+   const p=arenaNormalizedPointerV600(e);
+   const prev=arenaStateV600.tracePoints.length
+    ?arenaStateV600.tracePoints[arenaStateV600.tracePoints.length-1]
+    :p;
+   arenaStateV600.tracePoints.push(p);
+
+   while(arenaStateV600.traceIndex<arenaStateV600.trace.length){
+    const expected=arenaStateV600.trace[arenaStateV600.traceIndex];
+    const direct=arenaTraceDistanceV600(p,expected);
+    const crossed=arenaPointSegmentDistanceV610(expected,prev,p);
+    const special=
+     arenaStateV600.traceKind==="special" ||
+     arenaStateV600.traceKind==="defenseSpecial";
+    const directTol=special ? .32 : .26;
+    const crossedTol=special ? .27 : .22;
+
+    if(direct<directTol || crossed<crossedTol){
+     arenaStateV600.traceIndex++;
+    }else{
+     break;
+    }
+   }
+
+   const complete=arenaStateV600.traceIndex>=arenaStateV600.trace.length;
+   const now=Number(e.timeStamp)||performance.now();
+   const inTime=now<=arenaStateV600.traceDeadline;
+
+   arenaStateV600.traceStarted=false;
+
+   if(mode==="trace-defense"){
+    arenaResolveKiDefenseV630();
+    return;
+   }
+
+   if(complete && inTime){
+    arenaSuccessTraceV600();
+   }else{
+    arenaFailTraceV600();
+   }
+  }
+ }
+
+ function arenaGestureCancelV600(e){
+  if(e.cancelable)e.preventDefault();
+  arenaStateV600.pointerId=null;
+  arenaStateV600.comboPointerStep=-1;
+  arenaStateV600.defensePointerStep=-1;
+
+  if(arenaStateV600.gestureMode==="trace-defense"){
+   arenaStateV600.traceStarted=false;
+   arenaResolveKiDefenseV630();
+   return;
+  }
+
+  if(arenaStateV600.gestureMode==="trace"){
+   arenaStateV600.traceStarted=false;
+   arenaFailTraceV600();
+  }
+ }
+
+ function arenaFailTraceV600(){
+  const defense=arenaStateV600.gestureMode==="trace-defense";
+
+  if(defense){
+   arenaResolveKiDefenseV630();
+   return;
+  }
+
+  arenaClearTraceTimerV630();
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.gesture.className="";
+
+  arenaShowResultV640({
+   eyebrow:"FINE AZIONE • IL TUO TURNO",
+   title:"TECNICA FALLITA",
+   text:
+    "La configurazione non è stata completata in tempo.<br><br>"+
+    "<b>Il Ki speso non viene recuperato.</b><br>"+
+    "Ki attuale: "+Math.round(arenaStateV600.ki)+"/100",
+   onContinue:arenaAdvanceAfterPlayerActionV630
+  });
+ }
+
+ function arenaSuccessTraceV600(){
+  const kind=arenaStateV600.traceKind;
+
+  arenaClearTraceTimerV630();
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.gesture.className="";
+
+  const def=ARENA_TRACE_V600[kind];
+  const enemyBlock=kind==="special" ? .25 : .50;
+  const damage=Math.round(def.damage*(1-enemyBlock));
+
+  arenaStateV600.enemyHP=Math.max(
+   0,
+   arenaStateV600.enemyHP-damage
+  );
+  arenaUpdateHudV600();
+
+  if(window.WIUSoundV112)window.WIUSoundV112.play("release");
+
+  arenaShowResultV640({
+   eyebrow:"FINE AZIONE • IL TUO TURNO",
+   title:def.name+" COMPLETATO",
+   text:
+    "L'Ologramma ha bloccato <b>"+
+    Math.round(enemyBlock*100)+"%</b> della tecnica.<br><br>"+
+    "<b>"+damage+" danni inflitti</b><br>"+
+    "Ki rimasto: "+Math.round(arenaStateV600.ki)+"/100",
+   onContinue:arenaAdvanceAfterPlayerActionV630
+  });
+ }
+
+ function arenaCompleteTutorialV600(){
+  arenaStateV600.active=false;
+  arenaV600Refs.actions.innerHTML="";
+  arenaV600Refs.gesture.classList.remove("active");
+  arenaV600Refs.coachText.textContent="Bene. Adesso puoi provare contro qualcuno che reagisce davvero.";
+
+  window.setArenaTutorialCompleteV46(true);
+  arenaV600Refs.complete.classList.add("active");
+
+  if(window.WIUSoundV112)window.WIUSoundV112.play("success");
+ }
+
+ function arenaOpenV600(){
+  arenaCreateDOMV600();
+
+  panel.classList.remove("active");
+  panel.setAttribute("aria-hidden","true");
+  if(arenaStartBtnV600)arenaStartBtnV600.style.display="none";
+
+  saveMap();
+  saveRelationship();
+  window.closeNexusV41();
+
+  arenaRenderPlayerV600();
+  arenaResetStateV600();
+
+  arenaV600.classList.add("active");
+  arenaV600.setAttribute("aria-hidden","false");
+
+  if(window.WIUSoundV112)window.WIUSoundV112.play("transition");
+ }
+
+ function arenaCloseV600(fromComplete){
+  if(!arenaV600)return;
+
+  arenaStateV600.active=false;
+  arenaStateV600.gestureMode="";
+  arenaStateV600.pointerId=null;
+  arenaStateV600.rewritePending=false;
+  clearTimeout(arenaStateV600.rewriteTimer);
+  clearTimeout(arenaStateV600.comboStepTimer);
+  clearTimeout(arenaStateV600.defenseTimer);
+  clearTimeout(arenaStateV600.traceTimer);
+  try{
+   if(arenaStateV600.comboStepAnim)arenaStateV600.comboStepAnim.cancel();
+   if(arenaStateV600.rewriteAnim)arenaStateV600.rewriteAnim.cancel();
+  }catch(e){}
+  if(arenaV600Refs){
+   arenaV600Refs.rewritePrompt.classList.remove("active");
+   arenaV600Refs.tutorialInfo.classList.remove("active");
+   arenaV600Refs.turnBanner.classList.remove("active");
+   arenaV600Refs.resultModal.classList.remove("active");
+  }
+
+  arenaV600.classList.remove("active");
+  arenaV600.setAttribute("aria-hidden","true");
+
+  window.openNexusV41({skipIntro:true,newArrival:false});
+
+  if(fromComplete){
+   setObjective("RAGGIUNGI TRY COMBAT KAELIOS");
+   showLocation("TRY COMBAT KAELIOS","NUOVA AREA DISPONIBILE");
+  }else{
+   setObjective(
+    isArenaTutorialCompleteV46()
+      ?"TRY COMBAT KAELIOS È DISPONIBILE"
+      :"COMPLETA IL TUTORIAL NELL'ARENA"
+   );
+  }
+ }
+
+ arenaCreateDOMV600();
+
+ arenaStartBtnV600.addEventListener("click",arenaOpenV600);
+
+
+ window.openNexusV41=function(opts={}){
+  const skipIntro=!!opts.skipIntro;
+  const newArrival=!!opts.newArrival;
+
+  hideOtherScreens();
+  seedFromPrologueAndLoadRelationship();
+
+  if(newArrival){
+   resetArrivalPosition();
+   try{localStorage.removeItem(MAP_KEY)}catch(e){}
+  }else{
+   if(!loadMap()){
+    currentArea="core";
+    const s=AREAS.core.spawnFromLower;
+    playerX=768;playerY=600;
+    kaeliosX=710;kaeliosY=545;
+    guideFinished=true;
+    coreDialogueDone=true;
+   }
+  }
+
+  renderPlayer();
+  active=true;
+  controlsLocked=skipIntro?false:true;
+  nexus.classList.add("active");
+  nexus.setAttribute("aria-hidden","false");
+
+  applyAreaVisual();
+  renderPositions();
+  renderChunks();
+
+  if(newArrival && !skipIntro){
+   playArrival();
+   setTimeout(introDialogue,820);
+  }else{
+   guideActive=false;
+   setObjective("");
+   controlsLocked=false;
+   showAreaName();
+   showLocation(getArea().name,"HUB TEMPORALE");
+  }
+
+  if(!raf){
+   lastT=0;
+   raf=requestAnimationFrame(tick);
+  }
+ };
+
+ window.closeNexusV41=function(){
+  if(!active)return;
+  saveMap();
+  saveRelationship();
+  active=false;
+  controlsLocked=true;
+  stopMovement();
+  nexus.classList.remove("active");
+  nexus.setAttribute("aria-hidden","true");
+  if(raf){cancelAnimationFrame(raf);raf=0}
+ };
+
+ /* DEV -> NEXUS = salto diretto alla mappa, senza intro */
+ window.devNexusV253=function(){
+  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
+  if(typeof devClearScreensV255==="function")devClearScreensV255();
+  openNexusV41({skipIntro:true,newArrival:false});
+ };
+
+
+ /* DEV -> UNIVERSO TRASCENDENTE = accesso diretto di test, bypassa PORTALE 01 */
+ window.devTranscendentV482=function(){
+  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
+  if(typeof devClearScreensV255==="function")devClearScreensV255();
+
+  /* Attiva il Nexus senza INTRO e poi forza l'hub di test. */
+  openNexusV41({skipIntro:true,newArrival:false});
+
+  currentArea="transcendent";
+  const s=AREAS.transcendent.spawnFromUpper;
+  playerX=s.x; playerY=s.y;
+  kaeliosX=s.kx; kaeliosY=s.ky;
+  guideActive=false;
+  guideFinished=true;
+  coreDialogueDone=true;
+  controlsLocked=false;
+
+  applyAreaVisual();
+  renderPositions();
+  renderChunks();
+  setObjective("");
+  saveMap();
+
+  /* Stesso titolo temporaneo usato nei cambi zona normali. */
+  showAreaName();
+  showLocation("UNIVERSO TRASCENDENTE","HUB DEI MONDI");
+ };
+
+ /* Anche il vecchio dispatcher DEV deve finire sul nuovo Nexus */
+ if(typeof window.devShowTeaserV255==="function"){
+  const oldDevShow=window.devShowTeaserV255;
+  window.devShowTeaserV255=function(mode){
+   if(mode==="nexus"){
+    openNexusV41({skipIntro:true,newArrival:false});
+    return;
+   }
+   return oldDevShow(mode);
+  };
+ }
+
+ /* Reset DEV: pulisce anche Nexus + relazione */
+ if(typeof window.resetSaveV25==="function"){
+  const oldReset=window.resetSaveV25;
+  window.resetSaveV25=function(){
+   oldReset();
+   try{
+    localStorage.removeItem(MAP_KEY);
+    localStorage.removeItem(REL_KEY);
+    localStorage.removeItem(TRY_COMBAT_KAELIOS_KEY_V48);
+   }catch(e){}
+   if(typeof kaeliosTrust!=="undefined")kaeliosTrust=0;
+   if(typeof protagonistIndependence!=="undefined")protagonistIndependence=0;
+  };
+ }
+
+ window.addEventListener("resize",()=>{
+  if(active){
+   renderPlayer();
+   renderPositions();
+  }
+ });
+
+ document.addEventListener("visibilitychange",()=>{
+  if(active && document.visibilityState==="hidden"){
+   saveMap();saveRelationship();stopMovement();
+  }
+ });
+ window.addEventListener("pagehide",()=>{
+  if(active){saveMap();saveRelationship()}
+ });
+})();
+</script>
+
+
+
+
+
+
+<script>
+/* =========================================================
+   PROLOGUE CINEMATIC BACKDROPS V1_9_1_1
+   Background dinamici senza interferire con UI/gameplay.
+   ========================================================= */
+(function(){
+    const BGS_DESKTOP={
+        fracture:"./frattura_cosmica_tra_rovine_celesti.png",
+        kaelios:"./vortice_cosmico_tra_rovine_stellari.png",
+        run:"./rovine_celesti_nel_vortice_cosmico.png",
+        alt:"./cattedrale_astrale_dei_mondi_frantumati.png",
+        nexus:"./cittadella_celeste_tra_le_stelle.png"
+    };
+
+    const BGS_IOS={
+        fracture:"./ios_fracture_bg.webp",
+        kaelios:"./ios_kaelios_bg.webp",
+        run:"./ios_run_bg.webp",
+        alt:"./ios_alt_bg.webp",
+        nexus:"./ios_nexus_bg.webp"
+    };
+
+    const BGS=document.documentElement.classList.contains("ios-lite-v115")
+        ? BGS_IOS
+        : BGS_DESKTOP;
+
+    /*
+      Preload leggero: scarica i file ma NON chiama img.decode().
+      Su Safari iOS decode() esplicito può forzare la decodifica
+      alla dimensione naturale e aumentare pressione di memoria.
+    */
+    const BG_CACHE_V192={};
+    function warmPrologueBackgroundsV192(){
+        Object.entries(BGS).forEach(([key,src],index)=>{
+            setTimeout(()=>{
+                const pre=new Image();
+                BG_CACHE_V192[key]=pre;
+                pre.decoding="async";
+                pre.src=src;
+            },120*index);
+        });
+    }
+
+    if(document.readyState==="complete"){
+        setTimeout(warmPrologueBackgroundsV192,150);
+    }else{
+        window.addEventListener("load",()=>{
+            setTimeout(warmPrologueBackgroundsV192,150);
+        },{once:true});
+    }
+
+    function setRiftBg(key){
+        const scene=document.getElementById("riftScene");
+        const img=document.getElementById("prologueBgImageV191");
+        const flash=document.getElementById("prologueCineFlashV110");
+        if(!img || !scene)return;
+
+        const finalKey=BGS[key]?key:"fracture";
+        const src=BGS[finalKey];
+
+        scene.classList.remove("bg-fracture","bg-kaelios","bg-run","bg-alt","bg-nexus","scene-shift");
+        scene.classList.add("bg-"+finalKey,"cinematic-bars");
+
+        if(document.documentElement.classList.contains("ios-lite-v115")){
+            /* Nessun forced layout: la transizione parte asincrona. */
+            requestAnimationFrame(()=>{
+                scene.classList.add("scene-shift");
+                setTimeout(()=>scene.classList.remove("scene-shift"),460);
+            });
+        }else{
+            void scene.offsetWidth;
+            scene.classList.add("scene-shift");
+            setTimeout(()=>scene.classList.remove("scene-shift"),460);
+        }
+
+        if(img.getAttribute("src")!==src){
+            if(flash){
+                if(document.documentElement.classList.contains("ios-lite-v115")){
+                    restartClassAsyncIOSV190(flash,"active");
+                }else{
+                    flash.classList.remove("active");
+                    void flash.offsetWidth;
+                    flash.classList.add("active");
+                }
+                setTimeout(()=>flash.classList.remove("active"),520);
+            }
+
+            img.style.opacity=".10";
+
+            /*
+              Usa direttamente il file già richiesto in BG_CACHE.
+              Se la decodifica non è ancora terminata, Safari completerà
+              il caricamento in modo asincrono senza creare un nuovo Image
+              nel gesto del giocatore.
+            */
+            img.src=src;
+            requestAnimationFrame(()=>{
+                requestAnimationFrame(()=>{
+                    img.style.opacity=".58";
+                });
+            });
+        }else{
+            img.style.opacity=".58";
+        }
+    }
+
+    function setExternalBg(id,key){
+        const el=document.getElementById(id);
+        if(!el)return;
+        el.style.setProperty("--prologue-ext-bg",'url("'+(BGS[key]||BGS.fracture)+'")');
+    }
+
+    function cinematicPulseV110(){
+        const flash=document.getElementById("prologueCineFlashV110");
+        if(!flash)return;
+        if(document.documentElement.classList.contains("ios-lite-v115")){
+            restartClassAsyncIOSV190(flash,"active");
+        }else{
+            flash.classList.remove("active");
+            void flash.offsetWidth;
+            flash.classList.add("active");
+        }
+        setTimeout(()=>flash.classList.remove("active"),520);
+    }
+    window.cinematicPulseV110=cinematicPulseV110;
+
+
+    setRiftBg("fracture");
+    setExternalBg("timelineVision","run");
+    setExternalBg("convergenceScreen","alt");
+
+    if(typeof window.cineVisual==="function"){
+        const old=window.cineVisual;
+        window.cineVisual=function(mode){
+            const result=old.apply(this,arguments);
+
+            if(mode==="fracture") setRiftBg("fracture");
+            else if(mode==="run") setRiftBg("run");
+            else if(mode==="alt" || mode==="entity") setRiftBg("alt");
+            else if(mode==="rewind") setRiftBg("fracture");
+            else setRiftBg("kaelios");
+
+            return result;
+        };
+    }
+
+    if(typeof window.startRift==="function"){
+        const old=window.startRift;
+        window.startRift=function(){
+            setRiftBg("fracture");
+            return old.apply(this,arguments);
+        };
+    }
+
+    if(typeof window.showTimelineVision2==="function"){
+        const old=window.showTimelineVision2;
+        window.showTimelineVision2=function(){
+            setExternalBg("timelineVision","run");
+            return old.apply(this,arguments);
+        };
+    }
+
+    if(typeof window.beginConvergence2==="function"){
+        const old=window.beginConvergence2;
+        window.beginConvergence2=function(){
+            setExternalBg("convergenceScreen","alt");
+            return old.apply(this,arguments);
+        };
+    }
+
+    if(typeof window.completeChapterOneV238==="function"){
+        const old=window.completeChapterOneV238;
+        window.completeChapterOneV238=function(){
+            setRiftBg("nexus");
+            return old.apply(this,arguments);
+        };
+    }
+
+    const chapterContinue=document.getElementById("chapterContinueV241");
+    if(chapterContinue){
+        chapterContinue.addEventListener("click",()=>setRiftBg("nexus"),true);
+    }
+})();
+</script>
+
+<button id="audioToggleV112" type="button" aria-label="Disattiva audio" title="Audio">🔊</button>
+
+<script id="externalAudioV112Script">
+/* =========================================================
+   WHAT IF UNIVERSE — CUSTOM EXTERNAL SFX V1.15
+   File WAV reali caricati dalla root del progetto.
+   ========================================================= */
+(function(){
+    const STORE_KEY="whatIfUniverse_audio_enabled_v1142";
+
+    const FILES={
+        click:      {src:"./ui_click.wav",         volume:.52},
+        choice:     {src:"./choice_confirm.wav",   volume:.55},
+        fracture:   {src:"./frattura_ok.wav",      volume:.82},
+        whoosh:     {src:"./swoosh.wav",            volume:.72},
+        whoosh2:    {src:"./swoosh2.wav",           volume:.76},
+        hit:        {src:"./impact_hit.wav",        volume:.78},
+        charge:     {src:"./ki_charge_loop.wav",   volume:.68},
+        release:    {src:"./mystic_laser.wav",      volume:.72},
+        rewrite:    {src:"./rewrite_temporal.wav", volume:.68},
+        success:    {src:"./success.wav",          volume:.62},
+        fail:       {src:"./fail.wav",             volume:.68},
+        portal:     {src:"./portal_open.wav",      volume:.66},
+        transition: {src:"./nexus_transition.wav", volume:.58},
+        anomaly:    {src:"./anomaly_warning.wav",  volume:.64}
+    };
+
+    let enabled=true;
+    let unlocked=false;
+    let chargeAudio=null;
+    let chargePrepared=null;
+
+    try{
+        const saved=localStorage.getItem(STORE_KEY);
+        if(saved!==null)enabled=saved==="1";
+    }catch(e){}
+
+    const pools={};
+
+    function makeAudio(key){
+        const cfg=FILES[key];
+        if(!cfg)return null;
+
+        const a=new Audio(cfg.src);
+        a.preload="auto";
+        a.volume=cfg.volume;
+        a.playsInline=true;
+        return a;
+    }
+
+    function getPool(key){
+        if(pools[key])return pools[key];
+
+        const count=
+            key==="fracture" ? 6 :
+            (key==="click" || key==="choice" || key==="whoosh" || key==="whoosh2" || key==="hit") ? 4 : 2;
+        pools[key]=[];
+        for(let i=0;i<count;i++){
+            const a=makeAudio(key);
+            if(a)pools[key].push(a);
+        }
+        return pools[key];
+    }
+
+    function unlock(){
+        if(unlocked)return true;
+
+        /*
+          Sblocco robusto per Safari/Chrome mobile.
+          unlocked diventa true SOLO se il browser ha accettato il play.
+        */
+        const a=makeAudio("click");
+        if(!a)return false;
+
+        a.volume=0;
+
+        try{
+            const p=a.play();
+
+            if(p && typeof p.then==="function"){
+                p.then(()=>{
+                    unlocked=true;
+                    try{
+                        a.pause();
+                        a.currentTime=0;
+                    }catch(e){}
+                }).catch(()=>{
+                    unlocked=false;
+                });
+            }else{
+                unlocked=true;
+                try{
+                    a.pause();
+                    a.currentTime=0;
+                }catch(e){}
+            }
+        }catch(e){
+            unlocked=false;
+        }
+
+        return unlocked;
+    }
+
+    function play(key,volumeMul=1){
+        if(!enabled)return;
+
+        unlock();
+
+        const pool=getPool(key);
+        if(!pool || !pool.length)return;
+
+        let a=pool.find(x=>x.paused || x.ended);
+        if(!a)a=pool[0];
+
+        try{
+            a.pause();
+            a.currentTime=0;
+            a.volume=Math.max(0,Math.min(1,(FILES[key]?.volume||.6)*volumeMul));
+            const p=a.play();
+            if(p && typeof p.catch==="function")p.catch(()=>{});
+        }catch(e){}
+    }
+
+    function startCharge(){
+        if(!enabled)return;
+        unlock();
+
+        stopCharge();
+
+        /*
+          Usa un'istanza già preparata quando possibile: così su mobile
+          il suono di carica parte immediatamente al pointerdown.
+        */
+        chargeAudio=chargePrepared || makeAudio("charge");
+        chargePrepared=null;
+        if(!chargeAudio)return;
+
+        chargeAudio.loop=true;
+        chargeAudio.volume=FILES.charge.volume;
+
+        try{
+            chargeAudio.pause();
+            chargeAudio.currentTime=0;
+            const p=chargeAudio.play();
+            if(p && typeof p.catch==="function")p.catch(()=>{});
+        }catch(e){}
+    }
+
+    function stopCharge(){
+        if(chargeAudio){
+            try{
+                chargeAudio.pause();
+                chargeAudio.currentTime=0;
+            }catch(e){}
+            chargeAudio=null;
+        }
+
+        if(!chargePrepared){
+            chargePrepared=makeAudio("charge");
+            if(chargePrepared){
+                chargePrepared.preload="auto";
+                try{ chargePrepared.load(); }catch(e){}
+            }
+        }
+    }
+
+    function stopAll(){
+        stopCharge();
+        Object.values(pools).forEach(pool=>{
+            pool.forEach(a=>{
+                try{
+                    a.pause();
+                    a.currentTime=0;
+                }catch(e){}
+            });
+        });
+    }
+
+    function updateButton(){
+        const b=document.getElementById("audioToggleV112");
+        if(!b)return;
+        b.textContent=enabled?"🔊":"🔇";
+        b.classList.toggle("muted",!enabled);
+        b.setAttribute("aria-label",enabled?"Disattiva audio":"Attiva audio");
+        b.title=enabled?"Audio attivo":"Audio disattivato";
+    }
+
+    function setEnabled(value){
+        enabled=!!value;
+        try{localStorage.setItem(STORE_KEY,enabled?"1":"0")}catch(e){}
+        if(!enabled)stopAll();
+        else{
+            unlock();
+            play("click",.90);
+        }
+        updateButton();
+    }
+
+    /*
+      Primo gesto: sblocca esplicitamente l'audio.
+      capture=true così avviene prima degli handler del gioco.
+    */
+    function firstAudioGesture(){
+        unlock();
+    }
+
+    if(document.documentElement.classList.contains("ios-lite-v115")){
+        document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
+    }else{
+        document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
+        document.addEventListener("touchstart",firstAudioGesture,{capture:true,passive:true});
+        document.addEventListener("click",firstAudioGesture,{capture:true,passive:true});
+    }
+
+    const toggle=document.getElementById("audioToggleV112");
+    if(toggle){
+        updateButton();
+
+        toggle.addEventListener("pointerdown",e=>{
+            e.stopPropagation();
+            unlock();
+        });
+
+        toggle.addEventListener("click",e=>{
+            e.preventDefault();
+            e.stopPropagation();
+            setEnabled(!enabled);
+        });
+    }
+
+    /*
+      Feedback UI di base.
+      Gli eventi narrativi importanti hanno poi il loro SFX specifico.
+    */
+    document.addEventListener("click",e=>{
+        if(!enabled)return;
+
+        const el=e.target.closest("button,.choice,.branchAction");
+        if(!el || el.id==="audioToggleV112")return;
+
+        if(
+            el.classList.contains("choice") ||
+            el.classList.contains("branchAction") ||
+            /choice/i.test(el.className||"")
+        ){
+            play("choice");
+        }else{
+            play("click");
+        }
+    },true);
+
+    function wrap(name,before,after){
+        const original=window[name];
+        if(typeof original!=="function")return false;
+
+        window[name]=function(){
+            if(before){
+                try{before.apply(this,arguments)}catch(e){}
+            }
+            const result=original.apply(this,arguments);
+            if(after){
+                try{after.apply(this,arguments)}catch(e){}
+            }
+            return result;
+        };
+        return true;
+    }
+
+
+    /*
+      SFX narrativi sincronizzati direttamente nei punti reali del gameplay.
+      Nessun suono viene più deciso soltanto dal cambio di visuale.
+    */
+
+    /* Sicurezza mobile */
+    document.addEventListener("visibilitychange",()=>{
+        if(document.hidden)stopCharge();
+    });
+
+    window.WIUSoundV112={
+        play,
+        startCharge,
+        stopCharge,
+        stopAll,
+        setEnabled,
+        isEnabled:()=>enabled,
+        files:FILES
+    };
+
+    /*
+      TRAMBUSTO V1.14.2:
+      ogni vera chiamata alla vibrazione riproduce frattura_ok.wav
+      a volume ridotto. L'apertura della frattura usa già lo stesso
+      file a volume pieno nel punto preciso della scena.
+    */
+    if(typeof window.vibrate==="function"){
+        const originalVibrateV1142=window.vibrate;
+
+        window.vibrate=function(pattern){
+            const isiOS=document.documentElement.classList.contains("ios-lite-v115");
+
+            /*
+              TEST iOS:
+              niente fracture.wav automatico su ogni pseudo-vibrazione.
+              Restano intatti tutti gli SFX narrativi espliciti.
+            */
+            if(enabled && !isiOS){
+                play("fracture",.24);
+            }
+
+            return originalVibrateV1142.apply(this,arguments);
+        };
+    }
+
+    /*
+      Preload leggero dopo il load, senza bloccare il rendering.
+    */
+    window.addEventListener("load",()=>{
+        setTimeout(()=>{
+            Object.keys(FILES).forEach(key=>getPool(key));
+
+            chargePrepared=makeAudio("charge");
+            if(chargePrepared){
+                chargePrepared.preload="auto";
+                try{ chargePrepared.load(); }catch(e){}
+            }
+        },350);
+    });
+})();
+</script>
+
+
+<script id="restartPrologueAutostartV1">
+(function(){
+    function maybeRestartPrologueV1(){
+        let restart=false;
+
+        try{
+            restart=sessionStorage.getItem("whatIfUniverse_restart_prologue_v1")==="1";
+            if(restart){
+                sessionStorage.removeItem("whatIfUniverse_restart_prologue_v1");
+            }
+        }catch(e){}
+
+        if(!restart)return;
+
+        /*
+          startGame() è la funzione originale che avvia il prologo
+          dall'introduzione "UNIVERSO 7".
+        */
+        setTimeout(()=>{
+            if(typeof window.startGame==="function"){
+                window.startGame();
+            }else if(typeof startGame==="function"){
+                startGame();
+            }
+        },80);
+    }
+
+    if(document.readyState==="loading"){
+        document.addEventListener("DOMContentLoaded",maybeRestartPrologueV1,{once:true});
+    }else{
+        maybeRestartPrologueV1();
+    }
+})();
+</script>
+
+</body>
+
+</html>
+<style id="arenaV660UnifiedGuardStyle">
+#arenaV600Resources{grid-template-columns:1fr 1fr !important}
+</style>
