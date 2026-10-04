@@ -6126,6 +6126,952 @@ html.ios-lite-v115.rewrite-focus-v300 #rewriteGameV233 .rwSlotV234{
 }
 </style>
 
+
+<style id="nexusIntroTourV500Style">
+/* =========================================================
+   INTRO TOUR V5.0
+   Dialoghi Nexus più grandi e leggibili.
+   ========================================================= */
+#nexus41Dialogue .nexus41DialogueCard{
+    width:min(680px,100%) !important;
+    padding:18px 18px 15px !important;
+}
+
+#nexus41Speaker{
+    font-size:12px !important;
+    letter-spacing:.20em !important;
+}
+
+#nexus41Text{
+    margin-top:9px !important;
+    min-height:58px !important;
+    font-size:clamp(17px,4.6vw,20px) !important;
+    line-height:1.52 !important;
+    font-weight:600 !important;
+}
+
+#nexus41Continue{
+    min-height:50px !important;
+    font-size:13px !important;
+}
+
+.nexus41Choice{
+    min-height:54px !important;
+    padding:12px 13px !important;
+    font-size:14px !important;
+    line-height:1.38 !important;
+}
+
+@media(max-height:700px){
+    #nexus41Dialogue .nexus41DialogueCard{
+        padding:14px 15px 12px !important;
+    }
+    #nexus41Text{
+        font-size:15.5px !important;
+        min-height:45px !important;
+        line-height:1.45 !important;
+    }
+    #nexus41Speaker{
+        font-size:11px !important;
+    }
+    #nexus41Continue{
+        min-height:44px !important;
+        font-size:12px !important;
+    }
+    .nexus41Choice{
+        min-height:47px !important;
+        font-size:12.5px !important;
+    }
+}
+</style>
+
+
+<style id="arenaCombatV600Style">
+/* =========================================================
+   ARENA COMBAT SYSTEM V1
+   Schermata fissa stile JRPG/Pokémon, gameplay a gesture.
+   Ottimizzata per mobile/iOS: niente loop grafici continui.
+   ========================================================= */
+#arenaCombatV600{
+    position:fixed;
+    inset:0;
+    z-index:1700;
+    display:none;
+    flex-direction:column;
+    background:
+        radial-gradient(circle at 78% 22%,rgba(106,72,170,.16),transparent 28%),
+        radial-gradient(circle at 18% 74%,rgba(74,120,180,.11),transparent 34%),
+        #05040b;
+    color:#fff;
+    overflow:hidden;
+    touch-action:none;
+    -webkit-user-select:none;
+    user-select:none;
+}
+#arenaCombatV600.active{display:flex}
+
+#arenaCombatV600 *{box-sizing:border-box}
+
+.arenaV600Top{
+    flex:0 0 auto;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:10px;
+    align-items:start;
+    padding:
+        max(10px,env(safe-area-inset-top))
+        12px 8px;
+}
+.arenaV600FighterHud{
+    min-width:0;
+    padding:9px 10px;
+    border:1px solid rgba(188,156,255,.30);
+    border-radius:12px;
+    background:rgba(9,7,18,.82);
+}
+.arenaV600FighterHud.enemy{text-align:right}
+.arenaV600Name{
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.14em;
+}
+.arenaV600HpText{
+    margin-top:4px;
+    font-size:10px;
+    font-weight:800;
+    opacity:.82;
+}
+.arenaV600Bar{
+    height:7px;
+    margin-top:5px;
+    overflow:hidden;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+}
+.arenaV600Bar > span{
+    display:block;
+    width:100%;
+    height:100%;
+    transform-origin:left center;
+    background:linear-gradient(90deg,#7ef3a6,#d3ffd9);
+}
+.arenaV600FighterHud.enemy .arenaV600Bar > span{
+    transform-origin:right center;
+}
+
+#arenaV600Exit{
+    min-width:62px;
+    min-height:42px;
+    padding:8px 10px;
+    border:1px solid rgba(188,156,255,.36);
+    border-radius:11px;
+    background:rgba(11,8,22,.88);
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.08em;
+}
+
+.arenaV600Battle{
+    position:relative;
+    flex:1 1 auto;
+    min-height:0;
+    overflow:hidden;
+}
+
+.arenaV600Stage{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px clamp(22px,7vw,58px) 150px;
+    pointer-events:none;
+}
+.arenaV600Platform{
+    position:absolute;
+    width:34%;
+    height:9%;
+    bottom:22%;
+    border-radius:50%;
+    border:1px solid rgba(172,145,255,.22);
+    background:radial-gradient(ellipse,rgba(117,82,180,.22),transparent 66%);
+}
+.arenaV600Platform.player{left:5%}
+.arenaV600Platform.enemy{right:5%}
+
+#arenaV600Player{
+    position:relative;
+    width:min(31vw,150px);
+    aspect-ratio:.67;
+    align-self:flex-end;
+    margin-bottom:15%;
+    z-index:3;
+}
+#arenaV600PlayerBody,
+#arenaV600PlayerHair{
+    position:absolute;
+    pointer-events:none;
+    object-fit:contain;
+}
+#arenaV600PlayerBody{
+    left:50%;
+    bottom:-1%;
+    width:100%;
+    height:100%;
+    transform:translateX(-50%);
+    transform-origin:50% 100%;
+}
+#arenaV600PlayerHair{
+    position:absolute;
+    height:auto;
+    transform:translateX(-50%);
+    transform-origin:center center;
+    z-index:5;
+    object-fit:contain;
+}
+
+#arenaV600Enemy{
+    position:relative;
+    width:min(31vw,160px);
+    aspect-ratio:1;
+    align-self:flex-start;
+    margin-top:8%;
+    display:grid;
+    place-items:center;
+    z-index:3;
+}
+.arenaV600EnemyCore{
+    width:58%;
+    aspect-ratio:1;
+    border-radius:50%;
+    border:2px solid rgba(211,195,255,.66);
+    background:
+        radial-gradient(circle,#fff 0 5%,#c9abff 6% 14%,#7651bb 27%,#302252 53%,#0d0b18 72%);
+    box-shadow:0 0 24px rgba(153,111,255,.25);
+}
+.arenaV600EnemyRing{
+    position:absolute;
+    inset:16%;
+    border-radius:50%;
+    border:1px solid rgba(215,201,255,.34);
+}
+.arenaV600EnemyLabel{
+    position:absolute;
+    top:102%;
+    width:150%;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.18em;
+    color:#d8c9ff;
+}
+
+#arenaV600Coach{
+    position:absolute;
+    left:50%;
+    top:6px;
+    transform:translateX(-50%);
+    z-index:8;
+    width:min(690px,calc(100% - 22px));
+    padding:9px 12px;
+    border:1px solid rgba(183,145,255,.32);
+    border-radius:12px;
+    background:rgba(7,5,15,.88);
+    text-align:center;
+}
+#arenaV600Coach strong{
+    display:block;
+    color:#cfb7ff;
+    font-size:9px;
+    letter-spacing:.18em;
+}
+#arenaV600Coach span{
+    display:block;
+    margin-top:4px;
+    font-size:clamp(12px,3.6vw,15px);
+    font-weight:700;
+    line-height:1.35;
+}
+
+#arenaV600Resources{
+    position:absolute;
+    left:10px;
+    right:10px;
+    bottom:116px;
+    z-index:8;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+.arenaV600Resource{
+    padding:7px 9px;
+    border:1px solid rgba(184,148,255,.24);
+    border-radius:10px;
+    background:rgba(8,6,17,.84);
+}
+.arenaV600ResourceHead{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.09em;
+}
+.arenaV600Resource .arenaV600Bar{height:6px}
+#arenaV600KiFill{background:linear-gradient(90deg,#86d9ff,#d8f6ff)}
+
+#arenaV600Actions{
+    position:absolute;
+    left:10px;
+    right:10px;
+    bottom:max(8px,env(safe-area-inset-bottom));
+    z-index:12;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+}
+.arenaV600Action{
+    min-width:0;
+    min-height:72px;
+    padding:8px 6px;
+    border:1px solid rgba(176,138,255,.35);
+    border-radius:12px;
+    background:rgba(18,13,33,.94);
+    color:#fff;
+    text-align:center;
+}
+.arenaV600Action:disabled{
+    opacity:.34;
+}
+.arenaV600Action.target{
+    border-color:rgba(224,207,255,.88);
+    background:rgba(83,48,145,.88);
+}
+.arenaV600Action strong{
+    display:block;
+    font-size:10px;
+    line-height:1.18;
+}
+.arenaV600Action span{
+    display:block;
+    margin-top:4px;
+    font-size:8px;
+    line-height:1.25;
+    opacity:.78;
+}
+
+#arenaV600Gesture{
+    position:absolute;
+    inset:72px 10px 196px;
+    z-index:20;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(188,155,255,.28);
+    border-radius:18px;
+    background:rgba(5,4,12,.83);
+    touch-action:none;
+    overflow:hidden;
+}
+#arenaV600Gesture.active{display:flex}
+
+#arenaV600GestureTitle{
+    position:absolute;
+    top:12px;
+    left:12px;
+    right:12px;
+    text-align:center;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.15em;
+    color:#d5c0ff;
+}
+#arenaV600GestureHint{
+    position:absolute;
+    bottom:12px;
+    left:12px;
+    right:12px;
+    text-align:center;
+    font-size:9px;
+    font-weight:700;
+    opacity:.72;
+}
+#arenaV600Sequence{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+    padding:42px 14px;
+}
+.arenaV600Dir{
+    width:46px;
+    height:46px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(210,191,255,.36);
+    border-radius:50%;
+    background:rgba(72,46,115,.40);
+    font-size:23px;
+    font-weight:900;
+}
+.arenaV600Dir.done{
+    opacity:.24;
+    transform:scale(.86);
+}
+.arenaV600Dir.current{
+    border-color:#fff;
+    background:rgba(133,86,214,.76);
+}
+
+#arenaV600TraceSvg{
+    position:absolute;
+    inset:42px 12px 36px;
+    width:calc(100% - 24px);
+    height:calc(100% - 78px);
+    overflow:visible;
+}
+.arenaV600TargetLine{
+    fill:none;
+    stroke:rgba(208,185,255,.60);
+    stroke-width:10;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+.arenaV600UserLine{
+    fill:none;
+    stroke:#fff;
+    stroke-width:7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+.arenaV600Checkpoint{
+    fill:#171024;
+    stroke:#d7c4ff;
+    stroke-width:2;
+}
+.arenaV600Checkpoint.done{
+    fill:#fff;
+}
+.arenaV600EnemyTrace{
+    fill:none;
+    stroke:rgba(255,120,150,.72);
+    stroke-width:6;
+    stroke-dasharray:10 8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+#arenaV600DefensePrompt{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+}
+#arenaV600DefensePrompt .big{
+    font-size:54px;
+    font-weight:900;
+}
+#arenaV600DefensePrompt .small{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.10em;
+    text-align:center;
+}
+
+#arenaV600IntroCard,
+#arenaV600Complete{
+    position:absolute;
+    inset:0;
+    z-index:50;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(3,2,8,.92);
+}
+#arenaV600IntroCard.active,
+#arenaV600Complete.active{display:flex}
+.arenaV600Modal{
+    width:min(520px,100%);
+    padding:22px 18px;
+    border:1px solid rgba(202,177,255,.46);
+    border-radius:18px;
+    background:#0b0814;
+    text-align:center;
+}
+.arenaV600Eyebrow{
+    color:#c8a9ff;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.20em;
+}
+.arenaV600Modal h2{
+    margin:9px 0 7px;
+    font-size:clamp(24px,7vw,34px);
+    line-height:1;
+}
+.arenaV600Modal p{
+    margin:0;
+    font-size:13px;
+    line-height:1.45;
+    opacity:.82;
+}
+.arenaV600Modal button{
+    width:100%;
+    min-height:52px;
+    margin-top:17px;
+    border:1px solid rgba(207,185,255,.56);
+    border-radius:12px;
+    background:#56328f;
+    color:#fff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+}
+
+#arenaV600Feedback{
+    position:absolute;
+    left:50%;
+    top:50%;
+    z-index:45;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    font-size:clamp(23px,8vw,42px);
+    font-weight:1000;
+    letter-spacing:.08em;
+    opacity:0;
+}
+#arenaV600Feedback.show{opacity:1}
+
+#nexus41ArenaStartV600{
+    width:100%;
+    min-height:48px;
+    margin-top:12px;
+    border:1px solid rgba(190,155,255,.48);
+    border-radius:10px;
+    background:rgba(84,48,145,.92);
+    color:#fff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.06em;
+}
+
+@media(max-height:700px){
+    .arenaV600Top{padding-top:max(6px,env(safe-area-inset-top))}
+    .arenaV600FighterHud{padding:6px 8px}
+    .arenaV600Stage{padding-bottom:132px}
+    #arenaV600Coach{top:2px;padding:6px 9px}
+    #arenaV600Coach span{font-size:11.5px}
+    #arenaV600Resources{bottom:98px}
+    #arenaV600Actions{bottom:max(4px,env(safe-area-inset-bottom))}
+    .arenaV600Action{min-height:60px}
+    #arenaV600Gesture{inset:60px 8px 165px}
+    #arenaV600Player{width:min(25vw,115px);margin-bottom:14%}
+    #arenaV600Enemy{width:min(25vw,120px)}
+}
+
+html.ios-lite-v115 #arenaCombatV600{
+    background:#05040b !important;
+}
+html.ios-lite-v115 #arenaV600Enemy .arenaV600EnemyCore{
+    box-shadow:none !important;
+}
+html.ios-lite-v115 #arenaV600PlayerBody,
+html.ios-lite-v115 #arenaV600PlayerHair{
+    filter:none !important;
+}
+</style>
+
+
+<style id="arenaCombatV610ClarityStyle">
+/* V2 — leggibilità input/danni */
+#arenaV600Sequence{
+    position:absolute;
+    top:48px;
+    left:12px;
+    right:12px;
+    padding:0;
+    min-height:48px;
+    align-items:center;
+}
+#arenaV600CurrentInput{
+    display:none;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-52%);
+    text-align:center;
+    pointer-events:none;
+}
+#arenaV600CurrentInput.active{display:block}
+#arenaV600CurrentArrow{
+    font-size:clamp(72px,18vw,126px);
+    line-height:.9;
+    font-weight:1000;
+    color:#fff;
+}
+#arenaV600CurrentMeta{
+    margin-top:9px;
+    font-size:11px;
+    line-height:1.35;
+    font-weight:900;
+    letter-spacing:.08em;
+    color:#d7c4ff;
+}
+#arenaV600CurrentDamage{
+    margin-top:4px;
+    font-size:10px;
+    font-weight:800;
+    color:#fff;
+    opacity:.80;
+}
+.arenaV600Dir.missed{
+    opacity:.28;
+    text-decoration:line-through;
+    border-color:rgba(255,120,145,.55);
+}
+.arenaV600Dir.hit{
+    opacity:.38;
+    border-color:rgba(132,255,178,.65);
+}
+.arenaV600Dir.current{
+    transform:scale(1.12);
+}
+#arenaV600Gesture.combo-mode #arenaV600TraceSvg,
+#arenaV600Gesture.combo-mode #arenaV600DefensePrompt{
+    display:none;
+}
+#arenaV600Gesture.trace-mode #arenaV600Sequence,
+#arenaV600Gesture.trace-mode #arenaV600CurrentInput{
+    display:none !important;
+}
+#arenaV600Gesture.defense-combo-mode #arenaV600TraceSvg{
+    display:none;
+}
+.arenaV600Checkpoint{
+    r:24;
+}
+.arenaV600TargetLine{
+    stroke-width:16;
+    opacity:.72;
+}
+</style>
+
+
+<style id="arenaCombatV620FlowStyle">
+/* =========================================================
+   ARENA TUTORIAL V3 — FLOW / TIMING / RISCRITTURA
+   ========================================================= */
+#arenaV600CurrentDamage{display:none !important}
+
+#arenaV600CurrentArrow{
+    transition:color .10s linear, transform .10s linear;
+}
+#arenaV600CurrentArrow.miss{
+    color:#ff5f78 !important;
+    transform:scale(1.08);
+}
+#arenaV600CurrentArrow.ok{
+    color:#9bffc1 !important;
+}
+
+#arenaV600InputTimer{
+    width:min(240px,54vw);
+    height:7px;
+    margin:12px auto 0;
+    overflow:hidden;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+}
+#arenaV600InputTimerFill{
+    display:block;
+    width:100%;
+    height:100%;
+    transform-origin:left center;
+    background:linear-gradient(90deg,#c8a6ff,#fff);
+}
+
+#arenaV600TutorialInfo,
+#arenaV600TurnBanner,
+#arenaV600RewritePrompt{
+    position:absolute;
+    inset:0;
+    z-index:70;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(3,2,8,.91);
+}
+#arenaV600TutorialInfo.active,
+#arenaV600TurnBanner.active,
+#arenaV600RewritePrompt.active{
+    display:flex;
+}
+
+.arenaV620InfoCard{
+    width:min(500px,100%);
+    padding:20px 18px;
+    border:1px solid rgba(205,180,255,.48);
+    border-radius:18px;
+    background:#0b0814;
+    text-align:center;
+}
+.arenaV620InfoEyebrow{
+    color:#c9aaff;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.20em;
+}
+.arenaV620InfoCard h3{
+    margin:9px 0 9px;
+    font-size:clamp(21px,6vw,30px);
+    line-height:1.06;
+}
+.arenaV620InfoCard p{
+    margin:0;
+    font-size:13px;
+    line-height:1.5;
+    opacity:.88;
+}
+.arenaV620InfoCard b{color:#e0ccff}
+.arenaV620InfoCard button{
+    width:100%;
+    min-height:50px;
+    margin-top:16px;
+    border:1px solid rgba(205,180,255,.52);
+    border-radius:12px;
+    background:#56328f;
+    color:#fff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+}
+
+#arenaV600TurnBanner{
+    background:rgba(3,2,8,.78);
+    pointer-events:none;
+}
+#arenaV600TurnText{
+    font-size:clamp(34px,11vw,70px);
+    font-weight:1000;
+    line-height:.95;
+    letter-spacing:.08em;
+    text-align:center;
+}
+#arenaV600TurnText.enemy{color:#ff9ab0}
+#arenaV600TurnText.player{color:#d9c2ff}
+
+#arenaV600RewritePrompt{
+    z-index:85;
+    background:rgba(3,2,8,.78);
+}
+#arenaV600RewritePrompt .arenaV620InfoCard{
+    border-color:rgba(209,177,255,.68);
+}
+#arenaV600RewriteTimer{
+    height:7px;
+    margin-top:14px;
+    overflow:hidden;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+}
+#arenaV600RewriteTimerFill{
+    display:block;
+    width:100%;
+    height:100%;
+    transform-origin:left center;
+    background:linear-gradient(90deg,#9e65ff,#fff);
+}
+
+#arenaV600Resources{
+    grid-template-columns:1fr 1fr 1fr !important;
+}
+#arenaV600RewriteFill{
+    background:linear-gradient(90deg,#b983ff,#f0dfff);
+}
+
+@media(max-width:420px){
+    .arenaV600ResourceHead{
+        font-size:7.5px !important;
+        letter-spacing:.05em !important;
+    }
+    .arenaV600Resource{
+        padding:6px 6px !important;
+    }
+}
+</style>
+
+
+<style id="arenaCombatV630Style">
+/* =========================================================
+   ARENA V4 — TURNI ALTERNATI / KI / GUARDIA / DIFESA KI
+   ========================================================= */
+.arenaV600Dir.parried{
+    opacity:.52;
+    border-color:rgba(115,205,255,.9) !important;
+    background:rgba(51,119,167,.34) !important;
+}
+
+#arenaV600Enemy.guard-flash .arenaV600EnemyCore{
+    border-color:#bde8ff !important;
+    transform:scale(1.06);
+}
+#arenaV600Enemy.guard-flash .arenaV600EnemyRing{
+    border-color:#e2f5ff !important;
+}
+#arenaV600EnemyLabel.guard-label{
+    color:#bde8ff !important;
+}
+
+#arenaV600TraceTimer{
+    position:absolute;
+    top:45px;
+    left:50%;
+    width:min(300px,68%);
+    height:7px;
+    transform:translateX(-50%);
+    overflow:hidden;
+    border-radius:999px;
+    background:rgba(255,255,255,.12);
+    display:none;
+}
+#arenaV600TraceTimer.active{display:block}
+#arenaV600TraceTimerFill{
+    display:block;
+    width:100%;
+    height:100%;
+    transform-origin:left center;
+    background:linear-gradient(90deg,#a56fff,#fff);
+}
+
+#arenaV600TraceProgress{
+    position:absolute;
+    top:58px;
+    left:12px;
+    right:12px;
+    text-align:center;
+    color:#d9c9ff;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.08em;
+    display:none;
+}
+#arenaV600TraceProgress.active{display:block}
+
+#arenaV600Gesture.trace-mode #arenaV600TraceSvg{
+    inset:78px 12px 40px !important;
+    height:calc(100% - 118px) !important;
+}
+
+.arenaV630KiNote{
+    color:#bfeaff;
+    font-weight:900;
+}
+</style>
+
+
+<style id="arenaCombatV640Style">
+/* =========================================================
+   ARENA V5 — DIFFICOLTÀ / RISULTATI / REWRITE A FINE AZIONE
+   ========================================================= */
+
+.arenaV600Dir.perfect{
+    border-color:rgba(141,255,193,.95) !important;
+    background:rgba(43,133,86,.35) !important;
+    opacity:.70 !important;
+}
+.arenaV600Dir.partial{
+    border-color:rgba(255,213,116,.95) !important;
+    background:rgba(145,104,32,.34) !important;
+    opacity:.70 !important;
+}
+.arenaV600Dir.missed{
+    border-color:rgba(255,95,120,.85) !important;
+    background:rgba(135,34,55,.30) !important;
+}
+
+/* Risultato turno: resta a schermo finché non premi CONTINUA. */
+#arenaV600ResultModal{
+    position:absolute;
+    inset:0;
+    z-index:92;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(3,2,8,.90);
+}
+#arenaV600ResultModal.active{display:flex}
+
+#arenaV600ResultModal .arenaV640ResultCard{
+    width:min(520px,100%);
+    padding:20px 18px;
+    border:1px solid rgba(205,180,255,.50);
+    border-radius:18px;
+    background:#0b0814;
+    text-align:center;
+}
+#arenaV600ResultEyebrow{
+    color:#c9aaff;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.18em;
+}
+#arenaV600ResultTitle{
+    margin:8px 0 8px;
+    font-size:clamp(23px,6.5vw,32px);
+    line-height:1.05;
+}
+#arenaV600ResultText{
+    font-size:13px;
+    line-height:1.5;
+    opacity:.90;
+}
+#arenaV600ResultActions{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    margin-top:16px;
+}
+#arenaV600ResultActions.two{
+    grid-template-columns:1fr 1fr;
+}
+#arenaV600ResultActions button{
+    min-height:50px;
+    border:1px solid rgba(205,180,255,.52);
+    border-radius:12px;
+    background:#56328f;
+    color:#fff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.07em;
+}
+#arenaV600ResultRewrite{
+    background:#2b174b !important;
+}
+#arenaV600ResultRewrite:disabled{
+    opacity:.35;
+}
+
+#arenaV600CurrentMeta .arenaV640Fast{
+    color:#9bffc1;
+}
+</style>
+
+
+<style id="arenaCombatV650GuardStyle">
+.arenaV650GuardRow{margin-top:6px}
+.arenaV650GuardHead{display:flex;justify-content:space-between;gap:8px;font-size:8px;font-weight:900;letter-spacing:.08em;color:#c8eaff}
+.arenaV650GuardBar{height:5px;margin-top:3px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.10)}
+.arenaV650GuardBar > span{display:block;width:100%;height:100%;transform-origin:left center;background:linear-gradient(90deg,#76cfff,#d9f4ff)}
+.arenaV600FighterHud.enemy .arenaV650GuardBar > span{transform-origin:right center}
+.arenaV650GuardBroken{color:#ff8799 !important}
+</style>
+
 </head>
 
 
@@ -14452,6 +15398,16 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  const panelTitle=document.getElementById("nexus41PanelTitle");
  const panelText=document.getElementById("nexus41PanelText");
  const panelClose=document.getElementById("nexus41PanelClose");
+
+ let arenaStartBtnV600=document.getElementById("nexus41ArenaStartV600");
+ if(!arenaStartBtnV600){
+  arenaStartBtnV600=document.createElement("button");
+  arenaStartBtnV600.id="nexus41ArenaStartV600";
+  arenaStartBtnV600.type="button";
+  arenaStartBtnV600.style.display="none";
+  panelClose.parentNode.insertBefore(arenaStartBtnV600,panelClose);
+ }
+
  const arrivalFx=document.getElementById("nexus41ArrivalFx");
  const areaFade=document.getElementById("nexus41AreaFade");
  const areaFadeText=areaFade.querySelector("span");
@@ -14493,6 +15449,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  let dialogueIndex=0;
  let dialogueDone=null;
  let currentChoiceStep=null;
+
+ /* =========================================================
+    INTRO TOUR V5.0
+    Tour guidato attraverso tutte e tre le macrozone del Nexus.
+    ========================================================= */
+ let introTourActiveV500=false;
+ let introTourIndexV500=0;
+ let introTourBusyV500=false;
 
  const AREAS={
   lower:{
@@ -14928,6 +15892,9 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  }
 
  function resetArrivalPosition(){
+  introTourActiveV500=false;
+  introTourIndexV500=0;
+  introTourBusyV500=false;
   currentArea="lower";
   const s=AREAS.lower.spawnFromCreator;
   playerX=s.x;playerY=s.y;
@@ -15061,1501 +16028,49 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    },
    {speaker:"KAELIOS",text:"Vieni. Ti mostro il Nexus."}
   ],()=>{
-   controlsLocked=false;
-   guideActive=true;
-   setObjective("SEGUI KAELIOS");
+   startIntroTourV500();
   });
  }
 
- function coreDialogue(){
-  if(coreDialogueDone)return;
-  coreDialogueDone=true;
-  guideFinished=true;
-  guideActive=false;
-  setObjective("");
-
-  showDialogue([
-   {speaker:"KAELIOS",text:"Questo è il cuore del Nexus. Da qui possiamo raggiungere realtà diverse, purché siano abbastanza stabili da essere attraversate."},
-   {speaker:"TU",text:"E posso attraversarle anch'io?"},
-   {speaker:"KAELIOS",text:()=>`Fino a poco fa avrei detto di no. Dopo quello che hai fatto, ${getPlayerName()}... dobbiamo scoprirlo.`}
-  ],()=>{
-   controlsLocked=false;
-   showLocation("NUCLEO","IL NEXUS È ORA ESPLORABILE");
-   setObjective("ESPLORA IL NEXUS • L'ARENA È A SUD-EST");
-   setTimeout(()=>setObjective(""),4200);
-   saveMap();
-  });
- }
-
- function setObjective(text){
-  if(text){
-   objective.textContent=text;
-   objective.classList.add("active");
-  }else{
-   objective.classList.remove("active");
-   objective.textContent="";
-  }
- }
-
- function showLocation(name,sub){
-  if(!name||name===lastLocation)return;
-  lastLocation=name;
-  locationToast.querySelector("strong").textContent=name;
-  locationToast.querySelector("span").textContent=sub||"";
-  locationToast.classList.add("active");
-  clearTimeout(locationTimer);
-  locationTimer=setTimeout(()=>locationToast.classList.remove("active"),1600);
- }
 
  /* ==========================================================
-    MACRO AREA RENDERING — V4.5
-    Una sola immagine originale HD caricata per volta.
+    INTRO TOUR V5.0
+    Il giocatore segue Kaelios attraverso:
+    MICROZONA 1 -> MICROZONA 2 -> MICROZONA 3.
     ========================================================== */
- function applyAreaVisual(){
-  const area=getArea();
 
-  WORLD_W=area.w;
-  WORLD_H=area.h;
-
-  world.style.setProperty("width",WORLD_W+"px","important");
-  world.style.setProperty("height",WORLD_H+"px","important");
-
-  chunkLayer.innerHTML="";
-
-  const img=document.createElement("img");
-  img.className="nexus45AreaMap";
-  img.src=area.image;
-  img.alt="";
-  img.draggable=false;
-  img.width=area.w;
-  img.height=area.h;
-  chunkLayer.appendChild(img);
-  currentAreaMap=img;
-
-  renderTryCombatKaeliosV46();
-
-  lastLocation="";
-  currentPoi=null;
-  displayedPoi=null;
-  pressedPoi=null;
-  interact.classList.remove("active");
-  interact.classList.remove("playerOverlap");
- }
-
-
- function renderTryCombatKaeliosV46(){
-  const old=document.getElementById("nexusTryCombatKaeliosV46");
-  if(old)old.remove();
-
-  if(currentArea!=="lower")return;
-
-  const unlocked=isArenaTutorialCompleteV46();
-  const zone=document.createElement("div");
-  zone.id="nexusTryCombatKaeliosV46";
-  zone.className=unlocked?"unlocked":"locked";
-  zone.setAttribute("aria-hidden","true");
-
-  zone.innerHTML=
-   '<div class="tryCombatPadV46"></div>'+
-   '<div class="tryCombatCrossV46"></div>'+
-   '<div class="tryCombatLabelV46">'+
-     '<strong>TRY COMBAT KAELIOS</strong>'+
-     '<span>'+(unlocked?"DISPONIBILE":"BLOCCATO • COMPLETA IL TUTORIAL ARENA")+'</span>'+
-   '</div>';
-
-  chunkLayer.appendChild(zone);
- }
-
- function renderChunks(){
-  if(!currentAreaMap || currentAreaMap.src.indexOf(getArea().image.split("/").pop())===-1){
-   applyAreaVisual();
-  }
- }
-
- function showAreaName(){
-  const area=getArea();
-  areaName.textContent=area.name;
-  areaName.classList.add("active");
-  setTimeout(()=>areaName.classList.remove("active"),1500);
- }
-
- function changeArea(target,spawnKey){
-  if(!AREAS[target] || controlsLocked)return;
-
-  if(window.WIUSoundV112) window.WIUSoundV112.play("transition");
-
-  controlsLocked=true;
-  stopMovement();
-  currentPoi=null;
-  interact.classList.remove("active");
-
-  areaFadeText.textContent=AREAS[target].name;
-  areaFade.classList.add("active");
-
-  setTimeout(()=>{
-   currentArea=target;
-   const area=getArea();
-
-   let spawn=null;
-   if(target==="lower"){
-    spawn=spawnKey==="fromCore"?area.spawnFromCore:area.spawnFromCreator;
-   }else if(target==="core"){
-    spawn=spawnKey==="fromUpper"?area.spawnFromUpper:area.spawnFromLower;
-   }else if(target==="upper"){
-    spawn=spawnKey==="fromTranscendent"?area.spawnFromTranscendent:area.spawnFromCore;
-   }else if(target==="transcendent"){
-    spawn=area.spawnFromUpper;
-   }
-
-   if(spawn){
-    playerX=spawn.x;playerY=spawn.y;
-    kaeliosX=spawn.kx;kaeliosY=spawn.ky;
-   }
-
-   guideActive=false;
-   applyAreaVisual();
-   renderPositions();
-   renderChunks();
-   saveMap();
-
-   setTimeout(()=>{
-    areaFade.classList.remove("active");
-    showAreaName();
-
-    /*
-      Universo Trascendente usa la stessa entrata delle altre macrozone:
-      il nome compare per qualche secondo al centro/sopra la mappa.
-    */
-    if(currentArea==="transcendent"){
-     areaName.textContent="UNIVERSO TRASCENDENTE";
-     areaName.classList.remove("active");
-     void areaName.offsetWidth;
-     areaName.classList.add("active");
-     setTimeout(()=>areaName.classList.remove("active"),2200);
-    }
-
-    if(currentArea==="core" && !coreDialogueDone){
-     setTimeout(()=>coreDialogue(),260);
-    }else{
-     controlsLocked=false;
-    }
-   },130);
-  },230);
- }
-
- /* ==========================================================
-    MAP / CAMERA / MOVEMENT
-    ========================================================== */
- function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-
- function distance(ax,ay,bx,by){
-  return Math.hypot(ax-bx,ay-by);
- }
-
- function pointInRect(x,y,l,t,r,b){
-  return x>=l && x<=r && y>=t && y<=b;
- }
-
- function pointInCircle(x,y,cx,cy,r){
-  return Math.hypot(x-cx,y-cy)<=r;
- }
-
- function pointInEllipse(x,y,cx,cy,rx,ry){
-  const dx=(x-cx)/rx;
-  const dy=(y-cy)/ry;
-  return dx*dx+dy*dy<=1;
- }
-
- function isWalkable(x,y){
-  if(currentArea==="lower"){
-   if(pointInEllipse(x,y,625,930,245,250))return true;
-   if(pointInRect(x,y,525,650,725,1010))return true;
-   if(pointInEllipse(x,y,615,475,425,285))return true;
-   if(pointInRect(x,y,525,40,725,700))return true;
-
-   /* Arena + ponte */
-   if(pointInEllipse(x,y,1040,455,230,230))return true;
-   if(pointInEllipse(x,y,835,470,300,95))return true;
-
-   /* Piccola terrazza laterale sinistra */
-   if(pointInEllipse(x,y,145,405,170,170))return true;
-   if(pointInEllipse(x,y,320,420,220,80))return true;
-
-   return false;
-  }
-
-  if(currentArea==="core"){
-   /* Nucleo centrale */
-   if(pointInEllipse(x,y,768,335,360,255))return true;
-
-   /* Piazza inferiore + ingresso */
-   if(pointInEllipse(x,y,768,770,430,210))return true;
-   if(pointInRect(x,y,650,690,885,1024))return true;
-   if(pointInRect(x,y,650,0,885,360))return true;
-
-   /* Archivio e collegamento */
-   if(pointInEllipse(x,y,190,300,190,225))return true;
-   if(pointInEllipse(x,y,445,350,300,88))return true;
-
-   /* Risonanza e collegamento */
-   if(pointInEllipse(x,y,1320,315,200,230))return true;
-   if(pointInEllipse(x,y,1085,355,300,90))return true;
-
-   return false;
-  }
-
-  if(currentArea==="upper"){
-   /* ingresso basso */
-   if(pointInRect(x,y,650,680,890,1024))return true;
-   if(pointInEllipse(x,y,768,790,430,200))return true;
-
-   /* piazza centrale/convergenza */
-   if(pointInEllipse(x,y,770,535,430,265))return true;
-
-   /* terrazza dei portali */
-   if(pointInEllipse(x,y,770,200,650,190))return true;
-   if(pointInRect(x,y,650,170,890,610))return true;
-
-   /* piattaforme portali */
-   if(pointInEllipse(x,y,370,195,150,150))return true;
-   if(pointInEllipse(x,y,575,150,145,140))return true;
-   if(pointInEllipse(x,y,765,125,155,145))return true;
-   if(pointInEllipse(x,y,960,160,145,140))return true;
-   if(pointInEllipse(x,y,1135,210,150,145))return true;
-
-   /* ponte e settore sigillato */
-   if(pointInEllipse(x,y,1280,185,260,70))return true;
-   if(pointInEllipse(x,y,1400,185,165,165))return true;
-
-   return false;
-  }
-
-  if(currentArea==="transcendent"){
-   /* pedana inferiore e accesso centrale */
-   if(pointInEllipse(x,y,627,930,275,220))return true;
-   if(pointInRect(x,y,560,640,694,1035))return true;
-
-   /* piattaforma centrale */
-   if(pointInEllipse(x,y,627,725,275,235))return true;
-   if(pointInEllipse(x,y,627,640,210,160))return true;
-
-   /* ramo verso Mondo Veurs */
-   if(pointInEllipse(x,y,320,740,285,80))return true;
-   if(pointInEllipse(x,y,140,740,150,150))return true;
-
-   /* ramo verso Mondo Zirem */
-   if(pointInEllipse(x,y,485,430,230,82))return true;
-   if(pointInEllipse(x,y,395,245,165,165))return true;
-
-   /* ramo verso Mondo Sharak */
-   if(pointInEllipse(x,y,790,430,230,82))return true;
-   if(pointInEllipse(x,y,888,245,175,170))return true;
-
-   /* ramo verso Mondo Kilin */
-   if(pointInEllipse(x,y,930,740,280,80))return true;
-   if(pointInEllipse(x,y,1100,735,160,160))return true;
-
-   return false;
-  }
-
-  return false;
- }
-
- function renderPositions(){
-  player.style.left=playerX+"px";
-  player.style.top=playerY+"px";
-  kaelios.style.left=kaeliosX+"px";
-  kaelios.style.top=kaeliosY+"px";
-
-  const vw=viewport.clientWidth||window.innerWidth;
-  const vh=viewport.clientHeight||window.innerHeight;
-  const cameraScale=vw<700?CAMERA_SCALE_MOBILE:CAMERA_SCALE_DESKTOP;
-  const visibleW=vw/cameraScale;
-  const visibleH=vh/cameraScale;
-
-  let camX=playerX-visibleW*.5;
-  let camY=playerY-visibleH*.48;
-
-  const maxCamX=Math.max(0,WORLD_W-visibleW);
-  const maxCamY=Math.max(0,WORLD_H-visibleH);
-
-  camX=clamp(camX,0,maxCamX);
-  camY=clamp(camY,0,maxCamY);
-
-  cameraX=camX;
-  cameraY=camY;
-
-  let extraX=0,extraY=0;
-  if(WORLD_W*cameraScale<vw)extraX=(vw-WORLD_W*cameraScale)/2;
-  if(WORLD_H*cameraScale<vh)extraY=(vh-WORLD_H*cameraScale)/2;
-
-  world.style.transform=`translate3d(${extraX-camX*cameraScale}px,${extraY-camY*cameraScale}px,0) scale(${cameraScale})`;
-
-  /* Se il pulsante è attivo, resta ancorato visivamente sopra al POI. */
-  if(currentPoi && interact.classList.contains("active")){
-   positionInteractButton(currentPoi);
-  }
- }
-
- function positionInteractButton(p){
-  if(!p)return;
-
-  const vw=viewport.clientWidth||window.innerWidth;
-  const vh=viewport.clientHeight||window.innerHeight;
-
-  const cameraScale=vw<700?CAMERA_SCALE_MOBILE:CAMERA_SCALE_DESKTOP;
-  let extraX=0,extraY=0;
-  if(WORLD_W*cameraScale<vw)extraX=(vw-WORLD_W*cameraScale)/2;
-  if(WORLD_H*cameraScale<vh)extraY=(vh-WORLD_H*cameraScale)/2;
-  let sx=extraX+(p.x-cameraX)*cameraScale;
-  let sy=extraY+(p.y-cameraY)*cameraScale;
-
-  /* Sopra la struttura/POI, ma sempre dentro lo schermo. */
-  const verticalOffset=(p.id==="core")?125:105;
-  sx=clamp(sx,72,vw-72);
-  sy=clamp(sy-verticalOffset,86,vh-92);
-
-  interact.style.left=sx+"px";
-  interact.style.top=sy+"px";
-
-  /*
-    Se l'etichetta passa sopra al personaggio, resta cliccabile
-    ma diventa traslucida per non nasconderlo.
-  */
-  const playerRect=player.getBoundingClientRect();
-  const promptRect=interact.getBoundingClientRect();
-
-  const overlap=!(
-   promptRect.right < playerRect.left-6 ||
-   promptRect.left > playerRect.right+6 ||
-   promptRect.bottom < playerRect.top-6 ||
-   promptRect.top > playerRect.bottom+6
-  );
-
-  interact.classList.toggle("playerOverlap",overlap);
- }
-
- function updatePoi(){
-  let nearest=null,best=Infinity;
-
-  getAreaPois().forEach(p=>{
-   const d=distance(playerX,playerY,p.x,p.y);
-   if(d<best){best=d;nearest=p}
-  });
-
-  if(nearest && best<nearest.r){
-   const canInteract=isPoiInteractableV47(nearest);
-
-   if(!displayedPoi || displayedPoi.id!==nearest.id){
-    /*
-      Per TRY COMBAT KAELIOS bloccato non mostriamo una seconda
-      descrizione: la label deve contenere solo il nome.
-    */
-    if(nearest.id==="tryCombatKaelios" && !canInteract){
-     showLocation(nearest.name,"");
-    }else{
-     showLocation(nearest.name,nearest.sub);
-    }
-   }
-
-   displayedPoi=nearest;
-   currentPoi=canInteract ? nearest : null;
-
-   interact.classList.add("active");
-   interact.classList.toggle("exitPrompt",nearest.type==="exit");
-   interact.classList.toggle("lockedPromptV47",!canInteract);
-
-   if(nearest.id==="tryCombatKaelios" && !canInteract){
-    interact.innerHTML=
-     '<span class="nexus451PoiName">TRY COMBAT KAELIOS</span>';
-   }else if(nearest.type==="exit"){
-    interact.innerHTML=
-     '<span class="nexus451PoiName">'+(nearest.label||nearest.name||"VAI")+'</span>';
-   }else{
-    interact.innerHTML=
-     '<span class="nexus451PoiName">'+(nearest.name||nearest.title||"INTERAGISCI")+'</span>'+
-     '<span class="nexus451PoiAction">INTERAGISCI</span>';
-   }
-
-   positionInteractButton(nearest);
-  }else{
-   currentPoi=null;
-   displayedPoi=null;
-   pressedPoi=null;
-   interact.classList.remove("active");
-   interact.classList.remove("exitPrompt");
-   interact.classList.remove("playerOverlap");
-   interact.classList.remove("lockedPromptV47");
-  }
- }
-
- function updateGuide(dt){
-  if(!guideActive || guideFinished || currentArea!=="lower")return;
-
-  const target=guideWaypoints[guideIndex];
-
-  if(!target){
-   guideActive=false;
-   guideFinished=true;
-   kaelios.classList.remove("walking");
-   setObjective("RAGGIUNGI IL NUCLEO");
-   saveMap();
-   return;
-  }
-
-  const playerDist=distance(playerX,playerY,kaeliosX,kaeliosY);
-
-  if(playerDist>265){
-   kaelios.classList.remove("walking");
-   return;
-  }
-
-  const dx=target.x-kaeliosX;
-  const dy=target.y-kaeliosY;
-  const d=Math.hypot(dx,dy);
-
-  if(d<15){
-   guideIndex++;
-   if(guideIndex>=guideWaypoints.length){
-    guideActive=false;
-    guideFinished=true;
-    kaelios.classList.remove("walking");
-    setObjective("RAGGIUNGI IL NUCLEO");
-    saveMap();
-   }
-   return;
-  }
-
-  const speed=118;
-  kaeliosX+=dx/d*speed*dt;
-  kaeliosY+=dy/d*speed*dt;
-  kaelios.classList.add("walking");
- }
-
- function getMoveVector(){
-  let x=joyX+keyX;
-  let y=joyY+keyY;
-  const m=Math.hypot(x,y);
-  if(m>1){x/=m;y/=m}
-  return{x,y};
- }
-
- function stopMovement(){
-  joyX=joyY=keyX=keyY=0;
-  joyPointer=null;
-  joyKnob.style.transform="translate3d(0,0,0)";
-  joyBase.classList.remove("active");
-  player.classList.remove("moving");
- }
-
- function tick(t){
-  if(!active){raf=0;return}
-  if(!lastT)lastT=t;
-  const dt=Math.min(.034,(t-lastT)/1000);
-  lastT=t;
-
-  if(!controlsLocked && !panel.classList.contains("active") && !dlg.classList.contains("active")){
-   const v=getMoveVector();
-   const moving=Math.abs(v.x)>.03||Math.abs(v.y)>.03;
-
-   if(moving){
-    const speed=220;
-    const nx=clamp(playerX+v.x*speed*dt,45,WORLD_W-45);
-    const ny=clamp(playerY+v.y*speed*dt,45,WORLD_H-45);
-
-    /* Scorrimento sugli assi: se la diagonale urta, prova X e Y separatamente. */
-    if(isWalkable(nx,ny)){
-     playerX=nx;playerY=ny;
-    }else if(isWalkable(nx,playerY)){
-     playerX=nx;
-    }else if(isWalkable(playerX,ny)){
-     playerY=ny;
-    }
-
-    player.classList.add("moving");
-    if(v.x<-.08)player.classList.add("facingLeft");
-    if(v.x>.08)player.classList.remove("facingLeft");
-   }else{
-    player.classList.remove("moving");
-   }
-  }
-
-  updateGuide(dt);
-  renderPositions();
-  updatePoi();
-  renderChunks();
-
-  raf=requestAnimationFrame(tick);
- }
-
- /* Joystick dinamico/flottante.
-    Nasce nel punto in cui tocchi l'area libera di gioco,
-    resta visibile mentre tieni premuto e scompare al rilascio. */
- function canStartFloatingJoystick(e){
-  if(!active || controlsLocked)return false;
-  if(dlg.classList.contains("active") || panel.classList.contains("active"))return false;
-
-  const target=e.target;
-  if(target && target.closest && target.closest(
-   "button,#nexus41Dialogue,#nexus41Panel,.nexus41Hud,#nexus41Objective,#nexus41Location"
-  ))return false;
-
-  return true;
- }
-
- function beginFloatingJoystick(e){
-  if(!canStartFloatingJoystick(e))return;
-  if(joyPointer!==null)return;
-
-  joyPointer=e.pointerId;
-  joyOriginX=e.clientX;
-  joyOriginY=e.clientY;
-
-  joyBase.style.left=joyOriginX+"px";
-  joyBase.style.top=joyOriginY+"px";
-  joyBase.classList.add("active");
-  joyKnob.style.transform="translate3d(0,0,0)";
-
-  try{viewport.setPointerCapture(e.pointerId)}catch(err){}
-  e.preventDefault();
- }
-
- function updateFloatingJoystick(e){
-  if(e.pointerId!==joyPointer)return;
-
-  const rect=joyBase.getBoundingClientRect();
-  const max=Math.max(30,rect.width*.32);
-
-  let dx=e.clientX-joyOriginX;
-  let dy=e.clientY-joyOriginY;
-  const d=Math.hypot(dx,dy)||1;
-
-  if(d>max){
-   dx=dx/d*max;
-   dy=dy/d*max;
-  }
-
-  joyX=dx/max;
-  joyY=dy/max;
-  joyKnob.style.transform=`translate3d(${dx}px,${dy}px,0)`;
-
-  e.preventDefault();
- }
-
- function endFloatingJoystick(e){
-  if(joyPointer===null)return;
-  if(e && typeof e.pointerId!=="undefined" && e.pointerId!==joyPointer)return;
-
-  joyPointer=null;
-  joyX=0;
-  joyY=0;
-  joyKnob.style.transform="translate3d(0,0,0)";
-  joyBase.classList.remove("active");
- }
-
- viewport.addEventListener("pointerdown",beginFloatingJoystick,{passive:false});
- viewport.addEventListener("pointermove",updateFloatingJoystick,{passive:false});
- viewport.addEventListener("pointerup",endFloatingJoystick,{passive:false});
- viewport.addEventListener("pointercancel",endFloatingJoystick,{passive:false});
- viewport.addEventListener("lostpointercapture",endFloatingJoystick);
-
- /* Tastiera */
- const keys=new Set();
- function recalcKeys(){
-  keyX=(keys.has("arrowright")||keys.has("d")?1:0)-(keys.has("arrowleft")||keys.has("a")?1:0);
-  keyY=(keys.has("arrowdown")||keys.has("s")?1:0)-(keys.has("arrowup")||keys.has("w")?1:0);
-  const m=Math.hypot(keyX,keyY);
-  if(m>1){keyX/=m;keyY/=m}
- }
-
- window.addEventListener("keydown",e=>{
-  if(!active)return;
-  const k=e.key.toLowerCase();
-  if(["arrowleft","arrowright","arrowup","arrowdown","w","a","s","d"].includes(k)){
-   e.preventDefault();keys.add(k);recalcKeys();
-  }
-  if((k==="e"||e.key==="Enter") && currentPoi && !controlsLocked){
-   e.preventDefault();openPoi(currentPoi);
-  }
- });
- window.addEventListener("keyup",e=>{
-  if(!active)return;
-  keys.delete(e.key.toLowerCase());recalcKeys();
- });
-
- function openPoi(p){
-  if(!p||controlsLocked)return;
-  if(!isPoiInteractableV47(p))return;
-  stopMovement();
-
-  if(window.WIUSoundV112){
-   const pid=String(p.id||"");
-   if(pid==="ascension" || pid.indexOf("portal")===0){
-    window.WIUSoundV112.play("portal");
-   }
-  }
-
-  if(p.type==="exit"){
-   changeArea(p.target,p.spawn);
-   return;
-  }
-
-  if(p.id==="tryCombatKaelios"){
-   panelTitle.textContent="TRY COMBAT KAELIOS";
-   panelText.innerHTML=
-    "Area sbloccata dopo il tutorial dell'Arena.<br><br>"+
-    "<b>COMBAT CONTRO KAELIOS</b><br>"+
-    "Una volta completato questo combattimento si sbloccherà il <b>PORTALE 01</b>.";
-  }else if(p.id==="arena"){
-   panelTitle.textContent="ARENA";
-   panelText.innerHTML=
-    "Questa è l'area dedicata all'addestramento e ai combattimenti.<br><br>"+
-    "<b>PROSSIMO STEP: COMBAT SYSTEM V1</b><br>"+
-    "Qui costruiremo combo di swipe, difesa inversa, Ki e Riscrittura.";
-  }else if(p.id==="archive"){
-   panelTitle.textContent="ARCHIVIO DELLE FORME";
-   panelText.innerHTML=
-    "Qui verranno gestiti <b>outfit, aspetti e personalizzazioni</b> del personaggio.";
-  }else if(p.id==="resonance"){
-   panelTitle.textContent="CAMERA DI RISONANZA";
-   panelText.innerHTML=
-    "Qui verranno gestite <b>trasformazioni, forme energetiche e potenziamenti</b>.";
-  }else if(p.id==="convergence"){
-   panelTitle.textContent="CONVERGENZA";
-   panelText.innerHTML=
-    "Da questa zona si raggiungono i mondi What If del Nexus.";
-  }else if(p.id==="portal1"){
-   if(isTryCombatKaeliosCompleteV48()){
-    changeArea("transcendent","fromUpper");
-    return;
-   }
-   panelTitle.textContent="PORTALE 01";
-   panelText.innerHTML=
-    "Questo universo sarà disponibile dopo che avrai completato il combattimento con Kaelios nell'area <b>\"TRY COMBAT KAELIOS\"</b>.";
-  }else if(["portalVeurs","portalZirem","portalSharak","portalKilin"].includes(p.id)){
-   panelTitle.textContent=p.title;
-   panelText.innerHTML=
-    'Questo portale condurrà al <b>'+p.title+'</b>.<br><br>Qui si aprirà un mondo giocabile in cui la trama avanzerà.';
-  }else if(p.id==="portal2" || p.id==="portal3" || p.id==="portal4"){
-
-   panelTitle.textContent=p.title;
-   panelText.innerHTML="Questo portale è ancora <b>sigillato</b>.";
-  }else if(p.id==="ascension"){
-   panelTitle.textContent="PORTALE DI ASCENSIONE";
-   panelText.innerHTML=
-    "Questo portale condurrà al <b>prossimo hub esplorabile</b> dopo aver completato i mondi del Nexus.";
-  }else if(p.id==="sealed"){
-   panelTitle.textContent="SETTORE SIGILLATO";
-   panelText.innerHTML=
-    "L'accesso a questa zona è attualmente <b>proibito</b>.";
-  }else{
-   panelTitle.textContent=p.title;
-   panelText.textContent=p.text||"";
-  }
-
-  panel.classList.add("active");
-  panel.setAttribute("aria-hidden","false");
- }
-
- /*
-  V4.5.2 — Il POI viene catturato appena tocchi il prompt.
-  Non dipendiamo più dalla posizione millimetrica del PG
-  nel frame esatto in cui viene emesso il click.
- */
- interact.addEventListener("pointerdown",(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
-
-  pressedPoi=currentPoi;
-
-  /*
-   * Catturiamo il puntatore sul prompt.
-   * Anche se il dito si sposta di qualche pixel prima del rilascio,
-   * il pointerup torna comunque qui.
-   */
-  try{interact.setPointerCapture(e.pointerId)}catch(err){}
- });
-
- interact.addEventListener("pointerup",(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
-
-  const poi=pressedPoi||currentPoi;
-  pressedPoi=null;
-
-  try{
-   if(interact.hasPointerCapture(e.pointerId)){
-    interact.releasePointerCapture(e.pointerId);
-   }
-  }catch(err){}
-
-  /*
-   * Apriamo QUI, senza aspettare il successivo evento click.
-   * Questo elimina i tap a vuoto tipici dei browser mobile.
-   */
-  if(poi)openPoi(poi);
- });
-
- interact.addEventListener("pointercancel",(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
-  pressedPoi=null;
- });
-
- /*
-  * Il click viene assorbito: l'interazione è già stata eseguita
-  * al pointerup e non deve partire due volte.
-  */
- interact.addEventListener("click",(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
- });
-
- panelClose.addEventListener("click",()=>{
-  panel.classList.remove("active");
-  panel.setAttribute("aria-hidden","true");
- });
-
- function playArrival(){
-  arrivalFx.classList.remove("active");
-  void arrivalFx.offsetWidth;
-  arrivalFx.classList.add("active");
-  setTimeout(()=>arrivalFx.classList.remove("active"),1400);
- }
-
- function hideOtherScreens(){
-  const creator=document.getElementById("creatorV30");
-  if(creator){
-   creator.classList.remove("active");
-   creator.setAttribute("aria-hidden","true");
-  }
-  const done=document.getElementById("creator30Done");
-  if(done){
-   done.classList.remove("active");
-   done.setAttribute("aria-hidden","true");
-  }
-  const teaser=document.getElementById("hubTeaserV241");
-  if(teaser){
-   teaser.classList.remove("active");
-   teaser.setAttribute("aria-hidden","true");
-   teaser.style.opacity="";
-   teaser.style.visibility="";
-   teaser.style.pointerEvents="";
-  }
-  const chapter=document.getElementById("chapterCompleteV238");
-  if(chapter){
-   chapter.classList.remove("active");
-   chapter.setAttribute("aria-hidden","true");
-   chapter.style.display="none";
-  }
-  const dev=document.getElementById("devPanelV25");
-  if(dev){
-   dev.classList.remove("active");
-   dev.setAttribute("aria-hidden","true");
-   dev.style.opacity="0";
-   dev.style.visibility="hidden";
-   dev.style.pointerEvents="none";
-  }
- }
-
- window.openNexusV41=function(opts={}){
-  const skipIntro=!!opts.skipIntro;
-  const newArrival=!!opts.newArrival;
-
-  hideOtherScreens();
-  seedFromPrologueAndLoadRelationship();
-
-  if(newArrival){
-   resetArrivalPosition();
-   try{localStorage.removeItem(MAP_KEY)}catch(e){}
-  }else{
-   if(!loadMap()){
-    currentArea="core";
-    const s=AREAS.core.spawnFromLower;
-    playerX=768;playerY=600;
-    kaeliosX=710;kaeliosY=545;
-    guideFinished=true;
-    coreDialogueDone=true;
-   }
-  }
-
-  renderPlayer();
-  active=true;
-  controlsLocked=skipIntro?false:true;
-  nexus.classList.add("active");
-  nexus.setAttribute("aria-hidden","false");
-
-  applyAreaVisual();
-  renderPositions();
-  renderChunks();
-
-  if(newArrival && !skipIntro){
-   playArrival();
-   setTimeout(introDialogue,820);
-  }else{
-   guideActive=false;
-   setObjective("");
-   controlsLocked=false;
-   showAreaName();
-   showLocation(getArea().name,"HUB TEMPORALE");
-  }
-
-  if(!raf){
-   lastT=0;
-   raf=requestAnimationFrame(tick);
-  }
- };
-
- window.closeNexusV41=function(){
-  if(!active)return;
-  saveMap();
-  saveRelationship();
-  active=false;
-  controlsLocked=true;
-  stopMovement();
-  nexus.classList.remove("active");
-  nexus.setAttribute("aria-hidden","true");
-  if(raf){cancelAnimationFrame(raf);raf=0}
- };
-
- /* DEV -> NEXUS = salto diretto alla mappa, senza intro */
- window.devNexusV253=function(){
-  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
-  if(typeof devClearScreensV255==="function")devClearScreensV255();
-  openNexusV41({skipIntro:true,newArrival:false});
- };
-
-
- /* DEV -> UNIVERSO TRASCENDENTE = accesso diretto di test, bypassa PORTALE 01 */
- window.devTranscendentV482=function(){
-  if(typeof devEnsureChapterStateV253==="function")devEnsureChapterStateV253();
-  if(typeof devClearScreensV255==="function")devClearScreensV255();
-
-  /* Attiva il Nexus senza INTRO e poi forza l'hub di test. */
-  openNexusV41({skipIntro:true,newArrival:false});
-
-  currentArea="transcendent";
-  const s=AREAS.transcendent.spawnFromUpper;
-  playerX=s.x; playerY=s.y;
-  kaeliosX=s.kx; kaeliosY=s.ky;
-  guideActive=false;
-  guideFinished=true;
-  coreDialogueDone=true;
-  controlsLocked=false;
-
-  applyAreaVisual();
-  renderPositions();
-  renderChunks();
-  setObjective("");
-  saveMap();
-
-  /* Stesso titolo temporaneo usato nei cambi zona normali. */
-  showAreaName();
-  showLocation("UNIVERSO TRASCENDENTE","HUB DEI MONDI");
- };
-
- /* Anche il vecchio dispatcher DEV deve finire sul nuovo Nexus */
- if(typeof window.devShowTeaserV255==="function"){
-  const oldDevShow=window.devShowTeaserV255;
-  window.devShowTeaserV255=function(mode){
-   if(mode==="nexus"){
-    openNexusV41({skipIntro:true,newArrival:false});
-    return;
-   }
-   return oldDevShow(mode);
-  };
- }
-
- /* Reset DEV: pulisce anche Nexus + relazione */
- if(typeof window.resetSaveV25==="function"){
-  const oldReset=window.resetSaveV25;
-  window.resetSaveV25=function(){
-   oldReset();
-   try{
-    localStorage.removeItem(MAP_KEY);
-    localStorage.removeItem(REL_KEY);
-    localStorage.removeItem(TRY_COMBAT_KAELIOS_KEY_V48);
-   }catch(e){}
-   if(typeof kaeliosTrust!=="undefined")kaeliosTrust=0;
-   if(typeof protagonistIndependence!=="undefined")protagonistIndependence=0;
-  };
- }
-
- window.addEventListener("resize",()=>{
-  if(active){
-   renderPlayer();
-   renderPositions();
-  }
- });
-
- document.addEventListener("visibilitychange",()=>{
-  if(active && document.visibilityState==="hidden"){
-   saveMap();saveRelationship();stopMovement();
-  }
- });
- window.addEventListener("pagehide",()=>{
-  if(active){saveMap();saveRelationship()}
- });
-})();
-</script>
-
-
-
-
-
-
-<script>
-/* =========================================================
-   PROLOGUE CINEMATIC BACKDROPS V1_9_1_1
-   Background dinamici senza interferire con UI/gameplay.
-   ========================================================= */
-(function(){
-    const BGS_DESKTOP={
-        fracture:"./frattura_cosmica_tra_rovine_celesti.png",
-        kaelios:"./vortice_cosmico_tra_rovine_stellari.png",
-        run:"./rovine_celesti_nel_vortice_cosmico.png",
-        alt:"./cattedrale_astrale_dei_mondi_frantumati.png",
-        nexus:"./cittadella_celeste_tra_le_stelle.png"
-    };
-
-    const BGS_IOS={
-        fracture:"./ios_fracture_bg.webp",
-        kaelios:"./ios_kaelios_bg.webp",
-        run:"./ios_run_bg.webp",
-        alt:"./ios_alt_bg.webp",
-        nexus:"./ios_nexus_bg.webp"
-    };
-
-    const BGS=document.documentElement.classList.contains("ios-lite-v115")
-        ? BGS_IOS
-        : BGS_DESKTOP;
-
-    /*
-      Preload leggero: scarica i file ma NON chiama img.decode().
-      Su Safari iOS decode() esplicito può forzare la decodifica
-      alla dimensione naturale e aumentare pressione di memoria.
-    */
-    const BG_CACHE_V192={};
-    function warmPrologueBackgroundsV192(){
-        Object.entries(BGS).forEach(([key,src],index)=>{
-            setTimeout(()=>{
-                const pre=new Image();
-                BG_CACHE_V192[key]=pre;
-                pre.decoding="async";
-                pre.src=src;
-            },120*index);
-        });
-    }
-
-    if(document.readyState==="complete"){
-        setTimeout(warmPrologueBackgroundsV192,150);
-    }else{
-        window.addEventListener("load",()=>{
-            setTimeout(warmPrologueBackgroundsV192,150);
-        },{once:true});
-    }
-
-    function setRiftBg(key){
-        const scene=document.getElementById("riftScene");
-        const img=document.getElementById("prologueBgImageV191");
-        const flash=document.getElementById("prologueCineFlashV110");
-        if(!img || !scene)return;
-
-        const finalKey=BGS[key]?key:"fracture";
-        const src=BGS[finalKey];
-
-        scene.classList.remove("bg-fracture","bg-kaelios","bg-run","bg-alt","bg-nexus","scene-shift");
-        scene.classList.add("bg-"+finalKey,"cinematic-bars");
-
-        if(document.documentElement.classList.contains("ios-lite-v115")){
-            /* Nessun forced layout: la transizione parte asincrona. */
-            requestAnimationFrame(()=>{
-                scene.classList.add("scene-shift");
-                setTimeout(()=>scene.classList.remove("scene-shift"),460);
-            });
-        }else{
-            void scene.offsetWidth;
-            scene.classList.add("scene-shift");
-            setTimeout(()=>scene.classList.remove("scene-shift"),460);
-        }
-
-        if(img.getAttribute("src")!==src){
-            if(flash){
-                if(document.documentElement.classList.contains("ios-lite-v115")){
-                    restartClassAsyncIOSV190(flash,"active");
-                }else{
-                    flash.classList.remove("active");
-                    void flash.offsetWidth;
-                    flash.classList.add("active");
-                }
-                setTimeout(()=>flash.classList.remove("active"),520);
-            }
-
-            img.style.opacity=".10";
-
-            /*
-              Usa direttamente il file già richiesto in BG_CACHE.
-              Se la decodifica non è ancora terminata, Safari completerà
-              il caricamento in modo asincrono senza creare un nuovo Image
-              nel gesto del giocatore.
-            */
-            img.src=src;
-            requestAnimationFrame(()=>{
-                requestAnimationFrame(()=>{
-                    img.style.opacity=".58";
-                });
-            });
-        }else{
-            img.style.opacity=".58";
-        }
-    }
-
-    function setExternalBg(id,key){
-        const el=document.getElementById(id);
-        if(!el)return;
-        el.style.setProperty("--prologue-ext-bg",'url("'+(BGS[key]||BGS.fracture)+'")');
-    }
-
-    function cinematicPulseV110(){
-        const flash=document.getElementById("prologueCineFlashV110");
-        if(!flash)return;
-        if(document.documentElement.classList.contains("ios-lite-v115")){
-            restartClassAsyncIOSV190(flash,"active");
-        }else{
-            flash.classList.remove("active");
-            void flash.offsetWidth;
-            flash.classList.add("active");
-        }
-        setTimeout(()=>flash.classList.remove("active"),520);
-    }
-    window.cinematicPulseV110=cinematicPulseV110;
-
-
-    setRiftBg("fracture");
-    setExternalBg("timelineVision","run");
-    setExternalBg("convergenceScreen","alt");
-
-    if(typeof window.cineVisual==="function"){
-        const old=window.cineVisual;
-        window.cineVisual=function(mode){
-            const result=old.apply(this,arguments);
-
-            if(mode==="fracture") setRiftBg("fracture");
-            else if(mode==="run") setRiftBg("run");
-            else if(mode==="alt" || mode==="entity") setRiftBg("alt");
-            else if(mode==="rewind") setRiftBg("fracture");
-            else setRiftBg("kaelios");
-
-            return result;
-        };
-    }
-
-    if(typeof window.startRift==="function"){
-        const old=window.startRift;
-        window.startRift=function(){
-            setRiftBg("fracture");
-            return old.apply(this,arguments);
-        };
-    }
-
-    if(typeof window.showTimelineVision2==="function"){
-        const old=window.showTimelineVision2;
-        window.showTimelineVision2=function(){
-            setExternalBg("timelineVision","run");
-            return old.apply(this,arguments);
-        };
-    }
-
-    if(typeof window.beginConvergence2==="function"){
-        const old=window.beginConvergence2;
-        window.beginConvergence2=function(){
-            setExternalBg("convergenceScreen","alt");
-            return old.apply(this,arguments);
-        };
-    }
-
-    if(typeof window.completeChapterOneV238==="function"){
-        const old=window.completeChapterOneV238;
-        window.completeChapterOneV238=function(){
-            setRiftBg("nexus");
-            return old.apply(this,arguments);
-        };
-    }
-
-    const chapterContinue=document.getElementById("chapterContinueV241");
-    if(chapterContinue){
-        chapterContinue.addEventListener("click",()=>setRiftBg("nexus"),true);
-    }
-})();
-</script>
-
-<button id="audioToggleV112" type="button" aria-label="Disattiva audio" title="Audio">🔊</button>
-
-<script id="externalAudioV112Script">
-/* =========================================================
-   WHAT IF UNIVERSE — CUSTOM EXTERNAL SFX V1.15
-   File WAV reali caricati dalla root del progetto.
-   ========================================================= */
-(function(){
-    const STORE_KEY="whatIfUniverse_audio_enabled_v1142";
-
-    const FILES={
-        click:      {src:"./ui_click.wav",         volume:.52},
-        choice:     {src:"./choice_confirm.wav",   volume:.55},
-        fracture:   {src:"./frattura_ok.wav",      volume:.82},
-        whoosh:     {src:"./swoosh.wav",            volume:.72},
-        whoosh2:    {src:"./swoosh2.wav",           volume:.76},
-        hit:        {src:"./impact_hit.wav",        volume:.78},
-        charge:     {src:"./ki_charge_loop.wav",   volume:.68},
-        release:    {src:"./mystic_laser.wav",      volume:.72},
-        rewrite:    {src:"./rewrite_temporal.wav", volume:.68},
-        success:    {src:"./success.wav",          volume:.62},
-        fail:       {src:"./fail.wav",             volume:.68},
-        portal:     {src:"./portal_open.wav",      volume:.66},
-        transition: {src:"./nexus_transition.wav", volume:.58},
-        anomaly:    {src:"./anomaly_warning.wav",  volume:.64}
-    };
-
-    let enabled=true;
-    let unlocked=false;
-    let chargeAudio=null;
-    let chargePrepared=null;
-
-    try{
-        const saved=localStorage.getItem(STORE_KEY);
-        if(saved!==null)enabled=saved==="1";
-    }catch(e){}
-
-    const pools={};
-
-    function makeAudio(key){
-        const cfg=FILES[key];
-        if(!cfg)return null;
-
-        const a=new Audio(cfg.src);
-        a.preload="auto";
-        a.volume=cfg.volume;
-        a.playsInline=true;
-        return a;
-    }
-
-    function getPool(key){
-        if(pools[key])return pools[key];
-
-        const count=
-            key==="fracture" ? 6 :
-            (key==="click" || key==="choice" || key==="whoosh" || key==="whoosh2" || key==="hit") ? 4 : 2;
-        pools[key]=[];
-        for(let i=0;i<count;i++){
-            const a=makeAudio(key);
-            if(a)pools[key].push(a);
-        }
-        return pools[key];
-    }
-
-    function unlock(){
-        if(unlocked)return true;
-
-        /*
-          Sblocco robusto per Safari/Chrome mobile.
-          unlocked diventa true SOLO se il browser ha accettato il play.
-        */
-        const a=makeAudio("click");
-        if(!a)return false;
-
-        a.volume=0;
-
-        try{
-            const p=a.play();
-
-            if(p && typeof p.then==="function"){
-                p.then(()=>{
-                    unlocked=true;
-                    try{
-                        a.pause();
-                        a.currentTime=0;
-                    }catch(e){}
-                }).catch(()=>{
-                    unlocked=false;
-                });
-            }else{
-                unlocked=true;
-                try{
-                    a.pause();
-                    a.currentTime=0;
-                }catch(e){}
-            }
-        }catch(e){
-            unlocked=false;
-        }
-
-        return unlocked;
-    }
-
-    function play(key,volumeMul=1){
-        if(!enabled)return;
-
-        unlock();
-
-        const pool=getPool(key);
-        if(!pool || !pool.length)return;
-
-        let a=pool.find(x=>x.paused || x.ended);
-        if(!a)a=pool[0];
-
-        try{
-            a.pause();
-            a.currentTime=0;
-            a.volume=Math.max(0,Math.min(1,(FILES[key]?.volume||.6)*volumeMul));
-            const p=a.play();
-            if(p && typeof p.catch==="function")p.catch(()=>{});
-        }catch(e){}
-    }
-
-    function startCharge(){
-        if(!enabled)return;
-        unlock();
-
-        stopCharge();
-
-        /*
-          Usa un'istanza già preparata quando possibile: così su mobile
-          il suono di carica parte immediatamente al pointerdown.
-        */
-        chargeAudio=chargePrepared || makeAudio("charge");
-        chargePrepared=null;
-        if(!chargeAudio)return;
-
-        chargeAudio.loop=true;
-        chargeAudio.volume=FILES.charge.volume;
-
-        try{
-            chargeAudio.pause();
-            chargeAudio.currentTime=0;
-            const p=chargeAudio.play();
-            if(p && typeof p.catch==="function")p.catch(()=>{});
-        }catch(e){}
-    }
-
-    function stopCharge(){
-        if(chargeAudio){
-            try{
-                chargeAudio.pause();
-                chargeAudio.currentTime=0;
-            }catch(e){}
-            chargeAudio=null;
-        }
-
-        if(!chargePrepared){
-            chargePrepared=makeAudio("charge");
-            if(chargePrepared){
-                chargePrepared.preload="auto";
-                try{ chargePrepared.load(); }catch(e){}
-            }
-        }
-    }
-
-    function stopAll(){
-        stopCharge();
-        Object.values(pools).forEach(pool=>{
-            pool.forEach(a=>{
-                try{
-                    a.pause();
-                    a.currentTime=0;
-                }catch(e){}
-            });
-        });
-    }
-
-    function updateButton(){
-        const b=document.getElementById("audioToggleV112");
-        if(!b)return;
-        b.textContent=enabled?"🔊":"🔇";
-        b.classList.toggle("muted",!enabled);
-        b.setAttribute("aria-label",enabled?"Disattiva audio":"Attiva audio");
-        b.title=enabled?"Audio attivo":"Audio disattivato";
-    }
-
-    function setEnabled(value){
-        enabled=!!value;
-        try{localStorage.setItem(STORE_KEY,enabled?"1":"0")}catch(e){}
-        if(!enabled)stopAll();
-        else{
-            unlock();
-            play("click",.90);
-        }
-        updateButton();
-    }
-
-    /*
-      Primo gesto: sblocca esplicitamente l'audio.
-      capture=true così avviene prima degli handler del gioco.
-    */
-    function firstAudioGesture(){
-        unlock();
-    }
-
-    if(document.documentElement.classList.contains("ios-lite-v115")){
-        document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
-    }else{
-        document.addEventListener("pointerdown",firstAudioGesture,{capture:true,passive:true});
-        document.addEventListener("touchstart",firstAudioGesture,{capture:true,passive:true});
-        document.addEventListener("click",firstAudioGesture,{capture:true,passive:true});
-    }
-
-    const toggle=document.getElementById("audioToggleV112");
-    if(toggle){
-        updateButton();
-
-        toggle.addEventListener("pointerdown",e=>{
-            e.stopPropagation();
-            unlock();
-        });
-
-        toggle.addEventListener("click",e=>{
-            e.preventDefault();
-            e.stopPropagation();
-            setEnabled(!enabled);
-        });
-    }
-
-    /*
-      Feedback UI di base.
-      Gli eventi narrativi importanti hanno poi il loro SFX specifico.
-    */
-    document.addEventListener("click",e=>{
-        if(!enabled)return;
-
-        const el=e.target.closest("button,.choice,.branchAction");
-        if(!el || el.id==="audioToggleV112")return;
-
-        if(
-            el.classList.contains("choice") ||
-            el.classList.contains("branchAction") ||
-            /choice/i.test(el.className||"")
-        ){
-            play("choice");
-        }else{
-            play("click");
-        }
-    },true);
-
-    function wrap(name,before,after){
-        const original=window[name];
-        if(typeof original!=="function")return false;
-
-        window[name]=function(){
-            if(before){
-                try{before.apply(this,arguments)}catch(e){}
-            }
-            const result=original.apply(this,arguments);
-            if(after){
-                try{after.apply(this,arguments)}catch(e){}
-            }
-            return result;
-        };
-        return true;
-    }
-
-
-    /*
-      SFX narrativi sincronizzati direttamente nei punti reali del gameplay.
-      Nessun suono viene più deciso soltanto dal cambio di visuale.
-    */
-
-    /* Sicurezza mobile */
-    document.addEventListener("visibilitychange",()=>{
-        if(document.hidden)stopCharge();
-    });
-
-    window.WIUSoundV112={
-        play,
-        startCharge,
-        stopCharge,
-        stopAll,
-        setEnabled,
-        isEnabled:()=>enabled,
-        files:FILES
-    };
-
-    /*
-      TRAMBUSTO V1.14.2:
-      ogni vera chiamata alla vibrazione riproduce frattura_ok.wav
-      a volume ridotto. L'apertura della frattura usa già lo stesso
-      file a volume pieno nel punto preciso della scena.
-    */
-    if(typeof window.vibrate==="function"){
-        const originalVibrateV1142=window.vibrate;
-
-        window.vibrate=function(pattern){
-            const isiOS=document.documentElement.classList.contains("ios-lite-v115");
-
-            /*
-              TEST iOS:
-              niente fracture.wav automatico su ogni pseudo-vibrazione.
-              Restano intatti tutti gli SFX narrativi espliciti.
-            */
-            if(enabled && !isiOS){
-                play("fracture",.24);
-            }
-
-            return originalVibrateV1142.apply(this,arguments);
-        };
-    }
-
-    /*
-      Preload leggero dopo il load, senza bloccare il rendering.
-    */
-    window.addEventListener("load",()=>{
-        setTimeout(()=>{
-            Object.keys(FILES).forEach(key=>getPool(key));
-
-            chargePrepared=makeAudio("charge");
-            if(chargePrepared){
-                chargePrepared.preload="auto";
-                try{ chargePrepared.load(); }catch(e){}
-            }
-        },350);
-    });
-})();
-</script>
-
-
-<script id="restartPrologueAutostartV1">
-(function(){
-    function maybeRestartPrologueV1(){
-        let restart=false;
-
-        try{
-            restart=sessionStorage.getItem("whatIfUniverse_restart_prologue_v1")==="1";
-            if(restart){
-                sessionStorage.removeItem("whatIfUniverse_restart_prologue_v1");
-            }
-        }catch(e){}
-
-        if(!restart)return;
-
-        /*
-          startGame() è la funzione originale che avvia il prologo
-          dall'introduzione "UNIVERSO 7".
-        */
-        setTimeout(()=>{
-            if(typeof window.startGame==="function"){
-                window.startGame();
-            }else if(typeof startGame==="function"){
-                startGame();
-            }
-        },80);
-    }
-
-    if(document.readyState==="loading"){
-        document.addEventListener("DOMContentLoaded",maybeRestartPrologueV1,{once:true});
-    }else{
-        maybeRestartPrologueV1();
-    }
-})();
-</script>
-
-</body>
-
-</html>
+ const introTourStepsV500=[
+  {
+   area:"lower",
+   x:625,y:900,
+   location:"VARCO ZERO",
+   sub:"PUNTO DI INGRESSO",
+   objective:"SEGUI KAELIOS • VARCO ZERO",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questo è il Varco Zero. È il punto da cui siamo entrati nel Nexus."},
+    {speaker:"KAELIOS",text:"Le fratture possono aprirsi altrove, ma qui possiamo osservarle senza essere immediatamente trascinati dentro una nuova linea temporale."}
+   ]
+  },
+  {
+   area:"lower",
+   x:620,y:505,
+   location:"PIAZZA BASSA",
+   sub:"MICROZONA 1",
+   objective:"SEGUI KAELIOS • PIAZZA BASSA",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Questa è la Piazza Bassa. È il punto di collegamento della prima zona del Nexus."},
+    {speaker:"KAELIOS",text:"Da qui raggiungi l'Arena, l'area di allenamento e il passaggio verso il Nucleo."}
+   ]
+  },
+  {
+   area:"lower",
+   x:315,y:425,
+   location:"TRY COMBAT KAELIOS",
+   sub:"SFIDA PERMANENTE",
+   objective:"SEGUI KAELIOS • AREA DI SFIDA",
+   dialogue:[
+    {speaker:"KAELIOS",text:"Quella piattaforma sarà il nostro campo di prova."},
+    {speaker:"KAELIOS",text:"Dopo aver completato il tutorial nell'Arena potrai affrontarmi qui ogni volta che vorrai."},
+    {speaker:"KAELIOS",text:"Ma non aspettarti lo stesso combattimento due volte. Ogni volta che riuscirai a battermi, la sfida successiva diventerà più difficile."}
+   ]
+  },
