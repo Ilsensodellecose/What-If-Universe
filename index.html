@@ -17401,31 +17401,31 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    id:"rapid",
    name:"ASSALTO RAPIDO",
    seq:["R","L","R"],
-   hitDamage:[5,4,5],
+   hitDamage:[6,5,6],
    guardDamagePerHit:7,
    guardThreshold:100,
    kiPerHit:5,
-   desc:"3 colpi • 14 DMG MAX • SEMPRE DISPONIBILE"
+   desc:"3 colpi • 17 DMG MAX • SEMPRE DISPONIBILE"
   },
   pressure:{
    id:"pressure",
    name:"COMBO INCALZANTE",
    seq:["U","R","L","D"],
-   hitDamage:[5,5,6,6],
+   hitDamage:[6,6,7,7],
    guardDamagePerHit:9,
    guardThreshold:75,
    kiPerHit:5,
-   desc:"4 colpi • 22 DMG MAX • GUARDIA NEMICA ≤75"
+   desc:"4 colpi • 26 DMG MAX • GUARDIA NEMICA ≤75"
   },
   burst:{
    id:"burst",
    name:"RAFFICA DEVASTANTE",
    seq:["R","U","L","D","R","U"],
-   hitDamage:[6,6,6,6,6,6],
+   hitDamage:[7,7,7,7,7,7],
    guardDamagePerHit:11,
    guardThreshold:40,
    kiPerHit:4,
-   desc:"6 colpi • 36 DMG MAX • GUARDIA NEMICA ≤40"
+   desc:"6 colpi • 42 DMG MAX • GUARDIA NEMICA ≤40"
   }
  };
 
@@ -17463,6 +17463,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   phase:0,
   playerHP:100,
   enemyHP:120,
+  enemyMaxHP:120,
   playerGuard:100,
   enemyGuard:100,
   ki:0,
@@ -17480,6 +17481,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   traceDefenseDamage:0,
   traceStartTs:0,
   traceDuration:0,
+  traceCompleteTs:0,
   freeFight:false,
   enemyKi:25,
   enemyTurnCount:0,
@@ -17550,6 +17552,16 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
       <div class="arenaV650GuardHead"><span>GUARDIA</span><b id="arenaV650PlayerGuardText">100/100</b></div>
       <div class="arenaV650GuardBar"><span id="arenaV650PlayerGuardFill"></span></div>
      </div>
+     <div id="arenaV600Resources" class="arenaV730PlayerResources">
+      <div class="arenaV600Resource arenaV730KiResource">
+       <div class="arenaV600ResourceHead"><span>KI</span><b id="arenaV600KiText">0/100</b></div>
+       <div class="arenaV600Bar"><span id="arenaV600KiFill"></span></div>
+      </div>
+      <div class="arenaV600Resource arenaV730RewriteResource" aria-label="Riscrittura disponibile">
+       <b id="arenaV600RewriteText">1/1</b>
+       <span id="arenaV600RewriteFill" hidden></span>
+      </div>
+     </div>
     </div>
     <button id="arenaV600Exit" type="button">ESCI</button>
     <div class="arenaV600FighterHud enemy">
@@ -17559,6 +17571,10 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      <div class="arenaV650GuardRow">
       <div class="arenaV650GuardHead"><span>GUARDIA</span><b id="arenaV650EnemyGuardText">100/100</b></div>
       <div class="arenaV650GuardBar"><span id="arenaV650EnemyGuardFill"></span></div>
+     </div>
+     <div class="arenaV740EnemyKiRow">
+      <div class="arenaV740EnemyKiHead"><span>KI</span><b id="arenaV740EnemyKiText">25/100</b></div>
+      <div class="arenaV740EnemyKiBar"><span id="arenaV740EnemyKiFill"></span></div>
      </div>
     </div>
    </div>
@@ -17588,17 +17604,6 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
       <div class="arenaV600EnemyRing"></div>
       <div class="arenaV600EnemyCore"></div>
       <div class="arenaV600EnemyLabel">BERSAGLIO DI ADDESTRAMENTO</div>
-     </div>
-    </div>
-
-    <div id="arenaV600Resources">
-     <div class="arenaV600Resource">
-      <div class="arenaV600ResourceHead"><span>KI</span><b id="arenaV600KiText">0/100</b></div>
-      <div class="arenaV600Bar"><span id="arenaV600KiFill"></span></div>
-     </div>
-     <div class="arenaV600Resource">
-      <div class="arenaV600ResourceHead"><span>RISCRITTURA</span><b id="arenaV600RewriteText">1/1</b></div>
-      <div class="arenaV600Bar"><span id="arenaV600RewriteFill"></span></div>
      </div>
     </div>
 
@@ -17701,6 +17706,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    enemyHpFill:el.querySelector("#arenaV600EnemyHpFill"),
    enemyGuardText:el.querySelector("#arenaV650EnemyGuardText"),
    enemyGuardFill:el.querySelector("#arenaV650EnemyGuardFill"),
+   enemyKiText:el.querySelector("#arenaV740EnemyKiText"),
+   enemyKiFill:el.querySelector("#arenaV740EnemyKiFill"),
    kiText:el.querySelector("#arenaV600KiText"),
    kiFill:el.querySelector("#arenaV600KiFill"),
    rewriteText:el.querySelector("#arenaV600RewriteText"),
@@ -17761,12 +17768,12 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
    arenaShowInfoV620(
     "TURNI E RISORSE",
-    "Il combattimento procede sempre <b>un'azione a testa</b>: TU → AVVERSARIO → TU.<br><br>"+
-    "Entrambi iniziate con <b>GUARDIA 100/100</b>. Gli attacchi fisici la consumano: più scende, meno l'avversario riesce a parare e più combo diventano disponibili. A Guardia 0 la difesa fisica è completamente aperta.<br><br>"+
-    "Un <b>PERFECT DODGE</b> recupera una piccola quantità di Guardia (+4).<br><br>"+
-    "Inizi anche con <b>25 KI</b>. Dal secondo tuo turno recuperi automaticamente <b>+8 KI</b>, mentre alcune combo fisiche ne generano altro.",
+    "Un'azione a testa: <b>TU → AVVERSARIO</b>.<br><br>"+
+    "Le combo fisiche consumano <b>GUARDIA</b> e generano Ki. Se la Guardia arriva a <b>0</b>, viene <b>SPEZZATA</b>: una risposta lenta non basta più e solo un <b>PERFECT DODGE</b> evita il danno pieno.<br><br>"+
+    "Un Perfect Dodge recupera anche <b>+4 Guardia</b>. Parti con <b>25 KI</b>.",
     ()=>arenaSetPhaseV600(1),
-    "ARENA • REGOLE BASE"
+    "ARENA • REGOLE BASE",
+    ".arenaV600FighterHud:not(.enemy) .arenaV650GuardRow"
    );
   });
 
@@ -17779,6 +17786,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   });
 
   arenaV600Refs.infoContinue.addEventListener("click",()=>{
+   arenaClearTutorialFocusV730();
    arenaV600Refs.tutorialInfo.classList.remove("active");
    const cb=arenaStateV600.tutorialInfoCallback;
    arenaStateV600.tutorialInfoCallback=null;
@@ -17837,44 +17845,48 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    if(action==="rapid"){
     arenaShowInfoV620(
      "COMBO FISICHE",
-     "La sequenza completa rimane in alto. Al centro vedrai <b>un solo input alla volta</b>.<br><br>"+
-     "Ogni freccia è un colpo e ha un tempo limite. <b>Un drag = una freccia</b>: rilascia il mouse/dito e poi inizia il gesto successivo. Se sbagli, perdi quel colpo ma la combo continua.<br><br>"+
-     "L'avversario può <b>PARARE anche uno swipe corretto</b>. Quel colpo non farà danno agli HP, ma abbasserà comunque la sua <b>GUARDIA</b>.<br><br>"+
-     "La Guardia è quindi anche la tua misura di apertura offensiva: più la porti verso 0, meno parate potrà effettuare e più combo potrai usare.",
-     ()=>arenaStartComboV600("rapid")
+     "Ogni freccia = <b>uno swipe</b>. Se sbagli, perdi solo quel colpo.<br><br>"+
+     "Anche uno swipe parato consuma la <b>GUARDIA</b> nemica. Portala verso 0 per aprire combo più forti.",
+     ()=>arenaStartComboV600("rapid"),
+     "TUTORIAL • COMBO",
+     ".arenaV600FighterHud.enemy .arenaV650GuardRow"
     );
    }else if(action==="pressure"){
     arenaShowInfoV620(
      "ROMPERE LA GUARDIA",
-     "Da ora c'è <b>una sola statistica</b>: la GUARDIA.<br><br>"+
-     "Ogni colpo fisico corretto la abbassa, anche se viene parato. Più scende, meno l'avversario riesce a difendersi e più combo diventano disponibili.<br><br>"+
-     "Nel combattimento reale: <b>COMBO INCALZANTE con Guardia nemica ≤75</b>; <b>RAFFICA DEVASTANTE con Guardia nemica ≤40</b>.",
+     "Ogni colpo fisico corretto abbassa la <b>GUARDIA</b>, anche se viene parato.<br><br>"+
+     "INCALZANTE si apre a <b>≤75</b>; RAFFICA DEVASTANTE a <b>≤40</b>.",
      ()=>arenaStartComboV600("pressure"),
-     "MECCANICA • GUARDIA"
+     "MECCANICA • GUARDIA",
+     ".arenaV600FighterHud.enemy .arenaV650GuardRow"
     );
    }else if(action==="burst"){
     arenaShowInfoV620(
      "COMBO AVANZATE",
-     "RAFFICA DEVASTANTE ha più colpi e una finestra più stretta per ogni swipe.<br><br>"+
-     "Nei combattimenti reali si sblocca quando la <b>Guardia nemica scende a 40 o meno</b>. Se perdi un input, perdi soltanto il danno di quel singolo colpo.",
-     ()=>arenaStartComboV600("burst")
+     "Sei swipe, finestre più strette. Se perdi un input, perdi solo quel colpo.<br><br>"+
+     "Nel combattimento reale richiede <b>Guardia nemica ≤40</b>.",
+     ()=>arenaStartComboV600("burst"),
+     "TUTORIAL • COMBO AVANZATA",
+     ".arenaV600FighterHud.enemy .arenaV650GuardRow"
     );
    }else if(action==="ki"){
     arenaShowInfoV620(
      "ATTACCHI KI",
-     "Gli attacchi energetici consumano Ki. <b>KI BLAST costa 25 KI e parte da 30 danni base</b>.<br><br>"+
-     "Il Ki <b>ignora completamente la Guardia</b>: anche contro Guardia 100 può colpire gli HP. Viene contrastato soltanto dalla contro-configurazione energetica.<br><br>"+
-     "Devi tracciare una configurazione continua attraversando i nodi nell'ordine. La linea è solo una guida: non devi seguirla al pixel.<br><br>"+
-     "La <b>VELOCITÀ</b> determina la potenza con cui la tecnica parte: completamento molto rapido = <b>100% danno</b>, poi 75%, 50% o 25%. Solo dopo viene applicata l'eventuale difesa avversaria.",
-     ()=>arenaStartTraceV600("ki")
+     "<b>KI BLAST: 25 KI • 30 danni base.</b><br><br>"+
+     "Ignora la Guardia e colpisce direttamente gli <b>HP</b>. Parti dal <b>nodo rosso</b> e attraversa gli altri in ordine.<br><br>"+
+     "Più sei veloce, più potenza ottieni: <b>25% • 50% • 75% • 100%</b>.",
+     ()=>arenaStartTraceV600("ki"),
+     "TUTORIAL • ATTACCO KI",
+     ".arenaV600FighterHud.enemy .arenaV600Bar"
     );
    }else if(action==="special"){
     arenaShowInfoV620(
      "TECNICA SPECIALE",
-     "IMPULSO RISONANTE costa <b>55 KI</b>, parte da <b>48 danni base</b> e ignora la Guardia come ogni tecnica energetica.<br><br>"+
-     "Anche qui la velocità dell'esecuzione determina il <b>25% • 50% • 75% • 100%</b> del danno potenziale.<br><br>"+
-     "Le tecniche speciali sono più difficili da bloccare: chi si difende ha meno tempo per completare la contro-configurazione.",
-     ()=>arenaStartTraceV600("special")
+     "<b>IMPULSO RISONANTE: 55 KI • 48 danni base.</b><br><br>"+
+     "Ignora la Guardia e lascia meno tempo alla contro-configurazione. Anche qui conta la velocità.",
+     ()=>arenaStartTraceV600("special"),
+     "TUTORIAL • TECNICA SPECIALE",
+     ".arenaV730KiResource"
     );
    }
   });
@@ -17937,6 +17949,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   body.onload=syncHair;
   hair.onload=syncHair;
   setTimeout(syncHair,60);
+  requestAnimationFrame(()=>requestAnimationFrame(syncHair));
+  setTimeout(syncHair,180);
 
   arenaV600Refs.playerName.textContent=getPlayerName().toUpperCase();
  }
@@ -17946,6 +17960,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.phase=0;
   arenaStateV600.playerHP=100;
   arenaStateV600.enemyHP=120;
+  arenaStateV600.enemyMaxHP=120;
   arenaStateV600.playerGuard=100;
   arenaStateV600.enemyGuard=100;
   arenaStateV600.ki=25;
@@ -17967,6 +17982,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.traceDefenseDamage=0;
   arenaStateV600.traceStartTs=0;
   arenaStateV600.traceDuration=0;
+  arenaStateV600.traceCompleteTs=0;
   arenaStateV600.freeFight=false;
   arenaStateV600.enemyKi=25;
   arenaStateV600.enemyTurnCount=0;
@@ -18009,6 +18025,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.traceDeadline=0;
   arenaStateV600.traceKind="";
 
+  arenaClearTutorialFocusV730();
   arenaV600Refs.intro.classList.add("active");
   arenaV600Refs.complete.classList.remove("active");
   arenaV600Refs.gesture.className="";
@@ -18021,14 +18038,15 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(!arenaV600Refs)return;
 
   const p=Math.max(0,Math.min(100,arenaStateV600.playerHP));
-  const e=Math.max(0,Math.min(120,arenaStateV600.enemyHP));
+  const enemyMax=Math.max(1,Number(arenaStateV600.enemyMaxHP)||120);
+  const e=Math.max(0,Math.min(enemyMax,arenaStateV600.enemyHP));
   const ki=Math.max(0,Math.min(100,arenaStateV600.ki));
 
   arenaV600Refs.playerHpText.textContent="HP "+Math.round(p)+"/100";
   arenaV600Refs.playerHpFill.style.transform="scaleX("+(p/100)+")";
 
-  arenaV600Refs.enemyHpText.textContent="HP "+Math.round(e)+"/120";
-  arenaV600Refs.enemyHpFill.style.transform="scaleX("+(e/120)+")";
+  arenaV600Refs.enemyHpText.textContent="HP "+Math.round(e)+"/"+Math.round(enemyMax);
+  arenaV600Refs.enemyHpFill.style.transform="scaleX("+(e/enemyMax)+")";
 
   const pg=Math.max(0,Math.min(100,arenaStateV600.playerGuard));
   const eg=Math.max(0,Math.min(100,arenaStateV600.enemyGuard));
@@ -18040,6 +18058,10 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaV600Refs.enemyGuardText.textContent=Math.round(eg)+"/100";
   arenaV600Refs.enemyGuardFill.style.transform="scaleX("+(eg/100)+")";
   arenaV600Refs.enemyGuardText.classList.toggle("arenaV650GuardBroken",eg<=0);
+
+  const enemyKi=Math.max(0,Math.min(100,arenaStateV600.enemyKi));
+  if(arenaV600Refs.enemyKiText)arenaV600Refs.enemyKiText.textContent=Math.round(enemyKi)+"/100";
+  if(arenaV600Refs.enemyKiFill)arenaV600Refs.enemyKiFill.style.transform="scaleX("+(enemyKi/100)+")";
 
   arenaV600Refs.kiText.textContent=Math.round(ki)+"/100";
   arenaV600Refs.kiFill.style.transform="scaleX("+(ki/100)+")";
@@ -18240,12 +18262,27 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   return Math.max(520,750-(i*42));
  }
 
- function arenaShowInfoV620(title,text,callback,eyebrow="TUTORIAL"){
+ function arenaClearTutorialFocusV730(){
+  if(!arenaV600)return;
+  arenaV600.querySelectorAll(".arenaV730TutorialFocus").forEach(el=>
+   el.classList.remove("arenaV730TutorialFocus")
+  );
+ }
+
+ function arenaFocusTutorialV730(selector){
+  arenaClearTutorialFocusV730();
+  if(!selector || !arenaV600)return;
+  const target=arenaV600.querySelector(selector);
+  if(target)target.classList.add("arenaV730TutorialFocus");
+ }
+
+ function arenaShowInfoV620(title,text,callback,eyebrow="TUTORIAL",focusSelector=""){
   arenaStateV600.tutorialInfoCallback=callback||null;
   arenaV600Refs.infoEyebrow.textContent=eyebrow;
   arenaV600Refs.infoTitle.textContent=title;
   arenaV600Refs.infoText.innerHTML=text;
   arenaV600Refs.tutorialInfo.classList.add("active");
+  arenaFocusTutorialV730(focusSelector);
  }
 
  function arenaShowTurnV620(who,callback){
@@ -18471,6 +18508,22 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(progress>=.75)return .75;
   if(progress>=.50)return .50;
   if(progress>=.25)return .25;
+  return 0;
+ }
+
+ function arenaKiDefenseBlockByTimeV740(){
+  const complete=arenaTraceCompletionV630()>=1;
+  if(!complete)return 0;
+
+  const duration=Math.max(1,arenaStateV600.traceDuration||1);
+  const end=arenaStateV600.traceCompleteTs||performance.now();
+  const start=arenaStateV600.traceStartTs||end;
+  const ratio=Math.max(0,end-start)/duration;
+
+  if(ratio<=.45)return 1;
+  if(ratio<=.65)return .75;
+  if(ratio<=.85)return .50;
+  if(ratio<=1)return .25;
   return 0;
  }
 
@@ -18761,7 +18814,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.freeFight=true;
   arenaStateV600.phase=100;
   arenaStateV600.playerHP=100;
-  arenaStateV600.enemyHP=120;
+  arenaStateV600.enemyHP=50;
+  arenaStateV600.enemyMaxHP=50;
   arenaStateV600.playerGuard=100;
   arenaStateV600.enemyGuard=100;
   arenaStateV600.ki=25;
@@ -18777,15 +18831,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaUpdateHudV600();
 
   arenaShowInfoV620(
-   "COMBATTIMENTO COMPLETO",
-   "Ora termina la parte guidata. Da questo momento si combatte fino a quando uno dei due arriva a <b>0 HP</b>.<br><br>"+
-   "Nel tuo turno avrai tre scelte principali: <b>COMBO</b>, <b>ATTACCHI KI</b> e <b>RECUPERA GUARDIA</b>.<br><br>"+
-   "<b>COMBO:</b> consumano la Guardia nemica, generano Ki e fanno danno HP moderato.<br>"+
-   "<b>KI:</b> ignorano completamente la Guardia e puntano direttamente agli HP; la loro difesa avviene solo tramite contro-configurazione.<br>"+
-   "<b>RECUPERA GUARDIA:</b> costa 30 Ki, restituisce fino a +50 Guardia e usa tutto il turno.<br><br>"+
-   "La RISCRITTURA resta <b>1/1 per tutto lo scontro</b>.",
+   "PROVA FINALE",
+   "L'Ologramma riparte da <b>50 HP</b>. Portalo a 0.<br><br>"+
+   "<b>COMBO</b> rompe Guardia e genera Ki • <b>KI</b> colpisce gli HP • <b>RECUPERA GUARDIA</b>: 30 Ki → +50.<br><br>"+
+   "<b>RISCRITTURA 1/1</b>: dopo un'azione subita puoi tornare indietro e riprovarla una sola volta.<br><br>"+
+   "Anche l'Ologramma ha il suo <b>KI</b>: Ki Blast, Speciale e Recupera Guardia consumano la sua risorsa.",
    ()=>arenaBeginFreePlayerTurnV690(),
-   "ARENA • PROVA FINALE"
+   "ARENA • COMBATTIMENTO COMPLETO",
+   ".arenaV600FighterHud.enemy .arenaV600Bar"
   );
  }
 
@@ -18827,6 +18880,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     100,
     arenaStateV600.enemyKi+8
    );
+   arenaUpdateHudV600();
   }
 
   /*
@@ -19016,7 +19070,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /* 1 — giocatore: combo facile */
   if(phase===1){
    arenaV600Refs.coachText.textContent=
-    "Il tuo turno. ASSALTO RAPIDO genera Ki e comincia a consumare la Guardia nemica, anche quando un colpo viene parato.";
+    "ASSALTO RAPIDO: genera Ki e consuma la Guardia nemica.";
    arenaBeginPlayerTurnV630(()=>arenaRenderActionsV600("rapid"));
    return;
   }
@@ -19025,15 +19079,21 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(phase===2){
    arenaShowTurnV620("enemy",()=>{
     arenaShowInfoV620(
-     "TURNO AVVERSARIO",
-     "Hai concluso la tua azione: ora l'Ologramma ne esegue una sua.<br><br>"+
-     "La sequenza nemica cambia a ogni tentativo. Verrà mostrata <b>solo per un momento</b>, poi scomparirà: dovrai ricordarla mentre reagisci alle singole frecce.<br><br>"+
-     "Se rispondi molto velocemente ottieni <b>PERFECT DODGE</b>: non subisci danno e recuperi <b>+4 Guardia</b>.<br><br>"+
-     "Se la direzione è corretta ma reagisci più tardi, ottieni una <b>PARATA PARZIALE</b>: subisci metà danno ma consumi Guardia. Un colpo pieno consuma ancora più Guardia.<br><br>"+
-     "A Guardia 0 una risposta lenta non basta più: devi fare Perfect Dodge oppure subirai il colpo pieno.<br><br>"+
-     "La <b>RISCRITTURA 1/1</b> può essere scelta soltanto alla fine dell'intera combo e ripristina anche la Guardia precedente.",
-     ()=>arenaStartDefenseComboV620("easy"),
-     "DIFESA • COMBO FACILE"
+     "DIFESA E GUARDIA",
+     "Memorizza la sequenza: poi sparisce.<br><br>"+
+     "<b>PERFECT DODGE</b>: 0 danni e +4 Guardia. Se reagisci correttamente ma più tardi, fai una <b>PARATA PARZIALE</b>: dimezzi il danno, ma consumi Guardia.<br><br>"+
+     "A <b>0 Guardia</b> compare <b>GUARDIA SPEZZATA</b>: la parata parziale non funziona più. Devi fare Perfect Dodge o subisci il colpo pieno.",
+     ()=>arenaShowInfoV620(
+      "RISCRITTURA",
+      "Hai <b>1 sola RISCRITTURA per scontro</b>.<br><br>"+
+      "Dopo un'azione nemica in cui subisci danno, puoi consumarla per <b>tornare a prima di quell'azione e riprovarla</b>.<br><br>"+
+      "Quando la usi, il contatore passa da <b>1/1</b> a <b>0/1</b>.",
+      ()=>arenaStartDefenseComboV620("easy"),
+      "MECCANICA • RISCRITTURA",
+      ".arenaV730RewriteResource"
+     ),
+     "DIFESA • COMBO FACILE",
+     ".arenaV600FighterHud:not(.enemy) .arenaV650GuardRow"
     );
    });
    return;
@@ -19042,7 +19102,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /* 3 — giocatore: combo media */
   if(phase===3){
    arenaV600Refs.coachText.textContent=
-    "Ora proviamo COMBO INCALZANTE. Nel tutorial la puoi usare comunque; in uno scontro reale richiede Guardia nemica a 75 o meno.";
+    "COMBO INCALZANTE: più pressione, disponibile a Guardia nemica ≤75.";
    arenaBeginPlayerTurnV630(()=>{
     arenaRenderActionsV600("pressure");
    });
@@ -19054,9 +19114,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    arenaShowTurnV620("enemy",()=>{
     arenaShowInfoV620(
      "COMBO NEMICA MEDIA",
-     "L'Ologramma passa a 4 colpi casuali. Vedrai la sequenza completa solo nell'anteprima, poi resterà soltanto la freccia del colpo corrente.<br><br>"+
-     "Il tempo per rispondere è più breve e <b>si restringe ancora durante la combo</b>.<br><br>"+
-     "Rispondere correttamente non basta sempre: devi farlo abbastanza presto per evitare completamente il danno.",
+     "Quattro colpi. Anteprima breve, poi resta solo la freccia corrente.<br><br>"+
+     "La finestra si restringe durante la combo: <b>prima reagisci, meglio difendi</b>.",
      ()=>arenaStartDefenseComboV620("medium"),
      "TURNO AVVERSARIO"
     );
@@ -19067,7 +19126,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /* 5 — giocatore: combo forte */
   if(phase===5){
    arenaV600Refs.coachText.textContent=
-    "Ora proviamo RAFFICA DEVASTANTE. Nel tutorial la puoi usare comunque; in uno scontro reale richiede Guardia nemica a 40 o meno.";
+    "RAFFICA DEVASTANTE: 6 colpi, disponibile a Guardia nemica ≤40.";
    arenaBeginPlayerTurnV630(()=>{
     arenaRenderActionsV600("burst");
    });
@@ -19079,8 +19138,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    arenaShowTurnV620("enemy",()=>{
     arenaShowInfoV620(
      "COMBO NEMICA DIFFICILE",
-     "Adesso arrivano 6 colpi casuali con una finestra molto stretta che accelera progressivamente.<br><br>"+
-     "Qui PERFECT DODGE, parata parziale e colpo pieno fanno davvero la differenza.",
+     "Sei colpi e timing più stretto.<br><br>"+
+     "Qui la velocità decide tra <b>PERFECT DODGE</b>, parata e colpo pieno.",
      ()=>arenaStartDefenseComboV620("hard"),
      "TURNO AVVERSARIO"
     );
@@ -19091,21 +19150,27 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /* 7 — giocatore: Ki Blast */
   if(phase===7){
    arenaV600Refs.coachText.textContent=
-    "È di nuovo il tuo turno. Hai accumulato Ki con combo, difese riuscite e rigenerazione naturale.";
+    "Hai Ki: prova un attacco energetico.";
    arenaBeginPlayerTurnV630(()=>arenaRenderActionsV600("ki"));
    return;
   }
 
   /* 8 — avversario: Ki base */
   if(phase===8){
+   arenaStateV600.enemyKi=Math.max(arenaStateV600.enemyKi,25);
+   arenaUpdateHudV600();
    arenaShowTurnV620("enemy",()=>{
     arenaShowInfoV620(
-     "DIFESA KI • BLOCCO GRADUALE",
-     "Contro il Ki non esiste soltanto successo o fallimento.<br><br>"+
-     "Alla scadenza del tempo, la porzione di contro-configurazione completata determina quanto blocchi: <b>25% • 50% • 75% • 100%</b>.<br><br>"+
-     "Questo Ki Blast ha una finestra relativamente comoda.",
-     ()=>arenaStartKiDefenseV600("base"),
-     "TURNO AVVERSARIO"
+     "DIFESA KI • VELOCITÀ",
+     "Completa <b>tutta</b> la contro-configurazione partendo dal nodo rosso.<br><br>"+
+     "Più velocemente la chiudi, più Ki respingi: <b>25% • 50% • 75% • 100%</b>. Se non la completi, respingi <b>0%</b>.",
+     ()=>{
+      arenaStateV600.enemyKi=Math.max(0,arenaStateV600.enemyKi-25);
+      arenaUpdateHudV600();
+      arenaStartKiDefenseV600("base");
+     },
+     "TURNO AVVERSARIO • 25 KI",
+     ".arenaV740EnemyKiRow"
     );
    });
    return;
@@ -19114,20 +19179,27 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /* 9 — giocatore: speciale */
   if(phase===9){
    arenaV600Refs.coachText.textContent=
-    "Adesso spendi una grossa quantità di Ki per la tecnica speciale. L'Ologramma proverà a contrastarla, ma avrà più difficoltà.";
+    "Ora prova la tecnica speciale: più costosa, più difficile da contrastare.";
    arenaBeginPlayerTurnV630(()=>arenaRenderActionsV600("special"));
    return;
   }
 
   /* 10 — avversario: speciale Ki */
   if(phase===10){
+   arenaStateV600.enemyKi=Math.max(arenaStateV600.enemyKi,55);
+   arenaUpdateHudV600();
    arenaShowTurnV620("enemy",()=>{
     arenaShowInfoV620(
-     "DIFENDITI DA UNA TECNICA SPECIALE",
-     "Le tecniche più potenti sono difficili da bloccare proprio perché consumano molto Ki.<br><br>"+
-     "Questa configurazione è più lunga e avrai <b>molto meno tempo</b>. Anche se non arrivi al 100%, raggiungere 25%, 50% o 75% ridurrà comunque il danno.",
-     ()=>arenaStartKiDefenseV600("special"),
-     "TURNO AVVERSARIO • TECNICA SPECIALE"
+     "DIFENDITI DALLA SPECIALE",
+     "La configurazione è più lunga e hai meno tempo.<br><br>"+
+     "Devi completarla tutta: la velocità decide se respingi <b>25% • 50% • 75% • 100%</b> del Ki.",
+     ()=>{
+      arenaStateV600.enemyKi=Math.max(0,arenaStateV600.enemyKi-55);
+      arenaUpdateHudV600();
+      arenaStartKiDefenseV600("special");
+     },
+     "TURNO AVVERSARIO • 55 KI",
+     ".arenaV740EnemyKiRow"
     );
    });
    return;
@@ -19240,6 +19312,11 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    );
    arenaCheckGuardBreakV700("enemy");
 
+   /* Feedback audio su OGNI swipe offensivo corretto, anche se viene parato. */
+   if(window.WIUSoundV112){
+    window.WIUSoundV112.play("whoosh");
+   }
+
    const parried=arenaStateV600.enemyGuardBlocksRemaining>0;
 
    if(parried){
@@ -19251,11 +19328,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     const dmg=c.hitDamage[i];
     arenaStateV600.comboResults[i]="hit";
     arenaStateV600.comboDamageDone+=dmg;
-    arenaStateV600.enemyHP=Math.max(0,arenaStateV600.enemyHP-dmg);
-
-    if(window.WIUSoundV112){
-     window.WIUSoundV112.play("whoosh");
-    }
+    arenaStateV600.enemyHP=Math.max(arenaStateV600.freeFight ? 0 : 1,arenaStateV600.enemyHP-dmg);
    }
 
    arenaStateV600.seqIndex++;
@@ -19623,7 +19696,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   const checks=pts.map((p,i)=>{
    const q=arenaPointToSvgV600(p);
-   return "<circle class='arenaV600Checkpoint' data-trace-index='"+i+
+   const startClass=i===0 ? " start" : "";
+   return "<circle class='arenaV600Checkpoint"+startClass+"' data-trace-index='"+i+
     "' cx='"+q[0]+"' cy='"+q[1]+"' r='26'></circle>";
   }).join("");
 
@@ -19674,6 +19748,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   const duration=kind==="special" ? 4000 : 3200;
   arenaStateV600.traceStartTs=performance.now();
   arenaStateV600.traceDuration=duration;
+  arenaStateV600.traceCompleteTs=0;
   arenaStateV600.traceDeadline=arenaStateV600.traceStartTs+duration;
 
   arenaV600Refs.actions.innerHTML="";
@@ -19719,24 +19794,24 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     Tecnica più potente = meno tempo per neutralizzarla.
   */
   const duration=special ? 2200 : 3400;
-  arenaStateV600.traceDeadline=performance.now()+duration;
+  arenaStateV600.traceStartTs=performance.now();
+  arenaStateV600.traceDuration=duration;
+  arenaStateV600.traceCompleteTs=0;
+  arenaStateV600.traceDeadline=arenaStateV600.traceStartTs+duration;
 
   arenaV600Refs.gesture.className="active trace-mode";
   arenaV600Refs.sequence.innerHTML="";
 
-  const directionArrow=arenaDirectionSymbolFromPointsV690(
-   arenaStateV600.trace
-  );
-  arenaV600Refs.defensePrompt.className="arenaV690KiArrowWrap";
-  arenaV600Refs.defensePrompt.innerHTML=
-   "<div class='arenaV690KiArrow'>"+directionArrow+"</div>";
+  /* La direzione non viene più suggerita con una freccia: il nodo rosso indica il punto di partenza. */
+  arenaV600Refs.defensePrompt.className="";
+  arenaV600Refs.defensePrompt.innerHTML="";
 
   arenaV600Refs.gestureTitle.textContent=
    special
     ?"TECNICA SPECIALE IN ARRIVO • CONTRO-CONFIGURAZIONE"
     :"KI BLAST IN ARRIVO • CONTRO-CONFIGURAZIONE";
   arenaV600Refs.gestureHint.textContent=
-   "Completa più forma possibile: 25% • 50% • 75% • 100% = stessa quota di danno bloccata.";
+   "Completa tutta la forma. Più veloce = 25% • 50% • 75% • 100% di Ki respinto.";
 
   arenaRenderTraceV600(
    special ? "defenseSpecial" : "defense"
@@ -19759,7 +19834,12 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaClearTraceTimerV630();
 
   const progress=arenaTraceCompletionV630();
-  const block=arenaBlockTierV630(progress);
+  const block=arenaKiDefenseBlockByTimeV740();
+  const completed=progress>=1;
+  const defenseEnd=completed
+   ?(arenaStateV600.traceCompleteTs||performance.now())
+   :performance.now();
+  const elapsed=Math.max(0,defenseEnd-(arenaStateV600.traceStartTs||defenseEnd));
   const damage=Math.round(
    arenaStateV600.traceDefenseDamage*(1-block)
   );
@@ -19790,9 +19870,10 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      ?"KI COMPLETAMENTE RESPINTO"
      :"ATTACCO KI TERMINATO",
    text:
-    "Contro-configurazione completata: <b>"+
-    Math.round(progress*100)+"%</b><br>"+
-    "Danno bloccato: <b>"+Math.round(block*100)+"%</b><br>"+
+    (completed
+     ?"Contro-configurazione completata in <b>"+(elapsed/1000).toFixed(2)+"s</b><br>"
+     :"Contro-configurazione <b>incompleta</b><br>")+
+    "KI RESPINTO: <b>"+Math.round(block*100)+"%</b><br>"+
     "<b>"+damage+" danni subiti</b><br><br>"+
     "HP: "+Math.round(arenaStateV600.playerHP)+"/100",
    onContinue:arenaAdvanceAfterEnemyActionV630,
@@ -19937,6 +20018,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    }
   }
 
+  if(
+   arenaStateV600.traceIndex>=arenaStateV600.trace.length &&
+   !arenaStateV600.traceCompleteTs
+  ){
+   arenaStateV600.traceCompleteTs=performance.now();
+  }
+
   arenaUpdateTraceV600();
  }
 
@@ -19958,11 +20046,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    const pct=Math.round(arenaTraceCompletionV630()*100);
 
    if(arenaStateV600.gestureMode==="trace-defense"){
-    const block=Math.round(
-     arenaBlockTierV630(arenaTraceCompletionV630())*100
-    );
-    arenaV600Refs.traceProgress.textContent=
-     "CONFIGURAZIONE "+pct+"% • BLOCCO ATTUALE "+block+"%";
+    if(pct>=100){
+     const block=Math.round(arenaKiDefenseBlockByTimeV740()*100);
+     arenaV600Refs.traceProgress.textContent=
+      "CONFIGURAZIONE COMPLETA • KI RESPINTO "+block+"%";
+    }else{
+     arenaV600Refs.traceProgress.textContent=
+      "CONFIGURAZIONE "+pct+"% • COMPLETALA PER RESPINGERE IL KI";
+    }
    }else if(arenaStateV600.gestureMode==="trace"){
     arenaV600Refs.traceProgress.textContent=
      "CONFIGURAZIONE "+pct+"%";
@@ -20050,6 +20141,9 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    }
 
    const complete=arenaStateV600.traceIndex>=arenaStateV600.trace.length;
+   if(complete && !arenaStateV600.traceCompleteTs){
+    arenaStateV600.traceCompleteTs=performance.now();
+   }
    const now=Number(e.timeStamp)||performance.now();
    const inTime=now<=arenaStateV600.traceDeadline;
 
@@ -20133,7 +20227,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   const damage=Math.round(potentialDamage*(1-enemyBlock));
 
   arenaStateV600.enemyHP=Math.max(
-   0,
+   arenaStateV600.freeFight ? 0 : 1,
    arenaStateV600.enemyHP-damage
   );
   arenaUpdateHudV600();
@@ -20936,6 +21030,159 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 })();
 </script>
 
+
+<style id="arenaV730RefinementStyle">
+/* =========================================================
+   ARENA V11.1 — PLAYTEST REFINEMENT SAFE PATCH
+   Nessuna modifica alle coordinate di PG/stage/gesture.
+   ========================================================= */
+
+/* KI compatto subito sotto Guardia; Riscrittura è solo 1/1. */
+#arenaV600Resources.arenaV730PlayerResources{
+ position:static !important;
+ left:auto !important;
+ right:auto !important;
+ bottom:auto !important;
+ display:grid !important;
+ grid-template-columns:minmax(0,1fr) auto !important;
+ align-items:end !important;
+ gap:5px !important;
+ margin-top:5px !important;
+ z-index:auto !important;
+}
+#arenaV600Resources.arenaV730PlayerResources .arenaV600Resource{
+ background:transparent !important;
+ border:0 !important;
+ border-radius:0 !important;
+ padding:0 !important;
+ min-width:0 !important;
+}
+#arenaV600Resources .arenaV730KiResource .arenaV600ResourceHead{
+ font-size:7px !important;
+ line-height:1 !important;
+ color:#d8f6ff;
+ letter-spacing:.05em !important;
+}
+#arenaV600Resources .arenaV730KiResource .arenaV600Bar{
+ height:4px !important;
+ margin-top:2px !important;
+}
+#arenaV600Resources .arenaV730RewriteResource{
+ display:flex !important;
+ align-items:center !important;
+ justify-content:center !important;
+ min-width:30px !important;
+ height:18px !important;
+ padding:0 5px !important;
+ border:1px solid rgba(190,145,255,.34) !important;
+ border-radius:7px !important;
+ background:rgba(73,42,118,.26) !important;
+}
+#arenaV600Resources .arenaV730RewriteResource #arenaV600RewriteText{
+ font-size:9px !important;
+ line-height:1 !important;
+ color:#eadcff;
+ letter-spacing:.02em;
+}
+
+/* Primo nodo = punto di partenza. */
+.arenaV600Checkpoint.start:not(.done){
+ fill:#8f1728 !important;
+ stroke:#ff667b !important;
+ stroke-width:4 !important;
+ filter:drop-shadow(0 0 7px rgba(255,74,103,.82));
+ animation:arenaV730StartNodePulse .72s ease-in-out infinite alternate;
+}
+@keyframes arenaV730StartNodePulse{
+ from{opacity:.78}
+ to{opacity:1}
+}
+
+/* Nessuna freccia direzionale per il Ki. */
+#arenaV600DefensePrompt.arenaV690KiArrowWrap{display:none !important}
+
+/* Tutorial: evidenziamo l'elemento REALE. Nessuna coordinata assoluta. */
+.arenaV730TutorialFocus{
+ position:relative !important;
+ z-index:85 !important;
+ outline:2px solid rgba(255,255,255,.96) !important;
+ outline-offset:3px !important;
+ border-radius:8px;
+ box-shadow:0 0 0 3px rgba(169,116,255,.30),0 0 18px rgba(187,139,255,.72) !important;
+ animation:arenaV730FocusPulse .72s ease-in-out infinite alternate;
+}
+@keyframes arenaV730FocusPulse{
+ from{filter:brightness(1)}
+ to{filter:brightness(1.35)}
+}
+
+@media(max-width:420px){
+ #arenaV600Resources.arenaV730PlayerResources{gap:4px !important;margin-top:4px !important}
+ #arenaV600Resources .arenaV730RewriteResource{min-width:27px !important;height:16px !important;padding:0 4px !important}
+ #arenaV600Resources .arenaV730RewriteResource #arenaV600RewriteText{font-size:8px !important}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .arenaV600Checkpoint.start:not(.done),
+ .arenaV730TutorialFocus{animation:none !important}
+}
+</style>
+
+
+<style id="arenaV740EnemyKiAndDefenseStyle">
+/* Enemy KI: compact row inside the existing enemy HUD, no absolute positioning. */
+.arenaV600FighterHud.enemy{
+ position:relative;
+}
+.arenaV740EnemyKiRow{
+ position:absolute;
+ left:0;
+ right:0;
+ top:calc(100% + 3px);
+ width:100%;
+ margin:0;
+ padding:0 2px;
+ pointer-events:none;
+}
+.arenaV740EnemyKiHead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ font-size:7px;
+ line-height:1;
+ color:#d8f6ff;
+ letter-spacing:.05em;
+}
+.arenaV740EnemyKiHead b{font-size:7px;font-weight:800}
+.arenaV740EnemyKiBar{
+ width:100%;
+ height:4px;
+ margin-top:2px;
+ overflow:hidden;
+ border-radius:99px;
+ background:rgba(255,255,255,.12);
+}
+#arenaV740EnemyKiFill{
+ display:block;
+ width:100%;
+ height:100%;
+ transform-origin:left center;
+ background:linear-gradient(90deg,#4fc3ff,#b6f0ff);
+ transition:transform .22s ease;
+}
+/* Four timing outcomes are conceptual tiers; the timer remains the real clock. */
+#arenaV600TraceTimer{
+ background-image:linear-gradient(90deg,
+  transparent 44.4%,rgba(255,255,255,.26) 44.5%,rgba(255,255,255,.26) 45.1%,transparent 45.2%,
+  transparent 64.4%,rgba(255,255,255,.22) 64.5%,rgba(255,255,255,.22) 65.1%,transparent 65.2%,
+  transparent 84.4%,rgba(255,255,255,.18) 84.5%,rgba(255,255,255,.18) 85.1%,transparent 85.2%);
+}
+@media(max-width:420px){
+ .arenaV740EnemyKiHead,.arenaV740EnemyKiHead b{font-size:6.5px}
+ .arenaV740EnemyKiBar{height:3px}
+}
+</style>
 </body>
 
 </html>
