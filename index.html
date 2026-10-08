@@ -6646,7 +6646,8 @@ html.ios-lite-v115.rewrite-focus-v300 #rewriteGameV233 .rwSlotV234{
 }
 #arenaV600Feedback.show{opacity:1}
 
-#nexus41ArenaStartV600{
+#nexus41ArenaStartV600,
+#nexus41KaeliosFightV800{
     width:100%;
     min-height:48px;
     margin-top:12px;
@@ -7237,6 +7238,116 @@ html.ios-lite-v115 #arenaV600PlayerHair{
 @keyframes arenaV720Perfect{0%{opacity:0;scale:.55}30%{opacity:1}100%{opacity:0;scale:1.30}}
 @keyframes arenaV720Beam{0%{opacity:0;scale:0 1}18%{opacity:1}68%{opacity:1;scale:1 1}100%{opacity:0;scale:1 1}}
 
+
+/* =========================================================
+   ARENA V7.6 — POST-ACTION COMBAT FEEDBACK
+   Nessun feedback numerico durante gesture/swipe: la replay parte
+   soltanto quando l'azione è già conclusa.
+   ========================================================= */
+.arenaV760Float{
+ position:absolute; z-index:12; pointer-events:none;
+ transform:translate(-50%,-50%);
+ padding:4px 8px; border-radius:10px;
+ background:rgba(4,3,10,.72);
+ border:1px solid rgba(255,255,255,.14);
+ font-size:clamp(12px,3.4vw,17px); font-weight:1000;
+ letter-spacing:.035em; white-space:nowrap; opacity:0;
+ text-shadow:0 2px 7px rgba(0,0,0,.8);
+ animation:arenaV760Float .72s cubic-bezier(.18,.75,.2,1) forwards;
+}
+.arenaV760Float.hp{color:#ff7183;border-color:rgba(255,86,111,.42)}
+.arenaV760Float.guard{color:#ffd078;border-color:rgba(255,194,83,.40)}
+.arenaV760Float.ki{color:#72ddff;border-color:rgba(89,204,255,.38)}
+.arenaV760Float.heal{color:#8dffc1;border-color:rgba(103,244,166,.40)}
+.arenaV760Float.status{color:#f0e5ff;border-color:rgba(192,143,255,.42)}
+
+#arenaV600Player.arenaV760Strike{animation:arenaV760StrikePlayer .25s ease-out}
+#arenaV600Enemy.arenaV760Strike{animation:arenaV760StrikeEnemy .25s ease-out}
+#arenaV600Player.arenaV760Hit{animation:arenaV760HitPlayer .34s ease-out}
+#arenaV600Enemy.arenaV760Hit{animation:arenaV760HitEnemy .34s ease-out}
+#arenaV600Player.arenaV760GuardHit,
+#arenaV600Enemy.arenaV760GuardHit{animation:arenaV760GuardHit .34s ease-out}
+#arenaV600Player.arenaV760Dodge{animation:arenaV760DodgePlayer .34s ease-out}
+#arenaV600Enemy.arenaV760Dodge{animation:arenaV760DodgeEnemy .34s ease-out}
+#arenaV600Player.arenaV760Recover,
+#arenaV600Enemy.arenaV760Recover{animation:arenaV760RecoverPulse .62s ease-out}
+
+@keyframes arenaV760Float{
+ 0%{opacity:0;translate:0 8px;scale:.88}
+ 16%{opacity:1;translate:0 0;scale:1}
+ 72%{opacity:1;translate:0 -24px;scale:1}
+ 100%{opacity:0;translate:0 -38px;scale:.98}
+}
+@keyframes arenaV760StrikePlayer{0%,100%{translate:0 0}46%{translate:18px -2px}}
+@keyframes arenaV760StrikeEnemy{0%,100%{translate:0 0}46%{translate:-18px -2px}}
+@keyframes arenaV760HitPlayer{
+ 0%,100%{translate:0 0;filter:none}
+ 28%{translate:-9px 2px;filter:sepia(.65) saturate(4) hue-rotate(310deg) brightness(1.12) drop-shadow(0 0 12px rgba(255,55,76,.86))}
+ 62%{translate:5px 0;filter:sepia(.28) saturate(2) hue-rotate(315deg)}
+}
+@keyframes arenaV760HitEnemy{
+ 0%,100%{translate:0 0;filter:none}
+ 28%{translate:9px 2px;filter:sepia(.65) saturate(4) hue-rotate(310deg) brightness(1.12) drop-shadow(0 0 12px rgba(255,55,76,.86))}
+ 62%{translate:-5px 0;filter:sepia(.28) saturate(2) hue-rotate(315deg)}
+}
+@keyframes arenaV760GuardHit{
+ 0%,100%{filter:none;scale:1}
+ 30%{filter:drop-shadow(0 0 15px rgba(255,197,92,.94));scale:.98}
+ 62%{filter:drop-shadow(0 0 7px rgba(255,197,92,.42));scale:1.01}
+}
+@keyframes arenaV760DodgePlayer{0%,100%{translate:0 0;opacity:1}45%{translate:-23px -2px;opacity:.48}}
+@keyframes arenaV760DodgeEnemy{0%,100%{translate:0 0;opacity:1}45%{translate:23px -2px;opacity:.48}}
+@keyframes arenaV760RecoverPulse{
+ 0%,100%{filter:none;scale:1}
+ 38%{filter:drop-shadow(0 0 18px rgba(104,239,190,.88));scale:1.035}
+}
+
+
+/* =========================================================
+   ARENA V7.7 — CHARACTER MOTION LAYER
+   Solo nella replay post-azione. Si anima il contenitore intero:
+   corpo e capelli restano sempre perfettamente agganciati.
+   ========================================================= */
+#arenaV600Player.arenaV770StrikeR{animation:arenaV770PlayerR .30s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Player.arenaV770StrikeL{animation:arenaV770PlayerL .30s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Player.arenaV770StrikeU{animation:arenaV770PlayerU .32s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Player.arenaV770StrikeD{animation:arenaV770PlayerD .32s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Enemy.arenaV770StrikeR{animation:arenaV770EnemyR .30s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Enemy.arenaV770StrikeL{animation:arenaV770EnemyL .30s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Enemy.arenaV770StrikeU{animation:arenaV770EnemyU .32s cubic-bezier(.2,.78,.2,1)}
+#arenaV600Enemy.arenaV770StrikeD{animation:arenaV770EnemyD .32s cubic-bezier(.2,.78,.2,1)}
+
+#arenaV600Player.arenaV770KiCharge,
+#arenaV600Enemy.arenaV770KiCharge{animation:arenaV770KiCharge .46s ease-in-out}
+#arenaV600Player.arenaV770KiRelease{animation:arenaV770PlayerKiRelease .34s cubic-bezier(.18,.82,.2,1)}
+#arenaV600Enemy.arenaV770KiRelease{animation:arenaV770EnemyKiRelease .34s cubic-bezier(.18,.82,.2,1)}
+#arenaV600Player.arenaV770GuardBreak,
+#arenaV600Enemy.arenaV770GuardBreak{animation:arenaV770GuardBreak .64s ease-out}
+
+@keyframes arenaV770PlayerR{0%,100%{translate:0 0;rotate:0deg}42%{translate:22px -1px;rotate:-2deg}68%{translate:12px 0;rotate:1deg}}
+@keyframes arenaV770PlayerL{0%,100%{translate:0 0;rotate:0deg}42%{translate:18px 1px;rotate:3deg}68%{translate:10px -1px;rotate:-1deg}}
+@keyframes arenaV770PlayerU{0%,100%{translate:0 0;rotate:0deg;scale:1}42%{translate:17px -8px;rotate:-3deg;scale:1.018}70%{translate:9px -2px;rotate:1deg;scale:1}}
+@keyframes arenaV770PlayerD{0%,100%{translate:0 0;rotate:0deg;scale:1}42%{translate:20px 5px;rotate:3deg;scale:1.012}70%{translate:10px 1px;rotate:-1deg;scale:1}}
+@keyframes arenaV770EnemyR{0%,100%{translate:0 0;rotate:0deg}42%{translate:-18px 1px;rotate:-3deg}68%{translate:-10px -1px;rotate:1deg}}
+@keyframes arenaV770EnemyL{0%,100%{translate:0 0;rotate:0deg}42%{translate:-22px -1px;rotate:2deg}68%{translate:-12px 0;rotate:-1deg}}
+@keyframes arenaV770EnemyU{0%,100%{translate:0 0;rotate:0deg;scale:1}42%{translate:-17px -8px;rotate:3deg;scale:1.018}70%{translate:-9px -2px;rotate:-1deg;scale:1}}
+@keyframes arenaV770EnemyD{0%,100%{translate:0 0;rotate:0deg;scale:1}42%{translate:-20px 5px;rotate:-3deg;scale:1.012}70%{translate:-10px 1px;rotate:1deg;scale:1}}
+
+@keyframes arenaV770KiCharge{
+ 0%,100%{translate:0 0;scale:1;filter:none}
+ 28%{translate:0 2px;scale:.985;filter:drop-shadow(0 0 8px rgba(176,112,255,.42))}
+ 68%{translate:0 0;scale:1.025;filter:drop-shadow(0 0 20px rgba(189,127,255,.92))}
+}
+@keyframes arenaV770PlayerKiRelease{0%,100%{translate:0 0;scale:1}38%{translate:13px -1px;scale:1.025}68%{translate:6px 0;scale:1.008}}
+@keyframes arenaV770EnemyKiRelease{0%,100%{translate:0 0;scale:1}38%{translate:-13px -1px;scale:1.025}68%{translate:-6px 0;scale:1.008}}
+@keyframes arenaV770GuardBreak{
+ 0%,100%{translate:0 0;rotate:0deg;filter:none}
+ 15%{translate:-5px 1px;rotate:-2deg;filter:drop-shadow(0 0 14px rgba(255,184,83,.94))}
+ 30%{translate:6px -1px;rotate:2deg}
+ 46%{translate:-4px 1px;rotate:-1deg}
+ 64%{translate:3px 0;rotate:1deg;filter:drop-shadow(0 0 6px rgba(255,184,83,.46))}
+}
+
 /* Risultato come pannello basso: l'Arena resta visibile. */
 #arenaV600ResultModal{
  align-items:flex-end!important; justify-content:center!important;
@@ -7254,6 +7365,23 @@ html.ios-lite-v115 #arenaV600PlayerHair{
 @media(orientation:portrait){#arenaV720Background{background-size:contain;background-position:center}}
 @media(orientation:landscape){#arenaV720Background{background-size:contain;background-position:center}}
 html.ios-lite-v115 #arenaV720Background{background-size:contain!important}
+
+/* =========================================================
+   COMBAT SCALING V8.0 — KAELIOS / NEMICI REALI
+   Il personaggio giocatore non viene toccato: cambia solo il
+   rendering del bersaglio quando il fight non è un tutorial.
+   ========================================================= */
+#arenaV600Enemy .arenaV800KaeliosSprite{
+ display:none; position:absolute; left:50%; bottom:-24%;
+ width:98%; height:148%; transform:translateX(-50%);
+ object-fit:contain; pointer-events:none; z-index:2;
+ filter:drop-shadow(0 8px 14px rgba(0,0,0,.55));
+}
+#arenaCombatV600.arenaV800KaeliosBattle #arenaV600Enemy .arenaV600EnemyCore,
+#arenaCombatV600.arenaV800KaeliosBattle #arenaV600Enemy .arenaV600EnemyRing{display:none}
+#arenaCombatV600.arenaV800KaeliosBattle #arenaV600Enemy .arenaV800KaeliosSprite{display:block}
+#arenaCombatV600.arenaV800KaeliosBattle #arenaV600EnemyLabel{top:112%;color:#efe4ff}
+.arenaV600Dir.dodged{border-color:rgba(154,255,205,.72)!important;color:#9dffd0!important;background:rgba(42,123,86,.18)!important}
 </style>
 
 </head>
@@ -13274,10 +13402,11 @@ function completeChapterOneV238(){
     chapter.classList.add("active");
     chapter.setAttribute("aria-hidden","false");
 
-    if(!window.chapterRewardGrantedV241){
+    if(!window.chapterRewardGrantedV241 && !chapter1CompleteV25){
         window.chapterRewardGrantedV241=true;
         gems+=50;
         xp+=100;
+        wiuSyncPlayerLevelV810();
         updateGems();
         chapter1CompleteV25=true;
         temporalMemoryV25=true;
@@ -13348,7 +13477,8 @@ document.getElementById("game").addEventListener("dragstart",e=>{
    <button class="devBtnV25" data-dev="rewrite" onclick="event.stopPropagation();devRewriteDirectV253();return false;">🔄 RISCRITTURA</button>
    <button class="devBtnV25" data-dev="gems" onclick="event.stopPropagation();devGemsV253();return false;">💎 +100</button>
    <button class="devBtnV25" data-dev="xp" onclick="event.stopPropagation();devXpV253();return false;">XP +100</button>
-   <button class="devBtnV25 wide danger" data-dev="reset" onclick="event.stopPropagation();devResetV253();return false;">RESET SALVATAGGIO</button>
+   <button class="devBtnV25 wide" data-dev="reset-flow" onclick="event.stopPropagation();devResetArenaKaeliosFlowV820();return false;">↺ RESET FLOW ARENA / KAELIOS</button>
+   <button class="devBtnV25 wide danger" data-dev="reset" onclick="event.stopPropagation();devResetV253();return false;">RESET SALVATAGGIO COMPLETO</button>
   </div>
   <button id="devCloseV25" class="devBtnV25 devCloseV25" type="button" onclick="var p=document.getElementById('devPanelV25');if(p){p.style.opacity='0';p.style.visibility='hidden';p.style.pointerEvents='none';p.classList.remove('active');}return false;">CHIUDI</button>
  </div>
@@ -13359,6 +13489,34 @@ document.getElementById("game").addEventListener("dragstart",e=>{
 const DEV_MODE_V25=true;
 const SAVE_KEY_V25="whatIfUniverse_save_v25";
 let playerLevelV25=1, chapter1CompleteV25=false, temporalMemoryV25=false, characterCreatedV25=false;
+
+/* V8.1 — PROGRESSION ENGINE CANONICO
+   EXP totale richiesta per raggiungere ogni livello.
+   Il primo level-up avviene dopo Prologo (100 EXP) + prima vittoria Kaelios (60 EXP). */
+const WIU_LEVEL_STARTS_V810=[0,160,380,660,1000,1400,1860,2380,2960,3600];
+function wiuLevelFromXpV810(total){
+ const v=Math.max(0,Number(total)||0);
+ let level=1;
+ for(let i=1;i<WIU_LEVEL_STARTS_V810.length;i++){
+  if(v>=WIU_LEVEL_STARTS_V810[i])level=i+1;
+ }
+ return Math.min(10,level);
+}
+function wiuNextLevelXpV810(level){
+ const l=Math.max(1,Math.min(10,Math.round(Number(level)||1)));
+ return l>=10?null:WIU_LEVEL_STARTS_V810[l];
+}
+function wiuSyncPlayerLevelV810(){
+ const oldLevel=Math.max(1,Number(playerLevelV25)||1);
+ const newLevel=wiuLevelFromXpV810(xp);
+ playerLevelV25=newLevel;
+ return {oldLevel,newLevel,leveledUp:newLevel>oldLevel};
+}
+window.WIUProgressionV810={
+ starts:WIU_LEVEL_STARTS_V810,
+ levelFromXp:wiuLevelFromXpV810,
+ nextLevelXp:wiuNextLevelXpV810
+};
 
 function snapshotSaveV25(){
  const character=(typeof creator30State!=="undefined" && characterCreatedV25)?{
@@ -13390,7 +13548,8 @@ function loadGameV25(){try{
  const s=JSON.parse(raw);
  if(Number.isFinite(Number(s.gems)))gems=Number(s.gems);
  if(Number.isFinite(Number(s.xp)))xp=Number(s.xp);
- if(Number.isFinite(Number(s.level)))playerLevelV25=Math.max(1,Number(s.level));
+ /* Il livello non è più una fonte autonoma: deriva sempre dall'EXP totale. */
+ playerLevelV25=wiuLevelFromXpV810(xp);
  chapter1CompleteV25=!!s.chapter1Complete;
  temporalMemoryV25=!!s.temporalMemory;
  characterCreatedV25=!!s.characterCreated;
@@ -13407,15 +13566,35 @@ function refreshDevStateV25(){
   const c=(typeof creator30State!=="undefined")?creator30State:(window.pendingCharacterV32||{});
   who=String(c.name||"PERSONAGGIO").toUpperCase()+" • "+(c.sex==="female"?"F":"M")+" • H"+(c.hair||1)+" • O"+(c.outfit||1);
  }
+ let arenaDone=false,kaeliosDone=false;
+ try{
+  arenaDone=localStorage.getItem("whatIfUniverse_arena_tutorial_complete_v1")==="1";
+  kaeliosDone=localStorage.getItem("whatIfUniverse_try_combat_kaelios_complete_v3")==="1";
+ }catch(e){}
  e.innerHTML="LV."+playerLevelV25+" • "+(Number(xp)||0)+" XP • 💎 "+(Number(gems)||0)+
  "<br>CAP.1: "+(chapter1CompleteV25?"COMPLETATO":"NON COMPLETATO")+" • MEMORIA: "+(temporalMemoryV25?"SÌ":"NO")+
+ "<br>ARENA: "+(arenaDone?"COMPLETATA":"DA FARE")+" • KAELIOS: "+(kaeliosDone?"SCONFITTO":"DA FARE")+
  "<br>"+who;
 }
 function resetSaveV25(){
- try{
-  localStorage.removeItem(SAVE_KEY_V25);
-  localStorage.removeItem("whatIfUniverse_character_v30");
- }catch(e){}
+ /* V8.2 — reset realmente totale dei progressi di gioco.
+    L'unica preferenza che preserviamo è l'audio. */
+ const gameplayKeys=[
+  SAVE_KEY_V25,
+  "whatIfUniverse_character_v30",
+  "whatIfUniverse_combat_progress_v1",
+  "whatIfUniverse_nexus_map_v45",
+  "whatIfUniverse_relationship_v41",
+  "whatIfUniverse_arena_tutorial_complete_v1",
+  "whatIfUniverse_arena_kaelios_invite_v1",
+  "whatIfUniverse_kaelios_last_defeat_v1",
+  "whatIfUniverse_kaelios_portal_unlock_story_v1",
+  "whatIfUniverse_transcendent_intro_v1",
+  "whatIfUniverse_try_combat_kaelios_complete_v2",
+  "whatIfUniverse_try_combat_kaelios_complete_v3",
+  "whatIfUniverse_restart_prologue_v1"
+ ];
+ try{gameplayKeys.forEach(k=>localStorage.removeItem(k))}catch(e){}
  gems=100;xp=0;playerLevelV25=1;chapter1CompleteV25=false;temporalMemoryV25=false;characterCreatedV25=false;
  window.pendingCharacterV32=null;
  window.chapterRewardGrantedV241=false;
@@ -13424,7 +13603,7 @@ function resetSaveV25(){
  }
  updateGems();refreshDevStateV25();
 }
-function grantChapterOneStateV25(){chapter1CompleteV25=true;temporalMemoryV25=true;gems=Math.max(Number(gems)||0,150);xp=Math.max(Number(xp)||0,100);window.chapterRewardGrantedV241=true;updateGems();saveGameV25()}
+function grantChapterOneStateV25(){chapter1CompleteV25=true;temporalMemoryV25=true;gems=Math.max(Number(gems)||0,150);xp=Math.max(Number(xp)||0,100);wiuSyncPlayerLevelV810();window.chapterRewardGrantedV241=true;updateGems();saveGameV25()}
 function openDevV25(){refreshDevStateV25();const p=document.getElementById("devPanelV25");p.classList.add("active");p.setAttribute("aria-hidden","false")}
 function closeDevV25(){const p=document.getElementById("devPanelV25");p.classList.remove("active");p.setAttribute("aria-hidden","true")}
 function devTeaserV25(mode){grantChapterOneStateV25();closeDevV25();show("riftScene");const r=document.getElementById("riftScene");if(r)r.classList.add("prologue-overlay-v244");const c=document.getElementById("chapterCompleteV238");if(c){c.classList.remove("active");c.style.display="none"}const t=document.getElementById("hubTeaserV241");t.classList.add("active");t.setAttribute("aria-hidden","false");if(mode==="nexus"){const title=t.querySelector(".chapterTitleV238"),hint=t.querySelector(".chapterHintV238"),mem=t.querySelector(".chapterMemoryV238");if(title)title.innerHTML="NEXUS<br>DEV CHECKPOINT";if(hint)hint.textContent="Il Nexus verrà costruito nella prossima fase.";if(mem)mem.textContent="STATO TEST • CAPITOLO 01 COMPLETATO"}}
@@ -13435,7 +13614,7 @@ function initDevV251(){
 if(DEV_MODE_V25){
  document.getElementById("devToggleV25").addEventListener("click",openDevV25);
  document.getElementById("devCloseV25").addEventListener("click",closeDevV25);
- document.getElementById("devPanelV25").addEventListener("click",e=>{const b=e.target.closest("[data-dev]");if(!b)return;const a=b.dataset.dev;if(a==="prologue"){closeDevV25();location.reload()}else if(a==="creator")devTeaserV25("creator");else if(a==="intro"){if(typeof devIntroV256==="function")devIntroV256();}else if(a==="nexus")devTeaserV25("nexus");else if(a==="transcendent"){if(typeof devTranscendentV482==="function")devTranscendentV482();}else if(a==="rewrite")devRewriteV25();else if(a==="gems"){gems+=100;updateGems();saveGameV25()}else if(a==="xp"){xp+=100;saveGameV25()}else if(a==="reset")resetSaveV25()});
+ document.getElementById("devPanelV25").addEventListener("click",e=>{const b=e.target.closest("[data-dev]");if(!b)return;const a=b.dataset.dev;if(a==="prologue"){closeDevV25();location.reload()}else if(a==="creator")devTeaserV25("creator");else if(a==="intro"){if(typeof devIntroV256==="function")devIntroV256();}else if(a==="nexus")devTeaserV25("nexus");else if(a==="transcendent"){if(typeof devTranscendentV482==="function")devTranscendentV482();}else if(a==="rewrite")devRewriteV25();else if(a==="gems"){gems+=100;updateGems();saveGameV25()}else if(a==="xp"){xp+=100;wiuSyncPlayerLevelV810();saveGameV25()}else if(a==="reset")resetSaveV25()});
 }else document.getElementById("devToggleV25").style.display="none";
 
 loadGameV25();refreshDevStateV25();
@@ -13465,6 +13644,7 @@ function devEnsureChapterStateV253(){
     temporalMemoryV25=true;
     gems=Math.max(Number(gems)||0,150);
     xp=Math.max(Number(xp)||0,100);
+    wiuSyncPlayerLevelV810();
     window.chapterRewardGrantedV241=true;
     updateGems();
     saveGameV25();
@@ -13582,10 +13762,47 @@ function devGemsV253(){
 }
 function devXpV253(){
     xp=(Number(xp)||0)+100;
+    wiuSyncPlayerLevelV810();
     saveGameV25();
 }
+function devResetArenaKaeliosFlowV820(){
+    /*
+      Simula di nuovo la PRIMA volta dopo il prologo senza cancellare
+      personaggio, capitolo 1 o scelte relazionali.
+    */
+    const flowKeys=[
+      "whatIfUniverse_arena_tutorial_complete_v1",
+      "whatIfUniverse_arena_kaelios_invite_v1",
+      "whatIfUniverse_kaelios_last_defeat_v1",
+      "whatIfUniverse_kaelios_portal_unlock_story_v1",
+      "whatIfUniverse_transcendent_intro_v1",
+      "whatIfUniverse_try_combat_kaelios_complete_v2",
+      "whatIfUniverse_try_combat_kaelios_complete_v3",
+      "whatIfUniverse_combat_progress_v1",
+      "whatIfUniverse_nexus_map_v45"
+    ];
+    try{flowKeys.forEach(k=>localStorage.removeItem(k))}catch(e){}
+
+    /* Stato canonico immediatamente successivo al prologo. */
+    if(chapter1CompleteV25){
+      xp=100;
+      gems=150;
+    }else{
+      xp=0;
+      gems=100;
+    }
+    playerLevelV25=wiuLevelFromXpV810(xp);
+    updateGems();
+    saveGameV25(true);
+    refreshDevStateV25();
+    devCloseHardV253();
+    location.reload();
+}
+
 function devResetV253(){
     resetSaveV25();
+    devCloseHardV253();
+    location.reload();
 }
 
 </script>
@@ -15592,6 +15809,15 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   panelClose.parentNode.insertBefore(arenaStartBtnV600,panelClose);
  }
 
+ let kaeliosFightBtnV800=document.getElementById("nexus41KaeliosFightV800");
+ if(!kaeliosFightBtnV800){
+  kaeliosFightBtnV800=document.createElement("button");
+  kaeliosFightBtnV800.id="nexus41KaeliosFightV800";
+  kaeliosFightBtnV800.type="button";
+  kaeliosFightBtnV800.style.display="none";
+  panelClose.parentNode.insertBefore(kaeliosFightBtnV800,panelClose);
+ }
+
  const arrivalFx=document.getElementById("nexus41ArrivalFx");
  const areaFade=document.getElementById("nexus41AreaFade");
  const areaFadeText=areaFade.querySelector("span");
@@ -15603,7 +15829,11 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  const MAP_KEY="whatIfUniverse_nexus_map_v45";
  const REL_KEY="whatIfUniverse_relationship_v41";
  const ARENA_TUTORIAL_KEY_V46="whatIfUniverse_arena_tutorial_complete_v1";
- const TRY_COMBAT_KAELIOS_KEY_V48="whatIfUniverse_try_combat_kaelios_complete_v2";
+ const TRY_COMBAT_KAELIOS_KEY_V48="whatIfUniverse_try_combat_kaelios_complete_v3";
+ const ARENA_KAELIOS_INVITE_KEY_V810="whatIfUniverse_arena_kaelios_invite_v1";
+ const KAELIOS_LAST_DEFEAT_KEY_V830="whatIfUniverse_kaelios_last_defeat_v1";
+ const KAELIOS_PORTAL_UNLOCK_STORY_KEY_V840="whatIfUniverse_kaelios_portal_unlock_story_v1";
+ const TRANSCENDENT_INTRO_KEY_V840="whatIfUniverse_transcendent_intro_v1";
 
  let currentArea="lower";
  let currentAreaMap=null;
@@ -15808,27 +16038,27 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     },
     {
      id:"portalVeurs",x:140,y:740,r:100,
-     name:"MONDO VEURS",sub:"PORTALE DEL MONDO",
+     name:"MONDO VEURS",sub:"LIVELLO CONSIGLIATO • 3",
      title:"MONDO VEURS",
-     text:"Questo portale ti condurrà al mondo giocabile di Veurs."
+     text:"Prima realtà dell'Universo Trascendente. Livello consigliato: 3."
     },
     {
      id:"portalZirem",x:395,y:245,r:105,
-     name:"MONDO ZIREM",sub:"PORTALE DEL MONDO",
+     name:"MONDO ZIREM",sub:"LIVELLO CONSIGLIATO • 3",
      title:"MONDO ZIREM",
-     text:"Questo portale ti condurrà al mondo giocabile di Zirem."
+     text:"Seconda realtà dell'Universo Trascendente. Livello consigliato: 3."
     },
     {
      id:"portalSharak",x:888,y:245,r:110,
-     name:"MONDO SHARAK",sub:"PORTALE DEL MONDO",
+     name:"MONDO SHARAK",sub:"LIVELLO CONSIGLIATO • 4",
      title:"MONDO SHARAK",
-     text:"Questo portale ti condurrà al mondo giocabile di Sharak."
+     text:"Realtà avanzata dell'Universo Trascendente. Livello consigliato: 4."
     },
     {
      id:"portalKilin",x:1100,y:735,r:102,
-     name:"MONDO KILIN",sub:"PORTALE DEL MONDO",
+     name:"MONDO KILIN",sub:"LIVELLO CONSIGLIATO • 4",
      title:"MONDO KILIN",
-     text:"Questo portale ti condurrà al mondo giocabile di Kilin."
+     text:"Realtà avanzata dell'Universo Trascendente. Livello consigliato: 4."
     },
     {
      id:"toUpperFromTranscendent",type:"exit",target:"upper",spawn:"fromTranscendent",
@@ -16748,7 +16978,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      setTimeout(()=>areaName.classList.remove("active"),2200);
     }
 
-    if(currentArea==="core" && !coreDialogueDone){
+    if(currentArea==="transcendent"){
+     if(!transcendentIntroSeenV840()){
+      controlsLocked=true;
+      setTimeout(showTranscendentIntroV840,360);
+     }else{
+      controlsLocked=false;
+     }
+    }else if(currentArea==="core" && !coreDialogueDone){
      setTimeout(()=>coreDialogue(),260);
     }else{
      controlsLocked=false;
@@ -17202,6 +17439,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(!p||controlsLocked)return;
 
   if(arenaStartBtnV600)arenaStartBtnV600.style.display="none";
+  if(kaeliosFightBtnV800)kaeliosFightBtnV800.style.display="none";
 
   /*
     Durante la INTRO i cambi macrozona sono controllati da Kaelios:
@@ -17225,11 +17463,27 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   }
 
   if(p.id==="tryCombatKaelios"){
+   const rematch=isTryCombatKaeliosCompleteV48();
+   const pr=wiuLoadCombatProgressV800();
+   const enemyLevel=rematch?5:2;
+   const lastDefeat=arenaGetLastKaeliosDefeatV830();
+   const retrying=lastDefeat===enemyLevel;
    panelTitle.textContent="TRY COMBAT KAELIOS";
    panelText.innerHTML=
-    "Area sbloccata dopo il tutorial dell'Arena.<br><br>"+
-    "<b>COMBAT CONTRO KAELIOS</b><br>"+
-    "Una volta completato questo combattimento si sbloccherà il <b>PORTALE 01</b>.";
+    "<b>TU LV."+pr.level+" vs KAELIOS LV."+enemyLevel+"</b><br><br>"+
+    (retrying
+     ?(rematch
+       ?"Kaelios ti osserva in silenzio.<br><br><b>«Vuoi davvero riprovarci?»</b>"
+       :"Kaelios è ancora qui.<br><br><b>«La prova non è finita.»</b><br><br>Devi sconfiggerlo per aprire il Portale 01.")
+     :(rematch
+       ?"Kaelios è tornato molto più forte. Questo rematch usa lo stesso sistema di scaling dei futuri mondi."
+       :"Primo combattimento reale. Kaelios è superiore di un livello: può difendersi davvero e gestisce Ki e Guardia.<br><br>La prima vittoria ti porta esattamente al <b>primo LEVEL UP</b> e sblocca il <b>PORTALE 01</b>."));
+   if(kaeliosFightBtnV800){
+    kaeliosFightBtnV800.textContent=retrying
+     ?(rematch?"AFFRONTA DI NUOVO • KAELIOS LV."+enemyLevel:"RIPROVA • KAELIOS LV.2")
+     :(rematch?"REMATCH • KAELIOS LV.5":"AFFRONTA KAELIOS • LV.2");
+    kaeliosFightBtnV800.style.display="block";
+   }
   }else if(p.id==="arena"){
    panelTitle.textContent="ARENA";
 
@@ -17267,8 +17521,11 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     "Questo universo sarà disponibile dopo che avrai completato il combattimento con Kaelios nell'area <b>\"TRY COMBAT KAELIOS\"</b>.";
   }else if(["portalVeurs","portalZirem","portalSharak","portalKilin"].includes(p.id)){
    panelTitle.textContent=p.title;
+   const recommended=(p.id==="portalVeurs" || p.id==="portalZirem")?3:4;
    panelText.innerHTML=
-    'Questo portale condurrà al <b>'+p.title+'</b>.<br><br>Qui si aprirà un mondo giocabile in cui la trama avanzerà.';
+    '<b>LIVELLO CONSIGLIATO: '+recommended+'</b><br><br>'+
+    'Questo portale condurrà al <b>'+p.title+'</b>.<br><br>'+
+    'Il livello è un consiglio, non un requisito: potrai entrare anche prima, ma il mondo <b>non scalerà verso il basso</b> per adattarsi a te.';
   }else if(p.id==="portal2" || p.id==="portal3" || p.id==="portal4"){
 
    panelTitle.textContent=p.title;
@@ -17456,11 +17713,63 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   points:ARENA_TRACE_V600.enemySpecial.points.map(p=>[1-p[0],p[1]])
  };
 
+ /* =========================================================
+    UNIVERSAL COMBAT SCALING ENGINE V8.0
+    Stesse regole per Kaelios e per i futuri mondi.
+    Guardia sempre 100; il livello aumenta statistiche e qualità AI.
+    ========================================================= */
+ const WIU_PERFECT_BY_DELTA_V800={"-3":.05,"-2":.08,"-1":.12,"0":.18,"1":.25,"2":.33,"3":.42,"4":.50,"5":.58,"6":.64,"7":.70};
+ function wiuClampV800(v,a,b){return Math.max(a,Math.min(b,v))}
+ function wiuCombatStatsV800(level){
+  const l=Math.max(1,Math.round(Number(level)||1));
+  return{
+   level:l,
+   maxHP:Math.round(100*(1+.06*(l-1))),
+   maxKi:Math.round(100*(1+.04*(l-1))),
+   physicalMult:1+.05*(l-1),
+   kiMult:1+.02*(l-1),
+   maxGuard:100
+  };
+ }
+ function wiuPerfectChanceV800(delta){
+  const d=Math.round(Number(delta)||0);
+  if(d<=-3)return .05;
+  if(d>=7)return .70;
+  return WIU_PERFECT_BY_DELTA_V800[String(d)]??.18;
+ }
+ function wiuEnemyProfileV800(enemyLevel,playerLevel,kind="standard"){
+  const e=Math.max(1,Math.round(Number(enemyLevel)||1));
+  const p=Math.max(1,Math.round(Number(playerLevel)||1));
+  const delta=e-p;
+  const kaelios=kind==="kaelios";
+  return{
+   kind,level:e,playerLevel:p,delta,
+   stats:wiuCombatStatsV800(e),
+   perfectChance:wiuPerfectChanceV800(delta),
+   parryChance:wiuClampV800(.18+.035*(e-1)+.025*Math.max(0,delta)+(kaelios?.02:0),.12,.62),
+   kiSkill:wiuClampV800(.28+.07*e+.04*Math.max(0,delta)+(kaelios?.03:0),.25,.94),
+   tactics:wiuClampV800(.24+.065*(e-1)+.035*Math.max(0,delta)+(kaelios?.05:0),.22,.92),
+   timingScale:wiuClampV800(1-.018*(e-1)-.012*Math.max(0,delta),.72,1),
+   previewScale:wiuClampV800(1-.012*(e-1)-.010*Math.max(0,delta),.76,1),
+   maxCombo:e>=5?"hard":e>=2?"medium":"easy",
+   hiddenInputChance:e>=5?wiuClampV800(.05+.025*(e-5),.05,.22):0
+  };
+ }
+ window.WIUCombatScalingV800={stats:wiuCombatStatsV800,profile:wiuEnemyProfileV800};
+
  let arenaV600=null;
  let arenaV600Refs=null;
  let arenaStateV600={
   active:false,
   phase:0,
+  battleMode:"tutorial",
+  playerLevel:1,
+  enemyLevel:0,
+  playerMaxHP:100,
+  playerMaxKi:100,
+  enemyMaxKi:100,
+  enemyProfile:null,
+  playerStats:null,
   playerHP:100,
   enemyHP:120,
   enemyMaxHP:120,
@@ -17473,6 +17782,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   comboResults:[],
   comboDamageDone:0,
   comboParries:0,
+  comboDodges:0,
   enemyGuardBlocksRemaining:0,
   playerTurnCount:0,
   traceTimer:null,
@@ -17517,6 +17827,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   defensePerfects:0,
   defensePartials:0,
   defenseMisses:0,
+  defensePerfectGuardRewarded:false,
+  defenseGuardDeltas:[],
   defenseLevel:"",
   pointerId:null,
   startX:0,
@@ -17565,7 +17877,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     </div>
     <button id="arenaV600Exit" type="button">ESCI</button>
     <div class="arenaV600FighterHud enemy">
-     <div class="arenaV600Name">OLOGRAMMA NEXUS</div>
+     <div class="arenaV600Name" id="arenaV600EnemyName">OLOGRAMMA NEXUS</div>
      <div class="arenaV600HpText" id="arenaV600EnemyHpText">HP 120/120</div>
      <div class="arenaV600Bar"><span id="arenaV600EnemyHpFill"></span></div>
      <div class="arenaV650GuardRow">
@@ -17603,7 +17915,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      <div id="arenaV600Enemy">
       <div class="arenaV600EnemyRing"></div>
       <div class="arenaV600EnemyCore"></div>
-      <div class="arenaV600EnemyLabel">BERSAGLIO DI ADDESTRAMENTO</div>
+      <img class="arenaV800KaeliosSprite" src="./Kaelios.png" alt="Kaelios">
+      <div class="arenaV600EnemyLabel" id="arenaV600EnemyLabel">BERSAGLIO DI ADDESTRAMENTO</div>
      </div>
     </div>
 
@@ -17702,6 +18015,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    playerHpFill:el.querySelector("#arenaV600PlayerHpFill"),
    playerGuardText:el.querySelector("#arenaV650PlayerGuardText"),
    playerGuardFill:el.querySelector("#arenaV650PlayerGuardFill"),
+   enemyName:el.querySelector("#arenaV600EnemyName"),
    enemyHpText:el.querySelector("#arenaV600EnemyHpText"),
    enemyHpFill:el.querySelector("#arenaV600EnemyHpFill"),
    enemyGuardText:el.querySelector("#arenaV650EnemyGuardText"),
@@ -17958,6 +18272,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  function arenaResetStateV600(){
   arenaStateV600.active=true;
   arenaStateV600.phase=0;
+  arenaStateV600.battleMode="tutorial";
+  arenaStateV600.playerLevel=1;
+  arenaStateV600.enemyLevel=0;
+  arenaStateV600.playerMaxHP=100;
+  arenaStateV600.playerMaxKi=100;
+  arenaStateV600.enemyMaxKi=100;
+  arenaStateV600.enemyProfile=null;
+  arenaStateV600.playerStats=wiuCombatStatsV800(1);
   arenaStateV600.playerHP=100;
   arenaStateV600.enemyHP=120;
   arenaStateV600.enemyMaxHP=120;
@@ -17970,6 +18292,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.comboResults=[];
   arenaStateV600.comboDamageDone=0;
   arenaStateV600.comboParries=0;
+  arenaStateV600.comboDodges=0;
   arenaStateV600.enemyGuardBlocksRemaining=0;
   arenaStateV600.playerTurnCount=0;
   clearTimeout(arenaStateV600.traceTimer);
@@ -18016,6 +18339,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.defensePerfects=0;
   arenaStateV600.defensePartials=0;
   arenaStateV600.defenseMisses=0;
+  arenaStateV600.defensePerfectGuardRewarded=false;
+  arenaStateV600.defenseGuardDeltas=[];
   arenaStateV600.defenseLevel="";
   arenaStateV600.pointerId=null;
   arenaStateV600.trace=null;
@@ -18037,13 +18362,16 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  function arenaUpdateHudV600(){
   if(!arenaV600Refs)return;
 
-  const p=Math.max(0,Math.min(100,arenaStateV600.playerHP));
+  const playerMax=Math.max(1,Number(arenaStateV600.playerMaxHP)||100);
+  const playerKiMax=Math.max(1,Number(arenaStateV600.playerMaxKi)||100);
+  const enemyKiMax=Math.max(1,Number(arenaStateV600.enemyMaxKi)||100);
+  const p=Math.max(0,Math.min(playerMax,arenaStateV600.playerHP));
   const enemyMax=Math.max(1,Number(arenaStateV600.enemyMaxHP)||120);
   const e=Math.max(0,Math.min(enemyMax,arenaStateV600.enemyHP));
-  const ki=Math.max(0,Math.min(100,arenaStateV600.ki));
+  const ki=Math.max(0,Math.min(playerKiMax,arenaStateV600.ki));
 
-  arenaV600Refs.playerHpText.textContent="HP "+Math.round(p)+"/100";
-  arenaV600Refs.playerHpFill.style.transform="scaleX("+(p/100)+")";
+  arenaV600Refs.playerHpText.textContent="HP "+Math.round(p)+"/"+Math.round(playerMax);
+  arenaV600Refs.playerHpFill.style.transform="scaleX("+(p/playerMax)+")";
 
   arenaV600Refs.enemyHpText.textContent="HP "+Math.round(e)+"/"+Math.round(enemyMax);
   arenaV600Refs.enemyHpFill.style.transform="scaleX("+(e/enemyMax)+")";
@@ -18059,12 +18387,12 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaV600Refs.enemyGuardFill.style.transform="scaleX("+(eg/100)+")";
   arenaV600Refs.enemyGuardText.classList.toggle("arenaV650GuardBroken",eg<=0);
 
-  const enemyKi=Math.max(0,Math.min(100,arenaStateV600.enemyKi));
-  if(arenaV600Refs.enemyKiText)arenaV600Refs.enemyKiText.textContent=Math.round(enemyKi)+"/100";
-  if(arenaV600Refs.enemyKiFill)arenaV600Refs.enemyKiFill.style.transform="scaleX("+(enemyKi/100)+")";
+  const enemyKi=Math.max(0,Math.min(enemyKiMax,arenaStateV600.enemyKi));
+  if(arenaV600Refs.enemyKiText)arenaV600Refs.enemyKiText.textContent=Math.round(enemyKi)+"/"+Math.round(enemyKiMax);
+  if(arenaV600Refs.enemyKiFill)arenaV600Refs.enemyKiFill.style.transform="scaleX("+(enemyKi/enemyKiMax)+")";
 
-  arenaV600Refs.kiText.textContent=Math.round(ki)+"/100";
-  arenaV600Refs.kiFill.style.transform="scaleX("+(ki/100)+")";
+  arenaV600Refs.kiText.textContent=Math.round(ki)+"/"+Math.round(playerKiMax);
+  arenaV600Refs.kiFill.style.transform="scaleX("+(ki/playerKiMax)+")";
 
   arenaV600Refs.rewriteText.textContent=arenaStateV600.rewriteAvailable+"/1";
   arenaV600Refs.rewriteFill.style.transform=
@@ -18119,6 +18447,78 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   setTimeout(()=>beam.remove(),850);
  }
 
+
+ function arenaV760Float(side,text,kind="status",dx=0,dy=0){
+  const p=arenaV720Center(side);
+  if(!p||!arenaV600Refs.resolutionFx||!text)return;
+  const el=document.createElement("div");
+  el.className="arenaV760Float "+kind;
+  el.textContent=text;
+  el.style.left=(p.x+dx)+"px";
+  el.style.top=(p.y+dy)+"px";
+  arenaV600Refs.resolutionFx.appendChild(el);
+  setTimeout(()=>el.remove(),820);
+ }
+
+ function arenaV760Restart(side,cls,ms=380){
+  const el=side==="player"?arenaV600Refs.player:arenaV600Refs.enemy;
+  arenaV720RestartClass(el,cls,ms);
+ }
+
+ function arenaV770Strike(side,dir){
+  const d=["L","R","U","D"].includes(dir)?dir:"R";
+  arenaV760Restart(side,"arenaV770Strike"+d,350);
+ }
+
+ function arenaV770KiMotion(side){
+  arenaV760Restart(side,"arenaV770KiCharge",500);
+  setTimeout(()=>arenaV760Restart(side,"arenaV770KiRelease",380),270);
+ }
+
+ function arenaV760ComboStep(step){
+  if(!step||step.result==="miss")return;
+  arenaV770Strike("player",step.dir);
+
+  if(step.result==="dodge"){
+   arenaV760Restart("enemy","arenaV760Dodge",380);
+   arenaV720Impact("enemy","perfect");
+   arenaV760Float("enemy","PERFECT DODGE","status",0,-36);
+  }else if(step.result==="parry"){
+   arenaV720Impact("enemy","parry");
+   arenaV760Restart("enemy","arenaV760GuardHit",380);
+  }else{
+   arenaV720Impact("enemy","physical");
+   arenaV760Restart("enemy","arenaV760Hit",380);
+   if(step.hp>0)arenaV760Float("enemy","-"+step.hp+" HP","hp",0,-28);
+  }
+
+  if(step.guard>0)arenaV760Float("enemy","-"+step.guard+" GUARDIA","guard",0,6);
+  if(step.ki>0)arenaV760Float("player","+"+step.ki+" KI","ki",0,-26);
+ }
+
+ function arenaV760DefenseStep(step){
+  if(!step)return;
+  arenaV770Strike("enemy",step.dir);
+
+  if(step.result==="perfect"){
+   arenaV760Restart("player","arenaV760Dodge",380);
+   arenaV720Impact("player","perfect");
+   arenaV760Float("player","PERFECT DODGE","status",0,-34);
+   if(step.guard>0)arenaV760Float("player","+"+step.guard+" GUARDIA","heal",-18,2);
+   if(step.ki>0)arenaV760Float("player","+"+step.ki+" KI","ki",22,20);
+  }else if(step.result==="partial"){
+   arenaV720Impact("player","parry");
+   arenaV760Restart("player","arenaV760GuardHit",380);
+   if(step.hp>0)arenaV760Float("player","-"+step.hp+" HP","hp",0,-30);
+   if(step.guard<0)arenaV760Float("player",step.guard+" GUARDIA","guard",0,7);
+  }else{
+   arenaV720Impact("player","physical");
+   arenaV760Restart("player","arenaV760Hit",380);
+   if(step.hp>0)arenaV760Float("player","-"+step.hp+" HP","hp",0,-30);
+   if(step.guard<0)arenaV760Float("player",step.guard+" GUARDIA","guard",0,7);
+  }
+ }
+
  function arenaV720PlayVisual(visual,done){
   if(!visual||!arenaV600Refs.resolution){if(done)done();return}
 
@@ -18128,57 +18528,90 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaV600Refs.resolutionCaption.textContent=visual.caption||"AZIONE RISOLTA";
   layer.classList.add("active");
 
+  let duration=980;
+
   if(visual.type==="combo"){
-   arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveAttack",700);
-   const count=Math.min(3,Math.max(1,(visual.hits||0)+(visual.parries||0)));
-   for(let i=0;i<count;i++){
+   const steps=(visual.steps||[]).filter(x=>x&&x.result!=="miss");
+   const gap=270;
+   steps.forEach((step,i)=>setTimeout(()=>arenaV760ComboStep(step),130+i*gap));
+   if(visual.guardBroken){
     setTimeout(()=>{
-     arenaV720Impact("enemy",(i===count-1 && visual.parries>0)?"parry":"physical");
-     arenaV720RestartClass(arenaV600Refs.enemy,"arenaV720ResolveHit",430);
-    },170+i*170);
+     arenaV760Restart("enemy","arenaV770GuardBreak",700);
+     arenaV760Float("enemy","GUARDIA SPEZZATA","status",0,-46);
+    },150+steps.length*gap);
    }
+   duration=Math.max(980,520+steps.length*gap+(visual.guardBroken?180:0));
+
   }else if(visual.type==="ki"){
-   arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveAttack",720);
+   if(visual.cost>0)setTimeout(()=>arenaV760Float("player","-"+visual.cost+" KI","ki",0,-28),90);
+   setTimeout(()=>arenaV770KiMotion("player"),120);
    setTimeout(()=>{
     arenaV720Beam("player","enemy");
-    arenaV720Impact("enemy","ki");
-    arenaV720RestartClass(arenaV600Refs.enemy,"arenaV720ResolveHit",500);
-   },220);
+   },430);
+   setTimeout(()=>{
+    if(visual.block>0)arenaV760Float("enemy",Math.round(visual.block*100)+"% RESPINTO","status",0,-48);
+    if(visual.damage>0){
+     arenaV720Impact("enemy","ki");
+     arenaV760Restart("enemy","arenaV760Hit",430);
+     arenaV760Float("enemy","-"+visual.damage+" HP","hp",0,-14);
+    }else{
+     arenaV720Impact("enemy","perfect");
+    }
+   },610);
+   duration=1300;
+
   }else if(visual.type==="kiFail"){
-   arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveAttack",520);
-   setTimeout(()=>arenaV720Impact("player","parry"),230);
+   if(visual.cost>0)setTimeout(()=>arenaV760Float("player","-"+visual.cost+" KI","ki",0,-26),120);
+   setTimeout(()=>arenaV720Impact("player","parry"),300);
+   duration=900;
+
   }else if(visual.type==="defense"){
-   arenaV720RestartClass(arenaV600Refs.enemy,"arenaV720ResolveAttack",650);
-   if(visual.perfects>0)setTimeout(()=>{
-    arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveDodge",560);
-    arenaV720Impact("player","perfect");
-   },190);
-   if(visual.partials>0)setTimeout(()=>arenaV720Impact("player","parry"),390);
-   if(visual.misses>0)setTimeout(()=>{
-    arenaV720Impact("player","physical");
-    arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveHit",480);
-   },560);
+   const steps=visual.steps||[];
+   const gap=270;
+   steps.forEach((step,i)=>setTimeout(()=>arenaV760DefenseStep(step),130+i*gap));
+   if(visual.guardBroken){
+    setTimeout(()=>{
+     arenaV760Restart("player","arenaV770GuardBreak",700);
+     arenaV760Float("player","GUARDIA SPEZZATA","status",0,-48);
+    },150+steps.length*gap);
+   }
+   duration=Math.max(980,520+steps.length*gap+(visual.guardBroken?180:0));
+
   }else if(visual.type==="kiDefense"){
-   arenaV720RestartClass(arenaV600Refs.enemy,"arenaV720ResolveAttack",720);
+   if(visual.cost>0)setTimeout(()=>arenaV760Float("enemy","-"+visual.cost+" KI","ki",0,-28),90);
+   setTimeout(()=>arenaV770KiMotion("enemy"),120);
    setTimeout(()=>{
     arenaV720Beam("enemy","player");
+   },430);
+   setTimeout(()=>{
+    arenaV760Float("player","RESPINTO "+Math.round((visual.block||0)*100)+"%","status",0,-48);
     if(visual.damage>0){
+     if((visual.block||0)>0)arenaV720Impact("player","parry");
      arenaV720Impact("player","ki");
-     arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveHit",500);
+     arenaV760Restart("player","arenaV760Hit",430);
+     arenaV760Float("player","-"+visual.damage+" HP","hp",0,-12);
     }else{
      arenaV720Impact("player","perfect");
-     arenaV720RestartClass(arenaV600Refs.player,"arenaV720ResolveDodge",540);
+     arenaV760Restart("player","arenaV760Dodge",420);
+     if(visual.kiGain>0)arenaV760Float("player","+"+visual.kiGain+" KI","ki",0,14);
     }
-   },220);
+   },610);
+   duration=1300;
+
   }else if(visual.type==="recover"){
-   arenaV720Impact(visual.side||"player","recover");
+   const side=visual.side||"player";
+   arenaV760Restart(side,"arenaV760Recover",650);
+   arenaV720Impact(side,"recover");
+   if(visual.cost>0)setTimeout(()=>arenaV760Float(side,"-"+visual.cost+" KI","ki",0,-26),90);
+   if(visual.guard>0)setTimeout(()=>arenaV760Float(side,"+"+visual.guard+" GUARDIA","heal",0,10),260);
+   duration=980;
   }
 
   setTimeout(()=>{
    layer.classList.remove("active");
    fx.innerHTML="";
    if(done)done();
-  },980);
+  },duration);
  }
 
  function arenaShowResultV640({
@@ -18239,15 +18672,12 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  function arenaDefenseStepDurationV640(){
   const cfg=arenaStateV600.defenseConfig||ARENA_DEFENSE_V620.easy;
   const i=arenaStateV600.defenseIndex;
-
-  /* Progressivo, ma meno punitivo del test precedente. */
-  if(cfg.label==="COMBO FACILE"){
-   return Math.max(950,1150-(i*100));
-  }
-  if(cfg.label==="COMBO MEDIA"){
-   return Math.max(700,900-(i*60));
-  }
-  return Math.max(520,700-(i*36));
+  let value;
+  if(cfg.label==="COMBO FACILE")value=Math.max(950,1150-(i*100));
+  else if(cfg.label==="COMBO MEDIA")value=Math.max(700,900-(i*60));
+  else value=Math.max(520,700-(i*36));
+  if(arenaIsKaeliosFightV800())value*=arenaStateV600.enemyProfile?.timingScale||1;
+  return Math.round(value);
  }
 
  function arenaComboStepDurationProgressiveV640(c){
@@ -18419,13 +18849,45 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
 
 
+ function arenaIsKaeliosFightV800(){return arenaStateV600.battleMode==="kaelios"}
+ function arenaPlayerKiCapV800(){return Math.max(1,Number(arenaStateV600.playerMaxKi)||100)}
+ function arenaEnemyKiCapV800(){return Math.max(1,Number(arenaStateV600.enemyMaxKi)||100)}
+ function arenaEnemyDisplayNameV800(){return arenaIsKaeliosFightV800()?"KAELIOS":"OLOGRAMMA"}
+ function arenaPlayerPhysicalDamageV800(base){
+  const mult=arenaStateV600.playerStats?.physicalMult||1;
+  return Math.max(1,Math.round(base*mult));
+ }
+ function arenaPlayerKiDamageV800(base){
+  const mult=arenaStateV600.playerStats?.kiMult||1;
+  return Math.max(1,Math.round(base*mult));
+ }
+ function arenaEnemyPhysicalDefenseV800(){
+  const p=arenaStateV600.enemyProfile;
+  if(!p)return "hit";
+  const r=Math.random();
+  if(r<p.perfectChance)return "dodge";
+  if(arenaStateV600.enemyGuard>0 && r<p.perfectChance+p.parryChance)return "parry";
+  return "hit";
+ }
+ function arenaEnemyKiBlockV800(kind){
+  const p=arenaStateV600.enemyProfile;
+  if(!p)return kind==="special"?.25:.50;
+  let score=p.kiSkill+(Math.random()-.5)*.50-(kind==="special"?.12:0);
+  score=wiuClampV800(score,0,1);
+  if(score>=.85)return 1;
+  if(score>=.65)return .75;
+  if(score>=.45)return .50;
+  if(score>=.25)return .25;
+  return 0;
+ }
+
  function arenaBeginPlayerTurnV630(callback){
   arenaStateV600.playerTurnCount++;
 
   let gained=0;
   if(arenaStateV600.playerTurnCount>1){
    const before=arenaStateV600.ki;
-   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+8);
+   arenaStateV600.ki=Math.min(arenaPlayerKiCapV800(),arenaStateV600.ki+8);
    gained=arenaStateV600.ki-before;
    arenaUpdateHudV600();
   }
@@ -18456,7 +18918,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   enemy._guardTimer=setTimeout(()=>{
    enemy.classList.remove("guard-flash");
    label.classList.remove("guard-label");
-   label.textContent="BERSAGLIO DI ADDESTRAMENTO";
+   label.textContent=arenaIsKaeliosFightV800()?"KAELIOS":"BERSAGLIO DI ADDESTRAMENTO";
   },360);
  }
 
@@ -18590,9 +19052,9 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  }
 
  function arenaDefensePreviewDurationV690(level){
-  if(level==="easy")return 1250;
-  if(level==="medium")return 1450;
-  return 1800;
+  let base=level==="easy"?1250:level==="medium"?1450:1800;
+  if(arenaIsKaeliosFightV800())base*=arenaStateV600.enemyProfile?.previewScale||1;
+  return Math.round(base);
  }
 
  function arenaRenderDefensePreviewV690(){
@@ -18629,7 +19091,9 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     !arenaStateV600.enemyGuardBrokenAnnounced
    ){
     arenaStateV600.enemyGuardBrokenAnnounced=true;
-    arenaFeedbackV600("GUARDIA NEMICA SPEZZATA");
+    if(!["combo","defense-combo","trace","trace-defense"].includes(arenaStateV600.gestureMode)){
+     arenaFeedbackV600("GUARDIA NEMICA SPEZZATA");
+    }
    }
    if(arenaStateV600.enemyGuard>0){
     arenaStateV600.enemyGuardBrokenAnnounced=false;
@@ -18642,7 +19106,9 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    !arenaStateV600.playerGuardBrokenAnnounced
   ){
    arenaStateV600.playerGuardBrokenAnnounced=true;
-   arenaFeedbackV600("GUARDIA SPEZZATA");
+   if(!["combo","defense-combo","trace","trace-defense"].includes(arenaStateV600.gestureMode)){
+    arenaFeedbackV600("GUARDIA SPEZZATA");
+   }
   }
   if(arenaStateV600.playerGuard>0){
    arenaStateV600.playerGuardBrokenAnnounced=false;
@@ -18674,7 +19140,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     "Ki: "+Math.round(arenaStateV600.ki)+"/100<br><br>"+
     "Hai usato il tuo turno: ora agirà l'avversario.",
    onContinue:arenaAdvanceAfterPlayerActionV630,
-   visual:{type:"recover",side:"player",caption:"GUARDIA +"+recovered}
+   visual:{type:"recover",side:"player",guard:recovered,cost:30,caption:"GUARDIA +"+recovered}
   });
  }
 
@@ -18694,13 +19160,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   arenaShowResultV640({
    eyebrow:"FINE AZIONE • TURNO AVVERSARIO",
-   title:"L'OLOGRAMMA RECUPERA GUARDIA",
+   title:arenaEnemyDisplayNameV800()+" RECUPERA GUARDIA",
    text:
     "<b>+"+recovered+" Guardia</b><br>"+
     "Costo avversario: <b>30 KI</b><br><br>"+
-    "Guardia Ologramma: "+Math.round(arenaStateV600.enemyGuard)+"/100",
+    "Guardia "+arenaEnemyDisplayNameV800()+": "+Math.round(arenaStateV600.enemyGuard)+"/100",
    onContinue:arenaAdvanceAfterEnemyActionV630,
-   visual:{type:"recover",side:"enemy",caption:"OLOGRAMMA • GUARDIA +"+recovered}
+   visual:{type:"recover",side:"enemy",guard:recovered,cost:30,caption:arenaEnemyDisplayNameV800()+" • GUARDIA +"+recovered}
   });
  }
 
@@ -18859,17 +19325,39 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   let gained=0;
   if(arenaStateV600.playerTurnCount>1){
    const before=arenaStateV600.ki;
-   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+8);
+   arenaStateV600.ki=Math.min(arenaPlayerKiCapV800(),arenaStateV600.ki+8);
    gained=arenaStateV600.ki-before;
    arenaUpdateHudV600();
   }
 
   arenaShowTurnV620("player",()=>{
    arenaV600Refs.coachText.textContent=
-    "Scegli una categoria, poi la mossa. Porta l'Ologramma a 0 HP.";
+    "Scegli una categoria, poi la mossa. Porta "+arenaEnemyDisplayNameV800()+" a 0 HP.";
    if(gained>0)arenaFeedbackV600("+"+gained+" KI");
    arenaRenderCombatRootV690();
   });
+ }
+
+ function arenaChooseScaledEnemyActionV800(){
+  const p=arenaStateV600.enemyProfile||wiuEnemyProfileV800(1,1);
+  const guard=arenaStateV600.enemyGuard;
+  const ki=arenaStateV600.enemyKi;
+  const playerGuard=arenaStateV600.playerGuard;
+  const playerHP=arenaStateV600.playerHP;
+
+  if(guard<100 && ki>=30){
+   let recover=guard<=20?.78:guard<=40?.48:guard<=60?.18:.04;
+   recover*=.72+p.tactics*.48;
+   if(Math.random()<recover)return {type:"guard",cost:30};
+  }
+  if(ki>=55 && playerHP<=36 && Math.random()<(.32+p.tactics*.36))return {type:"ki",kind:"special",cost:55};
+  if(ki>=55 && Math.random()<(.10+p.tactics*.18))return {type:"ki",kind:"special",cost:55};
+  if(ki>=25 && Math.random()<(.18+p.tactics*.24))return {type:"ki",kind:"base",cost:25};
+
+  let level="easy";
+  if(p.maxCombo==="hard" && playerGuard<=45)level=Math.random()<(.45+p.tactics*.30)?"hard":"medium";
+  else if((p.maxCombo==="medium"||p.maxCombo==="hard") && (playerGuard<=78 || Math.random()<p.tactics*.42))level="medium";
+  return {type:"combo",level};
  }
 
  function arenaChooseEnemyActionV690(){
@@ -18877,11 +19365,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   if(arenaStateV600.enemyTurnCount>1){
    arenaStateV600.enemyKi=Math.min(
-    100,
+    arenaEnemyKiCapV800(),
     arenaStateV600.enemyKi+8
    );
    arenaUpdateHudV600();
   }
+
+  if(arenaIsKaeliosFightV800())return arenaChooseScaledEnemyActionV800();
 
   /*
     L'AI può sacrificare il turno per ricostruire Guardia.
@@ -18939,7 +19429,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaShowTurnV620("enemy",()=>{
    if(action.type==="guard"){
     arenaV600Refs.coachText.textContent=
-     "L'Ologramma sacrifica l'offensiva per ricostruire la propria Guardia.";
+     arenaEnemyDisplayNameV800()+" sacrifica l'offensiva per ricostruire la propria Guardia.";
     arenaRecoverEnemyGuardV700();
    }else if(action.type==="ki"){
     arenaStateV600.enemyKi=Math.max(
@@ -18948,8 +19438,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     );
     arenaV600Refs.coachText.textContent=
      action.kind==="special"
-      ?"L'Ologramma concentra una tecnica speciale."
-      :"L'Ologramma prepara un Ki Blast.";
+      ?arenaEnemyDisplayNameV800()+" concentra una tecnica speciale."
+      :arenaEnemyDisplayNameV800()+" prepara un Ki Blast.";
     arenaStartKiDefenseV600(action.kind);
    }else{
     arenaV600Refs.coachText.textContent=
@@ -18960,6 +19450,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  }
 
  function arenaWinFreeFightV690(){
+  if(arenaIsKaeliosFightV800()){arenaWinKaeliosV800();return;}
   arenaStateV600.freeFight=false;
   arenaV600Refs.actions.innerHTML="";
   arenaV600Refs.gesture.className="";
@@ -18969,6 +19460,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  }
 
  function arenaLoseFreeFightV690(){
+  if(arenaIsKaeliosFightV800()){arenaLoseKaeliosV800();return;}
   arenaStateV600.gestureMode="";
   arenaV600Refs.gesture.className="";
   arenaV600Refs.actions.innerHTML="";
@@ -19081,7 +19573,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     arenaShowInfoV620(
      "DIFESA E GUARDIA",
      "Memorizza la sequenza: poi sparisce.<br><br>"+
-     "<b>PERFECT DODGE</b>: 0 danni e +4 Guardia. Se reagisci correttamente ma più tardi, fai una <b>PARATA PARZIALE</b>: dimezzi il danno, ma consumi Guardia.<br><br>"+
+     "<b>PERFECT DODGE</b>: 0 danni. Il primo Perfect della combo recupera anche +4 Guardia; i successivi evitano il danno senza rigenerarla di nuovo. Se reagisci correttamente ma più tardi, fai una <b>PARATA PARZIALE</b>: dimezzi il danno, ma consumi Guardia.<br><br>"+
      "A <b>0 Guardia</b> compare <b>GUARDIA SPEZZATA</b>: la parata parziale non funziona più. Devi fare Perfect Dodge o subisci il colpo pieno.",
      ()=>arenaShowInfoV620(
       "RISCRITTURA",
@@ -19219,6 +19711,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.comboResults=[];
   arenaStateV600.comboDamageDone=0;
   arenaStateV600.comboParries=0;
+  arenaStateV600.comboDodges=0;
   arenaStateV600.enemyGuardBlocksRemaining=
    arenaEnemyGuardBlocksV630(arenaStateV600.enemyGuard);
   arenaStateV600.gestureMode="combo";
@@ -19244,6 +19737,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    const result=arenaStateV600.comboResults[i];
    if(result==="hit")d.classList.add("hit");
    if(result==="parry")d.classList.add("parried");
+   if(result==="dodge")d.classList.add("dodged");
    if(result==="miss")d.classList.add("missed");
    if(i===arenaStateV600.seqIndex)d.classList.add("current");
 
@@ -19301,34 +19795,38 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   if(correct){
    arenaStateV600.ki=Math.min(
-    100,
+    arenaPlayerKiCapV800(),
     arenaStateV600.ki+(c.kiPerHit||0)
    );
 
-   /* Anche un colpo parato consuma Guardia nemica. */
-   arenaStateV600.enemyGuard=Math.max(
-    0,
-    arenaStateV600.enemyGuard-(c.guardDamagePerHit||0)
-   );
-   arenaCheckGuardBreakV700("enemy");
+   /* Feedback audio su OGNI swipe offensivo corretto. */
+   if(window.WIUSoundV112)window.WIUSoundV112.play("whoosh");
 
-   /* Feedback audio su OGNI swipe offensivo corretto, anche se viene parato. */
-   if(window.WIUSoundV112){
-    window.WIUSoundV112.play("whoosh");
+   let outcome="hit";
+   if(arenaIsKaeliosFightV800()){
+    outcome=arenaEnemyPhysicalDefenseV800();
+   }else if(arenaStateV600.enemyGuardBlocksRemaining>0){
+    outcome="parry";
+    arenaStateV600.enemyGuardBlocksRemaining--;
    }
 
-   const parried=arenaStateV600.enemyGuardBlocksRemaining>0;
-
-   if(parried){
-    arenaStateV600.enemyGuardBlocksRemaining--;
-    arenaStateV600.comboParries++;
-    arenaStateV600.comboResults[i]="parry";
-    arenaEnemyGuardFlashV630();
+   if(outcome==="dodge"){
+    arenaStateV600.comboDodges++;
+    arenaStateV600.comboResults[i]="dodge";
    }else{
-    const dmg=c.hitDamage[i];
-    arenaStateV600.comboResults[i]="hit";
-    arenaStateV600.comboDamageDone+=dmg;
-    arenaStateV600.enemyHP=Math.max(arenaStateV600.freeFight ? 0 : 1,arenaStateV600.enemyHP-dmg);
+    /* Colpo entrato o parato: entrambi consumano Guardia. */
+    arenaStateV600.enemyGuard=Math.max(0,arenaStateV600.enemyGuard-(c.guardDamagePerHit||0));
+    arenaCheckGuardBreakV700("enemy");
+
+    if(outcome==="parry"){
+     arenaStateV600.comboParries++;
+     arenaStateV600.comboResults[i]="parry";
+    }else{
+     const dmg=arenaPlayerPhysicalDamageV800(c.hitDamage[i]);
+     arenaStateV600.comboResults[i]="hit";
+     arenaStateV600.comboDamageDone+=dmg;
+     arenaStateV600.enemyHP=Math.max(arenaStateV600.freeFight ? 0 : 1,arenaStateV600.enemyHP-dmg);
+    }
    }
 
    arenaStateV600.seqIndex++;
@@ -19363,7 +19861,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaV600Refs.currentInput.classList.remove("active");
 
   const executed=arenaStateV600.comboResults.filter(
-   x=>x==="hit"||x==="parry"
+   x=>x==="hit"||x==="parry"||x==="dodge"
   ).length;
   const missed=arenaStateV600.comboResults.filter(
    x=>x==="miss"
@@ -19375,15 +19873,21 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    text:
     "<b>"+executed+"/"+c.seq.length+" colpi eseguiti</b><br>"+
     missed+" mancati • "+
-    arenaStateV600.comboParries+" parati<br>"+
+    arenaStateV600.comboParries+" parati • "+arenaStateV600.comboDodges+" Perfect Dodge<br>"+
     "<b>"+arenaStateV600.comboDamageDone+" danni inflitti</b><br><br>"+
     "Guardia nemica: "+Math.round(arenaStateV600.enemyGuard)+"/100<br>"+
     "Ki: "+Math.round(arenaStateV600.ki)+"/100",
    onContinue:arenaAdvanceAfterPlayerActionV630,
    visual:{
     type:"combo",
-    hits:arenaStateV600.comboResults.filter(x=>x==="hit").length,
-    parries:arenaStateV600.comboParries,
+    steps:arenaStateV600.comboResults.map((result,i)=>({
+     result,
+     dir:c.seq[i],
+     hp:result==="hit"?arenaPlayerPhysicalDamageV800(c.hitDamage[i]||0):0,
+     guard:(result==="hit"||result==="parry")?(c.guardDamagePerHit||0):0,
+     ki:(result==="hit"||result==="parry"||result==="dodge")?(c.kiPerHit||0):0
+    })),
+    guardBroken:arenaStateV600.enemyGuard<=0,
     caption:arenaStateV600.comboDamageDone>0
      ? c.name+" • "+arenaStateV600.comboDamageDone+" DMG"
      : c.name+" • NESSUN DANNO"
@@ -19423,7 +19927,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.defenseSeq=arenaRandomDefenseSeqV640(cfg.length);
   arenaStateV600.defenseIndex=0;
   arenaStateV600.defenseResults=[];
-  arenaStateV600.defenseHitDamage=cfg.damage;
+  arenaStateV600.defenseHitDamage=Math.max(1,Math.round(cfg.damage*(arenaIsKaeliosFightV800()?(arenaStateV600.enemyProfile?.stats.physicalMult||1):1)));
   arenaStateV600.defenseConfig=cfg;
 
   arenaStateV600.defenseComboHPBefore=arenaStateV600.playerHP;
@@ -19432,6 +19936,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.defensePerfects=0;
   arenaStateV600.defensePartials=0;
   arenaStateV600.defenseMisses=0;
+  arenaStateV600.defensePerfectGuardRewarded=false;
+  arenaStateV600.defenseGuardDeltas=[];
 
   arenaStateV600.defensePreviewActive=true;
   arenaStateV600.gestureMode="defense-preview";
@@ -19520,6 +20026,20 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   },duration);
  }
 
+ function arenaPlayerPerfectRatioV810(){
+  /* Tutorial più permissivo. Nei combattimenti reali la finestra dipende
+     dalla differenza di livello: un avversario superiore richiede reazioni più pulite. */
+  if(!arenaIsKaeliosFightV800())return .46;
+  const delta=(Number(arenaStateV600.enemyLevel)||1)-(Number(arenaStateV600.playerLevel)||1);
+  if(delta<=-1)return .40;
+  if(delta===0)return .35;
+  if(delta===1)return .30;
+  if(delta===2)return .26;
+  if(delta===3)return .23;
+  if(delta===4)return .21;
+  return .18;
+ }
+
  function arenaResolveDefenseStepV610(
   dir,
   timedOut=false,
@@ -19560,7 +20080,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   let outcome="miss";
   let damage=arenaStateV600.defenseHitDamage;
 
-  if(correct && reactionRatio<=.46){
+  if(correct && reactionRatio<=arenaPlayerPerfectRatioV810()){
    outcome="perfect";
    damage=0;
   }else if(correct && arenaStateV600.playerGuard>0){
@@ -19579,19 +20099,29 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   if(outcome==="perfect"){
    arenaStateV600.defensePerfects++;
-   arenaStateV600.playerGuard=Math.min(100,arenaStateV600.playerGuard+4);
-   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+6);
+   /* +4 Guardia massimo UNA volta per combo: il Perfect resta forte senza rendere la Guardia infinita. */
+   let guardGain=0;
+   if(!arenaStateV600.defensePerfectGuardRewarded){
+    const beforeGuard=arenaStateV600.playerGuard;
+    arenaStateV600.playerGuard=Math.min(100,arenaStateV600.playerGuard+4);
+    guardGain=arenaStateV600.playerGuard-beforeGuard;
+    arenaStateV600.defensePerfectGuardRewarded=true;
+   }
+   arenaStateV600.defenseGuardDeltas[i]=guardGain;
+   arenaStateV600.ki=Math.min(arenaPlayerKiCapV800(),arenaStateV600.ki+6);
    if(window.WIUSoundV112)window.WIUSoundV112.play("whoosh");
   }else if(outcome==="partial"){
    arenaStateV600.defensePartials++;
+   arenaStateV600.defenseGuardDeltas[i]=-8;
    arenaStateV600.playerGuard=Math.max(0,arenaStateV600.playerGuard-8);
-   arenaStateV600.playerHP=Math.max(1,arenaStateV600.playerHP-damage);
+   arenaStateV600.playerHP=Math.max(arenaStateV600.freeFight?0:1,arenaStateV600.playerHP-damage);
    arenaStateV600.defenseDamageTaken+=damage;
    if(window.WIUSoundV112)window.WIUSoundV112.play("hit");
   }else{
    arenaStateV600.defenseMisses++;
+   arenaStateV600.defenseGuardDeltas[i]=-12;
    arenaStateV600.playerGuard=Math.max(0,arenaStateV600.playerGuard-12);
-   arenaStateV600.playerHP=Math.max(1,arenaStateV600.playerHP-damage);
+   arenaStateV600.playerHP=Math.max(arenaStateV600.freeFight?0:1,arenaStateV600.playerHP-damage);
    arenaStateV600.defenseDamageTaken+=damage;
    if(window.WIUSoundV112)window.WIUSoundV112.play("hit");
   }
@@ -19639,14 +20169,20 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     arenaStateV600.defensePartials+" parate parziali • "+
     arenaStateV600.defenseMisses+" colpi pieni<br>"+
     "<b>"+damage+" danni subiti</b><br><br>"+
-    "HP: "+Math.round(arenaStateV600.playerHP)+"/100 • "+
+    "HP: "+Math.round(arenaStateV600.playerHP)+"/"+Math.round(arenaStateV600.playerMaxHP||100)+" • "+
     "Guardia: "+Math.round(arenaStateV600.playerGuard)+"/100",
    onContinue:arenaAdvanceAfterEnemyActionV630,
    visual:{
     type:"defense",
-    perfects:arenaStateV600.defensePerfects,
-    partials:arenaStateV600.defensePartials,
-    misses:arenaStateV600.defenseMisses,
+    steps:arenaStateV600.defenseResults.map((result,i)=>({
+     result,
+     dir:arenaStateV600.defenseSeq[i],
+     hp:result==="partial"?Math.max(1,Math.round(arenaStateV600.defenseHitDamage*.50)):
+        result==="miss"?arenaStateV600.defenseHitDamage:0,
+     guard:Number(arenaStateV600.defenseGuardDeltas[i])||0,
+     ki:result==="perfect"?6:0
+    })),
+    guardBroken:arenaStateV600.playerGuard<=0,
     caption:damage===0 ? "DIFESA PERFETTA" : "DIFESA • "+damage+" DMG SUBITI"
    },
    allowRewrite:damage>0,
@@ -19778,7 +20314,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   const special=type==="special";
 
   arenaStateV600.traceDefenseType=type;
-  arenaStateV600.traceDefenseDamage=special ? 36 : 20;
+  arenaStateV600.traceDefenseDamage=Math.max(1,Math.round((special ? 36 : 20)*(arenaIsKaeliosFightV800()?(arenaStateV600.enemyProfile?.stats.kiMult||1):1)));
   arenaStateV600.traceKind=special ? "defenseSpecial" : "defense";
   arenaStateV600.trace=
    special
@@ -19793,7 +20329,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /*
     Tecnica più potente = meno tempo per neutralizzarla.
   */
-  const duration=special ? 2200 : 3400;
+  let duration=special ? 2200 : 3400;
+  if(arenaIsKaeliosFightV800())duration=Math.round(duration*(arenaStateV600.enemyProfile?.timingScale||1));
   arenaStateV600.traceStartTs=performance.now();
   arenaStateV600.traceDuration=duration;
   arenaStateV600.traceCompleteTs=0;
@@ -19857,7 +20394,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    );
    if(window.WIUSoundV112)window.WIUSoundV112.play("hit");
   }else{
-   arenaStateV600.ki=Math.min(100,arenaStateV600.ki+6);
+   arenaStateV600.ki=Math.min(arenaPlayerKiCapV800(),arenaStateV600.ki+6);
    if(window.WIUSoundV112)window.WIUSoundV112.play("whoosh");
   }
 
@@ -19875,11 +20412,14 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
      :"Contro-configurazione <b>incompleta</b><br>")+
     "KI RESPINTO: <b>"+Math.round(block*100)+"%</b><br>"+
     "<b>"+damage+" danni subiti</b><br><br>"+
-    "HP: "+Math.round(arenaStateV600.playerHP)+"/100",
+    "HP: "+Math.round(arenaStateV600.playerHP)+"/"+Math.round(arenaStateV600.playerMaxHP||100),
    onContinue:arenaAdvanceAfterEnemyActionV630,
    visual:{
     type:"kiDefense",
     damage:damage,
+    block:block,
+    cost:type==="special"?55:25,
+    kiGain:damage===0?6:0,
     caption:damage>0 ? "ATTACCO KI • "+damage+" DMG SUBITI" : "KI COMPLETAMENTE RESPINTO"
    },
    allowRewrite:damage>0,
@@ -20198,9 +20738,13 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    text:
     "La configurazione non è stata completata in tempo.<br><br>"+
     "<b>Il Ki speso non viene recuperato.</b><br>"+
-    "Ki attuale: "+Math.round(arenaStateV600.ki)+"/100",
+    "Ki attuale: "+Math.round(arenaStateV600.ki)+"/"+Math.round(arenaStateV600.playerMaxKi||100),
    onContinue:arenaAdvanceAfterPlayerActionV630,
-   visual:{type:"kiFail",caption:"TECNICA FALLITA"}
+   visual:{
+    type:"kiFail",
+    cost:arenaStateV600.traceKind==="special"?55:25,
+    caption:"TECNICA FALLITA"
+   }
   });
  }
 
@@ -20222,8 +20766,8 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     Prima si calcola QUANTO bene hai eseguito la tecnica.
     Solo dopo si applica la quota che l'avversario riesce a bloccare.
   */
-  const potentialDamage=Math.round(def.damage*quality);
-  const enemyBlock=kind==="special" ? .25 : .50;
+  const potentialDamage=Math.round(arenaPlayerKiDamageV800(def.damage)*quality);
+  const enemyBlock=arenaIsKaeliosFightV800()?arenaEnemyKiBlockV800(kind):(kind==="special" ? .25 : .50);
   const damage=Math.round(potentialDamage*(1-enemyBlock));
 
   arenaStateV600.enemyHP=Math.max(
@@ -20240,14 +20784,289 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    text:
     "Velocità esecuzione: <b>"+qualityPct+"% POTENZA</b><br>"+
     "Danno potenziale: <b>"+potentialDamage+"</b><br>"+
-    "Difesa Ologramma: <b>"+Math.round(enemyBlock*100)+"%</b><br><br>"+
+    "Difesa "+arenaEnemyDisplayNameV800()+": <b>"+Math.round(enemyBlock*100)+"%</b><br><br>"+
     "<b>"+damage+" danni finali inflitti</b><br>"+
-    "Ki rimasto: "+Math.round(arenaStateV600.ki)+"/100",
+    "Ki rimasto: "+Math.round(arenaStateV600.ki)+"/"+Math.round(arenaStateV600.playerMaxKi||100),
    onContinue:arenaAdvanceAfterPlayerActionV630,
    visual:{
     type:"ki",
+    cost:kind==="special"?55:25,
+    damage:damage,
+    block:enemyBlock,
     caption:def.name+" • "+qualityPct+"% POTENZA • "+damage+" DMG"
    }
+  });
+ }
+
+ const WIU_COMBAT_PROGRESS_KEY_V800="whatIfUniverse_combat_progress_v1";
+ function wiuLoadCombatProgressV800(){
+  let total=Math.max(0,Number(xp)||0);
+  try{
+   const raw=localStorage.getItem(WIU_COMBAT_PROGRESS_KEY_V800);
+   if(raw){
+    const old=JSON.parse(raw);
+    total=Math.max(total,Math.max(0,Number(old.xp)||0));
+   }
+  }catch(e){}
+
+  /* Migrazione dei salvataggi delle build precedenti. */
+  if(chapter1CompleteV25)total=Math.max(total,100);
+  if(typeof isTryCombatKaeliosCompleteV48==="function" && isTryCombatKaeliosCompleteV48())total=Math.max(total,160);
+
+  xp=total;
+  playerLevelV25=wiuLevelFromXpV810(total);
+  const pr={level:playerLevelV25,xp:total};
+  try{localStorage.setItem(WIU_COMBAT_PROGRESS_KEY_V800,JSON.stringify(pr))}catch(e){}
+  return pr;
+ }
+ function wiuLevelFromXpV800(total){
+  return wiuLevelFromXpV810(total);
+ }
+ function wiuGrantCombatRewardsV800(expReward,gemReward){
+  const before=wiuLoadCombatProgressV800();
+  const oldLevel=before.level;
+  xp=Math.max(0,before.xp+Math.max(0,expReward||0));
+  const sync=wiuSyncPlayerLevelV810();
+  const pr={
+   level:playerLevelV25,
+   xp,
+   oldLevel,
+   leveledUp:playerLevelV25>oldLevel,
+   nextLevelXp:wiuNextLevelXpV810(playerLevelV25)
+  };
+  try{localStorage.setItem(WIU_COMBAT_PROGRESS_KEY_V800,JSON.stringify({level:pr.level,xp:pr.xp}))}catch(e){}
+  gems=Math.max(0,(Number(gems)||0)+(gemReward||0));
+  updateGems();
+  if(typeof saveGameV25==="function")saveGameV25(true);
+  return pr;
+ }
+
+ function arenaSetEnemyVisualV800(mode,enemyLevel=0){
+  if(!arenaV600Refs||!arenaV600)return;
+  const k=mode==="kaelios";
+  arenaV600.classList.toggle("arenaV800KaeliosBattle",k);
+  if(arenaV600Refs.enemyName)arenaV600Refs.enemyName.textContent=k?("KAELIOS • LV."+enemyLevel):"OLOGRAMMA NEXUS";
+  if(arenaV600Refs.enemyLabel)arenaV600Refs.enemyLabel.textContent=k?"KAELIOS":"BERSAGLIO DI ADDESTRAMENTO";
+ }
+
+ function arenaGetLastKaeliosDefeatV830(){
+  try{
+   const v=Number(localStorage.getItem(KAELIOS_LAST_DEFEAT_KEY_V830));
+   return Number.isFinite(v) && v>0 ? v : 0;
+  }catch(e){return 0}
+ }
+
+ function arenaSetLastKaeliosDefeatV830(level=0){
+  try{
+   if(level>0)localStorage.setItem(KAELIOS_LAST_DEFEAT_KEY_V830,String(level));
+   else localStorage.removeItem(KAELIOS_LAST_DEFEAT_KEY_V830);
+  }catch(e){}
+ }
+
+ function arenaHasPortalUnlockStoryV840(){
+  try{return localStorage.getItem(KAELIOS_PORTAL_UNLOCK_STORY_KEY_V840)==="1"}catch(e){return false}
+ }
+
+ function arenaMarkPortalUnlockStoryV840(){
+  try{localStorage.setItem(KAELIOS_PORTAL_UNLOCK_STORY_KEY_V840,"1")}catch(e){}
+ }
+
+ function transcendentIntroSeenV840(){
+  try{return localStorage.getItem(TRANSCENDENT_INTRO_KEY_V840)==="1"}catch(e){return false}
+ }
+
+ function markTranscendentIntroSeenV840(){
+  try{localStorage.setItem(TRANSCENDENT_INTRO_KEY_V840,"1")}catch(e){}
+ }
+
+ function arenaShowPortalUnlockFlowV840(){
+  if(!isTryCombatKaeliosCompleteV48()){
+   controlsLocked=false;
+   return;
+  }
+  if(arenaHasPortalUnlockStoryV840()){
+   controlsLocked=false;
+   setObjective("RAGGIUNGI IL PORTALE 01 • CONVERGENZA");
+   return;
+  }
+
+  arenaMarkPortalUnlockStoryV840();
+  setObjective("");
+  showDialogue([
+   {speaker:"KAELIOS",text:"Hai superato la prova."},
+   {speaker:"KAELIOS",text:"Il Portale 01 ha reagito alla tua energia. Ora è aperto."},
+   {speaker:"KAELIOS",text:"Raggiungi la Convergenza. Dall'altra parte troverai l'Universo Trascendente."},
+   {speaker:"KAELIOS",text:"Lì non troverai un solo percorso, ma quattro mondi. Sarai tu a scegliere quale realtà affrontare per prima."}
+  ],()=>{
+   controlsLocked=false;
+   setObjective("RAGGIUNGI IL PORTALE 01 • CONVERGENZA");
+   showLocation("PORTALE 01 SBLOCCATO","UNIVERSO TRASCENDENTE ACCESSIBILE");
+   saveMap();
+  });
+ }
+
+ function showTranscendentIntroV840(){
+  if(transcendentIntroSeenV840()){
+   controlsLocked=false;
+   return;
+  }
+
+  markTranscendentIntroSeenV840();
+  setObjective("");
+  showDialogue([
+   {speaker:"KAELIOS",text:"Benvenuto nell'Universo Trascendente."},
+   {speaker:"KAELIOS",text:"Questa cittadella tiene insieme quattro realtà diverse. Ognuno di quei portali conduce a un mondo che non avrebbe dovuto esistere in questa forma."},
+   {speaker:"KAELIOS",text:"Veurs e Zirem sono le fratture più stabili: per affrontarle ti consiglio almeno il livello 3."},
+   {speaker:"KAELIOS",text:"Sharak e Kilin sono più pericolosi. Livello consigliato: 4."},
+   {speaker:"KAELIOS",text:"Sono solo indicazioni. Nessun portale ti impedirà di entrare prima... ma quei mondi non diventeranno più deboli per adattarsi a te."},
+   {speaker:"KAELIOS",text:()=>`Scegli tu da dove iniziare, ${getPlayerName()}. Da qui comincia il viaggio vero.`}
+  ],()=>{
+   controlsLocked=false;
+   setObjective("SCEGLI UN MONDO • VEURS/ZIREM LV.3 • SHARAK/KILIN LV.4");
+   showLocation("UNIVERSO TRASCENDENTE","4 MONDI • NESSUN HARD GATE");
+   saveMap();
+  });
+ }
+
+ function arenaShowKaeliosDefeatDialogueV830(level){
+  const hard=Number(level)>=5;
+  setObjective("");
+
+  showDialogue(
+   hard
+    ?[
+      {speaker:"KAELIOS",text:"Te l'avevo detto."},
+      {speaker:"KAELIOS",text:"Quando smetto di trattenermi... per ora non hai speranze."},
+      {speaker:"KAELIOS",text:"Ma sei già molto più forte di quando sei arrivato qui."},
+      {speaker:"KAELIOS",text:"Torna quando vorrai provarci ancora."}
+     ]
+    :[
+      {speaker:"KAELIOS",text:"Non male."},
+      {speaker:"KAELIOS",text:"Ma questa prova non è conclusa finché non riesci a superarmi."},
+      {speaker:"KAELIOS",text:"Il Portale 01 non si aprirà prima. Riprenditi... poi torna qui e ricominciamo."}
+     ],
+   ()=>{
+    controlsLocked=false;
+    if(hard){
+     showLocation("KAELIOS","REMATCH DISPONIBILE");
+     /* Il Lv.5+ è una sfida facoltativa: non sostituiamo l'obiettivo principale del Portale 01. */
+     setObjective("RAGGIUNGI IL PORTALE 01");
+    }else{
+     setObjective("SCONFIGGI KAELIOS LV.2 • OBBLIGATORIO PER PROSEGUIRE");
+     showLocation("PROVA NON SUPERATA","TORNA DA KAELIOS");
+    }
+    saveMap();
+   }
+  );
+ }
+
+ function arenaReturnFromKaeliosDefeatV830(level){
+  arenaSetLastKaeliosDefeatV830(level);
+  arenaCloseV600(false);
+  /* openNexusV41 viene eseguito sincronicamente da arenaCloseV600. */
+  setTimeout(()=>arenaShowKaeliosDefeatDialogueV830(level),180);
+ }
+
+ function arenaStartKaeliosFightV800(enemyLevel=2){
+  const progress=wiuLoadCombatProgressV800();
+  const playerLevel=Math.max(1,progress.level||1);
+  const ps=wiuCombatStatsV800(playerLevel);
+  const ep=wiuEnemyProfileV800(enemyLevel,playerLevel,"kaelios");
+
+  arenaStateV600.active=true;
+  arenaStateV600.battleMode="kaelios";
+  arenaStateV600.freeFight=true;
+  arenaStateV600.phase=200;
+  arenaStateV600.playerLevel=playerLevel;
+  arenaStateV600.enemyLevel=enemyLevel;
+  arenaStateV600.playerStats=ps;
+  arenaStateV600.enemyProfile=ep;
+  arenaStateV600.playerMaxHP=ps.maxHP;
+  arenaStateV600.playerMaxKi=ps.maxKi;
+  arenaStateV600.enemyMaxHP=ep.stats.maxHP;
+  arenaStateV600.enemyMaxKi=ep.stats.maxKi;
+  arenaStateV600.playerHP=ps.maxHP;
+  arenaStateV600.enemyHP=ep.stats.maxHP;
+  arenaStateV600.playerGuard=100;
+  arenaStateV600.enemyGuard=100;
+  arenaStateV600.ki=25;
+  arenaStateV600.enemyKi=25;
+  arenaStateV600.playerTurnCount=0;
+  arenaStateV600.enemyTurnCount=0;
+  arenaStateV600.playerGuardBrokenAnnounced=false;
+  arenaStateV600.enemyGuardBrokenAnnounced=false;
+  arenaStateV600.rewriteAvailable=1;
+  arenaStateV600.gestureMode="";
+  arenaStateV600.actions="";
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.actions.innerHTML="";
+  arenaV600Refs.intro.classList.remove("active");
+  arenaV600Refs.complete.classList.remove("active");
+  arenaSetEnemyVisualV800("kaelios",enemyLevel);
+  arenaV600Refs.playerName.textContent=getPlayerName().toUpperCase()+" • LV."+playerLevel;
+  arenaUpdateHudV600();
+
+  arenaShowInfoV620(
+   "TRY COMBAT KAELIOS",
+   "<b>TU LV."+playerLevel+" vs KAELIOS LV."+enemyLevel+"</b><br><br>"+
+   "Questo non è più un bersaglio. Kaelios può <b>parare, fare Perfect Dodge, difendersi dal Ki e gestire le proprie risorse</b>.<br><br>"+
+   (enemyLevel===2?"È il tuo primo avversario reale: la finestra del Perfect Dodge è più severa dell'addestramento e Kaelios legge davvero le tue azioni.":"Rematch: Kaelios sta combattendo molto più seriamente."),
+   ()=>arenaBeginFreePlayerTurnV690(),
+   "DUELLO REALE"
+  );
+ }
+
+ function arenaOpenKaeliosV800(){
+  arenaCreateDOMV600();
+  panel.classList.remove("active"); panel.setAttribute("aria-hidden","true");
+  if(arenaStartBtnV600)arenaStartBtnV600.style.display="none";
+  if(kaeliosFightBtnV800)kaeliosFightBtnV800.style.display="none";
+  saveMap(); saveRelationship(); window.closeNexusV41();
+  arenaRenderPlayerV600(); arenaResetStateV600();
+  arenaV600.classList.add("active"); arenaV600.setAttribute("aria-hidden","false");
+  const level=isTryCombatKaeliosCompleteV48()?5:2;
+  arenaStartKaeliosFightV800(level);
+  if(window.WIUSoundV112)window.WIUSoundV112.play("transition");
+ }
+
+ function arenaWinKaeliosV800(){
+  arenaStateV600.freeFight=false; arenaStateV600.gestureMode="";
+  arenaV600Refs.actions.innerHTML=""; arenaV600Refs.gesture.className="";
+  const first=!isTryCombatKaeliosCompleteV48();
+  const expReward=first?60:8, gemReward=first?40:0;
+  const pr=wiuGrantCombatRewardsV800(expReward,gemReward);
+  if(first)window.setTryCombatKaeliosCompleteV48(true);
+  arenaSetLastKaeliosDefeatV830(0);
+  arenaShowResultV640({
+   eyebrow:first?"PRIMA VITTORIA":"REMATCH COMPLETATO",
+   title:(first && pr.leveledUp)?("LEVEL UP! • LV."+pr.level):"KAELIOS SCONFITTO",
+   text:(first?
+        "Hai superato la prima vera prova del Nexus.<br><br><b>+60 EXP • +40 GEMME</b><br>"+
+        (pr.leveledUp?("<b>LV."+pr.oldLevel+" → LV."+pr.level+"</b><br>"):"")+
+        "<b>PORTALE 01 SBLOCCATO</b>":
+        "Kaelios si rialza quasi subito.<br><br><b>+8 EXP</b> • nessuna Gemma")+
+        "<br><br>Progressione: LV."+pr.level+" • "+pr.xp+" EXP totali"+
+        (pr.nextLevelXp?(" • prossimo livello a "+pr.nextLevelXp):" • LIVELLO MASSIMO"),
+   continueLabel:"TORNA AL NEXUS",
+   onContinue:()=>arenaCloseV600(true)
+  });
+  if(window.WIUSoundV112)window.WIUSoundV112.play("success");
+ }
+
+ function arenaLoseKaeliosV800(){
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.actions.innerHTML="";
+
+  const defeatedByLevel=arenaStateV600.enemyLevel||2;
+  arenaShowResultV640({
+   eyebrow:"DUELLO TERMINATO",
+   title:"SCONFITTA",
+   text:
+    "Sei arrivato a <b>0 HP</b>.<br><br>"+
+    "Lo scontro termina qui. Kaelios ti aspetta di nuovo nel Nexus.",
+   continueLabel:"TORNA AL NEXUS",
+   onContinue:()=>arenaReturnFromKaeliosDefeatV830(defeatedByLevel)
   });
  }
 
@@ -20276,6 +21095,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   arenaRenderPlayerV600();
   arenaResetStateV600();
+  arenaSetEnemyVisualV800("tutorial",0);
 
   arenaV600.classList.add("active");
   arenaV600.setAttribute("aria-hidden","false");
@@ -20285,6 +21105,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
  function arenaCloseV600(fromComplete){
   if(!arenaV600)return;
+  const closingMode=arenaStateV600.battleMode;
 
   arenaStateV600.active=false;
   arenaStateV600.gestureMode="";
@@ -20311,13 +21132,59 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   }
 
   arenaV600.classList.remove("active");
+  arenaV600.classList.remove("arenaV800KaeliosBattle");
   arenaV600.setAttribute("aria-hidden","true");
 
   window.openNexusV41({skipIntro:true,newArrival:false});
 
-  if(fromComplete){
-   setObjective("RAGGIUNGI TRY COMBAT KAELIOS");
-   showLocation("TRY COMBAT KAELIOS","NUOVA AREA DISPONIBILE");
+  if(fromComplete && closingMode==="kaelios"){
+   if(isTryCombatKaeliosCompleteV48() && !arenaHasPortalUnlockStoryV840()){
+    setObjective("");
+    setTimeout(arenaShowPortalUnlockFlowV840,180);
+   }else{
+    setObjective("RAGGIUNGI IL PORTALE 01 • CONVERGENZA");
+   }
+  }else if(fromComplete){
+   const kaeliosAlreadyDefeated=isTryCombatKaeliosCompleteV48();
+   let inviteSeen=false;
+   try{inviteSeen=localStorage.getItem(ARENA_KAELIOS_INVITE_KEY_V810)==="1"}catch(e){}
+
+   /*
+     Il raccordo narrativo Arena -> Kaelios appartiene SOLO alla prima
+     conclusione del tutorial. Ripetere l'Arena non deve riattivare
+     dialoghi, toast o obiettivi ormai superati.
+   */
+   if(kaeliosAlreadyDefeated){
+    setObjective("RAGGIUNGI IL PORTALE 01");
+   }else{
+    /* Finché Kaelios non è stato sconfitto, resta fisicamente nella zona di sfida. */
+    if(currentArea==="lower"){
+     kaeliosX=255;
+     kaeliosY=405;
+     renderPositions();
+     saveMap();
+    }
+
+    if(!inviteSeen){
+     try{localStorage.setItem(ARENA_KAELIOS_INVITE_KEY_V810,"1")}catch(e){}
+     setObjective("");
+     showDialogue([
+      {speaker:"KAELIOS",text:"Bene. Ora conosci le basi."},
+      {speaker:"KAELIOS",text:"Ma un Ologramma segue degli schemi. Un vero avversario può leggerti, difendersi e cambiare strategia."},
+      {speaker:"KAELIOS",text:"Se vuoi capire quanto hai davvero imparato, raggiungimi nella parte occidentale della Piazza Bassa."},
+      {speaker:"KAELIOS",text:"Ti aspetto lì. E questa volta non sarà un addestramento."}
+     ],()=>{
+      controlsLocked=false;
+      setObjective("RAGGIUNGI KAELIOS • AREA OVEST");
+      showLocation("NUOVO OBIETTIVO","KAELIOS TI ASPETTA A OVEST");
+     });
+    }else{
+     /* Replay prima della vittoria: nessuna nuova scena narrativa. */
+     setObjective("RAGGIUNGI KAELIOS • AREA OVEST");
+    }
+   }
+  }else if(closingMode==="kaelios" && isTryCombatKaeliosCompleteV48()){
+   setObjective("RAGGIUNGI IL PORTALE 01");
   }else{
    setObjective(
     isArenaTutorialCompleteV46()
@@ -20330,6 +21197,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  arenaCreateDOMV600();
 
  arenaStartBtnV600.addEventListener("click",arenaOpenV600);
+ kaeliosFightBtnV800.addEventListener("click",arenaOpenKaeliosV800);
 
 
  window.openNexusV41=function(opts={}){
@@ -20426,6 +21294,10 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   /* Stesso titolo temporaneo usato nei cambi zona normali. */
   showAreaName();
   showLocation("UNIVERSO TRASCENDENTE","HUB DEI MONDI");
+  if(!transcendentIntroSeenV840()){
+   controlsLocked=true;
+   setTimeout(showTranscendentIntroV840,320);
+  }
  };
 
  /* Anche il vecchio dispatcher DEV deve finire sul nuovo Nexus */
@@ -20449,6 +21321,10 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     localStorage.removeItem(MAP_KEY);
     localStorage.removeItem(REL_KEY);
     localStorage.removeItem(TRY_COMBAT_KAELIOS_KEY_V48);
+    localStorage.removeItem("whatIfUniverse_try_combat_kaelios_complete_v2");
+    localStorage.removeItem(ARENA_KAELIOS_INVITE_KEY_V810);
+    localStorage.removeItem(KAELIOS_LAST_DEFEAT_KEY_V830);
+    localStorage.removeItem(WIU_COMBAT_PROGRESS_KEY_V800);
    }catch(e){}
    if(typeof kaeliosTrust!=="undefined")kaeliosTrust=0;
    if(typeof protagonistIndependence!=="undefined")protagonistIndependence=0;
