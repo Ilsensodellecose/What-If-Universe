@@ -19828,8 +19828,17 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     arenaCheckGuardBreakV700("enemy");
 
     if(outcome==="parry"){
+     /*
+       PARATA PARZIALE UNIVERSALE:
+       come per il giocatore, la parata riduce il danno HP al 50%
+       ma non lo annulla. Il Perfect Dodge resta l'unico esito a 0 danni.
+     */
+     const fullDmg=arenaPlayerPhysicalDamageV800(c.hitDamage[i]);
+     const dmg=Math.max(1,Math.round(fullDmg*.50));
      arenaStateV600.comboParries++;
      arenaStateV600.comboResults[i]="parry";
+     arenaStateV600.comboDamageDone+=dmg;
+     arenaStateV600.enemyHP=Math.max(arenaStateV600.freeFight ? 0 : 1,arenaStateV600.enemyHP-dmg);
     }else{
      const dmg=arenaPlayerPhysicalDamageV800(c.hitDamage[i]);
      arenaStateV600.comboResults[i]="hit";
@@ -19892,7 +19901,11 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     steps:arenaStateV600.comboResults.map((result,i)=>({
      result,
      dir:c.seq[i],
-     hp:result==="hit"?arenaPlayerPhysicalDamageV800(c.hitDamage[i]||0):0,
+     hp:result==="hit"
+      ?arenaPlayerPhysicalDamageV800(c.hitDamage[i]||0)
+      :result==="parry"
+       ?Math.max(1,Math.round(arenaPlayerPhysicalDamageV800(c.hitDamage[i]||0)*.50))
+       :0,
      guard:(result==="hit"||result==="parry")?(c.guardDamagePerHit||0):0,
      ki:(result==="hit"||result==="parry"||result==="dodge")?(c.kiPerHit||0):0
     })),
