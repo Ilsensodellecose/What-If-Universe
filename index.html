@@ -12585,7 +12585,12 @@ function failRewriteV234(reason){
     cancelAnimationFrame(rewriteGameRafV234);
     rewriteFailCountV233++;
 
-    if(damagePlayerV237(8)) return;
+    if(window.WIURewriteDamageHandlerV900){
+        const out=window.WIURewriteDamageHandlerV900(8);
+        if(out===false){ closeRewriteGameV233(); return; }
+    }else{
+        if(damagePlayerV237(8)) return;
+    }
     vibrate([90,35,90]);
 
     const overlay=document.getElementById("rewriteGameV233");
@@ -13590,6 +13595,8 @@ function resetSaveV25(){
   "whatIfUniverse_kaelios_last_defeat_v1",
   "whatIfUniverse_kaelios_portal_unlock_story_v1",
   "whatIfUniverse_transcendent_intro_v1",
+  "whatIfUniverse_veurs_run_v1",
+  "whatIfUniverse_veurs_complete_v1",
   "whatIfUniverse_try_combat_kaelios_complete_v2",
   "whatIfUniverse_try_combat_kaelios_complete_v3",
   "whatIfUniverse_restart_prologue_v1"
@@ -15818,6 +15825,15 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   panelClose.parentNode.insertBefore(kaeliosFightBtnV800,panelClose);
  }
 
+ let veursStartBtnV900=document.getElementById("nexus41VeursStartV900");
+ if(!veursStartBtnV900){
+  veursStartBtnV900=document.createElement("button");
+  veursStartBtnV900.id="nexus41VeursStartV900";
+  veursStartBtnV900.type="button";
+  veursStartBtnV900.style.display="none";
+  panelClose.parentNode.insertBefore(veursStartBtnV900,panelClose);
+ }
+
  const arrivalFx=document.getElementById("nexus41ArrivalFx");
  const areaFade=document.getElementById("nexus41AreaFade");
  const areaFadeText=areaFade.querySelector("span");
@@ -17449,6 +17465,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
   if(arenaStartBtnV600)arenaStartBtnV600.style.display="none";
   if(kaeliosFightBtnV800)kaeliosFightBtnV800.style.display="none";
+  if(veursStartBtnV900)veursStartBtnV900.style.display="none";
 
   /*
     Durante la INTRO tutto il Nexus è in modalità tour: Kaelios gestisce
@@ -17528,9 +17545,22 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    panelTitle.textContent="PORTALE 01";
    panelText.innerHTML=
     "Questo universo sarà disponibile dopo che avrai completato il combattimento con Kaelios nell'area <b>\"TRY COMBAT KAELIOS\"</b>.";
-  }else if(["portalVeurs","portalZirem","portalSharak","portalKilin"].includes(p.id)){
+  }else if(p.id==="portalVeurs"){
+   panelTitle.textContent="MONDO VEURS";
+   let veursDone=false;
+   try{veursDone=localStorage.getItem("whatIfUniverse_veurs_complete_v1")==="1"}catch(e){}
+   panelText.innerHTML=
+    '<b>LIVELLO CONSIGLIATO: 3</b><br><br>'+
+    '<b>VEURS — LA CITTÀ CHE HA SMESSO DI SCEGLIERE</b><br><br>'+
+    'Esperienza narrativa con HP persistenti, QTE e combattimenti. Il mondo non scalerà verso il basso per adattarsi a te.'+
+    (veursDone?'<br><br><b>MONDO GIÀ STABILIZZATO • RIGIOCABILE</b>':'');
+   if(veursStartBtnV900){
+    veursStartBtnV900.textContent=veursDone?"RIGIOCA VEURS":"ENTRA IN VEURS";
+    veursStartBtnV900.style.display="block";
+   }
+  }else if(["portalZirem","portalSharak","portalKilin"].includes(p.id)){
    panelTitle.textContent=p.title;
-   const recommended=(p.id==="portalVeurs" || p.id==="portalZirem")?3:4;
+   const recommended=p.id==="portalZirem"?3:4;
    panelText.innerHTML=
     '<b>LIVELLO CONSIGLIATO: '+recommended+'</b><br><br>'+
     'Questo portale condurrà al <b>'+p.title+'</b>.<br><br>'+
@@ -18685,7 +18715,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(cfg.label==="COMBO FACILE")value=Math.max(950,1150-(i*100));
   else if(cfg.label==="COMBO MEDIA")value=Math.max(700,900-(i*60));
   else value=Math.max(520,700-(i*36));
-  if(arenaIsKaeliosFightV800())value*=arenaStateV600.enemyProfile?.timingScale||1;
+  if(arenaUsesScaledEnemyV900())value*=arenaStateV600.enemyProfile?.timingScale||1;
   return Math.round(value);
  }
 
@@ -18859,9 +18889,15 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
 
  function arenaIsKaeliosFightV800(){return arenaStateV600.battleMode==="kaelios"}
+ function arenaIsWorldFightV900(){return arenaStateV600.battleMode==="world"}
+ function arenaUsesScaledEnemyV900(){return arenaIsKaeliosFightV800()||arenaIsWorldFightV900()}
  function arenaPlayerKiCapV800(){return Math.max(1,Number(arenaStateV600.playerMaxKi)||100)}
  function arenaEnemyKiCapV800(){return Math.max(1,Number(arenaStateV600.enemyMaxKi)||100)}
- function arenaEnemyDisplayNameV800(){return arenaIsKaeliosFightV800()?"KAELIOS":"OLOGRAMMA"}
+ function arenaEnemyDisplayNameV800(){
+  if(arenaIsKaeliosFightV800())return "KAELIOS";
+  if(arenaIsWorldFightV900())return String(arenaStateV600.worldEnemyName||"NEMICO");
+  return "OLOGRAMMA";
+ }
  function arenaPlayerPhysicalDamageV800(base){
   const mult=arenaStateV600.playerStats?.physicalMult||1;
   return Math.max(1,Math.round(base*mult));
@@ -18927,7 +18963,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   enemy._guardTimer=setTimeout(()=>{
    enemy.classList.remove("guard-flash");
    label.classList.remove("guard-label");
-   label.textContent=arenaIsKaeliosFightV800()?"KAELIOS":"BERSAGLIO DI ADDESTRAMENTO";
+   label.textContent=arenaIsKaeliosFightV800()?"KAELIOS":(arenaIsWorldFightV900()?arenaEnemyDisplayNameV800():"BERSAGLIO DI ADDESTRAMENTO");
   },360);
  }
 
@@ -19062,7 +19098,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
  function arenaDefensePreviewDurationV690(level){
   let base=level==="easy"?1250:level==="medium"?1450:1800;
-  if(arenaIsKaeliosFightV800())base*=arenaStateV600.enemyProfile?.previewScale||1;
+  if(arenaUsesScaledEnemyV900())base*=arenaStateV600.enemyProfile?.previewScale||1;
   return Math.round(base);
  }
 
@@ -19380,7 +19416,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    arenaUpdateHudV600();
   }
 
-  if(arenaIsKaeliosFightV800())return arenaChooseScaledEnemyActionV800();
+  if(arenaUsesScaledEnemyV900())return arenaChooseScaledEnemyActionV800();
 
   /*
     L'AI può sacrificare il turno per ricostruire Guardia.
@@ -19459,6 +19495,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  }
 
  function arenaWinFreeFightV690(){
+  if(arenaIsWorldFightV900()){arenaWinWorldFightV900();return;}
   if(arenaIsKaeliosFightV800()){arenaWinKaeliosV800();return;}
   arenaStateV600.freeFight=false;
   arenaV600Refs.actions.innerHTML="";
@@ -19469,6 +19506,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  }
 
  function arenaLoseFreeFightV690(){
+  if(arenaIsWorldFightV900()){arenaLoseWorldFightV900();return;}
   if(arenaIsKaeliosFightV800()){arenaLoseKaeliosV800();return;}
   arenaStateV600.gestureMode="";
   arenaV600Refs.gesture.className="";
@@ -19812,7 +19850,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    if(window.WIUSoundV112)window.WIUSoundV112.play("whoosh");
 
    let outcome="hit";
-   if(arenaIsKaeliosFightV800()){
+   if(arenaUsesScaledEnemyV900()){
     outcome=arenaEnemyPhysicalDefenseV800();
    }else if(arenaStateV600.enemyGuardBlocksRemaining>0){
     outcome="parry";
@@ -19949,7 +19987,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   arenaStateV600.defenseSeq=arenaRandomDefenseSeqV640(cfg.length);
   arenaStateV600.defenseIndex=0;
   arenaStateV600.defenseResults=[];
-  arenaStateV600.defenseHitDamage=Math.max(1,Math.round(cfg.damage*(arenaIsKaeliosFightV800()?(arenaStateV600.enemyProfile?.stats.physicalMult||1):1)));
+  arenaStateV600.defenseHitDamage=Math.max(1,Math.round(cfg.damage*(arenaUsesScaledEnemyV900()?(arenaStateV600.enemyProfile?.stats.physicalMult||1):1)));
   arenaStateV600.defenseConfig=cfg;
 
   arenaStateV600.defenseComboHPBefore=arenaStateV600.playerHP;
@@ -20051,7 +20089,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  function arenaPlayerPerfectRatioV810(){
   /* Tutorial più permissivo. Nei combattimenti reali la finestra dipende
      dalla differenza di livello: un avversario superiore richiede reazioni più pulite. */
-  if(!arenaIsKaeliosFightV800())return .46;
+  if(!arenaUsesScaledEnemyV900())return .46;
   const delta=(Number(arenaStateV600.enemyLevel)||1)-(Number(arenaStateV600.playerLevel)||1);
   if(delta<=-1)return .40;
   if(delta===0)return .35;
@@ -20336,7 +20374,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   const special=type==="special";
 
   arenaStateV600.traceDefenseType=type;
-  arenaStateV600.traceDefenseDamage=Math.max(1,Math.round((special ? 36 : 20)*(arenaIsKaeliosFightV800()?(arenaStateV600.enemyProfile?.stats.kiMult||1):1)));
+  arenaStateV600.traceDefenseDamage=Math.max(1,Math.round((special ? 36 : 20)*(arenaUsesScaledEnemyV900()?(arenaStateV600.enemyProfile?.stats.kiMult||1):1)));
   arenaStateV600.traceKind=special ? "defenseSpecial" : "defense";
   arenaStateV600.trace=
    special
@@ -20352,7 +20390,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     Tecnica più potente = meno tempo per neutralizzarla.
   */
   let duration=special ? 2200 : 3400;
-  if(arenaIsKaeliosFightV800())duration=Math.round(duration*(arenaStateV600.enemyProfile?.timingScale||1));
+  if(arenaUsesScaledEnemyV900())duration=Math.round(duration*(arenaStateV600.enemyProfile?.timingScale||1));
   arenaStateV600.traceStartTs=performance.now();
   arenaStateV600.traceDuration=duration;
   arenaStateV600.traceCompleteTs=0;
@@ -20828,7 +20866,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
     Solo dopo si applica la quota che l'avversario riesce a bloccare.
   */
   const potentialDamage=Math.round(arenaPlayerKiDamageV800(def.damage)*quality);
-  const enemyBlock=arenaIsKaeliosFightV800()?arenaEnemyKiBlockV800(kind):(kind==="special" ? .25 : .50);
+  const enemyBlock=arenaUsesScaledEnemyV900()?arenaEnemyKiBlockV800(kind):(kind==="special" ? .25 : .50);
   const damage=Math.round(potentialDamage*(1-enemyBlock));
 
   arenaStateV600.enemyHP=Math.max(
@@ -20902,12 +20940,21 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   return pr;
  }
 
- function arenaSetEnemyVisualV800(mode,enemyLevel=0){
+ function arenaSetEnemyVisualV800(mode,enemyLevel=0,opts={}){
   if(!arenaV600Refs||!arenaV600)return;
-  const k=mode==="kaelios";
-  arenaV600.classList.toggle("arenaV800KaeliosBattle",k);
-  if(arenaV600Refs.enemyName)arenaV600Refs.enemyName.textContent=k?("KAELIOS • LV."+enemyLevel):"OLOGRAMMA NEXUS";
-  if(arenaV600Refs.enemyLabel)arenaV600Refs.enemyLabel.textContent=k?"KAELIOS":"BERSAGLIO DI ADDESTRAMENTO";
+  const real=mode==="kaelios"||mode==="world";
+  const name=mode==="kaelios"?"KAELIOS":(mode==="world"?String(opts.name||"NEMICO"):"OLOGRAMMA NEXUS");
+  arenaV600.classList.toggle("arenaV800KaeliosBattle",real);
+  const sprite=arenaV600.querySelector(".arenaV800KaeliosSprite");
+  if(sprite){
+   sprite.src=mode==="world"?String(opts.sprite||"./guardiano_veurs.png"):"./Kaelios.png";
+   sprite.alt=name;
+   sprite.style.width=mode==="world"?(opts.spriteWidth||"108%"):"98%";
+   sprite.style.height=mode==="world"?(opts.spriteHeight||"156%"):"148%";
+   sprite.style.bottom=mode==="world"?(opts.spriteBottom||"-28%"):"-24%";
+  }
+  if(arenaV600Refs.enemyName)arenaV600Refs.enemyName.textContent=real?(name+" • LV."+enemyLevel):"OLOGRAMMA NEXUS";
+  if(arenaV600Refs.enemyLabel)arenaV600Refs.enemyLabel.textContent=real?name:"BERSAGLIO DI ADDESTRAMENTO";
  }
 
  function arenaGetLastKaeliosDefeatV830(){
@@ -21090,6 +21137,126 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   if(window.WIUSoundV112)window.WIUSoundV112.play("transition");
  }
 
+ function arenaCloseWorldFightV900(result){
+  if(!arenaV600)return;
+  arenaStateV600.active=false;
+  arenaStateV600.freeFight=false;
+  arenaStateV600.gestureMode="";
+  arenaStateV600.pointerId=null;
+  clearTimeout(arenaStateV600.rewriteTimer);
+  clearTimeout(arenaStateV600.comboStepTimer);
+  clearTimeout(arenaStateV600.defenseTimer);
+  clearTimeout(arenaStateV600.traceTimer);
+  clearTimeout(arenaStateV600.defensePreviewTimer);
+  try{
+   if(arenaStateV600.comboStepAnim)arenaStateV600.comboStepAnim.cancel();
+   if(arenaStateV600.rewriteAnim)arenaStateV600.rewriteAnim.cancel();
+  }catch(e){}
+  arenaV600.classList.remove("active","arenaV800KaeliosBattle");
+  arenaV600.setAttribute("aria-hidden","true");
+  arenaSetEnemyVisualV800("tutorial",0);
+  if(window.WIUVeursV900 && typeof window.WIUVeursV900.onCombatClosed==="function"){
+   window.WIUVeursV900.onCombatClosed(result);
+  }
+ }
+
+ function arenaWinWorldFightV900(){
+  arenaStateV600.freeFight=false;
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.actions.innerHTML="";
+  arenaV600Refs.gesture.className="";
+  const remaining=Math.max(1,Math.round(arenaStateV600.playerHP));
+  arenaShowResultV640({
+   eyebrow:"VEURS • SCONTRO SUPERATO",
+   title:String(arenaStateV600.worldEnemyName||"NEMICO")+" SCONFITTO",
+   text:"HP spedizione rimasti: <b>"+remaining+" / "+Math.round(arenaStateV600.playerMaxHP)+"</b>"+
+        (arenaStateV600.worldExpReward?("<br><br><b>+"+arenaStateV600.worldExpReward+" EXP SPEDIZIONE</b><br><small>L'EXP verrà salvata solo se completi Veurs.</small>"):"")+
+        "<br><br>Gli HP non vengono ripristinati automaticamente tra gli scontri di questo mondo.",
+   continueLabel:"CONTINUA",
+   onContinue:()=>arenaCloseWorldFightV900({win:true,hp:remaining,id:arenaStateV600.worldFightId||"",expReward:arenaStateV600.worldExpReward||0})
+  });
+  if(window.WIUSoundV112)window.WIUSoundV112.play("success");
+ }
+
+ function arenaLoseWorldFightV900(){
+  arenaStateV600.gestureMode="";
+  arenaV600Refs.gesture.className="";
+  arenaV600Refs.actions.innerHTML="";
+  arenaShowResultV640({
+   eyebrow:"VEURS • SPEDIZIONE INTERROTTA",
+   title:"SCONFITTA",
+   text:"I tuoi HP sono arrivati a <b>0</b>.<br><br>La spedizione a Veurs termina qui. Ripartirai dall'ingresso del mondo.<br><br><b>L'EXP della spedizione e le scelte FIDUCIA / INDIPENDENZA fatte durante questa run non verranno salvate.</b>",
+   continueLabel:"TORNA ALL'UNIVERSO TRASCENDENTE",
+   onContinue:()=>arenaCloseWorldFightV900({win:false,hp:0,id:arenaStateV600.worldFightId||""})
+  });
+ }
+
+ window.WIUWorldCombatV900={
+  start:function(cfg={}){
+   arenaCreateDOMV600();
+   if(panel){panel.classList.remove("active");panel.setAttribute("aria-hidden","true")}
+   if(arenaStartBtnV600)arenaStartBtnV600.style.display="none";
+   if(kaeliosFightBtnV800)kaeliosFightBtnV800.style.display="none";
+   if(veursStartBtnV900)veursStartBtnV900.style.display="none";
+
+   arenaRenderPlayerV600();
+   arenaResetStateV600();
+
+   const playerLevel=Math.max(1,Number(cfg.playerLevel)||wiuLoadCombatProgressV800().level||1);
+   const ps=wiuCombatStatsV800(playerLevel);
+   const enemyLevel=Math.max(1,Number(cfg.enemyLevel)||3);
+   const ep=wiuEnemyProfileV800(enemyLevel,playerLevel,String(cfg.kind||"standard"));
+   if(Number.isFinite(Number(cfg.perfectMod)))ep.perfectChance=wiuClampV800(ep.perfectChance+Number(cfg.perfectMod),.02,.75);
+   if(Number.isFinite(Number(cfg.parryMod)))ep.parryChance=wiuClampV800(ep.parryChance+Number(cfg.parryMod),.05,.70);
+   if(Number.isFinite(Number(cfg.tacticsMod)))ep.tactics=wiuClampV800(ep.tactics+Number(cfg.tacticsMod),.15,.96);
+   if(Number.isFinite(Number(cfg.kiSkillMod)))ep.kiSkill=wiuClampV800(ep.kiSkill+Number(cfg.kiSkillMod),.15,.98);
+
+   arenaStateV600.active=true;
+   arenaStateV600.battleMode="world";
+   arenaStateV600.freeFight=true;
+   arenaStateV600.phase=300;
+   arenaStateV600.worldFightId=String(cfg.id||"");
+   arenaStateV600.worldEnemyName=String(cfg.name||"NEMICO").toUpperCase();
+   arenaStateV600.worldExpReward=Math.max(0,Number(cfg.expReward)||0);
+   arenaStateV600.playerLevel=playerLevel;
+   arenaStateV600.enemyLevel=enemyLevel;
+   arenaStateV600.playerStats=ps;
+   arenaStateV600.enemyProfile=ep;
+   arenaStateV600.playerMaxHP=Math.max(1,Number(cfg.playerMaxHP)||ps.maxHP);
+   arenaStateV600.playerMaxKi=ps.maxKi;
+   arenaStateV600.enemyMaxHP=Math.max(1,Number(cfg.enemyHP)||ep.stats.maxHP);
+   arenaStateV600.enemyMaxKi=ep.stats.maxKi;
+   arenaStateV600.playerHP=Math.max(1,Math.min(arenaStateV600.playerMaxHP,Number(cfg.playerHP)||arenaStateV600.playerMaxHP));
+   arenaStateV600.enemyHP=arenaStateV600.enemyMaxHP;
+   arenaStateV600.playerGuard=100;
+   arenaStateV600.enemyGuard=100;
+   arenaStateV600.ki=Math.max(0,Math.min(ps.maxKi,25+(Number(cfg.playerKiBonus)||0)));
+   arenaStateV600.enemyKi=Math.max(0,Math.min(ep.stats.maxKi,25+(Number(cfg.enemyKiBonus)||0)));
+   arenaStateV600.playerTurnCount=0;
+   arenaStateV600.enemyTurnCount=0;
+   arenaStateV600.playerGuardBrokenAnnounced=false;
+   arenaStateV600.enemyGuardBrokenAnnounced=false;
+   arenaStateV600.rewriteAvailable=1;
+   arenaStateV600.gestureMode="";
+   arenaV600Refs.gesture.className="";
+   arenaV600Refs.actions.innerHTML="";
+   arenaV600Refs.intro.classList.remove("active");
+   arenaV600Refs.complete.classList.remove("active");
+   arenaSetEnemyVisualV800("world",enemyLevel,{name:arenaStateV600.worldEnemyName,sprite:cfg.sprite,spriteWidth:cfg.spriteWidth,spriteHeight:cfg.spriteHeight,spriteBottom:cfg.spriteBottom});
+   arenaV600Refs.playerName.textContent=(window.pendingCharacterV32?.name||"PLAYER").toUpperCase()+" • LV."+playerLevel;
+   arenaUpdateHudV600();
+   arenaV600.classList.add("active");
+   arenaV600.setAttribute("aria-hidden","false");
+   if(window.WIUSoundV112)window.WIUSoundV112.play("transition");
+   arenaShowInfoV620(
+    String(cfg.title||"SCONTRO • VEURS"),
+    "<b>TU LV."+playerLevel+" vs "+arenaStateV600.worldEnemyName+" LV."+enemyLevel+"</b><br><br>HP spedizione: <b>"+Math.round(arenaStateV600.playerHP)+" / "+Math.round(arenaStateV600.playerMaxHP)+"</b>.<br>Guardia, Ki e Riscrittura ripartono per questo scontro; gli HP no.",
+    ()=>arenaBeginFreePlayerTurnV690(),
+    "MONDO VEURS"
+   );
+  }
+ };
+
  function arenaWinKaeliosV800(){
   arenaStateV600.freeFight=false; arenaStateV600.gestureMode="";
   arenaV600Refs.actions.innerHTML=""; arenaV600Refs.gesture.className="";
@@ -21259,6 +21426,11 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
  arenaStartBtnV600.addEventListener("click",arenaOpenV600);
  kaeliosFightBtnV800.addEventListener("click",arenaOpenKaeliosV800);
+ if(veursStartBtnV900)veursStartBtnV900.addEventListener("click",()=>{
+  panel.classList.remove("active");
+  panel.setAttribute("aria-hidden","true");
+  if(window.WIUVeursV900 && typeof window.WIUVeursV900.start==="function")window.WIUVeursV900.start();
+ });
 
 
  window.openNexusV41=function(opts={}){
@@ -22120,6 +22292,248 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
  .arenaV740EnemyKiBar{height:3px}
 }
 </style>
+
+<style id="veursV900Style">
+#veursV900{position:fixed;inset:0;z-index:3900;background:#050817;color:#fff;overflow:hidden;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#veursV900.hidden{display:none!important}
+#veursV900Bg{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;transition:opacity .32s ease,transform .7s ease;filter:saturate(1.03) contrast(1.02)}
+#veursV900Bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,8,24,.12) 0%,rgba(3,7,20,.02) 42%,rgba(3,5,18,.76) 100%);pointer-events:none}
+.veursV900Hud{position:absolute;top:max(12px,env(safe-area-inset-top));left:14px;right:14px;z-index:6;display:flex;justify-content:space-between;gap:10px;pointer-events:none}
+.veursV900HudBox{background:rgba(5,12,31,.78);border:1px solid rgba(102,192,255,.42);box-shadow:0 8px 24px rgba(0,0,0,.28),inset 0 0 20px rgba(30,137,255,.08);backdrop-filter:blur(8px);border-radius:14px;padding:8px 10px;min-width:0}
+#veursV900WorldTitle{font-size:11px;letter-spacing:.18em;color:#a8dfff;font-weight:800}#veursV900HpText{font-size:13px;font-weight:900;margin-top:4px}.veursV900HpBar{width:min(43vw,220px);height:7px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin-top:5px}.veursV900HpBar span{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,#52caff,#d7f6ff);transition:transform .3s ease}
+#veursV900Traits{text-align:right;font-size:11px;line-height:1.55;font-weight:800;color:#dceeff}
+.veursV900Actor{position:absolute;z-index:3;bottom:18%;height:min(69vh,760px);max-width:47vw;object-fit:contain;filter:drop-shadow(0 16px 22px rgba(0,0,0,.55));transition:opacity .28s ease,transform .35s ease;pointer-events:none}.veursV900Actor.hiddenActor{opacity:0;transform:translateY(16px) scale(.98)}#veursV900Left{left:-3%}#veursV900Right{right:-3%;transform:scaleX(-1)}#veursV900Right.hiddenActor{transform:scaleX(-1) translateY(16px) scale(.98)}
+#veursV900Dialogue{position:absolute;z-index:8;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));width:min(94vw,760px);background:linear-gradient(180deg,rgba(6,9,28,.94),rgba(5,7,22,.985));border:1px solid rgba(100,196,255,.46);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.5),inset 0 0 28px rgba(49,145,255,.06);padding:14px 15px 12px}
+#veursV900Speaker{font-size:11px;letter-spacing:.16em;color:#74ceff;font-weight:900;margin-bottom:7px}#veursV900Text{font-size:clamp(14px,3.7vw,18px);line-height:1.45;min-height:44px;color:#f6f8ff}#veursV900Continue,.veursV900Choice{border:1px solid rgba(103,202,255,.56);background:rgba(41,121,204,.16);color:#fff;border-radius:12px;padding:10px 13px;font-weight:900;letter-spacing:.05em;cursor:pointer}.veursV900DialogueActions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}.veursV900Choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}.veursV900Choice{width:100%}
+.veursV900TitleCard{position:absolute;z-index:7;left:50%;top:48%;transform:translate(-50%,-50%);text-align:center;text-shadow:0 5px 25px #000;pointer-events:none;opacity:0}.veursV900TitleCard.active{animation:veursTitleV900 2.5s ease both}.veursV900TitleCard strong{display:block;font-size:clamp(30px,8vw,64px);letter-spacing:.16em}.veursV900TitleCard span{font-size:12px;letter-spacing:.2em;color:#a9dcff}@keyframes veursTitleV900{0%{opacity:0;transform:translate(-50%,-44%) scale(.96)}20%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-55%) scale(1.02)}}
+.veursV900Qte{position:absolute;z-index:20;inset:0;display:none;align-items:center;justify-content:center;background:rgba(3,7,24,.87);backdrop-filter:blur(7px)}.veursV900Qte.active{display:flex}.veursV900QtePanel{width:min(94vw,720px);border:1px solid rgba(102,203,255,.5);border-radius:22px;background:linear-gradient(180deg,rgba(9,16,43,.97),rgba(3,7,24,.99));box-shadow:0 24px 70px #000;padding:18px 15px}.veursV900QteHead{text-align:center;margin-bottom:13px}.veursV900QteHead strong{display:block;letter-spacing:.16em;font-size:18px}.veursV900QteHead span{display:block;color:#98d9ff;font-size:12px;margin-top:5px}.veursV900Score{display:flex;justify-content:center;gap:16px;font-size:12px;font-weight:900;color:#d8efff;margin-top:7px}
+#veursMoleGridV900{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:min(92%,520px);margin:20px auto}.veursMoleNodeV900{aspect-ratio:1;border-radius:50%;border:2px solid rgba(111,187,255,.32);background:radial-gradient(circle,rgba(60,134,206,.14),rgba(9,20,48,.78));box-shadow:inset 0 0 18px rgba(70,160,255,.1);transition:transform .08s ease,background .08s,border .08s,box-shadow .08s}.veursMoleNodeV900.active{border-color:#bcecff;background:radial-gradient(circle,#effcff 0%,#72d7ff 20%,#1f8cff 48%,rgba(20,62,121,.72) 72%);box-shadow:0 0 18px #50bfff,0 0 40px rgba(38,147,255,.75),inset 0 0 20px #c5f5ff;transform:scale(1.08)}.veursMoleNodeV900.hit{animation:veursMoleHit .22s ease}.veursMoleNodeV900.miss{animation:veursMoleMiss .25s ease}@keyframes veursMoleHit{50%{transform:scale(.82);filter:brightness(1.8)}}@keyframes veursMoleMiss{50%{border-color:#ff667f;box-shadow:0 0 26px #ff3f63}}
+#veursGlyphButtonsV900{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:min(96%,560px);margin:10px auto 18px}.veursGlyphBtnV900{height:58px;border-radius:50%;aspect-ratio:1;justify-self:center;border:1px solid rgba(105,195,255,.48);background:radial-gradient(circle,rgba(50,127,209,.28),rgba(5,15,38,.85));color:#e9f8ff;font-size:26px;font-family:Georgia,"Times New Roman",serif;font-weight:800;text-shadow:0 0 12px #61c8ff;box-shadow:inset 0 0 18px rgba(46,139,255,.09)}.veursGlyphBtnV900.correct{animation:veursGlyphOk .3s ease}.veursGlyphBtnV900.wrong{animation:veursGlyphBad .3s ease}@keyframes veursGlyphOk{50%{background:#5ed8ff;color:#061126;transform:scale(1.12);box-shadow:0 0 28px #5ed8ff}}@keyframes veursGlyphBad{50%{background:#ff4568;transform:scale(.92)}}
+#veursGlyphRailsV900{display:grid;gap:12px;width:min(96%,620px);margin:0 auto}.veursGlyphLaneV900{height:64px;border-radius:14px;border:1px solid rgba(93,183,255,.32);background:linear-gradient(90deg,rgba(28,74,130,.08),rgba(53,141,220,.16),rgba(28,74,130,.08));position:relative;overflow:hidden}.veursGlyphLaneV900::before,.veursGlyphLaneV900::after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#6acbff,transparent);opacity:.5}.veursGlyphLaneV900::before{top:9px}.veursGlyphLaneV900::after{bottom:9px}.veursGlyphMoverV900{position:absolute;left:0;top:50%;transform:translate(-120%,-50%);width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:28px;font-family:Georgia,"Times New Roman",serif;font-weight:900;color:#eafaff;background:radial-gradient(circle,#3abaff 0%,#14529e 56%,#0a1b3f 100%);border:1px solid #a6e6ff;box-shadow:0 0 20px rgba(62,183,255,.7);text-shadow:0 0 8px #fff}
+.veursV900QteResult{text-align:center;font-weight:900;font-size:18px;min-height:24px;margin-top:12px;color:#dff7ff}.veursV900QteResult.bad{color:#ff8da0}.veursV900QteResult.good{color:#8ef7d2}
+@media(max-width:600px){.veursV900Actor{height:min(58vh,560px);bottom:23%}#veursV900Left{left:-17%}#veursV900Right{right:-17%}.veursV900Choices{grid-template-columns:1fr}.veursV900QtePanel{padding:15px 10px}#veursMoleGridV900{gap:12px}.veursGlyphBtnV900{height:52px;font-size:23px}}
+</style>
+
+<section id="veursV900" class="screen hidden" aria-hidden="true">
+ <div id="veursV900Bg"></div>
+ <div class="veursV900Hud">
+  <div class="veursV900HudBox"><div id="veursV900WorldTitle">VEURS • LV.3</div><div id="veursV900HpText">HP SPEDIZIONE 106/106</div><div class="veursV900HpBar"><span id="veursV900HpFill"></span></div></div>
+  <div class="veursV900HudBox" id="veursV900Traits">FIDUCIA 0<br>INDIPENDENZA 0</div>
+ </div>
+ <img id="veursV900Left" class="veursV900Actor hiddenActor" alt="">
+ <img id="veursV900Right" class="veursV900Actor hiddenActor" alt="">
+ <div id="veursV900TitleCard" class="veursV900TitleCard"><strong>VEURS</strong><span>LA CITTÀ CHE HA SMESSO DI SCEGLIERE</span></div>
+ <div id="veursV900Dialogue">
+  <div id="veursV900Speaker">KAELIOS</div><div id="veursV900Text"></div>
+  <div id="veursV900Choices" class="veursV900Choices" style="display:none"></div>
+  <div class="veursV900DialogueActions"><button id="veursV900Continue" type="button">CONTINUA</button></div>
+ </div>
+ <div id="veursMoleV900" class="veursV900Qte" aria-hidden="true"><div class="veursV900QtePanel">
+  <div class="veursV900QteHead"><strong>MOLE</strong><span>NEUTRALIZZA ALMENO L'80% DEI NODI • 0,5s PER REAGIRE</span><div class="veursV900Score"><span id="veursMoleHitsV900">0/10</span><span id="veursMoleScoreV900">0 PT</span></div></div>
+  <div id="veursMoleGridV900"></div><div id="veursMoleResultV900" class="veursV900QteResult"></div>
+ </div></div>
+ <div id="veursGlyphV900" class="veursV900Qte" aria-hidden="true"><div class="veursV900QtePanel">
+  <div class="veursV900QteHead"><strong>GLYPH SCROLLING</strong><span>RICONOSCI IL GLIFO IN CORSA E TOCCA LA CORRISPONDENZA • 0,8s</span><div class="veursV900Score"><span id="veursGlyphCorrectV900">0/10</span><span id="veursGlyphScoreV900">0 PT</span></div></div>
+  <div id="veursGlyphButtonsV900"></div><div id="veursGlyphRailsV900"><div class="veursGlyphLaneV900"></div><div class="veursGlyphLaneV900"></div></div><div id="veursGlyphResultV900" class="veursV900QteResult"></div>
+ </div></div>
+</section>
+
+<script id="veursV900Engine">
+(function(){
+ const el=document.getElementById("veursV900"); if(!el)return;
+ const bg=document.getElementById("veursV900Bg"), left=document.getElementById("veursV900Left"), right=document.getElementById("veursV900Right");
+ const speaker=document.getElementById("veursV900Speaker"), textEl=document.getElementById("veursV900Text"), cont=document.getElementById("veursV900Continue"), choices=document.getElementById("veursV900Choices");
+ const hpText=document.getElementById("veursV900HpText"), hpFill=document.getElementById("veursV900HpFill"), traits=document.getElementById("veursV900Traits"), titleCard=document.getElementById("veursV900TitleCard");
+ const BG={arrival:"./veurs_ingresso_portale.png",city:"./veurs_viale_centrale.png",sensors:"./veurs_corridoio_sensori.png",refuge:"./veurs_rifugio_varianti.png",oracle:"./veurs_santuario_oracolo.png",boss:"./veurs_arena_custode.png"};
+ const CHAR={kaelios:"./Kaelios.png",aelia:"./aelia_veurs.png",guard:"./guardiano_veurs.png",executor:"./esecutore_veurs.png",custodian:"./custode_veurs.png",pursuer:"./inseguitore_alpha.png"};
+ const SAVE="whatIfUniverse_veurs_run_v1", COMPLETE="whatIfUniverse_veurs_complete_v1";
+ const FIGHT_EXP={guard:25,executor:35,boss:60};
+ let state={active:false,maxHP:106,hp:106,step:0,nextEnemyKiBonus:0,firstFightPlayerKiBonus:0,firstFightEnemyKiBonus:0,extraLore:false,mole:null,glyph:null,pendingXP:0,baseTrust:0,baseIndep:0};
+ let dialogue=[],di=0,done=null;
+ function playerName(){return String(window.pendingCharacterV32?.name||"TU").trim()||"TU"}
+ function lvl(){try{return Math.max(1,Number(playerLevelV25)||1)}catch(e){return 1}}
+ function maxHp(){try{return window.WIUCombatScalingV800?.stats(lvl()).maxHP||100}catch(e){return 100}}
+ function trustNow(){try{return Number(typeof kaeliosTrust!=="undefined"?kaeliosTrust:0)||0}catch(e){return 0}}
+ function indepNow(){try{return Number(typeof protagonistIndependence!=="undefined"?protagonistIndependence:0)||0}catch(e){return 0}}
+ function setBg(k){bg.style.opacity=".25";setTimeout(()=>{bg.style.backgroundImage=`url("${BG[k]}")`;bg.style.opacity="1"},120)}
+ function actor(node,key,show=true){if(!show){node.classList.add("hiddenActor");return}node.src=CHAR[key];node.alt=key;node.classList.remove("hiddenActor")}
+ function actors(l=null,r=null){actor(left,l,!!l);actor(right,r,!!r)}
+ function updateHud(){hpText.textContent="HP SPEDIZIONE "+Math.round(state.hp)+"/"+Math.round(state.maxHP);hpFill.style.transform="scaleX("+Math.max(0,state.hp/state.maxHP)+")";traits.innerHTML="FIDUCIA "+trustNow()+"<br>INDIPENDENZA "+indepNow()+"<br><b>EXP SPEDIZIONE +"+(Number(state.pendingXP)||0)+"</b>"}
+ function save(){try{localStorage.setItem(SAVE,JSON.stringify(state))}catch(e){}}
+ function persistRelationship(){try{localStorage.setItem("whatIfUniverse_relationship_v41",JSON.stringify({trust:trustNow(),independence:indepNow(),savedAt:Date.now()}))}catch(e){}}
+ function relationship(dt,ind){try{if(typeof kaeliosTrust!=="undefined")kaeliosTrust+=dt;if(typeof protagonistIndependence!=="undefined")protagonistIndependence+=ind;persistRelationship()}catch(e){}updateHud();save()}
+ function restoreRelationship(){try{if(typeof kaeliosTrust!=="undefined")kaeliosTrust=Number(state.baseTrust)||0;if(typeof protagonistIndependence!=="undefined")protagonistIndependence=Number(state.baseIndep)||0;persistRelationship()}catch(e){}}
+ function damage(n){state.hp=Math.max(0,state.hp-Math.max(0,n));updateHud();save();if(window.WIUSoundV112)window.WIUSoundV112.play("hit");return state.hp>0}
+ function heal(n){const before=state.hp;state.hp=Math.min(state.maxHP,state.hp+Math.max(0,n));const got=Math.max(0,Math.round(state.hp-before));updateHud();save();if(got&&window.WIUSoundV112)window.WIUSoundV112.play("success",.4);return got}
+ function addPendingXp(n){state.pendingXP=Math.max(0,(Number(state.pendingXP)||0)+Math.max(0,Number(n)||0));updateHud();save()}
+ function showWorld(){if(typeof show==="function")show("veursV900");else el.classList.remove("hidden");el.setAttribute("aria-hidden","false");updateHud()}
+ function say(lines,cb){dialogue=lines;di=0;done=cb;choices.style.display="none";choices.innerHTML="";cont.style.display="inline-block";renderLine()}
+ function renderLine(){const x=dialogue[di];if(!x){const cb=done;done=null;if(cb)cb();return}speaker.textContent=x.speaker||"";textEl.innerHTML=typeof x.text==="function"?x.text():x.text}
+ cont.addEventListener("click",()=>{if(di<dialogue.length-1){di++;renderLine()}else{di++;renderLine()}});
+ function choose(prompt,opts){speaker.textContent=prompt.speaker||"";textEl.innerHTML=prompt.text||"";cont.style.display="none";choices.innerHTML="";choices.style.display="grid";opts.forEach(o=>{const b=document.createElement("button");b.className="veursV900Choice";b.textContent=o.label;b.onclick=()=>{choices.style.display="none";cont.style.display="inline-block";o.onChoose()};choices.appendChild(b)})}
+ function title(){titleCard.classList.remove("active");void titleCard.offsetWidth;titleCard.classList.add("active")}
+ function failExpedition(msg){say([{speaker:"SISTEMA",text:msg},{speaker:"SISTEMA",text:()=>`SPEDIZIONE FALLITA<br><b>EXP SPEDIZIONE PERDUTA: ${state.pendingXP}</b><br>Le variazioni di FIDUCIA e INDIPENDENZA di questa run verranno annullate.`},{speaker:"KAELIOS",text:"Il varco ci sta richiamando. Dovremo rientrare a Veurs dall'inizio."}],()=>returnToHub(false))}
+ function returnToHub(completed){state.active=false;if(!completed)restoreRelationship();try{localStorage.removeItem(SAVE)}catch(e){};if(completed)try{localStorage.setItem(COMPLETE,"1")}catch(e){};el.classList.add("hidden");el.setAttribute("aria-hidden","true");if(typeof window.openNexusV41==="function"){window.openNexusV41({skipIntro:true,newArrival:false});setTimeout(()=>{try{if(typeof setObjective==="function")setObjective(completed?"VEURS STABILIZZATO • 1/4 MONDI":"VEURS • RIPARTI DALL'INGRESSO")}catch(e){}},120)}}
+
+ function start(){
+  try{if(typeof window.closeNexusV41==="function")window.closeNexusV41()}catch(e){}
+  state={active:true,maxHP:maxHp(),hp:maxHp(),step:0,nextEnemyKiBonus:0,firstFightPlayerKiBonus:0,firstFightEnemyKiBonus:0,extraLore:false,mole:null,glyph:null,pendingXP:0,baseTrust:trustNow(),baseIndep:indepNow()};save();showWorld();setBg("arrival");actors("kaelios",null);title();
+  setTimeout(()=>say([
+   {speaker:"KAELIOS",text:"Siamo passati attraverso il Portale 01. Questo è Veurs, uno dei quattro mondi dell'Universo Trascendente."},
+   {speaker:"KAELIOS",text:"Qui la spedizione funziona diversamente dal Nexus: le ferite restano tra uno scontro e l'altro."},
+   {speaker:"KAELIOS",text:"Guardia, Ki e Riscrittura si ripristinano a ogni combattimento. Gli HP invece restano quelli con cui esci dallo scontro."},
+   {speaker:"KAELIOS",text:()=>`Se arriviamo a 0 HP, ${playerName()}, il Portale ci espellerà e dovremo ricominciare Veurs dall'inizio.`},
+   {speaker:"NARRAZIONE",text:"Davanti a voi si apre una città perfettamente ordinata: strade simmetriche, cristalli luminosi e nessuno fuori posto. Quasi nessuno."}
+  ],sceneAelia),700)
+ }
+ function sceneAelia(){state.step=1;save();setBg("city");actors("kaelios","aelia");say([
+   {speaker:"NARRAZIONE",text:"Una ragazza corre lungo il viale guardandosi alle spalle. Quando vi vede, cambia direzione e viene verso di voi."},
+   {speaker:"AELIA",text:"Vi prego, aiutatemi. I Guardiani mi stanno cercando."},
+   {speaker:"KAELIOS",text:"Non muoverti ancora. Non sappiamo chi sia né perché la stiano inseguendo."},
+   {speaker:"AELIA",text:"Mi chiamo Aelia. Non ho commesso un crimine. Ho solo fatto una scelta che l'Oracolo non aveva previsto."}
+  ],()=>choose({speaker:"SCELTA",text:"Come reagisci?"},[
+   {label:"SEGUI KAELIOS • OSSERVA PRIMA  +FIDUCIA",onChoose:()=>{relationship(1,0);state.firstFightEnemyKiBonus=-10;guardArrival("trust")}},
+   {label:"INTERVIENI SUBITO • PROTEGGI AELIA  +INDIPENDENZA",onChoose:()=>{relationship(0,1);state.firstFightPlayerKiBonus=10;guardArrival("independence")}}
+  ]))
+ }
+ function guardArrival(path){setBg("city");actors("guard","aelia");const lead=path==="trust"?
+   [{speaker:"NARRAZIONE",text:"Rimani fermo per qualche secondo, seguendo l'indicazione di Kaelios. Noti che il Guardiano scarica parte del Ki ogni volta che esegue una scansione."},{speaker:"KAELIOS",text:"Ora. Abbiamo letto il suo ritmo: entrerà nello scontro con meno Ki."}]:
+   [{speaker:"NARRAZIONE",text:"Ti metti davanti ad Aelia prima che il Guardiano raggiunga la piazza. L'energia del movimento ti dà subito l'iniziativa."},{speaker:"KAELIOS",text:"Hai scelto di agire. Bene: sfrutta lo slancio, partirai con più Ki."}];
+  say([
+   ...lead,
+   {speaker:"GUARDIANO DI VEURS",text:"Cittadina Aelia. Deviazione decisionale confermata. Torna sotto custodia dell'Oracolo."},
+   {speaker:"AELIA",text:"È questo che fanno. Se una decisione non rientra nei loro calcoli, la trattano come un errore."},
+   {speaker:"GUARDIANO DI VEURS",text:"Le due entità non registrate interferiscono con il protocollo. Allontanatevi."},
+   {speaker:"KAELIOS",text:"Adesso sai perché sta combattendo. Preparati: è il primo scontro della spedizione."}
+  ],fightGuard)
+ }
+ function fightGuard(){state.step=2;save();el.classList.add("hidden");window.WIUWorldCombatV900.start({id:"guard",name:"GUARDIANO DI VEURS",enemyLevel:3,sprite:CHAR.guard,playerLevel:lvl(),playerHP:state.hp,playerMaxHP:state.maxHP,playerKiBonus:state.firstFightPlayerKiBonus,enemyKiBonus:state.firstFightEnemyKiBonus,expReward:FIGHT_EXP.guard,title:"SCONTRO 1/3 • GUARDIANO DI VEURS"})}
+ function afterGuard(){state.step=3;save();showWorld();setBg("city");actors("aelia","kaelios");say([
+   {speaker:"AELIA",text:"Grazie. Ora posso spiegarvi cosa sta succedendo."},
+   {speaker:"AELIA",text:"L'Oracolo era stato creato per prevedere le conseguenze delle nostre decisioni e aiutarci a evitare le catastrofi."},
+   {speaker:"AELIA",text:"Poi ha concluso che il modo più sicuro per eliminare le conseguenze imprevedibili fosse eliminare le scelte imprevedibili."},
+   {speaker:"TU",text:"E chi sceglie qualcosa che non aveva previsto diventa una 'variante'."},
+   {speaker:"AELIA",text:"Esatto. E le Varianti vengono isolate prima che possano creare altre possibilità."},
+   {speaker:"AELIA",text:"Se vogliamo arrivare al Santuario dell'Oracolo dovrete attraversare il settore centrale. Ma prima... bevi questo. Hai bisogno di recuperare."}
+  ],aeliaHeal)}
+ function aeliaHeal(){const got=heal(30);say([
+   {speaker:"SISTEMA",text:()=>got>0?`SOLUZIONE CRISTALLINA<br><b>+${got} HP</b>`:"SOLUZIONE CRISTALLINA<br><b>HP GIÀ AL MASSIMO</b>"},
+   {speaker:"AELIA",text:"Non ne ho molta. Da qui in avanti dovremo evitare danni inutili."},
+   {speaker:"KAELIOS",text:"Il passaggio davanti a noi è coperto da otto nodi di scansione. Se si accendono abbastanza a lungo, ci identificano."}
+  ],sensorChoice)}
+ function sensorChoice(){choose({speaker:"SCELTA",text:"Come vuoi attraversare la rete di sensori?"},[
+   {label:"SEGUI IL TEMPO DI KAELIOS  +FIDUCIA",onChoose:()=>{relationship(1,0);say([{speaker:"KAELIOS",text:"Ti indico io quando ogni nodo entra nella finestra vulnerabile. Tu devi soltanto colpirlo mentre è azzurro."},{speaker:"SISTEMA",text:"MOLE<br>8 NODI • 10 ATTIVAZIONI<br>Ogni nodo resta vulnerabile per <b>0,5 secondi</b>.<br>Neutralizzane almeno 8 su 10."}],startMole)}},
+   {label:"PRENDI TU L'INIZIATIVA  +INDIPENDENZA",onChoose:()=>{relationship(0,1);say([{speaker:"TU",text:"Ho capito il ritmo. Entro io nella rete e apro il passaggio."},{speaker:"AELIA",text:"Allora guarda soltanto i nodi azzurri. Se tocchi in tempo, la scansione si interrompe."},{speaker:"SISTEMA",text:"MOLE<br>8 NODI • 10 ATTIVAZIONI<br>Ogni nodo resta vulnerabile per <b>0,5 secondi</b>.<br>Neutralizzane almeno 8 su 10."}],startMole)}}
+  ])}
+
+ // MOLE
+ function startMole(){state.step=4;save();setBg("sensors");actors(null,null);const q=document.getElementById("veursMoleV900"),grid=document.getElementById("veursMoleGridV900"),hitsEl=document.getElementById("veursMoleHitsV900"),scoreEl=document.getElementById("veursMoleScoreV900"),res=document.getElementById("veursMoleResultV900");grid.innerHTML="";res.textContent="";res.className="veursV900QteResult";hitsEl.textContent="0/10";scoreEl.textContent="0 PT";let round=0,hits=0,score=0,last=-1,active=-1,deadline=0,timer=null,locked=false;for(let i=0;i<8;i++){const b=document.createElement("button");b.className="veursMoleNodeV900";b.type="button";b.dataset.i=i;b.addEventListener("pointerdown",e=>{e.preventDefault();if(locked||i!==active)return;const remaining=Math.max(0,deadline-performance.now());hits++;score+=100+Math.round(50*(remaining/500));hitsEl.textContent=hits+"/10";scoreEl.textContent=score+" PT";b.classList.remove("active");b.classList.add("hit");active=-1;clearTimeout(timer);locked=true;if(window.WIUSoundV112)window.WIUSoundV112.play("success",.45);setTimeout(next,220)});grid.appendChild(b)}
+  q.classList.add("active");q.setAttribute("aria-hidden","false");function next(){if(round>=10){finish();return}locked=false;[...grid.children].forEach(n=>n.className="veursMoleNodeV900");let n;do{n=Math.floor(Math.random()*8)}while(n===last);last=n;active=n;round++;deadline=performance.now()+500;grid.children[n].classList.add("active");timer=setTimeout(()=>{if(active===n){grid.children[n].classList.remove("active");grid.children[n].classList.add("miss");active=-1;locked=true;setTimeout(next,220)}},500)}
+  function finish(){locked=true;clearTimeout(timer);let label,loss=0;if(hits>=9){label="PERFETTO • SISTEMA ELUSO";res.classList.add("good")}else if(hits>=8){label="SUPERATO • SCANSIONE EVITATA";res.classList.add("good")}else if(hits>=5){label="RILEVATO • -8% HP";loss=Math.max(1,Math.round(state.maxHP*.08));res.classList.add("bad")}else{label="INTERCETTATO • -12% HP";loss=Math.max(1,Math.round(state.maxHP*.12));state.nextEnemyKiBonus+=10;res.classList.add("bad")}res.textContent=label+" • "+hits+"/10 • "+score+" PT";state.mole={hits,score};if(loss)damage(loss);save();setTimeout(()=>{q.classList.remove("active");q.setAttribute("aria-hidden","true");if(state.hp<=0){failExpedition("La rete di sensori ti ha prosciugato completamente.");return}afterMole()},1500)}
+  setTimeout(next,900)
+ }
+ function afterMole(){setBg("refuge");actors("aelia","kaelios");const outcome=state.mole?.hits>=8?
+  "La rete non ci ha identificati. Possiamo usare questo rifugio senza attirare subito rinforzi.":
+  "La rete ci ha rilevati. Siamo passati, ma ora il settore sa che qualcuno sta cercando di raggiungere il Santuario.";
+  say([
+   {speaker:"AELIA",text:outcome},
+   {speaker:"AELIA",text:"Questo era uno dei rifugi delle Varianti. Qui conservavamo vecchi accessi all'Oracolo prima che venissero cancellati."},
+   {speaker:"KAELIOS",text:"Un terminale è ancora acceso. Sta facendo scorrere gli stessi otto simboli su due canali."},
+   {speaker:"AELIA",text:"Se riconosci il simbolo in movimento e tocchi quello uguale nella matrice, posso ricostruire la chiave d'accesso."}
+  ],glyphChoice)}
+ function glyphChoice(){choose({speaker:"SCELTA",text:"Come affronti la decodifica?"},[
+   {label:"CHIEDI A KAELIOS DI GUIDARTI  +FIDUCIA",onChoose:()=>{relationship(1,0);say([{speaker:"KAELIOS",text:"Non inseguire il simbolo con lo sguardo. Identificalo e torna subito alla matrice sopra."},{speaker:"SISTEMA",text:"GLYPH SCROLLING<br>10 GLIFI • 2 BINARI<br>Ogni glifo attraversa il binario in <b>0,8 secondi</b>.<br>Tocca il simbolo corrispondente prima che esca."}],startGlyph)}},
+   {label:"DECODIFICA DA SOLO  +INDIPENDENZA",onChoose:()=>{relationship(0,1);say([{speaker:"TU",text:"Lasciami provare. Voglio capire da solo come legge questi simboli."},{speaker:"AELIA",text:"Va bene. La matrice resta ferma; è il glifo sui binari che cambia."},{speaker:"SISTEMA",text:"GLYPH SCROLLING<br>10 GLIFI • 2 BINARI<br>Ogni glifo attraversa il binario in <b>0,8 secondi</b>.<br>Tocca il simbolo corrispondente prima che esca."}],startGlyph)}}
+  ])}
+
+ // GLYPH SCROLLING. Gli ID restano quelli richiesti; alcuni byte estesi usano equivalenti visibili Unicode.
+ const GLYPHS=[{id:245,ch:"õ"},{id:231,ch:"ç"},{id:225,ch:"á"},{id:155,ch:"›"},{id:207,ch:"Ï"},{id:139,ch:"‹"},{id:208,ch:"Ð"},{id:147,ch:"“"}];
+ function startGlyph(){state.step=5;save();actors(null,null);const q=document.getElementById("veursGlyphV900"),buttons=document.getElementById("veursGlyphButtonsV900"),lanes=[...document.querySelectorAll(".veursGlyphLaneV900")],correctEl=document.getElementById("veursGlyphCorrectV900"),scoreEl=document.getElementById("veursGlyphScoreV900"),res=document.getElementById("veursGlyphResultV900");buttons.innerHTML="";res.textContent="";res.className="veursV900QteResult";correctEl.textContent="0/10";scoreEl.textContent="0 PT";let round=0,correct=0,score=0,current=null,startTs=0,duration=800,anim=null,locked=true,last=-1;const order=[...GLYPHS].sort(()=>Math.random()-.5);order.forEach(g=>{const b=document.createElement("button");b.type="button";b.className="veursGlyphBtnV900";b.textContent=g.ch;b.title=String(g.id);b.dataset.id=g.id;b.addEventListener("pointerdown",e=>{e.preventDefault();if(locked||!current)return;locked=true;const ok=Number(b.dataset.id)===current.id;if(anim)anim.cancel();if(ok){correct++;const elapsed=performance.now()-startTs;score+=100+Math.max(0,Math.round(50*(1-elapsed/duration)));b.classList.add("correct");if(window.WIUSoundV112)window.WIUSoundV112.play("success",.42)}else{b.classList.add("wrong");if(window.WIUSoundV112)window.WIUSoundV112.play("fail",.35)}correctEl.textContent=correct+"/10";scoreEl.textContent=score+" PT";clearMover();setTimeout(next,360)});buttons.appendChild(b)});q.classList.add("active");q.setAttribute("aria-hidden","false");
+  function clearMover(){lanes.forEach(l=>l.querySelectorAll(".veursGlyphMoverV900").forEach(x=>x.remove()))}
+  function next(){if(round>=10){finish();return}buttons.querySelectorAll("button").forEach(b=>b.classList.remove("correct","wrong"));clearMover();let idx;do{idx=Math.floor(Math.random()*GLYPHS.length)}while(idx===last);last=idx;current=GLYPHS[idx];const lane=lanes[Math.floor(Math.random()*2)],m=document.createElement("div");m.className="veursGlyphMoverV900";m.textContent=current.ch;lane.appendChild(m);round++;locked=false;startTs=performance.now();anim=m.animate([{left:"0%",transform:"translate(-120%,-50%)"},{left:"100%",transform:"translate(20%,-50%)"}],{duration:800,easing:"linear",fill:"forwards"});anim.onfinish=()=>{if(locked)return;locked=true;clearMover();setTimeout(next,360)}}
+  function finish(){locked=true;clearMover();const pass=correct>=8;let label,loss=0;if(correct>=9&&score>=1150){label="DECODIFICA PERFETTA";state.extraLore=true;res.classList.add("good")}else if(pass){label="ACCESSO CONCESSO";res.classList.add("good")}else if(correct>=6){label="DECODIFICA INSTABILE • ESECUTORE ALLERTATO";state.nextEnemyKiBonus+=15;res.classList.add("bad")}else{label="ACCESSO FORZATO • -8% HP • ESECUTORE ALLERTATO";loss=Math.max(1,Math.round(state.maxHP*.08));state.nextEnemyKiBonus+=15;res.classList.add("bad")}res.textContent=label+" • "+correct+"/10 • "+score+" PT";state.glyph={correct,score};if(loss)damage(loss);save();setTimeout(()=>{q.classList.remove("active");q.setAttribute("aria-hidden","true");if(state.hp<=0){failExpedition("Il sistema di sicurezza ti ha fermato prima del Santuario.");return}afterGlyph()},1500)}
+  setTimeout(next,1000)
+ }
+ function afterGlyph(){setBg("refuge");actors("aelia","kaelios");const extra=state.extraLore?[
+   {speaker:"AELIA",text:"Hai aperto anche un registro che normalmente non dovremmo vedere."},
+   {speaker:"AELIA",text:"L'Oracolo ha registrato due anomalie extra-causali al nostro arrivo. La prima siamo noi. La seconda è entrata nel mondo pochi istanti dopo."},
+   {speaker:"TU",text:"Quindi qualcuno ci ha seguito attraverso il Portale."},
+   {speaker:"KAELIOS",text:"È possibile. E se è chi penso io, non voglio che ci raggiunga qui."}
+  ]:[];say([
+   {speaker:"AELIA",text:"La chiave è pronta. Possiamo raggiungere il ponte che porta al Santuario."},
+   ...extra,
+   {speaker:"NARRAZIONE",text:"Quando uscite dal rifugio, una figura in armatura è già ferma al centro del ponte. Non vi sta cercando: vi stava aspettando."}
+  ],executorArrival)}
+ function executorArrival(){setBg("sensors");actors("executor","kaelios");say([
+   {speaker:"ESECUTORE DI VEURS",text:"Accesso non autorizzato al registro predittivo. Tre deviazioni confermate."},
+   {speaker:"KAELIOS",text:"Questo non è un Guardiano ordinario. È un Esecutore: viene inviato quando l'Oracolo sa già che la deviazione non si fermerà da sola."},
+   {speaker:"ESECUTORE DI VEURS",text:"Obiettivo: impedire l'accesso al Santuario. Resistenza prevista: elevata."},
+   {speaker:"KAELIOS",text:"Secondo scontro. Conserva gli HP: dopo di lui ci sarà ancora il nucleo dell'Oracolo."}
+  ],fightExecutor)}
+ function fightExecutor(){state.step=6;save();el.classList.add("hidden");window.WIUWorldCombatV900.start({id:"executor",name:"ESECUTORE DI VEURS",enemyLevel:3,sprite:CHAR.executor,playerLevel:lvl(),playerHP:state.hp,playerMaxHP:state.maxHP,enemyKiBonus:state.nextEnemyKiBonus,perfectMod:.03,parryMod:.04,tacticsMod:.08,expReward:FIGHT_EXP.executor,title:"SCONTRO 2/3 • ESECUTORE DI VEURS"})}
+ function afterExecutor(){state.step=7;state.nextEnemyKiBonus=0;save();showWorld();setBg("oracle");actors("aelia","kaelios");say([
+   {speaker:"AELIA",text:"Questo è il Santuario. Tutte le previsioni di Veurs vengono elaborate qui."},
+   {speaker:"AELIA",text:"Ricordatelo: l'Oracolo non era nato per comandarci. Doveva mostrarci le conseguenze e lasciare a noi la decisione."},
+   {speaker:"ORACOLO",text:"ANOMALIA EXTRA-CAUSALE CONFERMATA."},
+   {speaker:"ORACOLO",text:"Le vostre decisioni generano possibilità che il modello non riesce a quantificare. Ogni intervento aumenta il rischio di collasso."},
+   {speaker:"TU",text:"Per evitare il rischio hai iniziato a decidere al posto di tutti."},
+   {speaker:"ORACOLO",text:"RIDURRE L'INCERTEZZA HA RIDOTTO IL DANNO. LE VARIANTI REINTRODUCONO INCERTEZZA."},
+   {speaker:"ORACOLO",text:"SECONDA ANOMALIA EXTRA-CAUSALE: PRESENTE NEL MONDO."},
+   {speaker:"TU",text:"Non sta parlando di noi."},
+   {speaker:"KAELIOS",text:"No. Qualcos'altro ha attraversato il Portale dopo di noi."}
+  ],rewriteChoice)}
+ function rewriteChoice(){choose({speaker:"SCELTA",text:"Il Santuario chiude il percorso verso il nucleo. Come reagisci?"},[
+   {label:"SEGUI LE ISTRUZIONI DI KAELIOS  +FIDUCIA",onChoose:()=>{relationship(1,0);say([{speaker:"KAELIOS",text:"Il percorso sta venendo cancellato e ricreato in continuazione. Ti guido io sul punto stabile."},{speaker:"AELIA",text:"Se agganci quella sequenza puoi costringere il sistema a ripristinare il passaggio."}],startRewrite)}},
+   {label:"AGGANCIA TU LA SEQUENZA  +INDIPENDENZA",onChoose:()=>{relationship(0,1);say([{speaker:"TU",text:"La sequenza si ripete. Posso trovare il punto stabile da solo."},{speaker:"KAELIOS",text:"Allora fallo prima che il Santuario completi la cancellazione."}],startRewrite)}}
+  ])}
+ function startRewrite(){say([
+   {speaker:"SISTEMA",text:"RISCRITTURA<br>Ricostruisci correttamente la sequenza per riaprire il percorso verso il nucleo.<br>Gli errori possono consumare gli HP della spedizione."}
+  ],()=>{window.WIURewriteDamageHandlerV900=(amount)=>{const alive=damage(amount);save();if(!alive){setTimeout(()=>{window.WIURewriteDamageHandlerV900=null;if(typeof hide==="function")hide("riftScene");showWorld();failExpedition("La Riscrittura ti ha consumato prima di raggiungere il nucleo.")},40);return false}return true};if(typeof openRewriteGameV233==="function")openRewriteGameV233(()=>{window.WIURewriteDamageHandlerV900=null;if(typeof hide==="function")hide("riftScene");showWorld();if(state.hp<=0){failExpedition("La Riscrittura ti ha consumato prima di raggiungere il nucleo.");return}afterRewrite()})})}
+ function afterRewrite(){setBg("boss");actors("kaelios","custodian");say([
+   {speaker:"NARRAZIONE",text:"Il percorso si ricompone. Oltre il nucleo, l'energia dell'Oracolo si concentra in un'unica figura corazzata."},
+   {speaker:"ORACOLO",text:"PROTOCOLLO DI PROTEZIONE ASSOLUTA ATTIVATO."},
+   {speaker:"KAELIOS",text:"Quello è il Custode. È l'ultima difesa del Santuario."},
+   {speaker:"KAELIOS",text:()=>`Hai ${Math.round(state.hp)} HP. Non ci sarà un'altra cura prima di questo scontro.`},
+   {speaker:"CUSTODE DI VEURS",text:"ACCESSO AL NUCLEO: NEGATO."}
+  ],fightBoss)}
+ function fightBoss(){state.step=8;save();setBg("boss");el.classList.add("hidden");window.WIUWorldCombatV900.start({id:"boss",name:"CUSTODE DI VEURS",enemyLevel:3,sprite:CHAR.custodian,playerLevel:lvl(),playerHP:state.hp,playerMaxHP:state.maxHP,enemyHP:Math.round((window.WIUCombatScalingV800?.stats(3).maxHP||112)*1.15),perfectMod:.04,parryMod:.05,tacticsMod:.1,kiSkillMod:.08,expReward:FIGHT_EXP.boss,title:"SCONTRO 3/3 • CUSTODE DI VEURS",spriteWidth:"116%",spriteHeight:"164%",spriteBottom:"-32%"})}
+ function afterBoss(){state.step=9;save();showWorld();setBg("oracle");actors("kaelios","aelia");say([
+   {speaker:"ORACOLO",text:"CUSTODE: DISATTIVATO."},
+   {speaker:"AELIA",text:"Adesso puoi cambiare la regola principale. L'Oracolo non potrà impedirti di scegliere."},
+   {speaker:"ORACOLO",text:"La mia eliminazione restituirà a Veurs piena libertà decisionale. Restituirà anche ogni rischio che avevo soppresso."},
+   {speaker:"ORACOLO",text:"In alternativa, puoi mantenermi attivo come sistema consultivo. Potrò prevedere e consigliare, ma non imporre."},
+   {speaker:"KAELIOS",text:"Questa decisione è tua. Io non la prenderò al posto tuo."}
+  ],()=>choose({speaker:"SCELTA • VEURS",text:"Decidi il futuro dell'Oracolo."},[
+   {label:"DISTRUGGI L'ORACOLO  +INDIPENDENZA",onChoose:()=>{relationship(0,1);ending("destroy")}},
+   {label:"LIMITA L'ORACOLO A CONSIGLIARE  +FIDUCIA",onChoose:()=>{relationship(1,0);ending("limit")}}
+  ]))}
+ function ending(choice){state.step=10;save();const lines=choice==="destroy"?[
+   {speaker:"NARRAZIONE",text:"Il nucleo si spegne. Le linee di previsione scompaiono una dopo l'altra."},
+   {speaker:"AELIA",text:"Per la prima volta da anni nessuno qui sa cosa accadrà domani. E nessuno potrà impedirci di scoprirlo."}
+  ]:[
+   {speaker:"NARRAZIONE",text:"Il nucleo resta acceso, ma i protocolli di imposizione vengono rimossi."},
+   {speaker:"AELIA",text:"Potremo ancora chiedere all'Oracolo cosa potrebbe accadere. Ma la scelta finale tornerà a essere nostra."}
+  ];say(lines,revealPursuer)}
+ function revealPursuer(){setBg("boss");actors("kaelios","pursuer");say([
+   {speaker:"ORACOLO",text:"ALLARME. SECONDA ANOMALIA EXTRA-CAUSALE IN AVVICINAMENTO."},
+   {speaker:"NARRAZIONE",text:"Una figura compare oltre il bordo della piattaforma. I cristalli vicini perdono stabilità e l'aria sembra piegarsi attorno al suo corpo."},
+   {speaker:"TU",text:"È la firma che ci ha seguito."},
+   {speaker:"KAELIOS",text:"Sì."},
+   {speaker:"TU",text:"Chi è?"},
+   {speaker:"KAELIOS",text:"Uno degli esseri che cercano anomalie come noi. E non dovrebbe essere riuscito a entrare in Veurs così velocemente."},
+   {speaker:"NARRAZIONE",text:"L'Inseguitore non attacca. Per un istante resta immobile, come se stesse registrando la vostra presenza."},
+   {speaker:"KAELIOS",text:"Abbiamo ottenuto quello per cui siamo venuti. Dobbiamo attraversare il Portale prima che decida di seguirci ancora."}
+  ],complete)}
+ function complete(){let pr=null,total=Math.max(0,Number(state.pendingXP)||0);if(total&&typeof wiuGrantCombatRewardsV800==="function")pr=wiuGrantCombatRewardsV800(total,0);try{localStorage.setItem(COMPLETE,"1")}catch(e){};say([
+   {speaker:"SISTEMA",text:()=>`VEURS STABILIZZATO<br><b>1 / 4 MONDI DELL'UNIVERSO TRASCENDENTE</b><br><br>EXP CONSOLIDATA: <b>+${total}</b>`},
+   ...(pr&&pr.leveledUp?[{speaker:"SISTEMA",text:`LEVEL UP<br><b>LV.${pr.oldLevel} → LV.${pr.level}</b>`}]:[]),
+   {speaker:"KAELIOS",text:"Veurs è stabile, ma la cosa che ci ha seguito è ancora là fuori. Questo non è finito."}
+  ],()=>returnToHub(true))}
+ function onCombatClosed(result){showWorld();if(!result||!result.win){state.hp=0;updateHud();failExpedition("Sei stato sconfitto. Veurs espelle la spedizione e annulla i progressi ottenuti al suo interno.");return}state.hp=Math.max(1,Number(result.hp)||1);addPendingXp(Number(result.expReward)||FIGHT_EXP[result.id]||0);updateHud();save();if(result.id==="guard")afterGuard();else if(result.id==="executor")afterExecutor();else if(result.id==="boss")afterBoss()}
+ window.WIUVeursV900={start,onCombatClosed,state:()=>({...state})};
+})();
+</script>
+
 </body>
 
 </html>
