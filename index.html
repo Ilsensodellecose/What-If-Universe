@@ -12360,11 +12360,15 @@ function resetRewriteGameV233(){
 }
 
 function ensureRewriteGlobalHostV1000(){
-    const gameRoot=document.getElementById("game");
+    /*
+      RISCRITTURA deve essere completamente autonoma: la spostiamo sotto BODY,
+      fuori da riftScene e fuori da qualunque stacking context del Prologo.
+    */
+    const host=document.body;
     const overlay=document.getElementById("rewriteGameV233");
     const fx=document.getElementById("rewriteFxV232");
-    if(gameRoot && overlay && overlay.parentElement!==gameRoot) gameRoot.appendChild(overlay);
-    if(gameRoot && fx && fx.parentElement!==gameRoot) gameRoot.appendChild(fx);
+    if(host && overlay && overlay.parentElement!==host) host.appendChild(overlay);
+    if(host && fx && fx.parentElement!==host) host.appendChild(fx);
 }
 
 function openRewriteGameV233(onSuccess){
@@ -13527,6 +13531,10 @@ function wiuSyncPlayerLevelV810(){
  const oldLevel=Math.max(1,Number(playerLevelV25)||1);
  const newLevel=wiuLevelFromXpV810(xp);
  playerLevelV25=newLevel;
+ /* Ogni ricalcolo del livello aggiorna subito gli HUD già montati. */
+ try{
+  if(typeof window.WIUSyncLevelHudV1000==="function") window.WIUSyncLevelHudV1000();
+ }catch(e){}
  return {oldLevel,newLevel,leveledUp:newLevel>oldLevel};
 }
 window.WIUProgressionV810={
@@ -13633,7 +13641,7 @@ function initDevV251(){
 if(DEV_MODE_V25){
  document.getElementById("devToggleV25").addEventListener("click",openDevV25);
  document.getElementById("devCloseV25").addEventListener("click",closeDevV25);
- document.getElementById("devPanelV25").addEventListener("click",e=>{const b=e.target.closest("[data-dev]");if(!b)return;const a=b.dataset.dev;if(a==="prologue"){closeDevV25();location.reload()}else if(a==="creator")devTeaserV25("creator");else if(a==="intro"){if(typeof devIntroV256==="function")devIntroV256();}else if(a==="nexus")devTeaserV25("nexus");else if(a==="transcendent"){if(typeof devTranscendentV482==="function")devTranscendentV482();}else if(a==="rewrite")devRewriteV25();else if(a==="gems"){gems+=100;updateGems();saveGameV25()}else if(a==="xp"){xp+=100;wiuSyncPlayerLevelV810();saveGameV25()}else if(a==="reset")resetSaveV25()});
+ document.getElementById("devPanelV25").addEventListener("click",e=>{const b=e.target.closest("[data-dev]");if(!b)return;const a=b.dataset.dev;if(a==="prologue"){closeDevV25();location.reload()}else if(a==="creator")devTeaserV25("creator");else if(a==="intro"){if(typeof devIntroV256==="function")devIntroV256();}else if(a==="nexus")devTeaserV25("nexus");else if(a==="transcendent"){if(typeof devTranscendentV482==="function")devTranscendentV482();}else if(a==="rewrite")devRewriteV25();else if(a==="gems"){gems+=100;updateGems();saveGameV25()}else if(a==="xp"){if(typeof devXpV253==="function")devXpV253();else{xp+=100;wiuSyncPlayerLevelV810();saveGameV25()}}else if(a==="reset")resetSaveV25()});
 }else document.getElementById("devToggleV25").style.display="none";
 
 loadGameV25();refreshDevStateV25();
@@ -13780,9 +13788,21 @@ function devGemsV253(){
     saveGameV25();
 }
 function devXpV253(){
+    const before=Math.max(1,Number(playerLevelV25)||1);
     xp=(Number(xp)||0)+100;
-    wiuSyncPlayerLevelV810();
+    const sync=wiuSyncPlayerLevelV810();
     saveGameV25();
+    try{if(typeof window.WIUSyncLevelHudV1000==="function")window.WIUSyncLevelHudV1000()}catch(e){}
+    const pr={
+      oldLevel:before,
+      level:Math.max(1,Number(playerLevelV25)||1),
+      xp:Number(xp)||0,
+      leveledUp:Math.max(1,Number(playerLevelV25)||1)>before,
+      nextLevelXp:typeof wiuNextLevelXpV810==="function"?wiuNextLevelXpV810(playerLevelV25):null
+    };
+    if(pr.leveledUp && typeof window.WIULevelUpV1000==="function"){
+      window.WIULevelUpV1000(pr);
+    }
 }
 function devResetArenaKaeliosFlowV820(){
     /*
@@ -16279,6 +16299,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   hudStats.innerHTML=
    getPlayerName().toUpperCase()+"<br>"+
    "LV."+((typeof playerLevelV25!=="undefined")?playerLevelV25:1)+
+   " • "+Math.max(0,Math.floor(Number(typeof xp!=="undefined"?xp:0)||0))+" XP"+
    " • 💎 "+((typeof gems!=="undefined")?gems:0);
  }
 
@@ -22611,13 +22632,27 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
    {speaker:"NARRAZIONE",text:"La scena si spezza e corre al contrario. I frammenti di luce risalgono, il ponte ricompare e le parole dell'Oracolo si riavvolgono fino a pochi secondi prima."},
    {speaker:"TU",text:"Sono tornato a prima della chiusura."},
    {speaker:"KAELIOS",text:"Adesso. Sai già cosa sta per fare: muoviti prima del protocollo."},
-   {speaker:"NARRAZIONE",text:"Questa volta raggiungi il punto di controllo prima che l'Oracolo possa sigillarlo. Il ponte resta acceso."}
-  ],bossArrival)}
+   {speaker:"NARRAZIONE",text:"Questa volta raggiungi il punto di controllo prima che l'Oracolo possa sigillarlo. Il ponte resta acceso."},
+   {speaker:"AELIA",text:"Aspetta. Prima di attraversarlo... guarda in che condizioni sei."},
+   {speaker:"AELIA",text:"Il Custode protegge direttamente il nucleo. Se ci aspetta dall'altra parte, non puoi affrontarlo così."}
+  ],aeliaPreBossHeal)}
+ function aeliaPreBossHeal(){
+  const before=Math.round(state.hp);
+  const recovered=heal(30);
+  const after=Math.round(state.hp);
+  actors("kaelios","aelia");
+  say([
+   {speaker:"NARRAZIONE",text:"Aelia estrae una piccola fiala attraversata dalla stessa luce azzurra dei cristalli di Veurs e te la porge."},
+   {speaker:"AELIA",text:"È una soluzione di recupero. Non ne ho un'altra. Usala adesso."},
+   {speaker:"SISTEMA",text:()=>`SOLUZIONE CRISTALLINA • <b>+${recovered} HP</b><br>HP: <b>${before} → ${after}</b> / ${Math.round(state.maxHP)}`},
+   {speaker:"KAELIOS",text:"Bene. Da qui in avanti non aspettarti altre pause."}
+  ],bossArrival);
+ }
  function bossArrival(){setBg("boss");actors("kaelios","custodian");say([
    {speaker:"NARRAZIONE",text:"Oltre il ponte, l'energia dell'Oracolo si concentra in un'unica figura corazzata."},
    {speaker:"ORACOLO",text:"PROTOCOLLO DI PROTEZIONE ASSOLUTA ATTIVATO."},
    {speaker:"KAELIOS",text:"Quello è il Custode. È l'ultima difesa del Santuario... ed è più forte di tutto ciò che abbiamo affrontato qui."},
-   {speaker:"SISTEMA",text:()=>`BOSS • CUSTODE DI VEURS <b>LV.4</b><br>Tu sei LV.${lvl()} • HP rimasti: <b>${Math.round(state.hp)}/${Math.round(state.maxHP)}</b><br><br>Nessuna cura prima dello scontro.`},
+   {speaker:"SISTEMA",text:()=>`BOSS • CUSTODE DI VEURS <b>LV.4</b><br>Tu sei LV.${lvl()} • HP disponibili: <b>${Math.round(state.hp)}/${Math.round(state.maxHP)}</b><br><br>La cura di Aelia è stata l'ultima occasione di recupero della spedizione.`},
    {speaker:"CUSTODE DI VEURS",text:"ACCESSO AL NUCLEO: NEGATO."}
   ],fightBoss)}
  function fightBoss(){state.step=8;save();setBg("boss");el.classList.add("hidden");window.WIUWorldCombatV900.start({id:"boss",name:"CUSTODE DI VEURS",enemyLevel:4,sprite:CHAR.custodian,playerLevel:lvl(),playerHP:state.hp,playerMaxHP:state.maxHP,perfectMod:.04,parryMod:.05,tacticsMod:.1,kiSkillMod:.08,expReward:FIGHT_EXP.boss,title:"SCONTRO 3/3 • CUSTODE DI VEURS • LV.4",spriteWidth:"116%",spriteHeight:"164%",spriteBottom:"-32%"})}
@@ -22739,8 +22774,25 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
 
 
 <style id="wiuGlobalRewriteHostV1000Style">
-#rewriteGameV233{position:fixed!important;z-index:10020!important}
-#rewriteFxV232{position:fixed!important;z-index:10030!important}
+/* RISCRITTURA globale: nessuna scena sottostante deve essere visibile. */
+#rewriteGameV233{
+ position:fixed!important;inset:0!important;z-index:10020!important;
+ background:
+  radial-gradient(circle at 50% 42%,rgba(103,58,164,.24) 0%,rgba(18,12,39,.98) 42%,#03040b 78%)!important;
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+ isolation:isolate!important;
+}
+#rewriteGameV233::before{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.24;
+ background:
+  repeating-linear-gradient(180deg,transparent 0 27px,rgba(202,171,255,.045) 28px 29px),
+  radial-gradient(circle at 50% 48%,rgba(202,171,255,.09),transparent 34%);
+}
+#rewriteGameV233 .rwGameCard{position:relative;z-index:2}
+#rewriteFxV232{
+ position:fixed!important;inset:0!important;z-index:10030!important;
+ background:radial-gradient(circle at 50% 46%,rgba(78,39,120,.46),#03040b 72%)!important;
+}
 </style>
 <style id="wiuLevelUpV1000Style">
 #wiuLevelUpV1000{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 42%,rgba(56,160,227,.28),rgba(3,4,15,.94) 58%);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
@@ -22761,7 +22813,7 @@ document.getElementById("creatorV30").addEventListener("dragstart",e=>e.preventD
   const lv=currentLevel();
   document.querySelectorAll("#hud .level").forEach(n=>n.textContent="LV. "+lv);
   const gem=document.getElementById("gemNumber");if(gem)gem.textContent=String(Math.max(0,Math.floor(Number(typeof gems!=="undefined"?gems:0)||0)));
-  const nh=document.getElementById("nexus41HudStats");if(nh)nh.innerHTML=currentName()+"<br>LV."+lv+" • 💎 "+Math.max(0,Math.floor(Number(typeof gems!=="undefined"?gems:0)||0));
+  const nh=document.getElementById("nexus41HudStats");if(nh)nh.innerHTML=currentName()+"<br>LV."+lv+" • "+Math.max(0,Math.floor(Number(typeof xp!=="undefined"?xp:0)||0))+" XP • 💎 "+Math.max(0,Math.floor(Number(typeof gems!=="undefined"?gems:0)||0));
   if(typeof refreshDevStateV25==="function")refreshDevStateV25();
  }
  function show(pr,onDone){
